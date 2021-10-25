@@ -3,7 +3,7 @@ Type: Package
 Title: CrashAPI
 Version: 0.1.0
 Author: Eli Pousson
-Maintainer: Eli Pousson
+Maintainer: Eli Pousson <eli.pousson@gmail.com>
 Description: Get Fatality Analysis Reporting System (FARS) data with the FARS API.
 License: MIT + file LICENSE
 Encoding: UTF-8
