@@ -77,38 +77,38 @@ get_fars_crashes(
   # Show 10 fatal crashes at random
   dplyr::slice_sample(n = 10)
 #>    CITY       CITYNAME COUNTY    COUNTYNAME CaseYear FATALS    LATITUDE
-#> 1     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.45480833
-#> 2     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.34865278
-#> 3     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.37956667
-#> 4     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.32650000
-#> 5   543          ESSEX      5 BALTIMORE (5)     2014      1 39.30697500
-#> 6     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      2 39.29557500
-#> 7     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.45822500
-#> 8     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.29632222
-#> 9     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.33761667
-#> 10    0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.47094167
-#>         LONGITUD STATE STATENAME ST_CASE TOTALVEHICLES TWAY_ID TWAY_ID2
-#> 1  -76.415350000    24  Maryland  240373             3    US-1         
-#> 2  -76.497319440    24  Maryland  240122             2    I-95         
-#> 3  -76.777680560    24  Maryland  240254             3 CR-2200  CR-2202
-#> 4  -76.423050000    24  Maryland  240101             1  SR-587         
-#> 5  -76.443363890    24  Maryland  240200             1 CR-4967  CR-4849
-#> 6  -76.524544440    24  Maryland  240244             2  SR-151  CR-5148
-#> 7  -76.633777780    24  Maryland  240297             2   SR-45         
-#> 8  -76.734202780    24  Maryland  240437             1 CR-2511         
-#> 9  -76.744733330    24  Maryland  240018             1   I-695         
-#> 10 -76.660891670    24  Maryland  240224             1    I-83         
-#>    VE_FORMS
-#> 1         3
-#> 2         2
-#> 3         3
-#> 4         1
-#> 5         1
-#> 6         2
-#> 7         2
-#> 8         1
-#> 9         1
-#> 10        1
+#> 1     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.38516944
+#> 2     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.37583333
+#> 3     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.68169167
+#> 4     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.36160833
+#> 5     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.51717500
+#> 6     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.40746111
+#> 7     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.26032222
+#> 8     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.39587500
+#> 9     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.44058611
+#> 10    0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.41453889
+#>         LONGITUD STATE STATENAME ST_CASE TOTALVEHICLES            TWAY_ID
+#> 1  -76.633408330    24  Maryland  240169             1             SR-134
+#> 2  -76.513941670    24  Maryland  240281             1            CR-4458
+#> 3  -76.730450000    24  Maryland  240058             1              CR-70
+#> 4  -76.525191670    24  Maryland  240112             2            CR-3481
+#> 5  -76.835450000    24  Maryland  240248             2              SR-30
+#> 6  -76.392258330    24  Maryland  240128             1              US-40
+#> 7  -76.487916670    24  Maryland  240388             1 JASMINE ROAD ALLEY
+#> 8  -76.662855560    24  Maryland  240318             1              SR-25
+#> 9  -76.626136110    24  Maryland  240376             2              SR-45
+#> 10 -76.592600000    24  Maryland  240103             2               I-95
+#>    TWAY_ID2 VE_FORMS
+#> 1                  1
+#> 2                  1
+#> 3                  1
+#> 4                  2
+#> 5    CR-187        2
+#> 6                  1
+#> 7                  1
+#> 8                  1
+#> 9    CR-810        2
+#> 10                 2
 ```
 
 ``` r
@@ -151,3 +151,34 @@ get_fars_summary(
 #> 9      2018         485              512
 #> 10     2019         484              521
 ```
+
+## Additional Information
+
+The [NHTSA website](https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx)
+provides additional information on the release data and version status
+for the FARS Dataset.
+
+| Data Year | File Version | Release Date      |
+|-----------|--------------|-------------------|
+| 2010      | Final        | December 11, 2012 |
+| 2011      | Final        | November 13, 2013 |
+| 2012      | Final        | December 12, 2013 |
+| 2013      | Final        | December 14, 2014 |
+| 2014      | Final        | December 18, 2015 |
+| 2015      | Final        | December 16, 2016 |
+| 2016      | Final        | December 14, 2017 |
+| 2017      | Final        | December 18, 2018 |
+| 2018      | Final        | June 24, 2021     |
+| 2019      | Annual       | June 24, 2021     |
+
+## Related packages and projects
+
+-   [stats19](https://github.com/ropensci/stats19) “provides functions
+    for downloading and formatting road crash data” from “the UK’s
+    official road traffic casualty database, STATS19.”
+-   [nzcrash](https://github.com/nacnudus/nzcrash): “An R package to
+    distribute New Zealand crash data in a convenient form.”
+-   [GraphHopper Open Traffic
+    Collection](https://github.com/graphhopper/open-traffic-collection):
+    “Collections of URLs pointing to traffic information portals which
+    contain open data or at least data which is free to use.”
