@@ -22,7 +22,8 @@
   }
 </script>
 
-<title>Function reference • crashapi</title>
+<title>Get variables and variable attributes for the Fatality Analysis
+  Reporting System (FARS) API — fars_vars • crashapi</title>
 
 
 <!-- jquery -->
@@ -65,7 +66,13 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Get variables and variable attributes for the Fatality Analysis
+  Reporting System (FARS) API — fars_vars" />
+<meta property="og:description" content="By default, this function returns the returns the list of
+  variables for the data year specified. If `vars` is &quot;make&quot;, &quot;model&quot;, or
+  &quot;bodytype&quot;, the function returns #'   list of variable attributes for the
+  specified variable name or attributes for make model and body type
+  specified in the FARS dataset." />
 
 
 
@@ -87,7 +94,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -134,62 +141,55 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Get variables and variable attributes for the Fatality Analysis
+  Reporting System (FARS) API</h1>
+    
+    <div class="hidden name"><code>fars_vars.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>By default, this function returns the returns the list of
+  variables for the data year specified. If `vars` is "make", "model", or
+  "bodytype", the function returns #'   list of variable attributes for the
+  specified variable name or attributes for make model and body type
+  specified in the FARS dataset.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>fars_vars</span><span class='op'>(</span><span class='va'>year</span>, var <span class='op'>=</span> <span class='cn'>NULL</span>, make <span class='op'>=</span> <span class='cn'>NULL</span>, model <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-get-data-from-the-fars-api" class="hasAnchor"><a href="#section-get-data-from-the-fars-api" class="anchor"></a>Get data from the FARS API</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="get_fars.html">get_fars_crashes()</a></code> <code><a href="get_fars.html">get_fars_crash_list()</a></code> <code><a href="get_fars.html">get_fars_summary()</a></code> </p>
-        </td>
-        <td><p>Get Fatality Analysis Reporting System (FARS) data with the FARS API</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-get-variable-definitions" class="hasAnchor"><a href="#section-get-variable-definitions" class="anchor"></a>Get variable definitions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="fars_vars.html">fars_vars()</a></code> </p>
-        </td>
-        <td><p>Get variables and variable attributes for the Fatality Analysis
-  Reporting System (FARS) API</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>year</th>
+      <td><p>Case year. Year must be between 2010 and 2019.</p></td>
+    </tr>
+    <tr>
+      <th>var</th>
+      <td><p>Default NULL. Supported values are "make", "model", and
+"bodytype". Using the var parameter returns variable attributes for the
+specified variable name or attributes for make model and body type
+specified in the dataset.</p></td>
+    </tr>
+    <tr>
+      <th>make</th>
+      <td><p>Integer. Make ID number. Required to return variables for "model"
+and "bodytype". Get a list of make ID numbers using the "make" var for the
+selected year, e.g. `fars_vars(year = 2010, var = "make")`.</p></td>
+    </tr>
+    <tr>
+      <th>model</th>
+      <td><p>Integer. Model ID number. Required to return variables for
+"bodytype". Get a list of model ID numbers using the "model" var for the
+selected year with a valid make ID number, e.g. `fars_vars(year = 2010, var
+= "model", make = 37)`</p></td>
+    </tr>
     </table>
-  </div>
 
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

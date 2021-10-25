@@ -31,7 +31,7 @@ county_to_fips <- function(county, state) {
 # Validate start and end year
 validate_year <- function(start_year, end_year) {
   if (!(is.numeric(start_year) | !is.numeric(end_year))) {
-    stop("The start_year and stop_year must be numeric.")
+    stop("The start_year and end_year must be numeric.")
   }
 
   if (start_year >= 2020 | start_year <= 2009) {
@@ -43,7 +43,7 @@ validate_year <- function(start_year, end_year) {
   }
 
   if (end_year < start_year) {
-    stop("The end-year must be greater than or equal to the start year.")
+    stop("The end_year must be greater than or equal to the start_year.")
   }
 }
 
@@ -53,14 +53,14 @@ data_to_sf <- function(x,
                        latitude = "LATITUDE",
                        crs = 4326) {
 
-  # Exclude rows with missing coordinates
-  x <- x[!is.na(x[longitude]), ]
-
   # Check that lat/lon are numeric
   if (!is.numeric(x[[longitude]])) {
     x[[longitude]] <- as.double(x[[longitude]])
     x[[latitude]] <- as.double(x[[latitude]])
   }
+
+  # Exclude rows with missing coordinates
+  x <- x[!is.na(x[longitude]), ]
 
   x <-
     sf::st_as_sf(
@@ -165,6 +165,9 @@ get_fars_crash_list <- function(start_year = 2014,
 get_fars_summary <- function(start_year = 2014,
                              end_year = 2015,
                              state = 1) {
+
+  validate_year(start_year = start_year,
+                end_year = end_year)
 
   state_fips <- state_to_fips(state) |>
     as.integer()
