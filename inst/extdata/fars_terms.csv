@@ -1,0 +1,67 @@
+term,definition
+Alcohol Involvement,NHTSA Defines A Fatal Crash As Alcohol-related Or Alcohol-involved If Either A Driver Or A Nonmotorist (usually A Pedestrian) Had A Measurable Or Estimated Blood Alcohol Concentration (BAC) Of 0.01 Grams Per Deciliter (g/dl) Or Above. NHTSA Defines A Nonfatal Crash As Alcohol-related Or Alcohol-involved If Police Indicate On The Police Accident Report That There Is Evidence Of Alcohol Present. The Code Does Not Necessarily Mean That A Driver Or Nonoccupant Was Tested For Alcohol.
+Alcohol-Impaired Driving Crashes,"Crashes That Involve At Least One Driver Or Motorcycle Rider (operator) With A Blood Alcohol Concentration (BAC) Of .08 Grams Per Deciliter (g/dL) Or Higher. Thus, Any Fatality Occurring In A Crash Involving A Driver Or Motorcycle Rider With A BAC Of .08 Or Higher Is Considered To Be An Alcohol-impaired-driving Fatality."
+Alcohol-Impaired Driving Fatalities,All Fatalities In Crashes Involving A Driver Or Motorcycle Rider (operator) With A Blood Alcohol Concentration (BAC) Of .08 Grams Per Deciliter (g/dL) Or Higher.
+Angled Collision,"Collisions Which Are Not Head-on, Rear-end, Rear-to-rear, Or Sideswipe."
+Blood Alcohol Concentration,The BAC Is Measured As A Percentage By Weight Of Alcohol In The Blood (grams/deciliter). A Positive BAC Level (0.01 G/dl And Higher) Indicates That Alcohol Was Consumed By The Person Tested. A BAC Level Of 0.10 G/dl Or More Indicates That The Person Was Intoxicated.
+Body Type,Detailed Type Of Motor Vehicle Within A Vehicle Type.
+Bus,"Large Motor Vehicles Used To Carry More Than Ten Passengers, Including School Buses, Inter-city Buses, And Transit Buses."
+Collectors,"In Rural Areas, Routes Serving Intra-county, Rather Than Statewide Travel. In Urban Areas, Streets Providing Direct Access To Neighborhoods As Well As Direct Access To Arterials."
+Combination Truck,A Truck Tractor Not Pulling A Trailer; A Tractor Pulling At Least One Full Or Semi-trailer; Or A Single-unit Truck Pulling At Least One Trailer.
+Construction/Maintenance Zone,"An Area, Usually Marked By Signs, Barricades, Or Other Devices Indicating That Highway Construction Or Highway Maintenance Activities Are Ongoing."
+Crash,"An Event That Produces Injury And/or Property Damage, Involves A Motor Vehicle In Transport, And Occurs On A Trafficway Or While The Vehicle Is Still In Motion After Running Off The Trafficway."
+Crash Type,Single-vehicle Or Multiple-vehicle Crash.
+Day,From 6 A.M. To 5:59 P.M.
+Driver,"An Occupant Of A Vehicle Who Is In Physical Control Of A Motor Vehicle In Transport, Or For An Out-of-control Vehicle, An Occupant Who Was In Control Until Control Was Lost."
+Ejection,Refers To Occupants Being Totally Or Partially Thrown From The Vehicle As A Result Of An Impact Or Rollover.
+Fatal Crash,A Police-reported Crash Involving A Motor Vehicle In Transport On A Trafficway In Which At Least One Person Dies Within 30 Days Of The Crash.
+First Harmful Event,The First Event During A Crash That Caused Injury Or Property Damage.
+Fixed Object,Stationary Structures Or Substantial Vegetation Attached To The Terrain.
+Gross Vehicle Weight Rating (GVWR),"The Maximum Rated Capacity Of A Vehicle, Including The Weight Of The Base Vehicle, All Added Equipment, Driver And Passengers, And All Cargo Loaded Into Or On The Vehicle. Actual Weight May Be Less Than Or Greater Than GVWR."
+Head-on Collision,Refers To A Collision Where The Front End Of One Vehicle Collides With The Front End Of Another Vehicle While The Two Vehicles Are Traveling In Opposite Directions.
+Initial Impact Point,"The First Impact Point That Produced Personal Injury Or Property Damage, Regardless Of First Or Most Harmful Event."
+Injury Crash,"A Police-reported Crash That Involves A Motor Vehicle In Transport On A Trafficway In Which No One Died But At Least One Person Was Reported To Have: (1) An Incapacitating Injury; (2) A Visible But Not Incapacitating Injury; (3) A Possible, Not Visible Injury; Or (4) An Injury Of Unknown Severity."
+Injury Severity,"The Police-reported Injury Severity Of The Person (i.e., Occupant, Pedestrian, Or Pedalcyclist)."
+Interstates,Limited Access Divided Facilities Of At Least Four Lanes Designated By The Federal Highway Administration As Part Of The Interstate System.
+Jackknife,"Jackknife Can Occur At Any Time During The Crash Sequence. In This Report, Jackknifing Is Restricted To Truck Tractors Pulling A Trailing Unit In Which The Trailing Unit And The Pulling Vehicle Rotate With Respect To Each Other."
+Junction,"Area Formed By The Connection Of Two Roadways, Including Intersections, Interchange Areas, And Entrance/exit Ramps."
+Land Use,The Crash Location (urban Or Rural).
+Large Trucks,"Trucks Over 10,000 Pounds Gross Vehicle Weight Rating, Including Single Unit Trucks And Truck Tractors."
+Light Trucks,"Trucks Of 10,000 Pounds Gross Vehicle Weight Rating Or Less, Including Pickups, Vans, Truck-based Station Wagons, And Utility Vehicles."
+Local Streets And Roads,"Streets Whose Primary Purpose Is Feeding Higher Order Systems, Providing Direct Access With Little Or No Through Traffic."
+Manner Of Collision,A Classification For Crashes In Which The First Harmful Event Was A Collision Between Two Motor Vehicles In Transport.
+Minor Arterials,Streets And Highways Linking Cities And Larger Towns In Rural Areas In Distributing Trips To Small Geographic Areas In Urban Areas (not Penetrating Identifiable Neighborhoods).
+Most Harmful Event,The Event During A Crash For A Particular Vehicle That Is Judged To Have Produced The Greatest Personal Injury Or Property Damage.
+Motor Vehicle In Transport,"A Motor Vehicle In Motion On The Trafficway Or Any Other Motor Vehicle On The Roadway, Including Stalled, Disabled, Or Abandoned Vehicles."
+Motorcycle,"A Two- Or Three-wheeled Motor Vehicle Designed To Transport One Or Two People, Including Motorscooters, Minibikes, And Mopeds."
+Motorcycle Rider,Operator Of A Motorcycle.
+Motorcyclists,Any Combined Reference To The “motorcycle Rider” As Well As The “passenger”. ”Passenger” Is Any Person Who Is Not In Control Of The Motorcycle
+N/A,Not Applicable.
+Night,From 6 P.M. To 5:59 A.M.
+Noncollision,"A Class Of Crash In Which The First Harmful Event Does Not Involve A Collision With A Fixed Object, Nonfixed Object, Or A Motor Vehicle. This Includes Overturn, Fire/explosion, Falls From A Vehicle, And Injuries In A Vehicle."
+Nonmotorist,"Any Person Who Is Not An Occupant Of A Motor Vehicle In Transport And Includes The Following: 1. Pedestrians 2. Pedalcyclists 3. Occupants Of Parked Motor Vehicles 4. Others Such As Joggers, Skateboard Riders, People Riding On Animals, And Persons Riding In Animal-drawn Conveyances."
+Nonmotorist Location,The Location Of Nonmotorists At Time Of Impact. Intersection Locations Are Coded Only If Nonmotorists Were Struck In The Area Formed By A Junction Of Two Or More Trafficways. Non-intersection Location May Include Nonmotorists Struck On A Junction Of A Driveway/alley Access And A Named Trafficway. Nonmotorists Who Are Occupants Of Motor Vehicles Not In Transport Are Coded With Respect To The Location Of The Vehicle.
+Objects Not Fixed,"Objects That Are Movable Or Moving But Are Not Motor Vehicles. Includes Pedestrians, Pedalcyclists, Animals, Or Trains (e.g., Spilled Cargo In Roadway)."
+Occupant,"Any Person Who Is In Or Upon A Motor Vehicle In Transport. Includes The Driver, Passengers, And Persons Riding On The Exterior Of A Motor Vehicle."
+Other Freeways And Expressways,All Urban Principal Arterial With Limited Control Of Access Not On The Interstate System.
+Other Principal Arterials,"Major Streets Or Highways, Many With Multi-lane Or Freeway Design, Serving High-volume Traffic Corridor Movements That Connect Major Generators Of Travel."
+Other Vehicle,"Consists Of The Following Types Of Vehicles: 1. Large Limousine (more Than Four Side Doors Or Stretched Chassis) 2. Three-wheel Automobile Or Automobile Derivative 3. Van-based Motorhome 4. Light-truck-based Motorhome (chassis Mounted) 5. Large-truck-based Motorhome 6. ATV (all Terrain Vehicle, Including Dune/swamp Buggy) And ATC (all Terrain Cycle) 7. Snowmobile 8. Farm Equipment Other Than Trucks 9. Construction Equipment Other Than Trucks (includes Graders) 10. Other Type Vehicle (includes Go-cart, Fork Lift, City Streetsweeper)."
+Passenger,Any Occupant Of A Motor Vehicle Who Is Not A Driver.
+Passenger Car,"Motor Vehicles Used Primarily For Carrying Passengers, Including Convertibles, Sedans, And Station Wagons."
+Pedalcyclist,A Person On A Vehicle That Is Powered Solely By Pedals.
+Pedestrian,Any Person Not In Or Upon A Motor Vehicle Or Other Vehicle.
+Property-Damage-Only Crash,A Police-reported Crash Involving A Motor Vehicle In Transport On A Trafficway In Which No One Involved In The Crash Suffered Any Injuries.
+Rear-end Collision,A Collision In Which One Vehicle Collides With The Rear Of Another Vehicle.
+Restraint Use,"The Occupant's Use Of Available Vehicle Restraints Including Lap Belt, Shoulder Belt, Or Automatic Belt."
+Roadway,"That Part Of A Trafficway Designed, Improved, And Ordinarily Used For Motor Vehicle Travel."
+Roadway Function Class,The Classification Describing The Character Of Service The Street Or Highway Is Intended To Provide.
+Rollover,Rollover Is Defined As Any Vehicle Rotation Of 90 Degrees Or More About Any True Longitudinal Or Lateral Axis. Includes Rollovers Occurring As A First Harmful Event Or Subsequent Event.
+School Bus-Related Crash,"Any Crash In Which A Vehicle, Regardless Of Body Design, Used As A School Bus Is Directly Or Indirectly Involved, Such As A Crash Involving School Children Alighting From A Vehicle."
+Seating Position,"The Location Of The Occupants In The Vehicle. More Than One Can Be Assigned The Same Seat Position; However, This Is Allowed Only When A Person Is Sitting On Someone's Lap."
+Sideswipe,A Collision In Which The Sides Of Both Vehicles Sustain Minimal Engagements.
+Single-Unit Truck,"A Medium Or Heavy Truck In Which The Engine, Cab, Drive Train, And Cargo Area Are All On One Chassis."
+Trafficway,"Any Road, Street, Or Highway Open To The Public As A Matter Of Right Or Custom For Moving Persons Or Property From One Place To Another."
+Unknown,Data Either Not Available Or Not Known.
+Vehicle Type,"A Series Of Motor Vehicle Body Types That Have Been Grouped Together Because Of Their Design Similarities. The Principal Vehicle Types Used In This Report Are Passenger Car, Light Truck, Large Truck, Motorcycle, Bus, And Other Vehicle."
+Weekday,From 6 A.M. Monday To 5:59 P.M. Friday.
+Weekend,From 6 P.M. Friday To 5:59 A.M. Monday.

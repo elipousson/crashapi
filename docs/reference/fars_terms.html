@@ -22,7 +22,7 @@
   }
 </script>
 
-<title>Function reference • crashapi</title>
+<title>NHSTA Terms and Defintions — fars_terms • crashapi</title>
 
 
 <!-- jquery -->
@@ -65,7 +65,10 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="NHSTA Terms and Defintions — fars_terms" />
+<meta property="og:description" content="FARS-related terms defined by the National Highway Traffic
+  Safety Administration based on ANSI D16.1-1996: Manual on Classification of
+  Motor Vehicle Traffic Accidents." />
 
 
 
@@ -87,7 +90,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -134,81 +137,35 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>NHSTA Terms and Defintions</h1>
+    
+    <div class="hidden name"><code>fars_terms.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>FARS-related terms defined by the National Highway Traffic
+  Safety Administration based on ANSI D16.1-1996: Manual on Classification of
+  Motor Vehicle Traffic Accidents.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='va'>fars_terms</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-get-data-from-the-fars-api" class="hasAnchor"><a href="#section-get-data-from-the-fars-api" class="anchor"></a>Get data from the FARS API</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="get_fars.html">get_fars_crashes()</a></code> <code><a href="get_fars.html">get_fars_crash_list()</a></code> <code><a href="get_fars.html">get_fars_summary()</a></code> </p>
-        </td>
-        <td><p>Get Fatality Analysis Reporting System (FARS) data with the FARS API</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-get-variable-definitions" class="hasAnchor"><a href="#section-get-variable-definitions" class="anchor"></a>Get variable definitions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="fars_vars.html">fars_vars()</a></code> </p>
-        </td>
-        <td><p>Get variables and variable attributes for the Fatality Analysis
-  Reporting System (FARS) API</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-background-information" class="hasAnchor"><a href="#section-background-information" class="anchor"></a>Background information</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="fars_terms.html">fars_terms</a></code> </p>
-        </td>
-        <td><p>NHSTA Terms and Defintions</p></td>
-      </tr>
-    </tbody>
-    </table>
+
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>A data frame with 66 rows and 2 variables:</p><dl>
+  <dt><code>term</code></dt><dd><p>character Term</p></dd>
+  <dt><code>definition</code></dt><dd><p>character Term definition</p></dd>
+
+</dl>
+
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+
+    <p><a href='https://www-fars.nhtsa.dot.gov/Help/Terms.aspx'>NHTSA FARS Terms</a></p>
+
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
