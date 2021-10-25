@@ -1,0 +1,89 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# crashapi
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of crashapi is to provides functions for downloading data from the National Highway Traffic Safety Administration (NHTSA) [Fatality Analysis Reporting System (FARS) API](https://crashviewer.nhtsa.dot.gov/CrashAPI/). The NHTSA website explains the purpose of the API:
+
+>The NHTSA Crash data Application Programming Interface (API) provides various ways to get crash data collected by DOT NHTSA’s Fatality Analysis Reporting System (FARS) program. The APIs are primarily targeted for developers, programmers or researchers interested in obtaining Crash statistics on Fatal Motor Vehicle Crashes. The API supports multiple data output formats, namely, XML, CSV/XLSX, JSV and JSON. FARS data starting from 2010 onwards is made available through this website. There are different APIs provided to make it easier to query specific data.
+
+Currently three of the 3 of the 9 query APIs are supported by this package.
+
+## Installation
+
+You can install the development version of crashapi using the remotes package:
+
+``` r
+remotes::install_github("elipousson/crashapi")
+```
+
+## Examples
+
+```{r}
+library(crashapi)
+library(ggplot2)
+```
+
+```{r get_fars_crash_list}
+# Get crashes in NY from 2019 with 5 to 10 vehicles
+get_fars_crash_list(
+  start_year = 2019,
+  end_year = 2019,
+  state = "NY",
+  vehicles = c(5,10)
+)
+```
+
+```{r get_fars_crashes}
+# Get crashes for Baltimore County, MD from 2014 to 2015
+get_fars_crashes(
+  start_year = 2014,
+  end_year = 2015,
+  state = "MD",
+  county = "Baltimore County") |>
+  # Show 10 fatal crashes at random
+  dplyr::slice_sample(n = 10)
+```
+
+```{r map_fars_crashes}
+# Get crashes for Baltimore County, MD from 2014 to 2015
+# Set geometry to TRUE to return an sf object
+crashes <-
+  get_fars_crashes(
+    start_year = 2014,
+    end_year = 2015,
+    state = "MD",
+    county = "Baltimore County",
+    geometry = TRUE
+  )
+
+# Map crashes
+ggplot() +
+  geom_sf(data = dplyr::filter(mapbaltimore::baltimore_msa_counties, namelsad == "Baltimore County"), fill = NA, color = "black") +
+  geom_sf(data = crashes, aes(color = TOTALVEHICLES)) +
+  theme_void()
+```
+
+```{r get_fars_summary}
+# Get summary crash count and fatal crash count data for Maryland from 2010 to 2019
+get_fars_summary(
+  start_year = 2010,
+  end_year = 2019,
+  state = "MD"
+)
+```
