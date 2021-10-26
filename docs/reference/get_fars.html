@@ -66,17 +66,20 @@
 
 
 <meta property="og:title" content="Get Fatality Analysis Reporting System (FARS) data with the FARS API — get_fars_crashes" />
-<meta property="og:description" content="Three APIs from FARS are currently supported:
-get_fars_crash_list returns a list of fatal crashes that have occurred in
-multiple States in one or more years. Limit the year range as data limit
-has been set to 5000 records.
+<meta property="og:description" content="These functions are currently supported.
+get_fars_crash_list returns a list of fatal crashes that have occurred
+in multiple states in one or more years.
 get_fars_crashes a list of fatal crashes by location that have occurred
-throughout U.S. Limit the year range as data limit has been set to 5000
-records.
+throughout U.S.
 get_fars_summary provides a count of injury severity that have occurred
 throughout U.S. including count of fatalities and crashes.
+get_fars_year provides one of 20 FARS data tables for a single year.
+Supports downloading to a CSV or JSON file.
 
-" />
+
+Both get_fars_crash_list and get_fars_crashes limit the returned data to
+5000 records so consider limiting the range of years requested if data
+exceeds that threshold." />
 
 
 
@@ -153,17 +156,20 @@ throughout U.S. including count of fatalities and crashes.
     </div>
 
     <div class="ref-description">
-    <p>Three APIs from FARS are currently supported:</p><ul>
-<li><p><code>get_fars_crash_list</code> returns a list of fatal crashes that have occurred in
-multiple States in one or more years. Limit the year range as data limit
-has been set to 5000 records.</p></li>
+    <p>These functions are currently supported.</p><ul>
+<li><p><code>get_fars_crash_list</code> returns a list of fatal crashes that have occurred
+in multiple states in one or more years.</p></li>
 <li><p><code>get_fars_crashes</code> a list of fatal crashes by location that have occurred
-throughout U.S. Limit the year range as data limit has been set to 5000
-records.</p></li>
+throughout U.S.</p></li>
 <li><p><code>get_fars_summary</code> provides a count of injury severity that have occurred
 throughout U.S. including count of fatalities and crashes.</p></li>
+<li><p><code>get_fars_year</code> provides one of 20 FARS data tables for a single year.
+Supports downloading to a CSV or JSON file.</p></li>
 </ul>
 
+<p>Both <code>get_fars_crash_list</code> and <code>get_fars_crashes</code> limit the returned data to
+5000 records so consider limiting the range of years requested if data
+exceeds that threshold.</p>
     </div>
 
     <pre class="usage"><span class='fu'>get_fars_crashes</span><span class='op'>(</span>
@@ -179,10 +185,12 @@ throughout U.S. including count of fatalities and crashes.</p></li>
   start_year <span class='op'>=</span> <span class='fl'>2014</span>,
   end_year <span class='op'>=</span> <span class='fl'>2015</span>,
   state <span class='op'>=</span> <span class='fl'>1</span>,
-  vehicles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>
+  vehicles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>50</span><span class='op'>)</span>
 <span class='op'>)</span>
 
-<span class='fu'>get_fars_summary</span><span class='op'>(</span>start_year <span class='op'>=</span> <span class='fl'>2014</span>, end_year <span class='op'>=</span> <span class='fl'>2015</span>, state <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
+<span class='fu'>get_fars_summary</span><span class='op'>(</span>start_year <span class='op'>=</span> <span class='fl'>2014</span>, end_year <span class='op'>=</span> <span class='fl'>2015</span>, state <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+
+<span class='fu'>get_fars_year</span><span class='op'>(</span><span class='va'>year</span>, data <span class='op'>=</span> <span class='st'>"ACCIDENT"</span>, format <span class='op'>=</span> <span class='st'>"json"</span>, download <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -220,6 +228,22 @@ geometry is TRUE</p></td>
       <td><p>Vector with the minimum and maximum number of vehicles, e.g.
 c(1, 2) for minimum of 1 vehicle and maximum of 2. Required for
 <code>get_fars_crash_list</code>.</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>data table to download with <code>get_fars_year</code>. Supported values
+include "ACCIDENT", "CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "FACTOR",
+"MANEUVER", "NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE",
+"PERSON", "SAFETYEQ", "VEHICLE", "VEVENT VINDECODE", "VINDERIVED",
+"VIOLATION", "VISION", and "VSOE".</p></td>
+    </tr>
+    <tr>
+      <th>format</th>
+      <td><p>Default "json". "csv" is also supported.</p></td>
+    </tr>
+    <tr>
+      <th>download</th>
+      <td><p>Default FALSE. If TRUE, download the data to a file.</p></td>
     </tr>
     </table>
 
