@@ -193,7 +193,6 @@ get_fars_summary <- function(start_year = 2014,
   jsonlite::read_json(query, simplifyVector = TRUE)$Results[[1]]
 }
 
-
 #' @rdname get_fars
 #' @export
 #' @importFrom jsonlite read_json
@@ -219,4 +218,20 @@ get_fars_year <- function(year,
   } else {
     fars
   }
+}
+
+#' @rdname get_fars
+#' @export
+#' @importFrom jsonlite read_json
+get_fars_crash_details <- function(year = 2015,
+                                   state = 1,
+                                   case) {
+  year <- match.arg(as.character(year), c(2010:2019))
+
+  states_fips <- state_to_fips(state) |>
+    as.integer()
+
+  query <- make_query("/crashes/GetCaseDetails?stateCase={case}&caseYear={year}&state={state_fips}")
+
+  jsonlite::read_json(query, simplifyVector = TRUE)$Results[[1]]
 }

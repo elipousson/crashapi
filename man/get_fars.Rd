@@ -5,6 +5,7 @@
 \alias{get_fars_crash_list}
 \alias{get_fars_summary}
 \alias{get_fars_year}
+\alias{get_fars_crash_details}
 \title{Get Fatality Analysis Reporting System (FARS) data with the FARS API}
 \usage{
 get_fars_crashes(
@@ -26,6 +27,8 @@ get_fars_crash_list(
 get_fars_summary(start_year = 2014, end_year = 2015, state = 1)
 
 get_fars_year(year, data = "ACCIDENT", format = "json", download = FALSE)
+
+get_fars_crash_details(year = 2015, state = 1, case)
 }
 \arguments{
 \item{start_year}{Required. Start year for crash reports (must be between
