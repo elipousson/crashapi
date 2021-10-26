@@ -85,7 +85,9 @@
 <blockquote>
 <p>The NHTSA Crash data Application Programming Interface (API) provides various ways to get crash data collected by DOT NHTSA’s Fatality Analysis Reporting System (FARS) program. The APIs are primarily targeted for developers, programmers or researchers interested in obtaining Crash statistics on Fatal Motor Vehicle Crashes. The API supports multiple data output formats, namely, XML, CSV/XLSX, JSV and JSON. FARS data starting from 2010 onwards is made available through this website. There are different APIs provided to make it easier to query specific data.</p>
 </blockquote>
-<p>Supported APIs include Get Crash List Information (<code><a href="reference/get_fars_crashes.html">get_fars_crash_list()</a></code>), Get Crashes By Location (<code><a href="reference/get_fars_crashes.html">get_fars_crashes()</a></code>), Get Summary Counts (<code><a href="reference/get_fars_crashes.html">get_fars_summary()</a></code>), Get Variables and Get Variable Attributes (<code>get_fars_vars()</code>), and Get FARS Data By Year (<code><a href="reference/get_fars_crashes.html">get_fars_year()</a></code>). Multiple formats are only supported for <code><a href="reference/get_fars_crashes.html">get_fars_year()</a></code>. The APIs for Get Crash Details, Get Crashes By Vehicle, and Get Crashes By Occupant are not yet supported.</p>
+<p>Supported APIs include Get Crash List Information (get_fars_crash_list()), Get Crashes By Location (get_fars_crashes()), Get Summary Counts (get_fars_summary()), Get Variables and Get Variable Attributes (<code>get_fars_vars()</code>), and Get FARS Data By Year (get_fars_year()).</p>
+<p>Multiple formats are only supported for get_fars_year().</p>
+<p>The APIs for Get Crash Details, Get Crashes By Vehicle, and Get Crashes By Occupant are not yet supported.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -133,38 +135,38 @@
   <span class="co"># Show 10 fatal crashes at random</span>
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_sample</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
 <span class="co">#&gt;    CITY       CITYNAME COUNTY    COUNTYNAME CaseYear FATALS    LATITUDE</span>
-<span class="co">#&gt; 1     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.36085278</span>
-<span class="co">#&gt; 2     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.23606944</span>
-<span class="co">#&gt; 3     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.32917500</span>
-<span class="co">#&gt; 4     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.42370000</span>
-<span class="co">#&gt; 5     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.24349167</span>
-<span class="co">#&gt; 6     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.35910556</span>
-<span class="co">#&gt; 7     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.51717500</span>
-<span class="co">#&gt; 8     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.49308333</span>
-<span class="co">#&gt; 9     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.39287500</span>
-<span class="co">#&gt; 10    0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.31194722</span>
-<span class="co">#&gt;         LONGITUD STATE STATENAME ST_CASE TOTALVEHICLES TWAY_ID    TWAY_ID2</span>
-<span class="co">#&gt; 1  -76.523691670    24  Maryland  240242             1    US-1     CR-3481</span>
-<span class="co">#&gt; 2  -76.470844440    24  Maryland  240399             1  SR-158 SHIPYARD RD</span>
-<span class="co">#&gt; 3  -76.440691670    24  Maryland  240377             2  SR-150     CR-6105</span>
-<span class="co">#&gt; 4  -76.495422220    24  Maryland  240087             2  SR-147            </span>
-<span class="co">#&gt; 5  -76.690841670    24  Maryland  240263             2    I-95            </span>
-<span class="co">#&gt; 6  -76.746147220    24  Maryland  240026             2   I-695            </span>
-<span class="co">#&gt; 7  -76.835450000    24  Maryland  240248             2   SR-30      CR-187</span>
-<span class="co">#&gt; 8  -76.605477780    24  Maryland  240340             2 CR-6615            </span>
-<span class="co">#&gt; 9  -76.486986110    24  Maryland  240178             2    US-1            </span>
-<span class="co">#&gt; 10 -76.730591670    24  Maryland  240352             1  SR-122            </span>
-<span class="co">#&gt;    VE_FORMS</span>
-<span class="co">#&gt; 1         1</span>
-<span class="co">#&gt; 2         1</span>
-<span class="co">#&gt; 3         2</span>
-<span class="co">#&gt; 4         2</span>
-<span class="co">#&gt; 5         2</span>
-<span class="co">#&gt; 6         1</span>
-<span class="co">#&gt; 7         2</span>
-<span class="co">#&gt; 8         2</span>
-<span class="co">#&gt; 9         2</span>
-<span class="co">#&gt; 10        1</span></code></pre></div>
+<span class="co">#&gt; 1     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.37288611</span>
+<span class="co">#&gt; 2     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.42700833</span>
+<span class="co">#&gt; 3     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.44058611</span>
+<span class="co">#&gt; 4     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.25870833</span>
+<span class="co">#&gt; 5     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.27728889</span>
+<span class="co">#&gt; 6     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.23606944</span>
+<span class="co">#&gt; 7     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.41126667</span>
+<span class="co">#&gt; 8     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.23193056</span>
+<span class="co">#&gt; 9     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.31041667</span>
+<span class="co">#&gt; 10    0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.23758333</span>
+<span class="co">#&gt;         LONGITUD STATE STATENAME ST_CASE TOTALVEHICLES   TWAY_ID</span>
+<span class="co">#&gt; 1  -76.568861110    24  Maryland  240349             1     SR-41</span>
+<span class="co">#&gt; 2  -76.390002780    24  Maryland  240140             1      I-95</span>
+<span class="co">#&gt; 3  -76.626136110    24  Maryland  240376             2     SR-45</span>
+<span class="co">#&gt; 4  -76.524613890    24  Maryland  240200             1   CR-5232</span>
+<span class="co">#&gt; 5  -76.481141670    24  Maryland  240209             1   SR-8007</span>
+<span class="co">#&gt; 6  -76.470844440    24  Maryland  240399             1    SR-158</span>
+<span class="co">#&gt; 7  -76.768558330    24  Maryland  240313             2    SR-140</span>
+<span class="co">#&gt; 8  -76.712363890    24  Maryland  240319             1 I-95 RAMP</span>
+<span class="co">#&gt; 9  -76.470936110    24  Maryland  240211             2    SR-150</span>
+<span class="co">#&gt; 10 -76.663413890    24  Maryland  240149             2   CR-3239</span>
+<span class="co">#&gt;                  TWAY_ID2 VE_FORMS</span>
+<span class="co">#&gt; 1                                1</span>
+<span class="co">#&gt; 2                                1</span>
+<span class="co">#&gt; 3                  CR-810        2</span>
+<span class="co">#&gt; 4                                1</span>
+<span class="co">#&gt; 5                                1</span>
+<span class="co">#&gt; 6             SHIPYARD RD        1</span>
+<span class="co">#&gt; 7  THOMAS CENTER ENTRANCE        2</span>
+<span class="co">#&gt; 8                                1</span>
+<span class="co">#&gt; 9           STUART STREET        2</span>
+<span class="co">#&gt; 10                CR-3200        2</span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Get crashes for Baltimore County, MD from 2014 to 2015</span>
 <span class="co"># Set geometry to TRUE to return an sf object</span>
