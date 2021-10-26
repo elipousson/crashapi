@@ -3,9 +3,9 @@
 \name{get_fars_crashes}
 \alias{get_fars_crashes}
 \alias{get_fars_crash_list}
+\alias{get_fars_crash_details}
 \alias{get_fars_summary}
 \alias{get_fars_year}
-\alias{get_fars_crash_details}
 \title{Get Fatality Analysis Reporting System (FARS) data with the FARS API}
 \usage{
 get_fars_crashes(
@@ -24,11 +24,11 @@ get_fars_crash_list(
   vehicles = c(1, 50)
 )
 
+get_fars_crash_details(year = 2015, state = 1, case)
+
 get_fars_summary(start_year = 2014, end_year = 2015, state = 1)
 
 get_fars_year(year, data = "ACCIDENT", format = "json", download = FALSE)
-
-get_fars_crash_details(year = 2015, state = 1, case)
 }
 \arguments{
 \item{start_year}{Required. Start year for crash reports (must be between
@@ -62,10 +62,12 @@ include "ACCIDENT", "CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "FACTOR",
 \item{download}{Default FALSE. If TRUE, download the data to a file.}
 }
 \description{
-These functions are currently supported.
+These functions are currently supported:
 \itemize{
 \item \code{get_fars_crash_list} returns a list of fatal crashes that have occurred
 in multiple states in one or more years.
+\item \code{get_fars_crash_details} returns a details of a fatal crash that has
+occurred in a state for a single year.
 \item \code{get_fars_crashes} a list of fatal crashes by location that have occurred
 throughout U.S.
 \item \code{get_fars_summary} provides a count of injury severity that have occurred

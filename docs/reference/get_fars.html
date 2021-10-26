@@ -66,9 +66,11 @@
 
 
 <meta property="og:title" content="Get Fatality Analysis Reporting System (FARS) data with the FARS API — get_fars_crashes" />
-<meta property="og:description" content="These functions are currently supported.
+<meta property="og:description" content="These functions are currently supported:
 get_fars_crash_list returns a list of fatal crashes that have occurred
 in multiple states in one or more years.
+get_fars_crash_details returns a details of a fatal crash that has
+occurred in a state for a single year.
 get_fars_crashes a list of fatal crashes by location that have occurred
 throughout U.S.
 get_fars_summary provides a count of injury severity that have occurred
@@ -159,9 +161,11 @@ exceeds that threshold." />
     </div>
 
     <div class="ref-description">
-    <p>These functions are currently supported.</p><ul>
+    <p>These functions are currently supported:</p><ul>
 <li><p><code>get_fars_crash_list</code> returns a list of fatal crashes that have occurred
 in multiple states in one or more years.</p></li>
+<li><p><code>get_fars_crash_details</code> returns a details of a fatal crash that has
+occurred in a state for a single year.</p></li>
 <li><p><code>get_fars_crashes</code> a list of fatal crashes by location that have occurred
 throughout U.S.</p></li>
 <li><p><code>get_fars_summary</code> provides a count of injury severity that have occurred
@@ -191,11 +195,11 @@ exceeds that threshold.</p>
   vehicles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>50</span><span class='op'>)</span>
 <span class='op'>)</span>
 
+<span class='fu'>get_fars_crash_details</span><span class='op'>(</span>year <span class='op'>=</span> <span class='fl'>2015</span>, state <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>case</span><span class='op'>)</span>
+
 <span class='fu'>get_fars_summary</span><span class='op'>(</span>start_year <span class='op'>=</span> <span class='fl'>2014</span>, end_year <span class='op'>=</span> <span class='fl'>2015</span>, state <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 
-<span class='fu'>get_fars_year</span><span class='op'>(</span><span class='va'>year</span>, data <span class='op'>=</span> <span class='st'>"ACCIDENT"</span>, format <span class='op'>=</span> <span class='st'>"json"</span>, download <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='fu'>get_fars_crash_details</span><span class='op'>(</span>year <span class='op'>=</span> <span class='fl'>2015</span>, state <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>case</span><span class='op'>)</span></pre>
+<span class='fu'>get_fars_year</span><span class='op'>(</span><span class='va'>year</span>, data <span class='op'>=</span> <span class='st'>"ACCIDENT"</span>, format <span class='op'>=</span> <span class='st'>"json"</span>, download <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

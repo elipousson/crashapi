@@ -82,9 +82,11 @@ data_to_sf <- function(x,
 }
 
 #' @title Get Fatality Analysis Reporting System (FARS) data with the FARS API
-#' @description These functions are currently supported.
+#' @description These functions are currently supported:
 #'   - `get_fars_crash_list` returns a list of fatal crashes that have occurred
 #'   in multiple states in one or more years.
+#'   - `get_fars_crash_details` returns a details of a fatal crash that has
+#'   occurred in a state for a single year.
 #'   - `get_fars_crashes` a list of fatal crashes by location that have occurred
 #'   throughout U.S.
 #'   - `get_fars_summary` provides a count of injury severity that have occurred
@@ -177,6 +179,22 @@ get_fars_crash_list <- function(start_year = 2014,
 #' @rdname get_fars
 #' @export
 #' @importFrom jsonlite read_json
+get_fars_crash_details <- function(year = 2015,
+                                   state = 1,
+                                   case) {
+  year <- match.arg(as.character(year), c(2010:2019))
+
+  states_fips <- state_to_fips(state) |>
+    as.integer()
+
+  query <- make_query("/crashes/GetCaseDetails?stateCase={case}&caseYear={year}&state={state_fips}")
+
+  jsonlite::read_json(query, simplifyVector = TRUE)$Results[[1]]
+}
+
+#' @rdname get_fars
+#' @export
+#' @importFrom jsonlite read_json
 get_fars_summary <- function(start_year = 2014,
                              end_year = 2015,
                              state = 1) {
@@ -218,20 +236,4 @@ get_fars_year <- function(year,
   } else {
     fars
   }
-}
-
-#' @rdname get_fars
-#' @export
-#' @importFrom jsonlite read_json
-get_fars_crash_details <- function(year = 2015,
-                                   state = 1,
-                                   case) {
-  year <- match.arg(as.character(year), c(2010:2019))
-
-  states_fips <- state_to_fips(state) |>
-    as.integer()
-
-  query <- make_query("/crashes/GetCaseDetails?stateCase={case}&caseYear={year}&state={state_fips}")
-
-  jsonlite::read_json(query, simplifyVector = TRUE)$Results[[1]]
 }
