@@ -19,26 +19,23 @@
 #'   = "model", make = 37)`
 #' @rdname fars_vars
 #' @export
-#' @importFrom glue glue
 #' @importFrom jsonlite read_json
 fars_vars <- function(year, var = NULL, make = NULL, model = NULL) {
   if ((year >= 2020 | year <= 2009) & !is.null(year)) {
     stop("The year must be between 2010 and 2019.")
   }
 
-  query <- "https://crashviewer.nhtsa.dot.gov/CrashAPI"
-
   if (!is.null(var)) {
     var <- match.arg(var, c("make", "model", "bodytype"))
     if (var == "make") {
-      query <- glue::glue("{query}/definitions/GetVariableAttributes?variable={var}&caseYear={year}&format=json")
+      query <- make_query("/definitions/GetVariableAttributes?variable={var}&caseYear={year}")
     } else if (var == "model") {
-      query <- glue::glue("{query}/definitions/GetVariableAttributesForModel?variable={var}&caseYear={year}&make={make}&format=json")
+      query <- make_query("/definitions/GetVariableAttributesForModel?variable={var}&caseYear={year}&make={make}")
     } else if (var == "bodytype") {
-      query <- glue::glue("{query}/definitions/GetVariableAttributesForbodyType?variable={var}&make={make}&model={model}&format=json")
+      query <- make_query("/definitions/GetVariableAttributesForbodyType?variable={var}&make={make}&model={model}")
     }
   } else {
-    query <- glue::glue("{query}/definitions/GetVariables?dataYear={year}&format=json")
+    query <- make_query("/definitions/GetVariables?dataYear={year}")
   }
 
   jsonlite::read_json(query, simplifyVector = TRUE)$Results[[1]]
