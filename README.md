@@ -22,8 +22,13 @@ explains the purpose of the API:
 > this website. There are different APIs provided to make it easier to
 > query specific data.
 
-Currently three of the 3 of the 9 query APIs are supported by this
-package.
+Supported APIs include Get Crash List Information
+(`get_fars_crash_list()`), Get Crashes By Location
+(`get_fars_crashes()`), Get Summary Counts (`get_fars_summary()`), Get
+Variables and Get Variable Attributes (`get_fars_vars()`), and Get FARS
+Data By Year (`get_fars_year()`). Multiple formats are only supported
+for `get_fars_year()`. The APIs for Get Crash Details, Get Crashes By
+Vehicle, and Get Crashes By Occupant are not yet supported.
 
 ## Installation
 
@@ -77,38 +82,38 @@ get_fars_crashes(
   # Show 10 fatal crashes at random
   dplyr::slice_sample(n = 10)
 #>    CITY       CITYNAME COUNTY    COUNTYNAME CaseYear FATALS    LATITUDE
-#> 1     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.38516944
-#> 2     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.37583333
-#> 3     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.68169167
-#> 4     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.36160833
-#> 5     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.51717500
-#> 6     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.40746111
-#> 7     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.26032222
-#> 8     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.39587500
-#> 9     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.44058611
-#> 10    0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.41453889
-#>         LONGITUD STATE STATENAME ST_CASE TOTALVEHICLES            TWAY_ID
-#> 1  -76.633408330    24  Maryland  240169             1             SR-134
-#> 2  -76.513941670    24  Maryland  240281             1            CR-4458
-#> 3  -76.730450000    24  Maryland  240058             1              CR-70
-#> 4  -76.525191670    24  Maryland  240112             2            CR-3481
-#> 5  -76.835450000    24  Maryland  240248             2              SR-30
-#> 6  -76.392258330    24  Maryland  240128             1              US-40
-#> 7  -76.487916670    24  Maryland  240388             1 JASMINE ROAD ALLEY
-#> 8  -76.662855560    24  Maryland  240318             1              SR-25
-#> 9  -76.626136110    24  Maryland  240376             2              SR-45
-#> 10 -76.592600000    24  Maryland  240103             2               I-95
-#>    TWAY_ID2 VE_FORMS
-#> 1                  1
-#> 2                  1
-#> 3                  1
-#> 4                  2
-#> 5    CR-187        2
-#> 6                  1
-#> 7                  1
-#> 8                  1
-#> 9    CR-810        2
-#> 10                 2
+#> 1     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.36085278
+#> 2     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.23606944
+#> 3     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.32917500
+#> 4     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.42370000
+#> 5     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.24349167
+#> 6     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.35910556
+#> 7     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.51717500
+#> 8     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.49308333
+#> 9     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.39287500
+#> 10    0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.31194722
+#>         LONGITUD STATE STATENAME ST_CASE TOTALVEHICLES TWAY_ID    TWAY_ID2
+#> 1  -76.523691670    24  Maryland  240242             1    US-1     CR-3481
+#> 2  -76.470844440    24  Maryland  240399             1  SR-158 SHIPYARD RD
+#> 3  -76.440691670    24  Maryland  240377             2  SR-150     CR-6105
+#> 4  -76.495422220    24  Maryland  240087             2  SR-147            
+#> 5  -76.690841670    24  Maryland  240263             2    I-95            
+#> 6  -76.746147220    24  Maryland  240026             2   I-695            
+#> 7  -76.835450000    24  Maryland  240248             2   SR-30      CR-187
+#> 8  -76.605477780    24  Maryland  240340             2 CR-6615            
+#> 9  -76.486986110    24  Maryland  240178             2    US-1            
+#> 10 -76.730591670    24  Maryland  240352             1  SR-122            
+#>    VE_FORMS
+#> 1         1
+#> 2         1
+#> 3         2
+#> 4         2
+#> 5         2
+#> 6         1
+#> 7         2
+#> 8         2
+#> 9         2
+#> 10        1
 ```
 
 ``` r

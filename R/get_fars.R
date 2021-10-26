@@ -1,11 +1,11 @@
 # Utility functions
 # Validate state and convert to FIPS number
-state_to_fips <- function(state) {
-  if (is.integer(state)) {
-    state_fips <- sprintf("%02d", state)
-    state_fips <- match.arg(state_fips, tigris::fips_codes["state_code"], several.ok = TRUE)
+state_to_fips <- function(state, several.ok = FALSE) {
+  if (is.numeric(state)) {
+    state <- sprintf("%02d", as.integer(state))
+    state_fips <- match.arg(arg = state, choices = tigris::fips_codes[["state_code"]], several.ok = several.ok)
   } else if (is.character(state)) {
-    state <- match.arg(state, unique(c(tigris::fips_codes[, "state"], tigris::fips_codes[, "state_name"])), several.ok = TRUE)
+    state <- match.arg(arg = state, unique(c(tigris::fips_codes[, "state"], tigris::fips_codes[, "state_name"])), several.ok = several.ok)
     state_fips <- tigris::fips_codes[tigris::fips_codes["state_name"] == state | tigris::fips_codes["state"] == state, "state_code"] |>
       unique()
   }
@@ -17,8 +17,8 @@ state_to_fips <- function(state) {
 county_to_fips <- function(county, state) {
   state <- state_to_fips(state)
 
-  if (is.integer(county)) {
-    county_fips <- sprintf("%03d", county)
+  if (is.numeric(county)) {
+    county_fips <- sprintf("%03d", as.integer(county))
     county_fips <- match.arg(county_fips, tigris::fips_codes[tigris::fips_codes["state_code"] == state, "county_code"])
   } else if (is.character(county)) {
     county <- match.arg(county, tigris::fips_codes[tigris::fips_codes["state_code"] == state, "county"])
@@ -45,6 +45,11 @@ validate_year <- function(start_year, end_year) {
   if (end_year < start_year) {
     stop("The end_year must be greater than or equal to the start_year.")
   }
+}
+
+# Build query URL
+make_query <- function(x, format = "json", .envir = parent.frame()) {
+  paste0("https://crashviewer.nhtsa.dot.gov/CrashAPI", glue::glue(x, .envir = .envir), glue::glue("&format={format}"))
 }
 
 # Convert data frame to sf object
@@ -77,15 +82,20 @@ data_to_sf <- function(x,
 }
 
 #' @title Get Fatality Analysis Reporting System (FARS) data with the FARS API
-#' @description Three APIs from FARS are currently supported:
-#'   - `get_fars_crash_list` returns a list of fatal crashes that have occurred in
-#'   multiple States in one or more years. Limit the year range as data limit
-#'   has been set to 5000 records.
+#' @description These functions are currently supported.
+#'   - `get_fars_crash_list` returns a list of fatal crashes that have occurred
+#'   in multiple states in one or more years.
 #'   - `get_fars_crashes` a list of fatal crashes by location that have occurred
-#'   throughout U.S. Limit the year range as data limit has been set to 5000
-#'   records.
+#'   throughout U.S.
 #'   - `get_fars_summary` provides a count of injury severity that have occurred
 #'   throughout U.S. including count of fatalities and crashes.
+#'   - `get_fars_year` provides one of 20 FARS data tables for a single year.
+#'   Supports downloading to a CSV or JSON file.
+#'
+#' Both `get_fars_crash_list` and `get_fars_crashes` limit the returned data to
+#' 5000 records so consider limiting the range of years requested if data
+#' exceeds that threshold.
+#'
 #' @param start_year Required. Start year for crash reports (must be between
 #'   2010 and 2019), Default: 2014
 #' @param end_year Required. End year for crash reports (must be between 2010
@@ -99,20 +109,27 @@ data_to_sf <- function(x,
 #' @param vehicles Vector with the minimum and maximum number of vehicles, e.g.
 #'   c(1, 2) for minimum of 1 vehicle and maximum of 2. Required for
 #'   `get_fars_crash_list`.
+#' @param data data table to download with `get_fars_year`. Supported values
+#'   include "ACCIDENT", "CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "FACTOR",
+#'   "MANEUVER", "NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE",
+#'   "PERSON", "SAFETYEQ", "VEHICLE", "VEVENT VINDECODE", "VINDERIVED",
+#'   "VIOLATION", "VISION", and "VSOE".
+#' @param format Default "json". "csv" is also supported.
+#' @param download Default FALSE. If TRUE, download the data to a file.
 #' @rdname get_fars
 #' @export
 #' @md
-#' @importFrom glue glue
 #' @importFrom jsonlite read_json
 get_fars_crashes <- function(start_year = 2014,
-                        end_year = 2015,
-                        state = 1,
-                        county = 1,
-                        geometry = FALSE,
-                        crs = 4326) {
-
-  validate_year(start_year = start_year,
-                end_year = end_year)
+                             end_year = 2015,
+                             state = 1,
+                             county = 1,
+                             geometry = FALSE,
+                             crs = 4326) {
+  validate_year(
+    start_year = start_year,
+    end_year = end_year
+  )
 
   state_fips <- state_to_fips(state) |>
     as.integer()
@@ -120,60 +137,86 @@ get_fars_crashes <- function(start_year = 2014,
   county_fips <- county_to_fips(county, state) |>
     as.integer()
 
-  query <- "https://crashviewer.nhtsa.dot.gov/CrashAPI"
-  query <- glue::glue("{query}/crashes/GetCrashesByLocation?fromCaseYear={start_year}&toCaseYear={end_year}&state={state_fips}&county={county_fips}&format=json")
+  query <- make_query("/crashes/GetCrashesByLocation?fromCaseYear={start_year}&toCaseYear={end_year}&state={state_fips}&county={county_fips}")
 
   data <- jsonlite::read_json(query, simplifyVector = TRUE)$Results[[1]]
 
   if (geometry) {
     data |>
-      data_to_sf(longitude = "LONGITUD",
-                 latitude = "LATITUDE",
-                 crs = crs)
+      data_to_sf(
+        longitude = "LONGITUD",
+        latitude = "LATITUDE",
+        crs = crs
+      )
   } else {
     data
   }
-
 }
 
 #' @rdname get_fars
 #' @export
-#' @importFrom glue glue
 #' @importFrom jsonlite read_json
 get_fars_crash_list <- function(start_year = 2014,
-                           end_year = 2015,
-                           state = 1,
-                           vehicles = c(1, 2)) {
+                                end_year = 2015,
+                                state = 1,
+                                vehicles = c(1, 50)) {
+  validate_year(
+    start_year = start_year,
+    end_year = end_year
+  )
 
-  validate_year(start_year = start_year,
-                end_year = end_year)
-
-  states <- state_to_fips(state) |>
+  states_fips <- state_to_fips(state, several.ok = TRUE) |>
     as.integer() |>
     paste0(collapse = ",")
 
-  query <- "https://crashviewer.nhtsa.dot.gov/CrashAPI"
-  query <- glue::glue("{query}/crashes/?states={states}&fromYear={start_year}&toYear={end_year}&minNumOfVehicles={vehicles[1]}&maxNumOfVehicles={vehicles[2]}&format=json")
+  query <- make_query("/crashes/?states={states_fips}&fromYear={start_year}&toYear={end_year}&minNumOfVehicles={vehicles[1]}&maxNumOfVehicles={vehicles[2]}")
 
   jsonlite::read_json(query, simplifyVector = TRUE)$Results[[1]]
 }
 
 #' @rdname get_fars
 #' @export
-#' @importFrom glue glue
 #' @importFrom jsonlite read_json
 get_fars_summary <- function(start_year = 2014,
                              end_year = 2015,
                              state = 1) {
-
-  validate_year(start_year = start_year,
-                end_year = end_year)
+  validate_year(
+    start_year = start_year,
+    end_year = end_year
+  )
 
   state_fips <- state_to_fips(state) |>
     as.integer()
 
-  query <- "https://crashviewer.nhtsa.dot.gov/CrashAPI"
-  query <- glue::glue("{query}/analytics/GetInjurySeverityCounts?fromCaseYear={start_year}&toCaseYear={end_year}&state={state_fips}&format=json")
+  query <- make_query("/analytics/GetInjurySeverityCounts?fromCaseYear={start_year}&toCaseYear={end_year}&state={state_fips}")
 
   jsonlite::read_json(query, simplifyVector = TRUE)$Results[[1]]
+}
+
+
+#' @rdname get_fars
+#' @export
+#' @importFrom jsonlite read_json
+#' @importFrom readr read_csv
+get_fars_year <- function(year,
+                          data = "ACCIDENT",
+                          format = "json",
+                          download = FALSE) {
+  year <- match.arg(as.character(year), c(2010:2017))
+  data <- match.arg(data, c("ACCIDENT", "CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "FACTOR", "MANEUVER", "NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE", "PERSON", "SAFETYEQ", "VEHICLE", "VEVENT VINDECODE", "VINDERIVED", "VIOLATION", "VISION", "VSOE"))
+  format <- match.arg(format, c("csv", "json"))
+
+  query <- make_query("/FARSData/GetFARSData?dataset={stringr::str_to_sentence(data)}&caseYear={year}", format = format)
+
+  if (format == "json") {
+    fars <- jsonlite::read_json(query, simplifyVector = TRUE)$Results[[1]]
+  } else if (format == "csv") {
+    fars <- readr::read_csv(query)
+  }
+
+  if (download) {
+    download.file(fars, destfile = paste0(year, "_", data, ".", format))
+  } else {
+    fars
+  }
 }

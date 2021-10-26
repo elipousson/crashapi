@@ -22,7 +22,7 @@ The goal of crashapi is to provides functions for downloading data from the Nati
 
 >The NHTSA Crash data Application Programming Interface (API) provides various ways to get crash data collected by DOT NHTSA’s Fatality Analysis Reporting System (FARS) program. The APIs are primarily targeted for developers, programmers or researchers interested in obtaining Crash statistics on Fatal Motor Vehicle Crashes. The API supports multiple data output formats, namely, XML, CSV/XLSX, JSV and JSON. FARS data starting from 2010 onwards is made available through this website. There are different APIs provided to make it easier to query specific data.
 
-Currently three of the 3 of the 9 query APIs are supported by this package.
+Supported APIs include Get Crash List Information (`get_fars_crash_list()`), Get Crashes By Location (`get_fars_crashes()`), Get Summary Counts (`get_fars_summary()`), Get Variables and Get Variable Attributes (`get_fars_vars()`), and Get FARS Data By Year (`get_fars_year()`). Multiple formats are only supported for `get_fars_year()`. The APIs for Get Crash Details, Get Crashes By Vehicle, and Get Crashes By Occupant are not yet supported.
 
 ## Installation
 

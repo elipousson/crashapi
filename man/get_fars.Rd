@@ -4,6 +4,7 @@
 \alias{get_fars_crashes}
 \alias{get_fars_crash_list}
 \alias{get_fars_summary}
+\alias{get_fars_year}
 \title{Get Fatality Analysis Reporting System (FARS) data with the FARS API}
 \usage{
 get_fars_crashes(
@@ -19,10 +20,12 @@ get_fars_crash_list(
   start_year = 2014,
   end_year = 2015,
   state = 1,
-  vehicles = c(1, 2)
+  vehicles = c(1, 50)
 )
 
 get_fars_summary(start_year = 2014, end_year = 2015, state = 1)
+
+get_fars_year(year, data = "ACCIDENT", format = "json", download = FALSE)
 }
 \arguments{
 \item{start_year}{Required. Start year for crash reports (must be between
@@ -44,17 +47,31 @@ geometry is TRUE}
 \item{vehicles}{Vector with the minimum and maximum number of vehicles, e.g.
 c(1, 2) for minimum of 1 vehicle and maximum of 2. Required for
 \code{get_fars_crash_list}.}
+
+\item{data}{data table to download with \code{get_fars_year}. Supported values
+include "ACCIDENT", "CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "FACTOR",
+"MANEUVER", "NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE",
+"PERSON", "SAFETYEQ", "VEHICLE", "VEVENT VINDECODE", "VINDERIVED",
+"VIOLATION", "VISION", and "VSOE".}
+
+\item{format}{Default "json". "csv" is also supported.}
+
+\item{download}{Default FALSE. If TRUE, download the data to a file.}
 }
 \description{
-Three APIs from FARS are currently supported:
+These functions are currently supported.
 \itemize{
-\item \code{get_fars_crash_list} returns a list of fatal crashes that have occurred in
-multiple States in one or more years. Limit the year range as data limit
-has been set to 5000 records.
+\item \code{get_fars_crash_list} returns a list of fatal crashes that have occurred
+in multiple states in one or more years.
 \item \code{get_fars_crashes} a list of fatal crashes by location that have occurred
-throughout U.S. Limit the year range as data limit has been set to 5000
-records.
+throughout U.S.
 \item \code{get_fars_summary} provides a count of injury severity that have occurred
 throughout U.S. including count of fatalities and crashes.
+\item \code{get_fars_year} provides one of 20 FARS data tables for a single year.
+Supports downloading to a CSV or JSON file.
 }
+
+Both \code{get_fars_crash_list} and \code{get_fars_crashes} limit the returned data to
+5000 records so consider limiting the range of years requested if data
+exceeds that threshold.
 }
