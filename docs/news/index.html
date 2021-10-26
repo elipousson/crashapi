@@ -22,7 +22,7 @@
   }
 </script>
 
-<title>NHSTA Terms and Defintions — fars_terms • crashapi</title>
+<title>Changelog • crashapi</title>
 
 
 <!-- jquery -->
@@ -65,10 +65,7 @@
 
 
 
-<meta property="og:title" content="NHSTA Terms and Defintions — fars_terms" />
-<meta property="og:description" content="FARS-related terms defined by the National Highway Traffic
-  Safety Administration based on ANSI D16.1-1996: Manual on Classification of
-  Motor Vehicle Traffic Accidents." />
+<meta property="og:title" content="Changelog" />
 
 
 
@@ -90,7 +87,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -142,38 +139,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>NHSTA Terms and Defintions</h1>
-    
-    <div class="hidden name"><code>fars_terms.Rd</code></div>
+      <h1 data-toc-skip>Changelog <small></small></h1>
+      
     </div>
 
-    <div class="ref-description">
-    <p>FARS-related terms defined by the National Highway Traffic
-  Safety Administration based on ANSI D16.1-1996: Manual on Classification of
-  Motor Vehicle Traffic Accidents.</p>
-    </div>
-
-    <pre class="usage"><span class='va'>fars_terms</span></pre>
-
-
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
-
-    <p>A data frame with 66 rows and 2 variables:</p><dl>
-  <dt><code>term</code></dt><dd><p>character Term</p></dd>
-  <dt><code>definition</code></dt><dd><p>character Term definition</p></dd>
-
-</dl>
-
-    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
-
-    <p><a href='https://www-fars.nhtsa.dot.gov/Help/Terms.aspx'>NHTSA FARS Terms</a></p>
-
+    <div id="crashapi-010" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.0">
+<a href="#crashapi-010" class="anchor"></a>crashapi 0.1.0</h1>
+<ul>
+<li>Added functions for accessing FARS APIs including Get Crash List Information, Get Crashes By Location, Get Summary Counts, and Get FARS Data By Year (documented in <code>get_fars()</code>)</li>
+<li>Added functions for accessing FARS APIs including Get Variables and Get Variable Attributes (documented in <code>get_fars_vars()</code>)</li>
+<li>Added <code>fars_terms</code> data with terms and definitions from National Highway Traffic Safety Administration (NHTSA) website</li>
+<li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
+<li>Set up a pkgdown website</li>
+</ul>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
+
 </div>
 
 
