@@ -100,7 +100,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">crashapi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9</span>
       </span>
     </div>
 
@@ -143,6 +143,18 @@
       
     </div>
 
+    <div id="crashapi-0109" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.0.9">
+<a href="#crashapi-0109" class="anchor"></a>crashapi 0.1.0.9</h1>
+<ul>
+<li>docs: Revise README and update pkgdown site</li>
+<li>fix: Add missing imports to <code>DESCRIPTION</code>
+</li>
+<li>fix: Update <code>county_to_fips()</code> to support partial county names, e.g. “Adams” instead of “Adams County” and avoiding matching multiple counties (closes <a href="https://github.com/elipousson/crashapi/issues/1">#1</a>)</li>
+<li>feat: Update <code><a href="../reference/get_fars_crashes.html">get_fars_crash_details()</a></code> to return sf objects using geometry parameter</li>
+<li>refactor: Set up API calls w/ unexported utility function (<code>make_query</code>)</li>
+</ul>
+</div>
     <div id="crashapi-010" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.0">
 <a href="#crashapi-010" class="anchor"></a>crashapi 0.1.0</h1>

@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">crashapi</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9</span>
       </span>
     </div>
 
@@ -84,133 +84,42 @@
 <a href="#crashapi" class="anchor"></a>crashapi</h1></div>
 <!-- badges: start -->
 <!-- badges: end -->
-<p>The goal of crashapi is to provides functions for downloading data from the National Highway Traffic Safety Administration (NHTSA) <a href="https://crashviewer.nhtsa.dot.gov/CrashAPI/">Fatality Analysis Reporting System (FARS) API</a>. The NHTSA website explains the purpose of the API:</p>
-<blockquote>
-<p>The NHTSA Crash data Application Programming Interface (API) provides various ways to get crash data collected by DOT NHTSA’s Fatality Analysis Reporting System (FARS) program. The APIs are primarily targeted for developers, programmers or researchers interested in obtaining Crash statistics on Fatal Motor Vehicle Crashes. The API supports multiple data output formats, namely, XML, CSV/XLSX, JSV and JSON. FARS data starting from 2010 onwards is made available through this website. There are different APIs provided to make it easier to query specific data.</p>
-</blockquote>
-<p>Supported APIs include Get Crash List Information (get_fars_crash_list()), Get Crashes By Location (get_fars_crashes()), Get Summary Counts (get_fars_summary()), Get Variables and Get Variable Attributes (<code>get_fars_vars()</code>), and Get FARS Data By Year (get_fars_year()).</p>
-<p>Multiple formats are only supported for get_fars_year().</p>
-<p>The APIs for Get Crash Details, Get Crashes By Vehicle, and Get Crashes By Occupant are not yet supported.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the development version of crashapi using the remotes package:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"elipousson/crashapi"</span><span class="op">)</span></code></pre></div>
-</div>
-<div id="examples" class="section level2">
-<h2 class="hasAnchor">
-<a href="#examples" class="anchor"></a>Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">crashapi</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Get crashes in NY from 2019 with 5 to 10 vehicles</span>
-<span class="fu"><a href="reference/get_fars_crashes.html">get_fars_crash_list</a></span><span class="op">(</span>
-  start_year <span class="op">=</span> <span class="fl">2019</span>,
-  end_year <span class="op">=</span> <span class="fl">2019</span>,
-  state <span class="op">=</span> <span class="st">"NY"</span>,
-  vehicles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">10</span><span class="op">)</span>
-<span class="op">)</span>
-<span class="co">#&gt;      CountyName                  CrashDate Fatals Peds Persons St_Case State</span>
-<span class="co">#&gt; 1     BRONX (5) /Date(1549865820000-0500)/      2    1       7  360042    36</span>
-<span class="co">#&gt; 2     ERIE (29) /Date(1551915000000-0500)/      1    0       4  360159    36</span>
-<span class="co">#&gt; 3   ORANGE (71) /Date(1558274040000-0400)/      1    0       1  360277    36</span>
-<span class="co">#&gt; 4   QUEENS (81) /Date(1561656240000-0400)/      1    0       6  360319    36</span>
-<span class="co">#&gt; 5     BRONX (5) /Date(1561866000000-0400)/      1    0      11  360339    36</span>
-<span class="co">#&gt; 6    KINGS (47) /Date(1564564080000-0400)/      1    0       5  360440    36</span>
-<span class="co">#&gt; 7 SUFFOLK (103) /Date(1563792360000-0400)/      1    0       2  360551    36</span>
-<span class="co">#&gt;   StateName TotalVehicles</span>
-<span class="co">#&gt; 1  New York             5</span>
-<span class="co">#&gt; 2  New York             5</span>
-<span class="co">#&gt; 3  New York             6</span>
-<span class="co">#&gt; 4  New York             5</span>
-<span class="co">#&gt; 5  New York             5</span>
-<span class="co">#&gt; 6  New York             5</span>
-<span class="co">#&gt; 7  New York             6</span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Get crashes for Baltimore County, MD from 2014 to 2015</span>
-<span class="fu"><a href="reference/get_fars_crashes.html">get_fars_crashes</a></span><span class="op">(</span>
-  start_year <span class="op">=</span> <span class="fl">2014</span>,
-  end_year <span class="op">=</span> <span class="fl">2015</span>,
-  state <span class="op">=</span> <span class="st">"MD"</span>,
-  county <span class="op">=</span> <span class="st">"Baltimore County"</span><span class="op">)</span> |&gt;
-  <span class="co"># Show 10 fatal crashes at random</span>
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_sample</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
-<span class="co">#&gt;    CITY       CITYNAME COUNTY    COUNTYNAME CaseYear FATALS    LATITUDE</span>
-<span class="co">#&gt; 1     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.38516944</span>
-<span class="co">#&gt; 2     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.35910556</span>
-<span class="co">#&gt; 3     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.28071111</span>
-<span class="co">#&gt; 4     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.32882222</span>
-<span class="co">#&gt; 5     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.32165833</span>
-<span class="co">#&gt; 6     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.71834444</span>
-<span class="co">#&gt; 7     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.34865278</span>
-<span class="co">#&gt; 8     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.42700833</span>
-<span class="co">#&gt; 9     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.32917500</span>
-<span class="co">#&gt; 10    0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.25870833</span>
-<span class="co">#&gt;         LONGITUD STATE STATENAME ST_CASE TOTALVEHICLES TWAY_ID     TWAY_ID2</span>
-<span class="co">#&gt; 1  -76.633408330    24  Maryland  240169             1  SR-134             </span>
-<span class="co">#&gt; 2  -76.746147220    24  Maryland  240026             2   I-695             </span>
-<span class="co">#&gt; 3  -76.485269440    24  Maryland  240031             1  SR-151             </span>
-<span class="co">#&gt; 4  -76.440558330    24  Maryland  240213             1  SR-150      CR-4582</span>
-<span class="co">#&gt; 5  -76.505925000    24  Maryland  240383             1   US-40             </span>
-<span class="co">#&gt; 6  -76.655605560    24  Maryland  240123             2   SR-45 FREELAIND RD</span>
-<span class="co">#&gt; 7  -76.497319440    24  Maryland  240122             2    I-95             </span>
-<span class="co">#&gt; 8  -76.390002780    24  Maryland  240140             1    I-95             </span>
-<span class="co">#&gt; 9  -76.440691670    24  Maryland  240377             2  SR-150      CR-6105</span>
-<span class="co">#&gt; 10 -76.524613890    24  Maryland  240200             1 CR-5232             </span>
-<span class="co">#&gt;    VE_FORMS</span>
-<span class="co">#&gt; 1         1</span>
-<span class="co">#&gt; 2         1</span>
-<span class="co">#&gt; 3         1</span>
-<span class="co">#&gt; 4         1</span>
-<span class="co">#&gt; 5         1</span>
-<span class="co">#&gt; 6         2</span>
-<span class="co">#&gt; 7         2</span>
-<span class="co">#&gt; 8         1</span>
-<span class="co">#&gt; 9         2</span>
-<span class="co">#&gt; 10        1</span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Get crashes for Baltimore County, MD from 2014 to 2015</span>
-<span class="co"># Set geometry to TRUE to return an sf object</span>
-<span class="va">crashes</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="reference/get_fars_crashes.html">get_fars_crashes</a></span><span class="op">(</span>
-    start_year <span class="op">=</span> <span class="fl">2014</span>,
-    end_year <span class="op">=</span> <span class="fl">2015</span>,
-    state <span class="op">=</span> <span class="st">"MD"</span>,
-    county <span class="op">=</span> <span class="st">"Baltimore County"</span>,
-    geometry <span class="op">=</span> <span class="cn">TRUE</span>
-  <span class="op">)</span>
-
-<span class="co"># Map crashes</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu">mapbaltimore</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/mapbaltimore/man/baltimore_msa_counties.html">baltimore_msa_counties</a></span>, <span class="va">namelsad</span> <span class="op">==</span> <span class="st">"Baltimore County"</span><span class="op">)</span>, fill <span class="op">=</span> <span class="cn">NA</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">crashes</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">TOTALVEHICLES</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-map_fars_crashes-1.png" width="100%"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Get summary crash count and fatal crash count data for Maryland from 2010 to 2019</span>
-<span class="fu"><a href="reference/get_fars_crashes.html">get_fars_summary</a></span><span class="op">(</span>
-  start_year <span class="op">=</span> <span class="fl">2010</span>,
-  end_year <span class="op">=</span> <span class="fl">2019</span>,
-  state <span class="op">=</span> <span class="st">"MD"</span>
-<span class="op">)</span>
-<span class="co">#&gt;    CaseYear CrashCounts TotalFatalCounts</span>
-<span class="co">#&gt; 1      2010         463              496</span>
-<span class="co">#&gt; 2      2011         455              485</span>
-<span class="co">#&gt; 3      2012         462              511</span>
-<span class="co">#&gt; 4      2013         431              465</span>
-<span class="co">#&gt; 5      2014         416              442</span>
-<span class="co">#&gt; 6      2015         479              520</span>
-<span class="co">#&gt; 7      2016         484              522</span>
-<span class="co">#&gt; 8      2017         518              558</span>
-<span class="co">#&gt; 9      2018         485              512</span>
-<span class="co">#&gt; 10     2019         484              521</span></code></pre></div>
-</div>
-<div id="additional-information" class="section level2">
-<h2 class="hasAnchor">
-<a href="#additional-information" class="anchor"></a>Additional Information</h2>
-<p>The <a href="https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx">NHTSA website</a> provides additional information on the release data and version status for the FARS Dataset.</p>
+<p>The goal of the crashapi R package is to provide functions for downloading data from the National Highway Traffic Safety Administration (NHTSA) <a href="https://crashviewer.nhtsa.dot.gov/CrashAPI/">Fatality Analysis Reporting System (FARS) API</a>.</p>
+<p>What is FARS? NHTSA explains: “The Fatality Analysis Reporting System (FARS) contains data on all vehicle crashes in the United States that occur on a public roadway and involve a fatality.”</p>
+<p>Supported APIs for this package include:</p>
+<ul class="task-list">
+<li>
+<input type="checkbox" disabled checked>
+Get Crash List Information</li>
+<li>
+<input type="checkbox" disabled checked>
+Get Crashes By Location</li>
+<li>
+<input type="checkbox" disabled checked>
+Get Summary Counts</li>
+<li>
+<input type="checkbox" disabled checked>
+Get Variables and Get Variable Attributes</li>
+<li>
+<input type="checkbox" disabled checked>
+Get FARS Data By Year</li>
+</ul>
+<p>Most of these APIs support XML, JSV, CSV, and JSON output formats. This package only uses JSON with the exception of get_fars_year (which supports downloading CSV files).</p>
+<p>Currently unsupported APIs include:</p>
+<ul class="task-list">
+<li>
+<input type="checkbox" disabled>
+Get Crash Details</li>
+<li>
+<input type="checkbox" disabled>
+Get Crashes By Vehicle</li>
+<li>
+<input type="checkbox" disabled>
+Get Crashes By Occupant</li>
+</ul>
+<p>Pull requests are welcome if you are interested in adding support for these APIs to the package. For reference, this package also includes a list of terms and NHTSA technical definitions in <code>fars_terms</code>.</p>
+<p>The FARS API currently only provides access to data from 2010 to 2019. Earlier data along with data from the the <a href="https://www.nhtsa.gov/national-automotive-sampling-system-nass/nass-general-estimates-system">General Estimates System</a> (GES) / <a href="https://www.nhtsa.gov/crash-data-systems/crash-report-sampling-system-crss">Crash Report Sampling System</a> (CRSS) is available through the <a href="https://cdan.dot.gov/query">Fatality and Injury Reporting System Tool</a> (FIRST).</p>
+<p>The <a href="https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx">NHTSA website</a> also provides additional information on the release data and version status for the FARS Dataset:</p>
 <table class="table">
 <thead><tr class="header">
 <th>Data Year</th>
@@ -270,6 +179,127 @@
 </tr>
 </tbody>
 </table>
+<div id="installation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h2>
+<p>You can install the development version of crashapi using the remotes package:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"elipousson/crashapi"</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="examples" class="section level2">
+<h2 class="hasAnchor">
+<a href="#examples" class="anchor"></a>Examples</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">crashapi</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Get fatal crashes in NY from 2019 with 5 to 10 vehicles</span>
+<span class="fu"><a href="reference/get_fars_crashes.html">get_fars_crash_list</a></span><span class="op">(</span>
+  start_year <span class="op">=</span> <span class="fl">2019</span>,
+  end_year <span class="op">=</span> <span class="fl">2019</span>,
+  state <span class="op">=</span> <span class="st">"NY"</span>,
+  vehicles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">10</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="co">#&gt;      CountyName                  CrashDate Fatals Peds Persons St_Case State</span>
+<span class="co">#&gt; 1     BRONX (5) /Date(1549865820000-0500)/      2    1       7  360042    36</span>
+<span class="co">#&gt; 2     ERIE (29) /Date(1551915000000-0500)/      1    0       4  360159    36</span>
+<span class="co">#&gt; 3   ORANGE (71) /Date(1558274040000-0400)/      1    0       1  360277    36</span>
+<span class="co">#&gt; 4   QUEENS (81) /Date(1561656240000-0400)/      1    0       6  360319    36</span>
+<span class="co">#&gt; 5     BRONX (5) /Date(1561866000000-0400)/      1    0      11  360339    36</span>
+<span class="co">#&gt; 6    KINGS (47) /Date(1564564080000-0400)/      1    0       5  360440    36</span>
+<span class="co">#&gt; 7 SUFFOLK (103) /Date(1563792360000-0400)/      1    0       2  360551    36</span>
+<span class="co">#&gt;   StateName TotalVehicles</span>
+<span class="co">#&gt; 1  New York             5</span>
+<span class="co">#&gt; 2  New York             5</span>
+<span class="co">#&gt; 3  New York             6</span>
+<span class="co">#&gt; 4  New York             5</span>
+<span class="co">#&gt; 5  New York             5</span>
+<span class="co">#&gt; 6  New York             5</span>
+<span class="co">#&gt; 7  New York             6</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Get fatal crashes for Baltimore County, MD from 2017 to 2018</span>
+<span class="fu"><a href="reference/get_fars_crashes.html">get_fars_crashes</a></span><span class="op">(</span>
+  start_year <span class="op">=</span> <span class="fl">2017</span>,
+  end_year <span class="op">=</span> <span class="fl">2018</span>,
+  state <span class="op">=</span> <span class="st">"MD"</span>,
+  county <span class="op">=</span> <span class="st">"Baltimore County"</span><span class="op">)</span> |&gt;
+  <span class="co"># Show 10 fatal crashes at random</span>
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_sample</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
+<span class="co">#&gt;    CITY       CITYNAME COUNTY    COUNTYNAME CaseYear FATALS    LATITUDE</span>
+<span class="co">#&gt; 1     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.36721944</span>
+<span class="co">#&gt; 2     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.53943333</span>
+<span class="co">#&gt; 3     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.50576944</span>
+<span class="co">#&gt; 4     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.62296944</span>
+<span class="co">#&gt; 5     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.22528889</span>
+<span class="co">#&gt; 6     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      2 39.48600000</span>
+<span class="co">#&gt; 7     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.43633333</span>
+<span class="co">#&gt; 8     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      2 39.54813333</span>
+<span class="co">#&gt; 9     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.32001944</span>
+<span class="co">#&gt; 10    0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.33058333</span>
+<span class="co">#&gt;         LONGITUD STATE STATENAME ST_CASE TOTALVEHICLES TWAY_ID TWAY_ID2</span>
+<span class="co">#&gt; 1  -76.747727780    24  Maryland  240126             2   I-695         </span>
+<span class="co">#&gt; 2  -76.837750000    24  Maryland  240395             1   SR-30         </span>
+<span class="co">#&gt; 3  -76.613827780    24  Maryland  240148             1  SR-145         </span>
+<span class="co">#&gt; 4  -76.793005560    24  Maryland  240167             1   SR-25         </span>
+<span class="co">#&gt; 5  -76.680933330    24  Maryland  240079             1   I-895         </span>
+<span class="co">#&gt; 6  -76.860986110    24  Maryland  240280             2  SR-140         </span>
+<span class="co">#&gt; 7  -76.605102780    24  Maryland  240290             1  CR-811         </span>
+<span class="co">#&gt; 8  -76.743408330    24  Maryland  240441             1   SR-88         </span>
+<span class="co">#&gt; 9  -76.454766670    24  Maryland  240435             1  SR-150  CR-4728</span>
+<span class="co">#&gt; 10 -76.500488890    24  Maryland  240227             3    SR-7         </span>
+<span class="co">#&gt;    VE_FORMS</span>
+<span class="co">#&gt; 1         2</span>
+<span class="co">#&gt; 2         1</span>
+<span class="co">#&gt; 3         1</span>
+<span class="co">#&gt; 4         1</span>
+<span class="co">#&gt; 5         1</span>
+<span class="co">#&gt; 6         2</span>
+<span class="co">#&gt; 7         1</span>
+<span class="co">#&gt; 8         1</span>
+<span class="co">#&gt; 9         1</span>
+<span class="co">#&gt; 10        3</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Get crashes for Baltimore County, MD from 2014</span>
+<span class="va">crashes</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="reference/get_fars_crashes.html">get_fars_crashes</a></span><span class="op">(</span>
+    start_year <span class="op">=</span> <span class="fl">2014</span>,
+    end_year <span class="op">=</span> <span class="fl">2014</span>,
+    state <span class="op">=</span> <span class="st">"MD"</span>,
+    county <span class="op">=</span> <span class="st">"Baltimore County"</span>,
+    geometry <span class="op">=</span> <span class="cn">TRUE</span>
+  <span class="op">)</span>
+
+<span class="co"># Map crashes</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>
+    data <span class="op">=</span> <span class="fu">tigris</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tigris/man/county_subdivisions.html">county_subdivisions</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"MD"</span>, county <span class="op">=</span> <span class="st">"Baltimore County"</span><span class="op">)</span>,
+    fill <span class="op">=</span> <span class="cn">NA</span>, color <span class="op">=</span> <span class="st">"black"</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>
+    data <span class="op">=</span> <span class="va">crashes</span>,
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">TOTALVEHICLES</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=                                                                     |   1%  |                                                                              |=                                                                     |   2%  |                                                                              |==                                                                    |   2%  |                                                                              |==                                                                    |   3%  |                                                                              |===                                                                   |   4%  |                                                                              |===                                                                   |   5%  |                                                                              |====                                                                  |   5%  |                                                                              |====                                                                  |   6%  |                                                                              |=====                                                                 |   7%  |                                                                              |=====                                                                 |   8%  |                                                                              |=======                                                               |   9%  |                                                                              |=======                                                               |  10%  |                                                                              |=======                                                               |  11%  |                                                                              |========                                                              |  11%  |                                                                              |========                                                              |  12%  |                                                                              |=========                                                             |  14%  |                                                                              |==============                                                        |  20%  |                                                                              |===============                                                       |  21%  |                                                                              |================                                                      |  22%  |                                                                              |================                                                      |  23%  |                                                                              |==================                                                    |  26%  |                                                                              |===================                                                   |  27%  |                                                                              |==========================                                            |  37%  |                                                                              |===============================                                       |  44%  |                                                                              |===============================                                       |  45%  |                                                                              |================================                                      |  46%  |                                                                              |=================================                                     |  47%  |                                                                              |==================================                                    |  48%  |                                                                              |===================================                                   |  51%  |                                                                              |====================================                                  |  51%  |                                                                              |====================================                                  |  52%  |                                                                              |=====================================                                 |  52%  |                                                                              |=====================================                                 |  54%  |                                                                              |=======================================                               |  55%  |                                                                              |=======================================                               |  56%  |                                                                              |========================================                              |  57%  |                                                                              |=========================================                             |  59%  |                                                                              |===========================================                           |  62%  |                                                                              |=======================================================               |  79%  |                                                                              |=============================================================         |  87%  |                                                                              |================================================================      |  92%  |                                                                              |==================================================================    |  94%  |                                                                              |===================================================================   |  95%  |                                                                              |====================================================================  |  97%  |                                                                              |======================================================================| 100%</span></code></pre></div>
+<p><img src="reference/figures/README-map_fars_crashes-1.png" width="100%"></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Get summary crash count and fatal crash count data for Maryland from 2010 to 2019</span>
+<span class="fu"><a href="reference/get_fars_crashes.html">get_fars_summary</a></span><span class="op">(</span>
+  start_year <span class="op">=</span> <span class="fl">2010</span>,
+  end_year <span class="op">=</span> <span class="fl">2019</span>,
+  state <span class="op">=</span> <span class="st">"MD"</span>
+<span class="op">)</span>
+<span class="co">#&gt;    CaseYear CrashCounts TotalFatalCounts</span>
+<span class="co">#&gt; 1      2010         463              496</span>
+<span class="co">#&gt; 2      2011         455              485</span>
+<span class="co">#&gt; 3      2012         462              511</span>
+<span class="co">#&gt; 4      2013         431              465</span>
+<span class="co">#&gt; 5      2014         416              442</span>
+<span class="co">#&gt; 6      2015         479              520</span>
+<span class="co">#&gt; 7      2016         484              522</span>
+<span class="co">#&gt; 8      2017         518              558</span>
+<span class="co">#&gt; 9      2018         485              512</span>
+<span class="co">#&gt; 10     2019         484              521</span></code></pre></div>
 </div>
 <div id="related-packages-and-projects" class="section level2">
 <h2 class="hasAnchor">
@@ -283,6 +313,8 @@
 <a href="https://github.com/nacnudus/nzcrash">nzcrash</a>: “An R package to distribute New Zealand crash data in a convenient form.”</li>
 <li>
 <a href="https://github.com/graphhopper/open-traffic-collection">GraphHopper Open Traffic Collection</a>: “Collections of URLs pointing to traffic information portals which contain open data or at least data which is free to use.”</li>
+<li>
+<a href="https://docs.google.com/spreadsheets/d/1rmn6GbHNkfWLLDEEmA87iuy2yHdh7hBybCTZiQJEY0k/edit?usp=sharing">Open Crash Data Index</a>: A Google Sheet listing a range of city, county, regional and state sources for crash data including non-injury crashes as well as the fatal crashes available through the FARS API. Contributions for crash data from other U.S. cities adn states are welcome.</li>
 </ul>
 </div>
 </div>

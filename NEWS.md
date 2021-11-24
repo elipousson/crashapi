@@ -1,11 +1,12 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
-# crashapi 0.1.0.9000
+# crashapi 0.1.0.9
 
-- fix: Add missing imports
-- fix: Update `county_to_fips()` to support partial county names, e.g. "Adams" instead of "Adams County" and avoiding matching multiple counties (closes #1)
-- feat: Update `get_fars_crash_details()` to return sf objects
-- refactor: Set up w/ unexported utility function (`make_query`)
+- docs: Revise README and update pkgdown site
+- fix: Add missing imports to `DESCRIPTION`
+- fix: Update `county_to_fips()` to support partial county names, e.g. "Adams" instead of "Adams County" and avoiding matching multiple counties (closes [#1](https://github.com/elipousson/crashapi/issues/1))
+- feat: Update `get_fars_crash_details()` to return sf objects using geometry parameter
+- refactor: Set up API calls w/ unexported utility function (`make_query`)
 
 # crashapi 0.1.0
 
