@@ -14,6 +14,7 @@ state_to_fips <- function(state, several.ok = FALSE) {
 }
 
 # Validate county and convert to FIPS number
+#' @importFrom stringr str_detect
 county_to_fips <- function(county, state) {
   state <- state_to_fips(state)
 
@@ -54,11 +55,13 @@ validate_year <- function(start_year, end_year) {
 }
 
 # Build query URL
+#' @importFrom glue glue
 make_query <- function(x, format = "json", .envir = parent.frame()) {
   paste0("https://crashviewer.nhtsa.dot.gov/CrashAPI", glue::glue(x, .envir = .envir), glue::glue("&format={format}"))
 }
 
 # Convert data frame to sf object
+#' @importFrom sf st_as_sf st_transform
 data_to_sf <- function(x,
                        longitude = "LONGITUD",
                        latitude = "LATITUDE",
@@ -108,12 +111,14 @@ data_to_sf <- function(x,
 #'   2010 and 2019), Default: 2014
 #' @param end_year Required. End year for crash reports (must be between 2010
 #'   and 2019), Default: 2015
+#' @param year Required for `get_fars_crash_details` or `get_fars_year`.
 #' @param state Required. State name, abbreviation, or FIPS number.
 #'   `get_fars_crash_list` supports multiple states.
 #' @param county County name or FIPS number. Required for `get_fars_crashes`.
 #' @param geometry If TRUE, return sf object. Optional for `get_fars_crashes`.
 #' @param crs Coordinate reference system to return for `get_fars_crashes` if
 #'   geometry is TRUE
+#' @param case Case number. Optional for `get_fars_crash_details`.
 #' @param vehicles Vector with the minimum and maximum number of vehicles, e.g.
 #'   c(1, 2) for minimum of 1 vehicle and maximum of 2. Required for
 #'   `get_fars_crash_list`.
@@ -229,6 +234,8 @@ get_fars_summary <- function(start_year = 2014,
 #' @export
 #' @importFrom jsonlite read_json
 #' @importFrom readr read_csv
+#' @importFrom stringr str_to_sentence
+#' @importFrom utils download.file
 get_fars_year <- function(year,
                           data = "ACCIDENT",
                           format = "json",
@@ -246,7 +253,7 @@ get_fars_year <- function(year,
   }
 
   if (download) {
-    download.file(fars, destfile = paste0(year, "_", data, ".", format))
+    utils::download.file(fars, destfile = paste0(year, "_", data, ".", format))
   } else {
     fars
   }

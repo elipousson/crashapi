@@ -85,38 +85,38 @@ get_fars_crashes(
   # Show 10 fatal crashes at random
   dplyr::slice_sample(n = 10)
 #>    CITY       CITYNAME COUNTY    COUNTYNAME CaseYear FATALS    LATITUDE
-#> 1     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.37288611
-#> 2     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.42700833
-#> 3     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.44058611
-#> 4     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.25870833
-#> 5     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.27728889
-#> 6     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.23606944
-#> 7     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.41126667
-#> 8     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.23193056
-#> 9     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.31041667
-#> 10    0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.23758333
-#>         LONGITUD STATE STATENAME ST_CASE TOTALVEHICLES   TWAY_ID
-#> 1  -76.568861110    24  Maryland  240349             1     SR-41
-#> 2  -76.390002780    24  Maryland  240140             1      I-95
-#> 3  -76.626136110    24  Maryland  240376             2     SR-45
-#> 4  -76.524613890    24  Maryland  240200             1   CR-5232
-#> 5  -76.481141670    24  Maryland  240209             1   SR-8007
-#> 6  -76.470844440    24  Maryland  240399             1    SR-158
-#> 7  -76.768558330    24  Maryland  240313             2    SR-140
-#> 8  -76.712363890    24  Maryland  240319             1 I-95 RAMP
-#> 9  -76.470936110    24  Maryland  240211             2    SR-150
-#> 10 -76.663413890    24  Maryland  240149             2   CR-3239
-#>                  TWAY_ID2 VE_FORMS
-#> 1                                1
-#> 2                                1
-#> 3                  CR-810        2
-#> 4                                1
-#> 5                                1
-#> 6             SHIPYARD RD        1
-#> 7  THOMAS CENTER ENTRANCE        2
-#> 8                                1
-#> 9           STUART STREET        2
-#> 10                CR-3200        2
+#> 1     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.38516944
+#> 2     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.35910556
+#> 3     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.28071111
+#> 4     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.32882222
+#> 5     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.32165833
+#> 6     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.71834444
+#> 7     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.34865278
+#> 8     0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.42700833
+#> 9     0 NOT APPLICABLE      5 BALTIMORE (5)     2014      1 39.32917500
+#> 10    0 NOT APPLICABLE      5 BALTIMORE (5)     2015      1 39.25870833
+#>         LONGITUD STATE STATENAME ST_CASE TOTALVEHICLES TWAY_ID     TWAY_ID2
+#> 1  -76.633408330    24  Maryland  240169             1  SR-134             
+#> 2  -76.746147220    24  Maryland  240026             2   I-695             
+#> 3  -76.485269440    24  Maryland  240031             1  SR-151             
+#> 4  -76.440558330    24  Maryland  240213             1  SR-150      CR-4582
+#> 5  -76.505925000    24  Maryland  240383             1   US-40             
+#> 6  -76.655605560    24  Maryland  240123             2   SR-45 FREELAIND RD
+#> 7  -76.497319440    24  Maryland  240122             2    I-95             
+#> 8  -76.390002780    24  Maryland  240140             1    I-95             
+#> 9  -76.440691670    24  Maryland  240377             2  SR-150      CR-6105
+#> 10 -76.524613890    24  Maryland  240200             1 CR-5232             
+#>    VE_FORMS
+#> 1         1
+#> 2         1
+#> 3         1
+#> 4         1
+#> 5         1
+#> 6         2
+#> 7         2
+#> 8         1
+#> 9         2
+#> 10        1
 ```
 
 ``` r
@@ -184,6 +184,8 @@ for the FARS Dataset.
 -   [stats19](https://github.com/ropensci/stats19) “provides functions
     for downloading and formatting road crash data” from “the UK’s
     official road traffic casualty database, STATS19.”
+-   [njtr1](https://github.com/gavinrozzi/njtr1): “An R interface to New
+    Jersey traffic crash data reported on form NJTR-1.”
 -   [nzcrash](https://github.com/nacnudus/nzcrash): “An R package to
     distribute New Zealand crash data in a convenient form.”
 -   [GraphHopper Open Traffic

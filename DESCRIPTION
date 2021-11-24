@@ -15,5 +15,6 @@ Imports:
     glue,
     jsonlite,
     readr,
+    stringr,
     sf,
     tigris

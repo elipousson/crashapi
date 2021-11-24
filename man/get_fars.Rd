@@ -57,6 +57,10 @@ geometry is TRUE}
 c(1, 2) for minimum of 1 vehicle and maximum of 2. Required for
 \code{get_fars_crash_list}.}
 
+\item{year}{Required for \code{get_fars_crash_details} or \code{get_fars_year}.}
+
+\item{case}{Case number. Optional for \code{get_fars_crash_details}.}
+
 \item{data}{data table to download with \code{get_fars_year}. Supported values
 include "ACCIDENT", "CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "FACTOR",
 "MANEUVER", "NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE",

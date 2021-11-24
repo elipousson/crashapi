@@ -195,7 +195,13 @@ exceeds that threshold.</p>
   vehicles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>50</span><span class='op'>)</span>
 <span class='op'>)</span>
 
-<span class='fu'>get_fars_crash_details</span><span class='op'>(</span>year <span class='op'>=</span> <span class='fl'>2015</span>, state <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>case</span><span class='op'>)</span>
+<span class='fu'>get_fars_crash_details</span><span class='op'>(</span>
+  year <span class='op'>=</span> <span class='fl'>2015</span>,
+  state <span class='op'>=</span> <span class='fl'>1</span>,
+  <span class='va'>case</span>,
+  geometry <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  crs <span class='op'>=</span> <span class='fl'>4326</span>
+<span class='op'>)</span>
 
 <span class='fu'>get_fars_summary</span><span class='op'>(</span>start_year <span class='op'>=</span> <span class='fl'>2014</span>, end_year <span class='op'>=</span> <span class='fl'>2015</span>, state <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 
@@ -225,7 +231,7 @@ and 2019), Default: 2015</p></td>
     </tr>
     <tr>
       <th>geometry</th>
-      <td><p>If TRUE, return sf object. Optional  for <code>get_fars_crashes</code>.</p></td>
+      <td><p>If TRUE, return sf object. Optional for <code>get_fars_crashes</code>.</p></td>
     </tr>
     <tr>
       <th>crs</th>
@@ -237,6 +243,14 @@ geometry is TRUE</p></td>
       <td><p>Vector with the minimum and maximum number of vehicles, e.g.
 c(1, 2) for minimum of 1 vehicle and maximum of 2. Required for
 <code>get_fars_crash_list</code>.</p></td>
+    </tr>
+    <tr>
+      <th>year</th>
+      <td><p>Required for <code>get_fars_crash_details</code> or <code>get_fars_year</code>.</p></td>
+    </tr>
+    <tr>
+      <th>case</th>
+      <td><p>Case number. Optional for <code>get_fars_crash_details</code>.</p></td>
     </tr>
     <tr>
       <th>data</th>
