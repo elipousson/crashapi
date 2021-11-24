@@ -24,7 +24,13 @@ get_fars_crash_list(
   vehicles = c(1, 50)
 )
 
-get_fars_crash_details(year = 2015, state = 1, case)
+get_fars_crash_details(
+  year = 2015,
+  state = 1,
+  case,
+  geometry = FALSE,
+  crs = 4326
+)
 
 get_fars_summary(start_year = 2014, end_year = 2015, state = 1)
 
@@ -42,7 +48,7 @@ and 2019), Default: 2015}
 
 \item{county}{County name or FIPS number. Required for \code{get_fars_crashes}.}
 
-\item{geometry}{If TRUE, return sf object. Optional  for \code{get_fars_crashes}.}
+\item{geometry}{If TRUE, return sf object. Optional for \code{get_fars_crashes}.}
 
 \item{crs}{Coordinate reference system to return for \code{get_fars_crashes} if
 geometry is TRUE}

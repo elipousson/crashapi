@@ -17,12 +17,18 @@ state_to_fips <- function(state, several.ok = FALSE) {
 county_to_fips <- function(county, state) {
   state <- state_to_fips(state)
 
+  state_counties <- tigris::fips_codes[tigris::fips_codes["state_code"] == state, ]
+
   if (is.numeric(county)) {
     county_fips <- sprintf("%03d", as.integer(county))
-    county_fips <- match.arg(county_fips, tigris::fips_codes[tigris::fips_codes["state_code"] == state, "county_code"])
+    county_fips <- match.arg(county_fips, state_counties[, "county_code"])
   } else if (is.character(county)) {
-    county <- match.arg(county, tigris::fips_codes[tigris::fips_codes["state_code"] == state, "county"])
-    county_fips <- tigris::fips_codes[tigris::fips_codes["county"] == county, "county_code"]
+    if (stringr::str_detect(county, "city|County$")) {
+      county <- match.arg(county, state_counties[, "county"])
+    } else {
+      county <- match.arg(paste(county, "County"), state_counties[, "county"])
+    }
+    county_fips <- state_counties[state_counties[, "county"] == county, "county_code"]
   }
 
   county_fips
@@ -105,7 +111,7 @@ data_to_sf <- function(x,
 #' @param state Required. State name, abbreviation, or FIPS number.
 #'   `get_fars_crash_list` supports multiple states.
 #' @param county County name or FIPS number. Required for `get_fars_crashes`.
-#' @param geometry If TRUE, return sf object. Optional  for `get_fars_crashes`.
+#' @param geometry If TRUE, return sf object. Optional for `get_fars_crashes`.
 #' @param crs Coordinate reference system to return for `get_fars_crashes` if
 #'   geometry is TRUE
 #' @param vehicles Vector with the minimum and maximum number of vehicles, e.g.
@@ -181,15 +187,23 @@ get_fars_crash_list <- function(start_year = 2014,
 #' @importFrom jsonlite read_json
 get_fars_crash_details <- function(year = 2015,
                                    state = 1,
-                                   case) {
+                                   case,
+                                   geometry = FALSE,
+                                   crs = 4326) {
   year <- match.arg(as.character(year), c(2010:2019))
 
-  states_fips <- state_to_fips(state) |>
+  state_fips <- state_to_fips(state) |>
     as.integer()
 
   query <- make_query("/crashes/GetCaseDetails?stateCase={case}&caseYear={year}&state={state_fips}")
 
-  jsonlite::read_json(query, simplifyVector = TRUE)$Results[[1]]
+  details <- jsonlite::read_json(query, simplifyVector = TRUE)$Results[[1]]
+
+  if (geometry) {
+    details |> data_to_sf(longitude = "LONGITUD", latitude = "LATITUDE")
+  } else {
+    details
+  }
 }
 
 #' @rdname get_fars
