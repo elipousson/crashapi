@@ -26,6 +26,7 @@ What is FARS? NHTSA explains: "The Fatality Analysis Reporting System (FARS) con
 Supported APIs for this package include:
 
 -   [x] Get Crash List Information
+-   [X] Get Crash Details
 -   [x] Get Crashes By Location
 -   [x] Get Summary Counts
 -   [x] Get Variables and Get Variable Attributes
@@ -35,7 +36,6 @@ Most of these APIs support XML, JSV, CSV, and JSON output formats. This package 
 
 Currently unsupported APIs include:
 
--   [ ] Get Crash Details
 -   [ ] Get Crashes By Vehicle
 -   [ ] Get Crashes By Occupant
 
