@@ -1,7 +1,7 @@
 Package: crashapi
 Type: Package
 Title: CrashAPI
-Version: 0.1.0.9
+Version: 0.1.0.10
 Author: Eli Pousson
 Maintainer: Eli Pousson <eli.pousson@gmail.com>
 Description: Get Fatality Analysis Reporting System (FARS) data with the FARS API.

@@ -1,5 +1,11 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# crashapi 0.1.0.10
+
+- feat: `get_fars_zip` added to provide alternate (non-API) method for downloading zipped CSV or SAS data files
+- fix: `get_fars_crash_details` updated to return data frame w/o list columns
+- feat: `get_fars_crash_details` updated to optionally return vehicle or crash events data frames
+
 # crashapi 0.1.0.9
 
 - docs: Revise README and update pkgdown site
