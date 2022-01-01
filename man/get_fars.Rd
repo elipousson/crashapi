@@ -29,7 +29,8 @@ get_fars_crash_details(
   state = 1,
   case,
   geometry = FALSE,
-  crs = 4326
+  crs = 4326,
+  type = NULL
 )
 
 get_fars_summary(start_year = 2014, end_year = 2015, state = 1)
@@ -61,6 +62,11 @@ c(1, 2) for minimum of 1 vehicle and maximum of 2. Required for
 
 \item{case}{Case number. Optional for \code{get_fars_crash_details}.}
 
+\item{type}{Type of detailed crash data to return (either "events" or
+"vehicles"). If NULL, events or vehicle data are excluded from data
+returned by \code{get_fars_crash_details}. Optional for
+\code{get_fars_crash_details}. Default: NULL.}
+
 \item{data}{data table to download with \code{get_fars_year}. Supported values
 include "ACCIDENT", "CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "FACTOR",
 "MANEUVER", "NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE",
@@ -86,7 +92,7 @@ throughout U.S. including count of fatalities and crashes.
 Supports downloading to a CSV or JSON file.
 }
 
-Both \code{get_fars_crash_list} and \code{get_fars_crashes} limit the returned data to
-5000 records so consider limiting the range of years requested if data
+Both \code{get_fars_crash_list} and \code{get_fars_crashes} limit the returned data
+to 5000 records so consider limiting the range of years requested if data
 exceeds that threshold.
 }

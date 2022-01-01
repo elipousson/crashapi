@@ -103,9 +103,9 @@ data_to_sf <- function(x,
 #'   - `get_fars_year` provides one of 20 FARS data tables for a single year.
 #'   Supports downloading to a CSV or JSON file.
 #'
-#' Both `get_fars_crash_list` and `get_fars_crashes` limit the returned data to
-#' 5000 records so consider limiting the range of years requested if data
-#' exceeds that threshold.
+#'   Both `get_fars_crash_list` and `get_fars_crashes` limit the returned data
+#'   to 5000 records so consider limiting the range of years requested if data
+#'   exceeds that threshold.
 #'
 #' @param start_year Required. Start year for crash reports (must be between
 #'   2010 and 2019), Default: 2014
@@ -118,6 +118,10 @@ data_to_sf <- function(x,
 #' @param geometry If TRUE, return sf object. Optional for `get_fars_crashes`.
 #' @param crs Coordinate reference system to return for `get_fars_crashes` if
 #'   geometry is TRUE
+#' @param type Type of detailed crash data to return (either "events" or
+#'   "vehicles"). If NULL, events or vehicle data are excluded from data
+#'   returned by `get_fars_crash_details`. Optional for
+#'   `get_fars_crash_details`. Default: NULL.
 #' @param case Case number. Optional for `get_fars_crash_details`.
 #' @param vehicles Vector with the minimum and maximum number of vehicles, e.g.
 #'   c(1, 2) for minimum of 1 vehicle and maximum of 2. Required for
@@ -194,7 +198,8 @@ get_fars_crash_details <- function(year = 2015,
                                    state = 1,
                                    case,
                                    geometry = FALSE,
-                                   crs = 4326) {
+                                   crs = 4326,
+                                   type = NULL) {
   year <- match.arg(as.character(year), c(2010:2019))
 
   state_fips <- state_to_fips(state) |>
@@ -202,12 +207,21 @@ get_fars_crash_details <- function(year = 2015,
 
   query <- make_query("/crashes/GetCaseDetails?stateCase={case}&caseYear={year}&state={state_fips}")
 
-  details <- jsonlite::read_json(query, simplifyVector = TRUE)$Results[[1]]
+  details <- jsonlite::read_json(query, simplifyVector = TRUE)
 
-  if (geometry) {
-    details |> data_to_sf(longitude = "LONGITUD", latitude = "LATITUDE")
-  } else {
-    details
+  crash_results <- details[["Results"]][[1]][["CrashResultSet"]]
+
+  if (is.null(type)) {
+    crash_results <- subset(crash_results, select = -c(CEvents, Vehicles))
+    if (geometry) {
+      crash_results |> data_to_sf(longitude = "LONGITUD", latitude = "LATITUDE")
+    } else {
+      crash_results
+    }
+  } else if (type == "events") {
+    crash_results[, "CEvents"][[1]]
+  } else if (type == "vehicles") {
+    crash_results[, "Vehicles"][[1]]
   }
 }
 
@@ -257,4 +271,41 @@ get_fars_year <- function(year,
   } else {
     fars
   }
+}
+
+#' @title Download FARS tables as zipped CSV or SAS files
+#' @description This function provides an alternative to get_fars_year that downloads files directly from NHTSA FTP site.
+#' @param year Year of data from 1975 to 2019, Default: 2019
+#' @param format Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
+#' @param path Path to download zip file with FARS tables.
+#' @param pr If TRUE, download FARS data for Puerto Rico. No Puerto Rico data available for years 1975-1977. Default: FALSE
+#' @return Downloads zip file with CSV or SAS tables.
+#' @rdname get_fars_zip
+#' @export
+#' @importFrom glue glue
+get_fars_zip <- function(year = 2019,
+                         format = "csv",
+                         path = NULL,
+                         pr = FALSE) {
+  year <- match.arg(as.character(year), as.character(c(1975:2019)))
+  format <- match.arg(format, c("csv", "sas"))
+
+  if (pr) {
+    geo <- utils::URLencode("Puerto Rico")
+  } else {
+    geo <- "National"
+  }
+
+  filename <- glue::glue("FARS{year}{geo}{toupper(format)}.zip")
+  url <- glue::glue("https://www.nhtsa.gov/file-downloads/download?p=nhtsa/downloads/FARS/{year}/{geo}/{filename}")
+
+  if (!is.null(path)) {
+    filename <- file.path(path, filename)
+  }
+
+  download.file(
+    url = url,
+    destfile = filename,
+    method = "auto"
+  )
 }
