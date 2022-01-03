@@ -3,6 +3,7 @@
 export(fars_vars)
 export(get_fars_crash_details)
 export(get_fars_crash_list)
+export(get_fars_crash_vehicles)
 export(get_fars_crashes)
 export(get_fars_summary)
 export(get_fars_year)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_fars.R
 \name{get_fars_zip}
 \alias{get_fars_zip}
-\title{Download FARS tables as zipped CSV or SAS files}
+\title{Download FARS data files as zipped CSV or SAS files}
 \usage{
 get_fars_zip(year = 2019, format = "csv", path = NULL, pr = FALSE)
 }

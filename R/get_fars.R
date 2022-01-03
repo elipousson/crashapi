@@ -212,7 +212,8 @@ get_fars_crash_details <- function(year = 2015,
   crash_results <- details[["Results"]][[1]][["CrashResultSet"]]
 
   if (is.null(type)) {
-    crash_results <- subset(crash_results, select = -c(CEvents, Vehicles))
+    list_cols <- c("CEvents", "Vehicles")
+    crash_results <- subset(crash_results, select = !(names(names) %in% list_cols))
     if (geometry) {
       crash_results |> data_to_sf(longitude = "LONGITUD", latitude = "LATITUDE")
     } else {
@@ -223,6 +224,76 @@ get_fars_crash_details <- function(year = 2015,
   } else if (type == "vehicles") {
     crash_results[, "Vehicles"][[1]]
   }
+}
+
+#' @rdname get_fars_crash_vehicles
+#' @title Get Get Crashes By Vehicle
+#' @description This function returns a list of fatal crashes by vehicle type
+#'   that have occurred throughout United States. The make, model, and body type
+#'   must match the options returned by `fars_vars`. This function accepts named
+#'   options that are converted to ID numbers for use in the API query.
+#'
+#' @inheritParams get_fars_crashes
+#' @param make Make name or ID, Required. The start_year is used to return a
+#'   list of support make options. Default: NULL
+#' @param model Model name or ID, Optional. Default: NULL
+#' @param model_year Model year, Optional. Default: NULL
+#' @param body_type Body type, Optional. `model` must be provided to use
+#'   body_type parameter. Default: NULL
+#' @export
+#' @importFrom jsonlite read_json
+get_fars_crash_vehicles <- function(start_year = 2014,
+                                    end_year = 2015,
+                                    state = NULL,
+                                    make = NULL,
+                                    model = NULL,
+                                    model_year = NULL,
+                                    body_type = NULL) {
+  validate_year(
+    start_year = start_year,
+    end_year = end_year
+  )
+
+  state_fips <- state_to_fips(state) |>
+    as.integer()
+
+  make_options <- fars_vars(year = start_year, var = "make")
+
+  if (make %in% make_options$TEXT) {
+    make <- make_options[make_options$TEXT == make, ]$ID
+  }
+
+  make <- match.arg(make, make_options$ID)
+
+  if (!is.null(model)) {
+    model_options <- fars_vars(year = model_year, make = make, var = "model")
+
+    if (model %in% model_options$MODELNAME) {
+      model <- model_options[model_options$MODELNAME == model, ]$ID |> as.character()
+    }
+
+    if (!is.null(body_type)) {
+      body_type_options <- fars_vars(year = model_year, make = make, model = model, var = "bodytype")
+
+      if (body_type %in% body_type_options$BODY_DEF) {
+        body_type <- body_type_options[body_type_options$BODY_DEF == body_type, ]$BODY_ID |> as.character()
+      }
+
+      body_type <- match.arg(body_type, body_type_options$BODY_ID)
+
+      body_type <- glue::glue("bodyType={body_type}")
+    }
+
+    model <- glue::glue("model={model}&modelyear={model_year}")
+  }
+
+  make <- glue::glue("make={make}")
+
+  query <- make_query("/crashes/GetCrashesByVehicle?{paste0(c(make, model, body_type), collapse = '&')}&fromCaseYear={start_year}&toCaseYear={end_year}&state={state_fips}")
+
+  details <- jsonlite::read_json(query, simplifyVector = TRUE)$Results[[1]]
+
+  details
 }
 
 #' @rdname get_fars
@@ -251,29 +322,33 @@ get_fars_summary <- function(start_year = 2014,
 #' @importFrom stringr str_to_sentence
 #' @importFrom utils download.file
 get_fars_year <- function(year,
-                          data = "ACCIDENT",
-                          format = "json",
-                          download = FALSE) {
+                         data = "ACCIDENT",
+                         format = "json",
+                         download = FALSE) {
   year <- match.arg(as.character(year), c(2010:2017))
   data <- match.arg(data, c("ACCIDENT", "CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "FACTOR", "MANEUVER", "NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE", "PERSON", "SAFETYEQ", "VEHICLE", "VEVENT VINDECODE", "VINDERIVED", "VIOLATION", "VISION", "VSOE"))
   format <- match.arg(format, c("csv", "json"))
 
   query <- make_query("/FARSData/GetFARSData?dataset={stringr::str_to_sentence(data)}&caseYear={year}", format = format)
 
-  if (format == "json") {
-    fars <- jsonlite::read_json(query, simplifyVector = TRUE)$Results[[1]]
-  } else if (format == "csv") {
-    fars <- readr::read_csv(query)
-  }
-
   if (download) {
-    utils::download.file(fars, destfile = paste0(year, "_", data, ".", format))
+    utils::download.file(
+      url = query,
+      destfile = paste0(year, "_", data, ".", format),
+      method = "auto"
+      )
   } else {
+    if (format == "json") {
+      fars <- jsonlite::read_json(query, simplifyVector = TRUE)$Results[[1]]
+    } else if (format == "csv") {
+      fars <- readr::read_csv(query)
+    }
+
     fars
   }
 }
 
-#' @title Download FARS tables as zipped CSV or SAS files
+#' @title Download FARS data files as zipped CSV or SAS files
 #' @description This function provides an alternative to get_fars_year that downloads files directly from NHTSA FTP site.
 #' @param year Year of data from 1975 to 2019, Default: 2019
 #' @param format Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
