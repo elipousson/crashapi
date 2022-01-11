@@ -28,6 +28,7 @@ Supported APIs for this package include:
 -   [x] Get Crash List Information
 -   [X] Get Crash Details
 -   [x] Get Crashes By Location
+-   [X] Get Crashes By Vehicle
 -   [x] Get Summary Counts
 -   [x] Get Variables and Get Variable Attributes
 -   [x] Get FARS Data By Year
@@ -36,14 +37,15 @@ Most of these APIs support XML, JSV, CSV, and JSON output formats. This package 
 
 Currently unsupported APIs include:
 
--   [ ] Get Crashes By Vehicle
 -   [ ] Get Crashes By Occupant
 
-Pull requests are welcome if you are interested in adding support for these APIs to the package. For reference, this package also includes a list of terms and NHTSA technical definitions in `fars_terms`.
+For reference, this package also includes a list of terms and NHTSA technical definitions in `fars_terms`.
 
-The FARS API currently only provides access to data from 2010 to 2019. Earlier data along with data from the the [General Estimates System](https://www.nhtsa.gov/national-automotive-sampling-system-nass/nass-general-estimates-system) (GES) / [Crash Report Sampling System](https://www.nhtsa.gov/crash-data-systems/crash-report-sampling-system-crss) (CRSS) is available through the [Fatality and Injury Reporting System Tool](https://cdan.dot.gov/query) (FIRST).
+The FARS API currently only provides access to data from 2010 to 2019. The `get_fars_zip` function can be used to access FARS data files from 1975 to 2019 that that are available for download on through [the NHTSA File Downloads site](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/) as zipped CSV or SAS files (not available through the NHTSA FARS API). This site also provides extensive technical documentation on coding and use of the FARS data files.
 
-The [NHTSA website](https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx) also provides additional information on the release data and version status for the FARS Dataset:
+Earlier data along with data from the the [General Estimates System](https://www.nhtsa.gov/national-automotive-sampling-system-nass/nass-general-estimates-system) (GES) / [Crash Report Sampling System](https://www.nhtsa.gov/crash-data-systems/crash-report-sampling-system-crss) (CRSS) is also available through the [Fatality and Injury Reporting System Tool](https://cdan.dot.gov/query) (FIRST).
+
+The [NHTSA website](https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx) also provides additional information on the release data and version status for the FARS data files:
 
 | Data Year | File Version | Release Date      |
 |-----------|--------------|-------------------|

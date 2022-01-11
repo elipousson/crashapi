@@ -20,6 +20,7 @@ Supported APIs for this package include:
 -   [x] Get Crash List Information
 -   [x] Get Crash Details
 -   [x] Get Crashes By Location
+-   [x] Get Crashes By Vehicle
 -   [x] Get Summary Counts
 -   [x] Get Variables and Get Variable Attributes
 -   [x] Get FARS Data By Year
@@ -30,24 +31,30 @@ supports downloading CSV files).
 
 Currently unsupported APIs include:
 
--   [ ] Get Crashes By Vehicle
 -   [ ] Get Crashes By Occupant
 
-Pull requests are welcome if you are interested in adding support for
-these APIs to the package. For reference, this package also includes a
-list of terms and NHTSA technical definitions in `fars_terms`.
+For reference, this package also includes a list of terms and NHTSA
+technical definitions in `fars_terms`.
 
 The FARS API currently only provides access to data from 2010 to 2019.
+The `get_fars_zip` function can be used to access FARS data files from
+1975 to 2019 that that are available for download on through [the NHTSA
+File Downloads
+site](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/) as
+zipped CSV or SAS files (not available through the NHTSA FARS API). This
+site also provides extensive technical documentation on coding and use
+of the FARS data files.
+
 Earlier data along with data from the the [General Estimates
 System](https://www.nhtsa.gov/national-automotive-sampling-system-nass/nass-general-estimates-system)
 (GES) / [Crash Report Sampling
 System](https://www.nhtsa.gov/crash-data-systems/crash-report-sampling-system-crss)
-(CRSS) is available through the [Fatality and Injury Reporting System
-Tool](https://cdan.dot.gov/query) (FIRST).
+(CRSS) is also available through the [Fatality and Injury Reporting
+System Tool](https://cdan.dot.gov/query) (FIRST).
 
 The [NHTSA website](https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx)
 also provides additional information on the release data and version
-status for the FARS Dataset:
+status for the FARS data files:
 
 | Data Year | File Version | Release Date      |
 |-----------|--------------|-------------------|
@@ -114,38 +121,38 @@ get_fars_crashes(
   # Show 10 fatal crashes at random
   dplyr::slice_sample(n = 10)
 #>    CITY       CITYNAME COUNTY    COUNTYNAME CaseYear FATALS    LATITUDE
-#> 1     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.39542500
-#> 2     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.30686389
-#> 3     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.32589722
-#> 4     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.27750278
-#> 5     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      2 39.23797778
-#> 6     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.40715278
-#> 7     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.32919167
-#> 8     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.32236667
-#> 9     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.39217222
-#> 10    0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.59704722
-#>         LONGITUD STATE STATENAME ST_CASE TOTALVEHICLES   TWAY_ID TWAY_ID2
-#> 1  -76.407447220    24  Maryland  240077             1     US-40         
-#> 2  -76.741608330    24  Maryland  240007             1 I-70 RAMP         
-#> 3  -76.497469440    24  Maryland  240206             2     US-40  CR-4447
-#> 4  -76.488580560    24  Maryland  240043             1   CR-5500         
-#> 5  -76.706641670    24  Maryland  240301             2      I-95         
-#> 6  -76.631930560    24  Maryland  240495             2    SR-139         
-#> 7  -76.466880560    24  Maryland  240079             1   CR-4552         
-#> 8  -76.750622220    24  Maryland  240166             1   CR-2356         
-#> 9  -76.763561110    24  Maryland  240201             2     I-795         
-#> 10 -76.664830560    24  Maryland  240222             1      I-83         
+#> 1     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.37209167
+#> 2     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.53543333
+#> 3     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.38739722
+#> 4     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.34260278
+#> 5     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.24831944
+#> 6     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      2 39.42957778
+#> 7     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.24068611
+#> 8     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.32246111
+#> 9     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      2 39.68845556
+#> 10    0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.66936944
+#>         LONGITUD STATE STATENAME ST_CASE TOTALVEHICLES TWAY_ID TWAY_ID2
+#> 1  -76.720697220    24  Maryland  240462             1  SR-140         
+#> 2  -76.728091670    24  Maryland  240142             2   SR-25   SR-128
+#> 3  -76.623925000    24  Maryland  240380             1  SR-139         
+#> 4  -76.479944440    24  Maryland  240320             2    SR-7         
+#> 5  -76.677350000    24  Maryland  240131             4   I-695         
+#> 6  -76.386275000    24  Maryland  240224             2    I-95         
+#> 7  -76.680222220    24  Maryland  240460             2  US-1AL  CR-3178
+#> 8  -76.504061110    24  Maryland  240298            11   US-40         
+#> 9  -76.644813890    24  Maryland  240354             4    I-83         
+#> 10 -76.802547220    24  Maryland  240483             2   CR-14    CR-15
 #>    VE_FORMS
 #> 1         1
-#> 2         1
-#> 3         2
+#> 2         2
+#> 3         1
 #> 4         1
-#> 5         2
-#> 6         2
-#> 7         1
+#> 5         4
+#> 6         1
+#> 7         2
 #> 8         1
-#> 9         1
-#> 10        1
+#> 9         4
+#> 10        2
 ```
 
 ``` r
@@ -170,7 +177,7 @@ ggplot() +
     aes(color = TOTALVEHICLES)
   ) +
   theme_void()
-#> Downloading: 14 kB     Downloading: 14 kB     Downloading: 23 kB     Downloading: 23 kB     Downloading: 23 kB     Downloading: 23 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 37 kB     Downloading: 37 kB     Downloading: 40 kB     Downloading: 40 kB     Downloading: 52 kB     Downloading: 52 kB     Downloading: 58 kB     Downloading: 58 kB     Downloading: 63 kB     Downloading: 63 kB     Downloading: 69 kB     Downloading: 69 kB     Downloading: 75 kB     Downloading: 75 kB     Downloading: 80 kB     Downloading: 80 kB     Downloading: 88 kB     Downloading: 88 kB     Downloading: 88 kB     Downloading: 88 kB     Downloading: 99 kB     Downloading: 99 kB     Downloading: 120 kB     Downloading: 120 kB     Downloading: 120 kB     Downloading: 120 kB     Downloading: 130 kB     Downloading: 130 kB     Downloading: 130 kB     Downloading: 130 kB     Downloading: 140 kB     Downloading: 140 kB     Downloading: 150 kB     Downloading: 150 kB     Downloading: 170 kB     Downloading: 170 kB     Downloading: 200 kB     Downloading: 200 kB     Downloading: 200 kB     Downloading: 200 kB     Downloading: 230 kB     Downloading: 230 kB     Downloading: 280 kB     Downloading: 280 kB     Downloading: 300 kB     Downloading: 300 kB     Downloading: 320 kB     Downloading: 320 kB     Downloading: 330 kB     Downloading: 330 kB     Downloading: 350 kB     Downloading: 350 kB     Downloading: 370 kB     Downloading: 370 kB     Downloading: 370 kB     Downloading: 370 kB     Downloading: 400 kB     Downloading: 400 kB     Downloading: 430 kB     Downloading: 430 kB     Downloading: 450 kB     Downloading: 450 kB     Downloading: 490 kB     Downloading: 490 kB     Downloading: 560 kB     Downloading: 560 kB     Downloading: 560 kB     Downloading: 560 kB     Downloading: 610 kB     Downloading: 610 kB     Downloading: 630 kB     Downloading: 630 kB     Downloading: 630 kB     Downloading: 630 kB     Downloading: 650 kB     Downloading: 650 kB     Downloading: 690 kB     Downloading: 690 kB     Downloading: 740 kB     Downloading: 740 kB     Downloading: 750 kB     Downloading: 750 kB     Downloading: 800 kB     Downloading: 800 kB     Downloading: 820 kB     Downloading: 820 kB     Downloading: 880 kB     Downloading: 880 kB     Downloading: 920 kB     Downloading: 920 kB     Downloading: 930 kB     Downloading: 930 kB     Downloading: 970 kB     Downloading: 970 kB     Downloading: 1 MB     Downloading: 1 MB     Downloading: 1.1 MB     Downloading: 1.1 MB     Downloading: 1.1 MB     Downloading: 1.1 MB     Downloading: 1.2 MB     Downloading: 1.2 MB     Downloading: 1.2 MB     Downloading: 1.2 MB     Downloading: 1.3 MB     Downloading: 1.3 MB     Downloading: 1.3 MB     Downloading: 1.3 MB     Downloading: 1.3 MB     Downloading: 1.3 MB     Downloading: 1.4 MB     Downloading: 1.4 MB     Downloading: 1.4 MB     Downloading: 1.4 MB     Downloading: 1.4 MB     Downloading: 1.4 MB     Downloading: 1.4 MB     Downloading: 1.4 MB     Downloading: 1.4 MB     Downloading: 1.4 MB     Downloading: 1.5 MB     Downloading: 1.5 MB     Downloading: 1.5 MB     Downloading: 1.5 MB     Downloading: 1.5 MB     Downloading: 1.5 MB     Downloading: 1.5 MB     Downloading: 1.5 MB     Downloading: 1.5 MB     Downloading: 1.5 MB     Downloading: 1.5 MB     Downloading: 1.5 MB     Downloading: 1.5 MB     Downloading: 1.5 MB     Downloading: 1.6 MB     Downloading: 1.6 MB     Downloading: 1.6 MB     Downloading: 1.6 MB     Downloading: 1.7 MB     Downloading: 1.7 MB     Downloading: 1.7 MB     Downloading: 1.7 MB     Downloading: 1.7 MB     Downloading: 1.7 MB     Downloading: 1.7 MB     Downloading: 1.7 MB     Downloading: 1.7 MB     Downloading: 1.7 MB     Downloading: 1.8 MB     Downloading: 1.8 MB     Downloading: 1.8 MB     Downloading: 1.8 MB     Downloading: 1.8 MB     Downloading: 1.8 MB     Downloading: 1.8 MB     Downloading: 1.8 MB     Downloading: 1.9 MB     Downloading: 1.9 MB     Downloading: 1.9 MB     Downloading: 1.9 MB     Downloading: 1.9 MB     Downloading: 1.9 MB     Downloading: 1.9 MB     Downloading: 1.9 MB     Downloading: 1.9 MB     Downloading: 1.9 MB     Downloading: 1.9 MB     Downloading: 1.9 MB     Downloading: 2 MB     Downloading: 2 MB     Downloading: 2 MB     Downloading: 2 MB     Downloading: 2 MB     Downloading: 2 MB     Downloading: 2.1 MB     Downloading: 2.1 MB     Downloading: 2.1 MB     Downloading: 2.1 MB     Downloading: 2.1 MB     Downloading: 2.1 MB     Downloading: 2.1 MB     Downloading: 2.1 MB     Downloading: 2.1 MB     Downloading: 2.1 MB     Downloading: 2.2 MB     Downloading: 2.2 MB     Downloading: 2.2 MB     Downloading: 2.2 MB     Downloading: 2.2 MB     Downloading: 2.2 MB     Downloading: 2.3 MB     Downloading: 2.3 MB     Downloading: 2.3 MB     Downloading: 2.3 MB     Downloading: 2.4 MB     Downloading: 2.4 MB     Downloading: 2.5 MB     Downloading: 2.5 MB     Downloading: 2.5 MB     Downloading: 2.5 MB     Downloading: 2.6 MB     Downloading: 2.6 MB     Downloading: 2.6 MB     Downloading: 2.6 MB     Downloading: 2.6 MB     Downloading: 2.6 MB     Downloading: 2.6 MB     Downloading: 2.6 MB     Downloading: 2.7 MB     Downloading: 2.7 MB     Downloading: 2.7 MB     Downloading: 2.7 MB     Downloading: 2.7 MB     Downloading: 2.7 MB     Downloading: 2.7 MB     Downloading: 2.7 MB     Downloading: 2.7 MB     Downloading: 2.7 MB     Downloading: 2.7 MB     Downloading: 2.7 MB     Downloading: 2.7 MB     Downloading: 2.7 MB     Downloading: 2.8 MB     Downloading: 2.8 MB     Downloading: 2.8 MB     Downloading: 2.8 MB     Downloading: 2.8 MB     Downloading: 2.8 MB     Downloading: 2.8 MB     Downloading: 2.8 MB     Downloading: 2.8 MB     Downloading: 2.8 MB     Downloading: 2.9 MB     Downloading: 2.9 MB     Downloading: 2.9 MB     Downloading: 2.9 MB     Downloading: 2.9 MB     Downloading: 2.9 MB     Downloading: 2.9 MB     Downloading: 2.9 MB     Downloading: 2.9 MB     Downloading: 2.9 MB     Downloading: 2.9 MB     Downloading: 2.9 MB     Downloading: 3 MB     Downloading: 3 MB     Downloading: 3 MB     Downloading: 3 MB     Downloading: 3 MB     Downloading: 3 MB     Downloading: 3.1 MB     Downloading: 3.1 MB     Downloading: 3.1 MB     Downloading: 3.1 MB     Downloading: 3.1 MB     Downloading: 3.1 MB     Downloading: 3.1 MB     Downloading: 3.1 MB
+#>   |                                                                              |                                                                      |   0%  |                                                                              |                                                                      |   1%  |                                                                              |=                                                                     |   1%  |                                                                              |=                                                                     |   2%  |                                                                              |==                                                                    |   2%  |                                                                              |==                                                                    |   3%  |                                                                              |==                                                                    |   4%  |                                                                              |===                                                                   |   4%  |                                                                              |===                                                                   |   5%  |                                                                              |====                                                                  |   5%  |                                                                              |====                                                                  |   6%  |                                                                              |=====                                                                 |   7%  |                                                                              |=====                                                                 |   8%  |                                                                              |======                                                                |   8%  |                                                                              |======                                                                |   9%  |                                                                              |=======                                                               |  10%  |                                                                              |========                                                              |  11%  |                                                                              |========                                                              |  12%  |                                                                              |=========                                                             |  13%  |                                                                              |=========                                                             |  14%  |                                                                              |==========                                                            |  15%  |                                                                              |============                                                          |  17%  |                                                                              |================                                                      |  23%  |                                                                              |=================                                                     |  24%  |                                                                              |===================                                                   |  27%  |                                                                              |====================                                                  |  28%  |                                                                              |=====================                                                 |  30%  |                                                                              |======================                                                |  31%  |                                                                              |=======================                                               |  33%  |                                                                              |========================                                              |  34%  |                                                                              |=========================                                             |  36%  |                                                                              |==========================                                            |  37%  |                                                                              |===========================                                           |  38%  |                                                                              |==============================                                        |  43%  |                                                                              |===============================                                       |  44%  |                                                                              |=================================                                     |  47%  |                                                                              |==================================                                    |  48%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================                                  |  51%  |                                                                              |======================================                                |  54%  |                                                                              |=======================================                               |  56%  |                                                                              |========================================                              |  57%  |                                                                              |========================================                              |  58%  |                                                                              |============================================                          |  62%  |                                                                              |============================================                          |  63%  |                                                                              |=============================================                         |  64%  |                                                                              |===============================================                       |  68%  |                                                                              |=================================================                     |  69%  |                                                                              |=================================================                     |  71%  |                                                                              |==================================================                    |  72%  |                                                                              |===================================================                   |  73%  |                                                                              |====================================================                  |  74%  |                                                                              |======================================================                |  78%  |                                                                              |========================================================              |  80%  |                                                                              |==========================================================            |  83%  |                                                                              |===========================================================           |  85%  |                                                                              |============================================================          |  85%  |                                                                              |============================================================          |  86%  |                                                                              |=============================================================         |  87%  |                                                                              |==============================================================        |  89%  |                                                                              |===============================================================       |  90%  |                                                                              |================================================================      |  91%  |                                                                              |=================================================================     |  92%  |                                                                              |=================================================================     |  93%  |                                                                              |==================================================================    |  95%  |                                                                              |===================================================================   |  95%  |                                                                              |====================================================================  |  97%  |                                                                              |===================================================================== |  98%  |                                                                              |======================================================================| 100%
 ```
 
 <img src="man/figures/README-map_fars_crashes-1.png" width="100%" />
