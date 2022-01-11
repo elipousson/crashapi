@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_fars.R
 \name{get_fars_crash_vehicles}
 \alias{get_fars_crash_vehicles}
-\title{Get Get Crashes By Vehicle}
+\title{Get Crashes By Vehicle}
 \usage{
 get_fars_crash_vehicles(
   start_year = 2014,

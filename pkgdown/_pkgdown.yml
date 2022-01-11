@@ -1,5 +1,6 @@
 template:
   package: preferably
+  bootstrap: 5
 home:
   title: An R package for accessing the Fatality Analysis Reporting System (FARS) API
   description: Get crash data for U.S. states and counties.

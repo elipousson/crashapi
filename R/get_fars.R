@@ -227,7 +227,7 @@ get_fars_crash_details <- function(year = 2015,
 }
 
 #' @rdname get_fars_crash_vehicles
-#' @title Get Get Crashes By Vehicle
+#' @title Get Crashes By Vehicle
 #' @description This function returns a list of fatal crashes by vehicle type
 #'   that have occurred throughout United States. The make, model, and body type
 #'   must match the options returned by `fars_vars`. This function accepts named
