@@ -22,7 +22,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">crashapi</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,6 +50,19 @@
       
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.11" id="crashapi-01011">crashapi 0.1.0.11<a class="anchor" aria-label="anchor" href="#crashapi-01011"></a></h2>
+<ul><li>feat: add <code><a href="../reference/get_fars.html">get_fars()</a></code> function that uses an api parameter to call different APIs</li>
+<li>feat: import helper functions from {tigris} package to improve renamed <code>lookup_fips()</code> function</li>
+<li>feat: Add <code>get_fars_crash_vehicles</code> to support downloading crash data by vehicle make, model, and/or body type</li>
+<li>fix: <code>get_fars_year</code> was not using the correct query URL if download = TRUE</li>
+<li>refactor: relocate helper functions to utils.R</li>
+<li>refactor: rename <code>make_query()</code> helper function to <code>read_api()</code>
+</li>
+<li>refactor: update <code>validate_year()</code> helper function to work with {checkmate} package</li>
+<li>refactor: update default values for year, start_year, end_year and other parameters</li>
+<li>docs: Update README and pkgdown site</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.10" id="crashapi-01010">crashapi 0.1.0.10<a class="anchor" aria-label="anchor" href="#crashapi-01010"></a></h2>
 <ul><li>feat: <code>get_fars_zip</code> added to provide alternate (non-API) method for downloading zipped CSV or SAS data files</li>
