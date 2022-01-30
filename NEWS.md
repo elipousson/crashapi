@@ -1,5 +1,17 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# crashapi 0.1.0.11
+
+- feat: add `get_fars()` function that uses an api parameter to call different APIs
+- feat: import helper functions from {tigris} package to improve renamed `lookup_fips()` function
+- feat: Add `get_fars_crash_vehicles` to support downloading crash data by vehicle make, model, and/or body type
+- fix: `get_fars_year` was not using the correct query URL if download = TRUE
+- refactor: relocate helper functions to utils.R
+- refactor: rename `make_query()` helper function to `read_api()`
+- refactor: update `validate_year()` helper function to work with {checkmate} package
+- refactor: update default values for year, start_year, end_year and other parameters
+- docs: Update README and pkgdown site
+
 # crashapi 0.1.0.10
 
 - feat: `get_fars_zip` added to provide alternate (non-API) method for downloading zipped CSV or SAS data files
