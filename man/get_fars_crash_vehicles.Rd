@@ -5,24 +5,24 @@
 \title{Get Crashes By Vehicle}
 \usage{
 get_fars_crash_vehicles(
-  start_year = 2014,
-  end_year = 2015,
-  state = NULL,
+  year = NULL,
+  start_year,
+  end_year,
+  state,
   make = NULL,
   model = NULL,
-  model_year = NULL,
+  model_year = 2010,
   body_type = NULL
 )
 }
 \arguments{
-\item{start_year}{Required. Start year for crash reports (must be between
-2010 and 2019), Default: 2014}
+\item{year}{numeric vector. Year or range with start and end year. 2010 to 2019 supported.}
 
-\item{end_year}{Required. End year for crash reports (must be between 2010
-and 2019), Default: 2015}
+\item{start_year}{Start year for crash reports.}
 
-\item{state}{Required. State name, abbreviation, or FIPS number.
-\code{get_fars_crash_list} supports multiple states.}
+\item{end_year}{End year for crash reports.}
+
+\item{state}{Required. State name, abbreviation, or FIPS number.}
 
 \item{make}{Make name or ID, Required. The start_year is used to return a
 list of support make options. Default: NULL}

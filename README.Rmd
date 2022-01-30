@@ -16,7 +16,9 @@ knitr::opts_chunk$set(
 # crashapi
 
 <!-- badges: start -->
-
+[![CRAN status](https://www.r-pkg.org/badges/version/crashapi)](https://CRAN.R-project.org/package=crashapi)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+ [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
 The goal of the crashapi R package is to provide functions for downloading data from the National Highway Traffic Safety Administration (NHTSA) [Fatality Analysis Reporting System (FARS) API](https://crashviewer.nhtsa.dot.gov/CrashAPI/).
@@ -77,36 +79,27 @@ library(ggplot2)
 
 ```{r get_fars_crash_list}
 # Get fatal crashes in NY from 2019 with 5 to 10 vehicles
-get_fars_crash_list(
-  start_year = 2019,
-  end_year = 2019,
+get_fars(
+  year = 2019,
   state = "NY",
-  vehicles = c(5,10)
+  vehicles = c(5, 10)
 )
 ```
 
 ```{r get_fars_crashes}
 # Get fatal crashes for Baltimore County, MD from 2017 to 2018
-get_fars_crashes(
-  start_year = 2017,
-  end_year = 2018,
+baltimore_co_crashes <- get_fars(
+  year = c(2017, 2018),
   state = "MD",
-  county = "Baltimore County") |>
-  # Show 10 fatal crashes at random
-  dplyr::slice_sample(n = 10)
+  county = "Baltimore County",
+  geometry = TRUE
+)
+
+# Show 10 fatal crashes at random
+dplyr::slice_sample(baltimore_co_crashes, n = 10)
 ```
 
 ```{r map_fars_crashes}
-# Get crashes for Baltimore County, MD from 2014
-crashes <-
-  get_fars_crashes(
-    start_year = 2014,
-    end_year = 2014,
-    state = "MD",
-    county = "Baltimore County",
-    geometry = TRUE
-  )
-
 # Map crashes
 ggplot() +
   geom_sf(
@@ -114,19 +107,26 @@ ggplot() +
     fill = NA, color = "black"
   ) +
   geom_sf(
-    data = crashes,
-    aes(color = TOTALVEHICLES)
+    data = baltimore_co_crashes,
+    aes(color = TOTALVEHICLES),
+    alpha = 0.75
   ) +
   theme_void()
 ```
 
 ```{r get_fars_summary}
 # Get summary crash count and fatal crash count data for Maryland from 2010 to 2019
-get_fars_summary(
-  start_year = 2010,
-  end_year = 2019,
-  state = "MD"
-)
+md_summary <-
+  get_fars(
+    year = c(2010, 2019),
+    state = "MD",
+    api = "summary count"
+  )
+
+ggplot(md_summary, aes(x = CaseYear, y = TotalFatalCounts)) +
+  geom_point(color = "red") +
+  geom_line(color = "red", group = 1) +
+  theme_minimal()
 ```
 
 ## Related packages and projects

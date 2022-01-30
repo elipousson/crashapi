@@ -8,4 +8,13 @@
 \description{
 Get Fatality Analysis Reporting System (FARS) data with the FARS API.
 }
+\author{
+\strong{Maintainer}: Eli Pousson \email{eli.pousson@gmail.com} (\href{https://orcid.org/0000-0001-8280-1706}{ORCID})
+
+Other contributors:
+\itemize{
+  \item Kyle Walker \email{kyle@walker-data.com} (Author of tigris helper functions bundled with crashapi (see tigris-utils.R).) [copyright holder]
+}
+
+}
 \keyword{internal}

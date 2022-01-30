@@ -21,23 +21,20 @@
 #' @export
 #' @importFrom jsonlite read_json
 fars_vars <- function(year, var = NULL, make = NULL, model = NULL) {
-  if ((year >= 2020 | year <= 2009) & !is.null(year)) {
-    stop("The year must be between 2010 and 2019.")
-  }
+
+  year <- validate_year(year, year_range = )
 
   if (!is.null(var)) {
     var <- match.arg(var, c("make", "model", "bodytype"))
     if (var == "make") {
-      query <- make_query("/definitions/GetVariableAttributes?variable={var}&caseYear={year}")
+      read_api("/definitions/GetVariableAttributes?variable={var}&caseYear={year}")
     } else if (var == "model") {
-      query <- make_query("/definitions/GetVariableAttributesForModel?variable={var}&caseYear={year}&make={make}")
+      read_api("/definitions/GetVariableAttributesForModel?variable={var}&caseYear={year}&make={make}")
     } else if (var == "bodytype") {
-      query <- make_query("/definitions/GetVariableAttributesForbodyType?variable={var}&make={make}&model={model}")
+      read_api("/definitions/GetVariableAttributesForbodyType?variable={var}&make={make}&model={model}")
     }
   } else {
-    query <- make_query("/definitions/GetVariables?dataYear={year}")
+    read_api("/definitions/GetVariables?dataYear={year}")
   }
-
-  jsonlite::read_json(query, simplifyVector = TRUE)$Results[[1]]
 }
 

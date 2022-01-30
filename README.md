@@ -4,6 +4,13 @@
 # crashapi
 
 <!-- badges: start -->
+
+[![CRAN
+status](https://www.r-pkg.org/badges/version/crashapi)](https://CRAN.R-project.org/package=crashapi)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![License:
+MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
 The goal of the crashapi R package is to provide functions for
@@ -87,12 +94,12 @@ library(ggplot2)
 
 ``` r
 # Get fatal crashes in NY from 2019 with 5 to 10 vehicles
-get_fars_crash_list(
-  start_year = 2019,
-  end_year = 2019,
+get_fars(
+  year = 2019,
   state = "NY",
-  vehicles = c(5,10)
+  vehicles = c(5, 10)
 )
+#> Setting `api` to 'state list' based on the `get_fars()` parameters.
 #>      CountyName                  CrashDate Fatals Peds Persons St_Case State
 #> 1     BRONX (5) /Date(1549865820000-0500)/      2    1       7  360042    36
 #> 2     ERIE (29) /Date(1551915000000-0500)/      1    0       4  360159    36
@@ -113,59 +120,56 @@ get_fars_crash_list(
 
 ``` r
 # Get fatal crashes for Baltimore County, MD from 2017 to 2018
-get_fars_crashes(
-  start_year = 2017,
-  end_year = 2018,
+baltimore_co_crashes <- get_fars(
+  year = c(2017, 2018),
   state = "MD",
-  county = "Baltimore County") |>
-  # Show 10 fatal crashes at random
-  dplyr::slice_sample(n = 10)
-#>    CITY       CITYNAME COUNTY    COUNTYNAME CaseYear FATALS    LATITUDE
-#> 1     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.37209167
-#> 2     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.53543333
-#> 3     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.38739722
-#> 4     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.34260278
-#> 5     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.24831944
-#> 6     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      2 39.42957778
-#> 7     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.24068611
-#> 8     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.32246111
-#> 9     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      2 39.68845556
-#> 10    0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.66936944
-#>         LONGITUD STATE STATENAME ST_CASE TOTALVEHICLES TWAY_ID TWAY_ID2
-#> 1  -76.720697220    24  Maryland  240462             1  SR-140         
-#> 2  -76.728091670    24  Maryland  240142             2   SR-25   SR-128
-#> 3  -76.623925000    24  Maryland  240380             1  SR-139         
-#> 4  -76.479944440    24  Maryland  240320             2    SR-7         
-#> 5  -76.677350000    24  Maryland  240131             4   I-695         
-#> 6  -76.386275000    24  Maryland  240224             2    I-95         
-#> 7  -76.680222220    24  Maryland  240460             2  US-1AL  CR-3178
-#> 8  -76.504061110    24  Maryland  240298            11   US-40         
-#> 9  -76.644813890    24  Maryland  240354             4    I-83         
-#> 10 -76.802547220    24  Maryland  240483             2   CR-14    CR-15
-#>    VE_FORMS
-#> 1         1
-#> 2         2
-#> 3         1
-#> 4         1
-#> 5         4
-#> 6         1
-#> 7         2
-#> 8         1
-#> 9         4
-#> 10        2
+  county = "Baltimore County",
+  geometry = TRUE
+)
+
+# Show 10 fatal crashes at random
+dplyr::slice_sample(baltimore_co_crashes, n = 10)
+#> Simple feature collection with 10 features and 15 fields
+#> Geometry type: POINT
+#> Dimension:     XY
+#> Bounding box:  xmin: -76.80255 ymin: 39.25286 xmax: -76.45716 ymax: 39.66937
+#> Geodetic CRS:  WGS 84
+#>    CITY       CITYNAME COUNTY    COUNTYNAME CaseYear FATALS LATITUDE  LONGITUD
+#> 1     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      2 39.25286 -76.45716
+#> 2     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.66937 -76.80255
+#> 3     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.30716 -76.72991
+#> 4     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.36017 -76.47853
+#> 5     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.62297 -76.79301
+#> 6     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.34727 -76.73358
+#> 7     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.37209 -76.72070
+#> 8     0 NOT APPLICABLE      5 BALTIMORE (5)     2017      1 39.38242 -76.78916
+#> 9     0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.39456 -76.49292
+#> 10    0 NOT APPLICABLE      5 BALTIMORE (5)     2018      1 39.28437 -76.74683
+#>    STATE STATENAME ST_CASE TOTALVEHICLES                      TWAY_ID TWAY_ID2
+#> 1     24  Maryland  240197             6                        I-695         
+#> 2     24  Maryland  240483             2                        CR-14    CR-15
+#> 3     24  Maryland  240347             1 SOCIAL SECURITY HEADQUARTERS         
+#> 4     24  Maryland  240052             1                         I-95         
+#> 5     24  Maryland  240167             1                        SR-25         
+#> 6     24  Maryland  240099             1                      CR-1901         
+#> 7     24  Maryland  240462             1                       SR-140         
+#> 8     24  Maryland  240246             2                      CR-2250  CR-2200
+#> 9     24  Maryland  240493             1                      CR-1400  CR-4090
+#> 10    24  Maryland  240273             1                        US-40         
+#>    VE_FORMS                   geometry
+#> 1         6 POINT (-76.45716 39.25286)
+#> 2         2 POINT (-76.80255 39.66937)
+#> 3         1 POINT (-76.72991 39.30716)
+#> 4         1 POINT (-76.47853 39.36017)
+#> 5         1 POINT (-76.79301 39.62297)
+#> 6         1 POINT (-76.73358 39.34727)
+#> 7         1  POINT (-76.7207 39.37209)
+#> 8         2 POINT (-76.78916 39.38242)
+#> 9         1 POINT (-76.49292 39.39456)
+#> 10        1 POINT (-76.74683 39.28437)
 ```
 
 ``` r
-# Get crashes for Baltimore County, MD from 2014
-crashes <-
-  get_fars_crashes(
-    start_year = 2014,
-    end_year = 2014,
-    state = "MD",
-    county = "Baltimore County",
-    geometry = TRUE
-  )
-
 # Map crashes
 ggplot() +
   geom_sf(
@@ -173,34 +177,32 @@ ggplot() +
     fill = NA, color = "black"
   ) +
   geom_sf(
-    data = crashes,
-    aes(color = TOTALVEHICLES)
+    data = baltimore_co_crashes,
+    aes(color = TOTALVEHICLES),
+    alpha = 0.75
   ) +
   theme_void()
-#>   |                                                                              |                                                                      |   0%  |                                                                              |                                                                      |   1%  |                                                                              |=                                                                     |   1%  |                                                                              |=                                                                     |   2%  |                                                                              |==                                                                    |   2%  |                                                                              |==                                                                    |   3%  |                                                                              |==                                                                    |   4%  |                                                                              |===                                                                   |   4%  |                                                                              |===                                                                   |   5%  |                                                                              |====                                                                  |   5%  |                                                                              |====                                                                  |   6%  |                                                                              |=====                                                                 |   7%  |                                                                              |=====                                                                 |   8%  |                                                                              |======                                                                |   8%  |                                                                              |======                                                                |   9%  |                                                                              |=======                                                               |  10%  |                                                                              |========                                                              |  11%  |                                                                              |========                                                              |  12%  |                                                                              |=========                                                             |  13%  |                                                                              |=========                                                             |  14%  |                                                                              |==========                                                            |  15%  |                                                                              |============                                                          |  17%  |                                                                              |================                                                      |  23%  |                                                                              |=================                                                     |  24%  |                                                                              |===================                                                   |  27%  |                                                                              |====================                                                  |  28%  |                                                                              |=====================                                                 |  30%  |                                                                              |======================                                                |  31%  |                                                                              |=======================                                               |  33%  |                                                                              |========================                                              |  34%  |                                                                              |=========================                                             |  36%  |                                                                              |==========================                                            |  37%  |                                                                              |===========================                                           |  38%  |                                                                              |==============================                                        |  43%  |                                                                              |===============================                                       |  44%  |                                                                              |=================================                                     |  47%  |                                                                              |==================================                                    |  48%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================                                  |  51%  |                                                                              |======================================                                |  54%  |                                                                              |=======================================                               |  56%  |                                                                              |========================================                              |  57%  |                                                                              |========================================                              |  58%  |                                                                              |============================================                          |  62%  |                                                                              |============================================                          |  63%  |                                                                              |=============================================                         |  64%  |                                                                              |===============================================                       |  68%  |                                                                              |=================================================                     |  69%  |                                                                              |=================================================                     |  71%  |                                                                              |==================================================                    |  72%  |                                                                              |===================================================                   |  73%  |                                                                              |====================================================                  |  74%  |                                                                              |======================================================                |  78%  |                                                                              |========================================================              |  80%  |                                                                              |==========================================================            |  83%  |                                                                              |===========================================================           |  85%  |                                                                              |============================================================          |  85%  |                                                                              |============================================================          |  86%  |                                                                              |=============================================================         |  87%  |                                                                              |==============================================================        |  89%  |                                                                              |===============================================================       |  90%  |                                                                              |================================================================      |  91%  |                                                                              |=================================================================     |  92%  |                                                                              |=================================================================     |  93%  |                                                                              |==================================================================    |  95%  |                                                                              |===================================================================   |  95%  |                                                                              |====================================================================  |  97%  |                                                                              |===================================================================== |  98%  |                                                                              |======================================================================| 100%
+#>   |                                                                              |                                                                      |   0%  |                                                                              |                                                                      |   1%  |                                                                              |=                                                                     |   1%  |                                                                              |=                                                                     |   2%  |                                                                              |==                                                                    |   2%  |                                                                              |==                                                                    |   3%  |                                                                              |===                                                                   |   4%  |                                                                              |===                                                                   |   5%  |                                                                              |====                                                                  |   5%  |                                                                              |====                                                                  |   6%  |                                                                              |=====                                                                 |   7%  |                                                                              |=====                                                                 |   8%  |                                                                              |======                                                                |   8%  |                                                                              |======                                                                |   9%  |                                                                              |=======                                                               |   9%  |                                                                              |=======                                                               |  10%  |                                                                              |=======                                                               |  11%  |                                                                              |========                                                              |  11%  |                                                                              |========                                                              |  12%  |                                                                              |=========                                                             |  13%  |                                                                              |==========                                                            |  14%  |                                                                              |==============                                                        |  20%  |                                                                              |=================                                                     |  24%  |                                                                              |====================                                                  |  28%  |                                                                              |=========================================                             |  58%  |                                                                              |=============================================                         |  64%  |                                                                              |==============================================                        |  65%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%
 ```
 
 <img src="man/figures/README-map_fars_crashes-1.png" width="100%" />
 
 ``` r
 # Get summary crash count and fatal crash count data for Maryland from 2010 to 2019
-get_fars_summary(
-  start_year = 2010,
-  end_year = 2019,
-  state = "MD"
-)
-#>    CaseYear CrashCounts TotalFatalCounts
-#> 1      2010         463              496
-#> 2      2011         455              485
-#> 3      2012         462              511
-#> 4      2013         431              465
-#> 5      2014         416              442
-#> 6      2015         479              520
-#> 7      2016         484              522
-#> 8      2017         518              558
-#> 9      2018         485              512
-#> 10     2019         484              521
+md_summary <-
+  get_fars(
+    year = c(2010, 2019),
+    state = "MD",
+    api = "summary count"
+  )
+
+ggplot(md_summary, aes(x = CaseYear, y = TotalFatalCounts)) +
+  geom_point(color = "red") +
+  geom_line(color = "red", group = 1) +
+  theme_minimal()
 ```
+
+<img src="man/figures/README-get_fars_summary-1.png" width="100%" />
 
 ## Related packages and projects
 

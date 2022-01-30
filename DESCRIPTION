@@ -2,8 +2,12 @@ Package: crashapi
 Type: Package
 Title: CrashAPI
 Version: 0.1.0.10
-Author: Eli Pousson
-Maintainer: Eli Pousson <eli.pousson@gmail.com>
+Authors@R: c(
+      person("Eli", "Pousson", , "eli.pousson@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-8280-1706")),
+      person(given="Kyle", family="Walker", email="kyle@walker-data.com", role=c("cph"),
+           comment = "Author of tigris helper functions bundled with crashapi (see tigris-utils.R).")
+      )
 Description: Get Fatality Analysis Reporting System (FARS) data with the FARS API.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -12,9 +16,15 @@ RoxygenNote: 7.1.2
 Depends: 
     R (>= 2.10)
 Imports:
+    checkmate,
     glue,
     jsonlite,
+    purrr,
     readr,
     stringr,
     sf,
     tigris
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr
