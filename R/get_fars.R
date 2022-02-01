@@ -68,6 +68,9 @@
 #' @param path File path used if download is TRUE.
 #' @param download logical. If TRUE and the `api` is "year dataset" or "zip",
 #'   download the data to a file. Default FALSE.
+#' @param progress_bar If TRUE, display a progress bar when downloading detailed
+#'   data with `get_fars_cases()` or another function that calls this function.
+#'   Default TRUE.
 #' @rdname get_fars
 #' @export
 #' @md
@@ -204,7 +207,8 @@ get_fars_cases <- function(year = 2019,
                            cases,
                            details = NULL,
                            geometry = FALSE,
-                           crs = 4326) {
+                           crs = 4326,
+                           progress_bar = TRUE) {
   year <- validate_year(year)
   state_fips <- lookup_fips(state)
 
@@ -212,9 +216,24 @@ get_fars_cases <- function(year = 2019,
     usethis::ui_stop("A valid FARS case number is required to access detailed crash data.")
   }
 
+  n_cases <- length(cases)
+  progress_bar <- progress_bar && (n_cases > 4)
+
   read_crash_result_set <- function(x) {
     results <- read_api("/crashes/GetCaseDetails?stateCase={x}&caseYear={year}&state={state_fips}")
+    if (n_cases > 5) {
+      pb$tick(tokens = list(case = x))
+    }
     results[["CrashResultSet"]]
+  }
+
+
+  if (progress_bar) {
+    usethis::ui_info("Downloading case data for {state} crashes.")
+    pb <-
+      progress::progress_bar$new(
+      format = "  downloading case :case [:bar] :percent in :elapsed",
+      total = n_cases)
   }
 
   crash_df <-

@@ -44,7 +44,8 @@ get_fars_cases(
   cases,
   details = NULL,
   geometry = FALSE,
-  crs = 4326
+  crs = 4326,
+  progress_bar = TRUE
 )
 
 get_fars_crash_list(
@@ -126,6 +127,10 @@ download the data to a file. Default FALSE.}
 \item{start_year}{Start year for crash reports.}
 
 \item{end_year}{End year for crash reports.}
+
+\item{progress_bar}{If TRUE, display a progress bar when downloading detailed
+data with \code{get_fars_cases()} or another function that calls this function.
+Default TRUE.}
 }
 \description{
 This function provides a convenient interface for accessing FARS

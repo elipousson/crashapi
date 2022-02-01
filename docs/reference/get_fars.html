@@ -151,7 +151,8 @@ NHTSA data downloads server in a zip format. Set <code>api</code> to "zip" or us
   <span class="va">cases</span>,
   details <span class="op">=</span> <span class="cn">NULL</span>,
   geometry <span class="op">=</span> <span class="cn">FALSE</span>,
-  crs <span class="op">=</span> <span class="fl">4326</span>
+  crs <span class="op">=</span> <span class="fl">4326</span>,
+  progress_bar <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span>
 
 <span class="fu">get_fars_crash_list</span><span class="op">(</span>
@@ -236,6 +237,10 @@ download the data to a file. Default FALSE.</p></dd>
 <dd><p>Start year for crash reports.</p></dd>
 <dt>end_year</dt>
 <dd><p>End year for crash reports.</p></dd>
+<dt>progress_bar</dt>
+<dd><p>If TRUE, display a progress bar when downloading detailed
+data with <code>get_fars_cases()</code> or another function that calls this function.
+Default TRUE.</p></dd>
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
