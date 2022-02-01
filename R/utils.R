@@ -1,6 +1,6 @@
 # Utility functions
 
-#' Build query URL and download data from API
+# Build query URL and download data from API
 #' @importFrom glue glue
 #' @importFrom jsonlite read_json
 read_api <- function(url,
@@ -19,7 +19,7 @@ read_api <- function(url,
   }
 }
 
-#' Validate start and end year
+# Validate start and end year
 #' @importFrom usethis ui_stop
 #' @importFrom checkmate expect_integerish
 validate_year <- function(year, year_range = c(2010, 2019), start_year, end_year) {
@@ -39,7 +39,7 @@ validate_year <- function(year, year_range = c(2010, 2019), start_year, end_year
   year
 }
 
-#' Convert data frame to sf object
+# Convert data frame to sf object
 #' @importFrom sf st_as_sf st_transform
 df_to_sf <- function(x,
                      longitude = "LONGITUD",
@@ -72,7 +72,7 @@ df_to_sf <- function(x,
 }
 
 
-#' Validate state and county name/abbreviation and convert to FIPS number
+# Validate state and county name/abbreviation and convert to FIPS number
 lookup_fips <- function(state, county = NULL, several.ok = FALSE, list = FALSE, int = TRUE) {
   if (!several.ok) {
     state_fips <- suppressMessages(validate_state(state))

@@ -11,6 +11,10 @@ reference:
 - title: Get variable definitions
   contents:
   - "fars_vars"
-- title: Background information
+- title: Reference information
   contents:
   - "fars_terms"
+  - "fars_vars_labels"
+- title: Utility functions
+  contents:
+  - "tidy_crashes"

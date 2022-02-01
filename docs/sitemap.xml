@@ -28,6 +28,9 @@
     <loc>/reference/fars_vars.html</loc>
   </url>
   <url>
+    <loc>/reference/fars_vars_labels.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_fars.html</loc>
   </url>
   <url>
@@ -38,5 +41,8 @@
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/tidy_crashes.html</loc>
   </url>
 </urlset>

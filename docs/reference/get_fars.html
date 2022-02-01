@@ -121,15 +121,15 @@ NHTSA data downloads server in a zip format. Set <code>api</code> to "zip" or us
   year <span class="op">=</span> <span class="fl">2019</span>,
   <span class="va">state</span>,
   county <span class="op">=</span> <span class="cn">NULL</span>,
-  api <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"crashes"</span>, <span class="st">"details"</span>, <span class="st">"state list"</span>, <span class="st">"summary count"</span>, <span class="st">"year dataset"</span>, <span class="st">"zip"</span><span class="op">)</span>,
+  api <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"crashes"</span>, <span class="st">"cases"</span>, <span class="st">"state list"</span>, <span class="st">"summary count"</span>, <span class="st">"year dataset"</span>, <span class="st">"zip"</span><span class="op">)</span>,
+  <span class="va">type</span>,
+  details <span class="op">=</span> <span class="cn">FALSE</span>,
   geometry <span class="op">=</span> <span class="cn">FALSE</span>,
   crs <span class="op">=</span> <span class="fl">4326</span>,
-  <span class="va">type</span>,
-  <span class="va">case</span>,
-  details <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">cases</span>,
   <span class="va">vehicles</span>,
+  format <span class="op">=</span> <span class="st">"json"</span>,
   <span class="va">pr</span>,
-  <span class="va">format</span>,
   path <span class="op">=</span> <span class="cn">NULL</span>,
   download <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span>
@@ -140,17 +140,18 @@ NHTSA data downloads server in a zip format. Set <code>api</code> to "zip" or us
   <span class="va">end_year</span>,
   <span class="va">state</span>,
   county <span class="op">=</span> <span class="cn">NULL</span>,
+  details <span class="op">=</span> <span class="cn">FALSE</span>,
   geometry <span class="op">=</span> <span class="cn">FALSE</span>,
   crs <span class="op">=</span> <span class="fl">4326</span>
 <span class="op">)</span>
 
-<span class="fu">get_fars_crash_details</span><span class="op">(</span>
+<span class="fu">get_fars_cases</span><span class="op">(</span>
   year <span class="op">=</span> <span class="fl">2019</span>,
   <span class="va">state</span>,
-  <span class="va">case</span>,
+  <span class="va">cases</span>,
+  details <span class="op">=</span> <span class="cn">NULL</span>,
   geometry <span class="op">=</span> <span class="cn">FALSE</span>,
-  crs <span class="op">=</span> <span class="fl">4326</span>,
-  details <span class="op">=</span> <span class="cn">NULL</span>
+  crs <span class="op">=</span> <span class="fl">4326</span>
 <span class="op">)</span>
 
 <span class="fu">get_fars_crash_list</span><span class="op">(</span>
@@ -190,13 +191,8 @@ dataset" only supports 2010 to 2017 and "zip" supports 1975 to 2019.
 <dd><p>County name or FIPS number. Required for <code>get_fars_crashes</code>.</p></dd>
 <dt>api</dt>
 <dd><p>character. API function to use. Supported values include
-"crashes", "details", "state list", "summary count", "year dataset", and
+"crashes", "cases", "state list", "summary count", "year dataset", and
 "zip". Default: "crashes".</p></dd>
-<dt>geometry</dt>
-<dd><p>If TRUE, return sf object. Optional for <code>get_fars_crashes</code>.</p></dd>
-<dt>crs</dt>
-<dd><p>Coordinate reference system to return for <code>get_fars_crashes</code> if
-<code>geometry</code> is TRUE.</p></dd>
 <dt>type</dt>
 <dd><p>Name of the dataset or data file to download when using the "year
 dataset" api or <code>get_fars_year</code>. Supported values include "ACCIDENT",
@@ -204,25 +200,33 @@ dataset" api or <code>get_fars_year</code>. Supported values include "ACCIDENT",
 "NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE", "PERSON",
 "SAFETYEQ", "VEHICLE", "VEVENT VINDECODE", "VINDERIVED", "VIOLATION",
 "VISION", and "VSOE". Lowercase or mixed case values are permitted.</p></dd>
-<dt>case</dt>
-<dd><p>Case number. Required if <code>api</code> is "details" or using
-<code>get_fars_crash_details</code>. Multiple case numbers can be provided.</p></dd>
 <dt>details</dt>
 <dd><p>Type of detailed crash data to return (either "events" or
-"vehicles"). If NULL, events or vehicle data are excluded from data
-returned by <code>get_fars_crash_details</code>. Optional for
-<code>get_fars_crash_details</code>. Default: NULL.</p></dd>
+"vehicles"). If TRUE for <code>get_fars</code> or <code>get_fars_crashes</code>, detailed case
+data (excluding event and vehicle data) is attached to the returned crash
+data. If NULL for <code>get_fars_cases</code>, events and vehicle data are excluded
+from the returned case data. returned by <code>get_fars_cases</code>. Optional for
+<code>get_fars_crash_details</code>. Default: NULL for <code>get_fars_cases</code>; FALSE for
+<code>get_fars</code> and <code>get_fars_crashes</code>.</p></dd>
+<dt>geometry</dt>
+<dd><p>If TRUE, return sf object. Optional for <code>get_fars_crashes</code>.</p></dd>
+<dt>crs</dt>
+<dd><p>Coordinate reference system to return for <code>get_fars_crashes</code> if
+<code>geometry</code> is TRUE.</p></dd>
+<dt>cases</dt>
+<dd><p>One or more FARS case numbers. Required if <code>api</code> is "cases" or
+using <code>get_fars_cases</code>. Multiple case numbers can be provided.</p></dd>
 <dt>vehicles</dt>
 <dd><p>numeric vector with the minimum and maximum number of
 vehicles, e.g. c(1, 2) for minimum of 1 vehicle and maximum of 2. Required
 for <code>get_fars_crash_list</code>.</p></dd>
-<dt>pr</dt>
-<dd><p>logical. If TRUE and the <code>api</code> is "zip", download FARS data for
-Puerto Rico. No Puerto Rico data available for years 1975-1977. Default:
-FALSE</p></dd>
 <dt>format</dt>
 <dd><p>Default "json". "csv" is supported when using the "year
 dataset" api. "sas" is supporting for the "zip" api.</p></dd>
+<dt>pr</dt>
+<dd><p>logical. If TRUE, download zip file with FARS data for Puerto Rico.
+No Puerto Rico data available for years 1975-1977. Default: FALSE for
+<code>get_fars_zip</code> only.</p></dd>
 <dt>path</dt>
 <dd><p>File path used if download is TRUE.</p></dd>
 <dt>download</dt>

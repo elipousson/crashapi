@@ -41,7 +41,7 @@ Currently unsupported APIs include:
 
 -   [ ] Get Crashes By Occupant
 
-For reference, this package also includes a list of terms and NHTSA technical definitions in `fars_terms`.
+For reference, this package also includes a list of terms and NHTSA technical definitions in `fars_terms` and a list of variable labels in `fars_vars_labels`.
 
 The FARS API currently only provides access to data from 2010 to 2019. The `get_fars_zip` function can be used to access FARS data files from 1975 to 2019 that that are available for download on through [the NHTSA File Downloads site](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/) as zipped CSV or SAS files (not available through the NHTSA FARS API). This site also provides extensive technical documentation on coding and use of the FARS data files.
 
@@ -77,45 +77,12 @@ library(crashapi)
 library(ggplot2)
 ```
 
-```{r get_fars_crash_list}
-# Get fatal crashes in NY from 2019 with 5 to 10 vehicles
-get_fars(
-  year = 2019,
-  state = "NY",
-  vehicles = c(5, 10)
-)
-```
+Most features for the package can be accessed using the `get_fars()` function that selects the appropriate API-specific function based on the provided parameters. You can also set the API to use with the `api` parameter or use an API-specific function (e.g. `get_fars_summary()`).
 
-```{r get_fars_crashes}
-# Get fatal crashes for Baltimore County, MD from 2017 to 2018
-baltimore_co_crashes <- get_fars(
-  year = c(2017, 2018),
-  state = "MD",
-  county = "Baltimore County",
-  geometry = TRUE
-)
-
-# Show 10 fatal crashes at random
-dplyr::slice_sample(baltimore_co_crashes, n = 10)
-```
-
-```{r map_fars_crashes}
-# Map crashes
-ggplot() +
-  geom_sf(
-    data = tigris::county_subdivisions(state = "MD", county = "Baltimore County"),
-    fill = NA, color = "black"
-  ) +
-  geom_sf(
-    data = baltimore_co_crashes,
-    aes(color = TOTALVEHICLES),
-    alpha = 0.75
-  ) +
-  theme_void()
-```
+For example, you can use the `get_fars()` access state-level summary data on crash and fatality counts.
 
 ```{r get_fars_summary}
-# Get summary crash count and fatal crash count data for Maryland from 2010 to 2019
+# Get summary crash count and fatality count data for Maryland from 2010 to 2019
 md_summary <-
   get_fars(
     year = c(2010, 2019),
@@ -127,6 +94,57 @@ ggplot(md_summary, aes(x = CaseYear, y = TotalFatalCounts)) +
   geom_point(color = "red") +
   geom_line(color = "red", group = 1) +
   theme_minimal()
+```
+
+You can download crash data and set geometry to TRUE optionally convert the data frame into an `sf` object for mapping.
+
+```{r map_fars_crashes}
+crashes_sf <-
+  get_fars(
+  year = c(2010, 2012),
+  state = "MD",
+  county = "Baltimore city",
+  geometry = TRUE
+)
+
+# Map crashes
+ggplot() +
+  geom_sf(
+    data = mapbaltimore::baltimore_city,
+    fill = NA, color = "black"
+  ) +
+  geom_sf(
+    data = crashes_sf,
+    aes(color = totalvehicles),
+    alpha = 0.75
+  ) +
+  theme_void()
+```
+
+You can list crashes and filter by the number of vehicles involved.
+
+```{r get_fars_crash_list}
+# Get fatal crashes in New York state from 2019 with 5 to 10 vehicles
+get_fars(
+  year = 2019,
+  state = "NY",
+  vehicles = c(5, 10)
+)
+```
+
+If you call `get_fars()` or `get_fars_crashes()` with details set to TRUE, additional information from `get_fars_cases()` (including the crash date and time) is appended to the crash data frame.
+
+```{r get_fars_crashes}
+# Get fatal crashes for Anne Arundel County, MD for 2019 and append details
+crashes_detailed <- get_fars(
+  year = 2019,
+  state = "MD",
+  county = "Anne Arundel County",
+  details = TRUE
+)
+
+# Show 10 fatal crashes at random
+dplyr::slice_sample(crashes_detailed, n = 10)
 ```
 
 ## Related packages and projects

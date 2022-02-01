@@ -3,6 +3,7 @@
 \name{get_fars}
 \alias{get_fars}
 \alias{get_fars_crashes}
+\alias{get_fars_cases}
 \alias{get_fars_crash_details}
 \alias{get_fars_crash_list}
 \alias{get_fars_summary}
@@ -13,15 +14,15 @@ get_fars(
   year = 2019,
   state,
   county = NULL,
-  api = c("crashes", "details", "state list", "summary count", "year dataset", "zip"),
+  api = c("crashes", "cases", "state list", "summary count", "year dataset", "zip"),
+  type,
+  details = FALSE,
   geometry = FALSE,
   crs = 4326,
-  type,
-  case,
-  details = NULL,
+  cases,
   vehicles,
+  format = "json",
   pr,
-  format,
   path = NULL,
   download = FALSE
 )
@@ -32,17 +33,18 @@ get_fars_crashes(
   end_year,
   state,
   county = NULL,
+  details = FALSE,
   geometry = FALSE,
   crs = 4326
 )
 
-get_fars_crash_details(
+get_fars_cases(
   year = 2019,
   state,
-  case,
+  cases,
+  details = NULL,
   geometry = FALSE,
-  crs = 4326,
-  details = NULL
+  crs = 4326
 )
 
 get_fars_crash_list(
@@ -79,13 +81,8 @@ dataset" only supports 2010 to 2017 and "zip" supports 1975 to 2019.
 \item{county}{County name or FIPS number. Required for \code{get_fars_crashes}.}
 
 \item{api}{character. API function to use. Supported values include
-"crashes", "details", "state list", "summary count", "year dataset", and
+"crashes", "cases", "state list", "summary count", "year dataset", and
 "zip". Default: "crashes".}
-
-\item{geometry}{If TRUE, return sf object. Optional for \code{get_fars_crashes}.}
-
-\item{crs}{Coordinate reference system to return for \code{get_fars_crashes} if
-\code{geometry} is TRUE.}
 
 \item{type}{Name of the dataset or data file to download when using the "year
 dataset" api or \code{get_fars_year}. Supported values include "ACCIDENT",
@@ -94,24 +91,32 @@ dataset" api or \code{get_fars_year}. Supported values include "ACCIDENT",
 "SAFETYEQ", "VEHICLE", "VEVENT VINDECODE", "VINDERIVED", "VIOLATION",
 "VISION", and "VSOE". Lowercase or mixed case values are permitted.}
 
-\item{case}{Case number. Required if \code{api} is "details" or using
-\code{get_fars_crash_details}. Multiple case numbers can be provided.}
-
 \item{details}{Type of detailed crash data to return (either "events" or
-"vehicles"). If NULL, events or vehicle data are excluded from data
-returned by \code{get_fars_crash_details}. Optional for
-\code{get_fars_crash_details}. Default: NULL.}
+"vehicles"). If TRUE for \code{get_fars} or \code{get_fars_crashes}, detailed case
+data (excluding event and vehicle data) is attached to the returned crash
+data. If NULL for \code{get_fars_cases}, events and vehicle data are excluded
+from the returned case data. returned by \code{get_fars_cases}. Optional for
+\code{get_fars_crash_details}. Default: NULL for \code{get_fars_cases}; FALSE for
+\code{get_fars} and \code{get_fars_crashes}.}
+
+\item{geometry}{If TRUE, return sf object. Optional for \code{get_fars_crashes}.}
+
+\item{crs}{Coordinate reference system to return for \code{get_fars_crashes} if
+\code{geometry} is TRUE.}
+
+\item{cases}{One or more FARS case numbers. Required if \code{api} is "cases" or
+using \code{get_fars_cases}. Multiple case numbers can be provided.}
 
 \item{vehicles}{numeric vector with the minimum and maximum number of
 vehicles, e.g. c(1, 2) for minimum of 1 vehicle and maximum of 2. Required
 for \code{get_fars_crash_list}.}
 
-\item{pr}{logical. If TRUE and the \code{api} is "zip", download FARS data for
-Puerto Rico. No Puerto Rico data available for years 1975-1977. Default:
-FALSE}
-
 \item{format}{Default "json". "csv" is supported when using the "year
 dataset" api. "sas" is supporting for the "zip" api.}
+
+\item{pr}{logical. If TRUE, download zip file with FARS data for Puerto Rico.
+No Puerto Rico data available for years 1975-1977. Default: FALSE for
+\code{get_fars_zip} only.}
 
 \item{path}{File path used if download is TRUE.}
 
