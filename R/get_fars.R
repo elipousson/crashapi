@@ -191,7 +191,7 @@ get_fars_crashes <- function(year = NULL,
     )
   }
 
-  crash_df <- tidy_crashes(crash_df, details = details)
+  crash_df <- format_crashes(crash_df, details = details)
 
   crash_df
 

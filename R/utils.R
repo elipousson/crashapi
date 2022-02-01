@@ -106,13 +106,13 @@ lookup_fips <- function(state, county = NULL, several.ok = FALSE, list = FALSE, 
 }
 
 #' @importFrom dplyr filter
-reorder_fars <- function(x) {
+reorder_fars_vars <- function(x) {
   # Reorder columns to match analytical manual order
   x_vars <- dplyr::filter(fars_vars_labels, name %in% names(x))
   x[,match(x_vars$name, colnames(x))]
 }
 
-#' Tidy crash data
+#' Format crash data
 #'
 #' Reorder columns to match the order documented in Fatality Analysis Reporting
 #' System (FARS) Analytical User's Manual, 1975-2019 and append derived columns
@@ -123,10 +123,10 @@ reorder_fars <- function(x) {
 #' @importFrom stringr str_pad
 #' @importFrom lubridate ymd_hm ymd
 #' @export
-tidy_crashes <- function(x, details = TRUE) {
+format_crashes <- function(x, details = TRUE) {
 
   # Reorder column names
-  crash_df <- reorder_fars(x)
+  crash_df <- reorder_fars_vars(x)
 
   # Clean column names
   crash_df <- janitor::clean_names(crash_df, "snake")

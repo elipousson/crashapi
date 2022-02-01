@@ -11,10 +11,10 @@ reference:
 - title: Get variable definitions
   contents:
   - "fars_vars"
+- title: Data formatting functions
+  contents:
+  - starts_with("format")
 - title: Reference information
   contents:
   - "fars_terms"
   - "fars_vars_labels"
-- title: Utility functions
-  contents:
-  - "tidy_crashes"
