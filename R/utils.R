@@ -131,13 +131,17 @@ format_crashes <- function(x, details = TRUE) {
   # Clean column names
   crash_df <- janitor::clean_names(crash_df, "snake")
 
+  pad_hm <- function(x) {
+    stringr::str_pad(x, width = 2, pad = "0")
+  }
+
   # Append date/time columns
   if (details) {
     crash_df <-
       dplyr::mutate(
         crash_df,
         date = paste(year, month, day, sep = "-"),
-        time = paste(stringr::str_pad(c("0", "2"), width = 2, pad = 0), collapse = ":"),
+        time = paste(pad_hm(hour), pad_hm(minute), sep = ":"),
         datetime = lubridate::ymd_hm(paste(date, time)),
         date = lubridate::ymd(date),
         .after = st_case
