@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/crashapi)](https://CRAN.R-project.org/package=crashapi)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Codecov test coverage](https://codecov.io/gh/elipousson/crashapi/branch/main/graph/badge.svg)](https://app.codecov.io/gh/elipousson/crashapi?branch=main)
 <!-- badges: end -->
 
 The goal of the crashapi R package is to provide functions for downloading data from the National Highway Traffic Safety Administration (NHTSA) [Fatality Analysis Reporting System (FARS) API](https://crashviewer.nhtsa.dot.gov/CrashAPI/).
@@ -31,15 +32,12 @@ Supported APIs for this package include:
 -   [X] Get Crash Details
 -   [x] Get Crashes By Location
 -   [X] Get Crashes By Vehicle
--   [x] Get Summary Counts
+-   [x] Get Summary Counts (not currently working)
 -   [x] Get Variables and Get Variable Attributes
 -   [x] Get FARS Data By Year
+-   [X] Get Crashes By Occupant (partial support)
 
 Most of these APIs support XML, JSV, CSV, and JSON output formats. This package only uses JSON with the exception of get_fars_year (which supports downloading CSV files).
-
-Currently unsupported APIs include:
-
--   [ ] Get Crashes By Occupant
 
 For reference, this package also includes a list of terms and NHTSA technical definitions in `fars_terms` and a list of variable labels in `fars_vars_labels`.
 
@@ -81,7 +79,7 @@ Most features for the package can be accessed using the `get_fars()` function th
 
 For example, you can use the `get_fars()` access state-level summary data on crash and fatality counts.
 
-```{r get_fars_summary}
+```{r get_fars_summary, eval = FALSE}
 # Get summary crash count and fatality count data for Maryland from 2010 to 2019
 md_summary <-
   get_fars(

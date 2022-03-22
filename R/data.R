@@ -6,7 +6,7 @@
 #' \describe{
 #'   \item{\code{term}}{character Term}
 #'   \item{\code{definition}}{character Term definition}
-#'}
+#' }
 #' @source \href{https://www-fars.nhtsa.dot.gov/Help/Terms.aspx}{NHTSA FARS Terms}
 "fars_terms"
 
@@ -31,5 +31,5 @@
 #'   \item{\code{api}}{character Name(s) of corresponding CrashAPI service}
 #'   \item{\code{name_var}}{logical Indicator for "NAME" variable returned by API}
 #'   \item{\code{api_list_col}}{logical Indicator for list columns returned by API}
-#'}
+#' }
 "fars_vars_labels"

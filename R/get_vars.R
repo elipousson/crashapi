@@ -21,8 +21,7 @@
 #' @export
 #' @importFrom jsonlite read_json
 fars_vars <- function(year, var = NULL, make = NULL, model = NULL) {
-
-  year <- validate_year(year, year_range = )
+  year <- validate_year(year, year_range = c(2010, 2019))
 
   if (!is.null(var)) {
     var <- match.arg(var, c("make", "model", "bodytype"))
@@ -37,4 +36,3 @@ fars_vars <- function(year, var = NULL, make = NULL, model = NULL) {
     read_api("/definitions/GetVariables?dataYear={year}")
   }
 }
-

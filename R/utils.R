@@ -1,6 +1,7 @@
 # Utility functions
 
-# Build query URL and download data from API
+#' Build query URL and download data from API
+#' @noRd
 #' @importFrom glue glue
 #' @importFrom jsonlite read_json
 read_api <- function(url,
@@ -19,7 +20,63 @@ read_api <- function(url,
   }
 }
 
-# Validate start and end year
+#' Read data from the CrashAPI
+#'
+#' An updated utility function using the httr2 package to read data from the CrashAPI.
+#'
+#' @param url Base url for CrashAPI.
+#' @param data Data (crashes, analytics, or fars), Default: 'crashes'
+#' @param type Type of API to use, Default: NULL
+#' @param format Format to return, Default: 'json'
+#' @param results If FALSE, return formatted url, Default: TRUE
+#' @param ... Additional parameters used in template (varies by type).
+#' @return Data frame with requested data or a formatted url
+#' @export
+#' @importFrom httr2 req_template request req_perform resp_body_json
+read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
+                          data = "crashes",
+                          type = NULL,
+                          format = "json",
+                          results = TRUE,
+                          ...) {
+  template <-
+    switch(type,
+      "GetCaseList" = "GET /CrashAPI/{data}/{type}?states={states}&fromYear={fromYear}&toYear={toYear}&minNumOfVehicles={minNumOfVehicles}&maxNumOfVehicles={maxNumOfVehicles}&format={format}",
+      "GetCaseDetails" = "GET /CrashAPI/{data}/{type}?stateCase={stateCase}&caseYear={caseYear}&state={state}&format={format}",
+      "GetCrashesByVehicle" = "GET /CrashAPI/{data}/{type}?make={make}&model={model}&modelyear={modelyear}&bodyType={bodyType}&fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&format={format}",
+      "GetCrashesByPerson" = "GET /CrashAPI/{data}/{type}?age={age}&sex={sex}&seatPos={seatPos}&injurySeverity={injurySeverity}&fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&includeOccupants={includeOccupants}&includeNonOccupants={includeNonOccupants}&format={format}",
+      "GetCrashesByLocation" = "GET /CrashAPI/{data}/{type}?fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&county={county}&format={format}",
+      "GetInjurySeverityCounts" = "GET /CrashAPI/{data}/{type}?fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&format={format}",
+      "GetVariables" = "GET /CrashAPI/{data}/{type}?dataYear={dataYear}&format={format}",
+      "GetVariableAttributes" = "GET /CrashAPI/{data}/{type}?variable={make}&caseYear={caseYear}&format={format}",
+      "GetVariableAttributesForModel" = "GET /CrashAPI/{data}/{type}?variable={model}&caseYear={caseYear}&make={make}&format={format}",
+      "GetVariableAttributesForbodyType" = "GET /CrashAPI/{data}/{type}?variable={bodytype}&make={make}&model={model}&format={format}",
+      "GetFARSData" = "GET /CrashAPI/{data}/{type}?dataset={dataset}&caseYear={caseYear}&format={format}"
+    )
+
+  request <- httr2::req_template(
+    req = httr2::request(url),
+    template = template,
+    data = data,
+    type = type,
+    format = format,
+    ...,
+    .env = parent.frame()
+  )
+
+  if (results && (format == "json")) {
+    data <- request |>
+      httr2::req_perform() |>
+      httr2::resp_body_json(check_type = FALSE, simplifyVector = TRUE)
+
+    return(data$Results[[1]])
+  } else {
+    return(request$url)
+  }
+}
+
+#' Validate start and end year
+#' @noRd
 #' @importFrom usethis ui_stop
 #' @importFrom checkmate expect_integerish
 validate_year <- function(year, year_range = c(2010, 2019), start_year, end_year) {
@@ -39,7 +96,9 @@ validate_year <- function(year, year_range = c(2010, 2019), start_year, end_year
   year
 }
 
-# Convert data frame to sf object
+#' Convert data frame to sf object
+#'
+#' @noRd
 #' @importFrom sf st_as_sf st_transform
 df_to_sf <- function(x,
                      longitude = "LONGITUD",
@@ -72,7 +131,8 @@ df_to_sf <- function(x,
 }
 
 
-# Validate state and county name/abbreviation and convert to FIPS number
+#' Validate state and county name/abbreviation and convert to FIPS number
+#' @noRd
 lookup_fips <- function(state, county = NULL, several.ok = FALSE, list = FALSE, int = TRUE) {
   if (!several.ok) {
     state_fips <- suppressMessages(validate_state(state))
@@ -105,11 +165,12 @@ lookup_fips <- function(state, county = NULL, several.ok = FALSE, list = FALSE, 
   }
 }
 
+#' @noRd
 #' @importFrom dplyr filter
 reorder_fars_vars <- function(x) {
   # Reorder columns to match analytical manual order
   x_vars <- dplyr::filter(fars_vars_labels, name %in% names(x))
-  x[,match(x_vars$name, colnames(x))]
+  x[, match(x_vars$name, colnames(x))]
 }
 
 #' Format crash data
@@ -118,11 +179,14 @@ reorder_fars_vars <- function(x) {
 #' System (FARS) Analytical User's Manual, 1975-2019 and append derived columns
 #' for date, time, and datetime.
 #'
+#' @param x Data frame with crash data.
+#' @param details If `TRUE`, append date, time, datetime columns to formatted
+#'   crash data; defaults to TRUE
+#' @export
 #' @importFrom janitor clean_names
 #' @importFrom dplyr mutate
 #' @importFrom stringr str_pad
 #' @importFrom lubridate ymd_hm ymd
-#' @export
 format_crashes <- function(x, details = TRUE) {
 
   # Reorder column names
@@ -150,3 +214,9 @@ format_crashes <- function(x, details = TRUE) {
 
   crash_df
 }
+
+utils::globalVariables(c(
+  "CITY", "CITYNAME", "COUNTY", "COUNTYNAME", "FATALS", "LATITUDE", "LONGITUD", "STATENAME",
+  "TWAY_ID", "TWAY_ID2", "VE_FORMS", "abb", "day", "fars_vars_labels", "get_area_crashes",
+  "hour", "minute", "month", "name", "st_case", "state_abb", "statewide_yn", "time", "year"
+))

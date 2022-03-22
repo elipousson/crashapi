@@ -131,7 +131,7 @@ validate_county <- function(state, county, .msg = interactive()) {
       return(county)
     } else {
       warning(sprintf("'%s' is not a valid FIPS code for counties in %s", county, county_table$state_name[1]),
-              call. = FALSE
+        call. = FALSE
       )
       return(NULL)
     }
@@ -143,7 +143,7 @@ validate_county <- function(state, county, .msg = interactive()) {
 
     if (length(matching_counties) == 0) {
       warning(sprintf("'%s' is not a valid name for counties in %s", county, county_table$state_name[1]),
-              call. = FALSE
+        call. = FALSE
       )
       return(NULL)
     } else if (length(matching_counties) == 1) {
@@ -185,6 +185,7 @@ format_vec <- function(vec) {
 
 simpleCapSO <- function(x) {
   s <- strsplit(x, " ")[[1]]
-  paste(toupper(substring(s, 1,1)), substring(s, 2),
-        sep="", collapse=" ")
+  paste(toupper(substring(s, 1, 1)), substring(s, 2),
+    sep = "", collapse = " "
+  )
 }
