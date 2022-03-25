@@ -31,7 +31,8 @@ Imports:
     sf,
     tigris,
     usethis,
-    utils
+    utils,
+    progress
 Suggests: 
     rmarkdown,
     knitr,
