@@ -119,7 +119,7 @@ validate_county <- function(state, county, .msg = interactive()) {
     return(NULL)
   }
 
-  state <- validate_state(state) # Get the state of the county
+  state <- validate_state(state, .msg = .msg) # Get the state of the county
 
   county_table <- tigris::fips_codes[tigris::fips_codes$state_code == state, ] # Get a df for the requested state to work with
 
