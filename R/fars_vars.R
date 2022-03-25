@@ -18,6 +18,7 @@
 #'   selected year with a valid make ID number, e.g. `fars_vars(year = 2010, var
 #'   = "model", make = 37)`
 #' @rdname fars_vars
+#' @aliases get_vars
 #' @export
 #' @importFrom jsonlite read_json
 fars_vars <- function(year, var = NULL, make = NULL, model = NULL) {
