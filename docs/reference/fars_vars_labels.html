@@ -68,7 +68,16 @@ documentation of the SAS format data files.</p>
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>A data frame with 498 rows and 14 variables:</p><dl><dt><code>data_file</code></dt>
+    <p>A data frame with 498 rows and 14 variables:</p><dl><dt><code>name</code></dt>
+<dd><p>character Variable name</p></dd>
+
+<dt><code>label</code></dt>
+<dd><p>character Variable label</p></dd>
+
+<dt><code>order</code></dt>
+<dd><p>double Sort order</p></dd>
+
+<dt><code>data_file</code></dt>
 <dd><p>character SAS data file name</p></dd>
 
 <dt><code>data_file_id</code></dt>
@@ -77,26 +86,17 @@ documentation of the SAS format data files.</p>
 <dt><code>file_id</code></dt>
 <dd><p>character File ID</p></dd>
 
-<dt><code>label</code></dt>
-<dd><p>character Variable label</p></dd>
-
-<dt><code>name</code></dt>
-<dd><p>character Variable name</p></dd>
+<dt><code>key</code></dt>
+<dd><p>logical Indicator for key variables</p></dd>
 
 <dt><code>location</code></dt>
 <dd><p>double Location in SAS data file</p></dd>
-
-<dt><code>order</code></dt>
-<dd><p>double Sort order</p></dd>
 
 <dt><code>mmuc_equivalent</code></dt>
 <dd><p>logical Equivalent term in MMUC (placeholder)</p></dd>
 
 <dt><code>discontinued</code></dt>
 <dd><p>logical Indicator for discontinued variables</p></dd>
-
-<dt><code>key</code></dt>
-<dd><p>logical Indicator for key variables</p></dd>
 
 <dt><code>api_only</code></dt>
 <dd><p>logical Indicator for variables only used by API</p></dd>

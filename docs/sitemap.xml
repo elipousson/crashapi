@@ -19,6 +19,9 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
+    <loc>/reference/crash_data_index.html</loc>
+  </url>
+  <url>
     <loc>/reference/crashapi-package.html</loc>
   </url>
   <url>
@@ -47,6 +50,9 @@
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/mmucc_codes.html</loc>
   </url>
   <url>
     <loc>/reference/read_crashapi.html</loc>

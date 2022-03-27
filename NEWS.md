@@ -1,5 +1,13 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# crashapi 0.1.0.12
+
+- feat: Add `get_fars_crash_persons()` function
+- refactor: Rename `tidy_crashes()` to `format_crashes()`
+- feat: rename `get_fars_crash_details()` to `get_fars_cases()`
+- feat: Add details parameter to `get_fars_crashes()` to supported appending detailed case information
+- feat: Add `fars_vars_labels` with names and labels derived from current analytical manual
+
 # crashapi 0.1.0.11
 
 - feat: add `get_fars()` function that uses an api parameter to call different APIs

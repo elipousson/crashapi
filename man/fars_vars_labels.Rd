@@ -7,16 +7,16 @@
 \format{
 A data frame with 498 rows and 14 variables:
 \describe{
+\item{\code{name}}{character Variable name}
+\item{\code{label}}{character Variable label}
+\item{\code{order}}{double Sort order}
 \item{\code{data_file}}{character SAS data file name}
 \item{\code{data_file_id}}{double SAS data file ID}
 \item{\code{file_id}}{character File ID}
-\item{\code{label}}{character Variable label}
-\item{\code{name}}{character Variable name}
+\item{\code{key}}{logical Indicator for key variables}
 \item{\code{location}}{double Location in SAS data file}
-\item{\code{order}}{double Sort order}
 \item{\code{mmuc_equivalent}}{logical Equivalent term in MMUC (placeholder)}
 \item{\code{discontinued}}{logical Indicator for discontinued variables}
-\item{\code{key}}{logical Indicator for key variables}
 \item{\code{api_only}}{logical Indicator for variables only used by API}
 \item{\code{api}}{character Name(s) of corresponding CrashAPI service}
 \item{\code{name_var}}{logical Indicator for "NAME" variable returned by API}
