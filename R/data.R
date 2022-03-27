@@ -17,16 +17,16 @@
 #'   documentation of the SAS format data files.
 #' @format A data frame with 498 rows and 14 variables:
 #' \describe{
+#'   \item{\code{name}}{character Variable name}
+#'   \item{\code{label}}{character Variable label}
+#'   \item{\code{order}}{double Sort order}
 #'   \item{\code{data_file}}{character SAS data file name}
 #'   \item{\code{data_file_id}}{double SAS data file ID}
 #'   \item{\code{file_id}}{character File ID}
-#'   \item{\code{label}}{character Variable label}
-#'   \item{\code{name}}{character Variable name}
+#'   \item{\code{key}}{logical Indicator for key variables}
 #'   \item{\code{location}}{double Location in SAS data file}
-#'   \item{\code{order}}{double Sort order}
 #'   \item{\code{mmuc_equivalent}}{logical Equivalent term in MMUC (placeholder)}
 #'   \item{\code{discontinued}}{logical Indicator for discontinued variables}
-#'   \item{\code{key}}{logical Indicator for key variables}
 #'   \item{\code{api_only}}{logical Indicator for variables only used by API}
 #'   \item{\code{api}}{character Name(s) of corresponding CrashAPI service}
 #'   \item{\code{name_var}}{logical Indicator for "NAME" variable returned by API}
@@ -73,3 +73,49 @@
 #'   \item{\code{restriction}}{Restriction value}
 #' }
 "mmucc_codes"
+
+
+#' U.S. vehicular crash data index (city, county, regional, and state)
+#'
+#' This index  include identified data from cities, counties, or regional
+#' entities in 43 of 50 U.S. states. Statewide data sources are included from 33
+#' states. In 4 states (NE, OH, ME, and CT), the only identified statewide data
+#' sources allow limited access through a web-based public query form. In 1
+#' state (MN), data only available through restricted access mapping/query tool.
+#' Not all statewide data sources include all crashes (some include only
+#' cyclist/pedestrian crashes or fatal crashes) and the structure and format of
+#' the crash data provided varies considerably.
+#'
+#' This index was compiled by Eli Pousson between October 2021 and February
+#' 2022 with contributions from Mae Hanzlik.
+#'
+#' Corrections, updates, or additional sources should be added to this public
+#' Google Sheet:
+#' <https://docs.google.com/spreadsheets/d/1rmn6GbHNkfWLLDEEmA87iuy2yHdh7hBybCTZiQJEY0k/edit?usp=sharing>
+#'
+#' @format A data frame with 75 rows and 22 variables:
+#' \describe{
+#'   \item{\code{name}}{Name of data set from provider.}
+#'   \item{\code{level}}{Geographic scope/level (e.g. city, county, region, state, national)}
+#'   \item{\code{city}}{City name}
+#'   \item{\code{county}}{County name}
+#'   \item{\code{region}}{logical COLUMN_DESCRIPTION}
+#'   \item{\code{state_name}}{U.S. state name}
+#'   \item{\code{state_abb}}{U.S. state abbreviation}
+#'   \item{\code{info_url}}{Informational URL (e.g. informational page about file download options)}
+#'   \item{\code{data_url}}{Data URL (e.g. direct link to ArcGIS FeatureServer layer)}
+#'   \item{\code{format}}{Data format (e.g. Socrata, CKAN, ArcGIS MapServer, etc.)}
+#'   \item{\code{statewide_yn}}{Yes for data with statewide geographic scope; NA for data from city, county, or regional level providers}
+#'   \item{\code{batch_download_yn}}{Yes for data where batch download is possible}
+#'   \item{\code{start_year}}{Earliest year for crashes in dataset}
+#'   \item{\code{end_year}}{Latest year for crashes in dataset}
+#'   \item{\code{publisher}}{Agency/organization responsible for publishing the data online}
+#'   \item{\code{description}}{Description of the dataset from provider}
+#'   \item{\code{bike_ped_only}}{Yes for data that only includes bike/ped involved crashes (common for Vision Zero programs)}
+#'   \item{\code{rolling_window}}{Description of rolling time window if data is only available within a rolling window}
+#'   \item{\code{fatal_severe_only}}{Yes for data that only includes fatal/severe crashes (common for Vision Zero programs)}
+#'   \item{\code{date_note}}{Note on the dates for the crash data}
+#'   \item{\code{updates}}{Information on update schedule if available}
+#'   \item{\code{note}}{General notes}
+#'}
+"crash_data_index"
