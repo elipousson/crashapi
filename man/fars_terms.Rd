@@ -7,8 +7,8 @@
 \format{
 A data frame with 66 rows and 2 variables:
 \describe{
-  \item{\code{term}}{character Term}
-  \item{\code{definition}}{character Term definition}
+\item{\code{term}}{character Term}
+\item{\code{definition}}{character Term definition}
 }
 }
 \source{
@@ -19,7 +19,7 @@ fars_terms
 }
 \description{
 FARS-related terms defined by the National Highway Traffic
-  Safety Administration based on ANSI D16.1-1996: Manual on Classification of
-  Motor Vehicle Traffic Accidents.
+Safety Administration based on ANSI D16.1-1996: Manual on Classification of
+Motor Vehicle Traffic Accidents.
 }
 \keyword{datasets}

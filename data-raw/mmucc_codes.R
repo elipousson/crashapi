@@ -54,7 +54,6 @@ get_restriction <-
       "definition" = definition,
       "restriction" = text
     )
-
   }
 
 restrictions <-

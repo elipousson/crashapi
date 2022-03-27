@@ -71,5 +71,5 @@
 #'   \item{\code{definition}}{Code definition}
 #'   \item{\code{restriction_id}}{Restriction id number}
 #'   \item{\code{restriction}}{Restriction value}
-#'}
+#' }
 "mmucc_codes"

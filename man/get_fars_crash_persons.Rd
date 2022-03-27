@@ -35,11 +35,11 @@ get_fars_crash_persons(
 \item{injury}{Options "unknown", "not reported", "died prior", "injured",
 "fatal", "suspected serious", "suspected minor", "possible", "no apparent"}
 
-\item{occupants}{Include vehicle occupants in query; defaults to `TRUE`}
+\item{occupants}{Include vehicle occupants in query; defaults to \code{TRUE}}
 
-\item{nonoccupants}{Include non-occupants in query; defaults to `TRUE`}
+\item{nonoccupants}{Include non-occupants in query; defaults to \code{TRUE}}
 }
 \description{
 This function returns a list of fatal crashes by occupant
-  that have occurred throughout United States.
+that have occurred throughout United States.
 }

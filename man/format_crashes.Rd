@@ -9,7 +9,7 @@ format_crashes(x, details = TRUE)
 \arguments{
 \item{x}{Data frame with crash data.}
 
-\item{details}{If `TRUE`, append date, time, datetime columns to formatted
+\item{details}{If \code{TRUE}, append date, time, datetime columns to formatted
 crash data; defaults to TRUE}
 }
 \description{

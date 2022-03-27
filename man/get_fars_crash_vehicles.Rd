@@ -31,12 +31,12 @@ list of support make options. Default: NULL}
 
 \item{model_year}{Model year, Optional. Default: NULL}
 
-\item{body_type}{Body type, Optional. `model` must be provided to use
+\item{body_type}{Body type, Optional. \code{model} must be provided to use
 body_type parameter. Default: NULL}
 }
 \description{
 This function returns a list of fatal crashes by vehicle type
-  that have occurred throughout United States. The make, model, and body type
-  must match the options returned by `fars_vars`. This function accepts named
-  options that are converted to ID numbers for use in the API query.
+that have occurred throughout United States. The make, model, and body type
+must match the options returned by \code{fars_vars}. This function accepts named
+options that are converted to ID numbers for use in the API query.
 }

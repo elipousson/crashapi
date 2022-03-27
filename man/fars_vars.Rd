@@ -4,7 +4,7 @@
 \alias{fars_vars}
 \alias{get_vars}
 \title{Get variables and variable attributes for the Fatality Analysis
-  Reporting System (FARS) API}
+Reporting System (FARS) API}
 \usage{
 fars_vars(year, var = NULL, make = NULL, model = NULL)
 }
@@ -18,17 +18,16 @@ specified in the dataset.}
 
 \item{make}{Integer. Make ID number. Required to return variables for "model"
 and "bodytype". Get a list of make ID numbers using the "make" var for the
-selected year, e.g. `fars_vars(year = 2010, var = "make")`.}
+selected year, e.g. \code{fars_vars(year = 2010, var = "make")}.}
 
 \item{model}{Integer. Model ID number. Required to return variables for
 "bodytype". Get a list of model ID numbers using the "model" var for the
-selected year with a valid make ID number, e.g. `fars_vars(year = 2010, var
-= "model", make = 37)`}
+selected year with a valid make ID number, e.g. \code{fars_vars(year = 2010, var = "model", make = 37)}}
 }
 \description{
 By default, this function returns the returns the list of
-  variables for the data year specified. If `vars` is "make", "model", or
-  "bodytype", the function returns #'   list of variable attributes for the
-  specified variable name or attributes for make model and body type
-  specified in the FARS dataset.
+variables for the data year specified. If \code{vars} is "make", "model", or
+"bodytype", the function returns #'   list of variable attributes for the
+specified variable name or attributes for make model and body type
+specified in the FARS dataset.
 }

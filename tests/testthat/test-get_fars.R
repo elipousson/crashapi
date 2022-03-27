@@ -45,5 +45,4 @@ test_that("get_cases", {
   expect_s3_class(get_fars_cases(year = 2019, state = "MD", cases = "240063"), "data.frame")
   expect_s3_class(get_fars_cases(year = 2019, state = "MD", cases = 240063), "data.frame")
   expect_error(get_fars_cases(year = 2019, state = "MD", cases = "0"), "subscript out of bounds")
-
 })
