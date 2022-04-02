@@ -48,9 +48,9 @@ read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
       "GetCrashesByLocation" = "GET /CrashAPI/{data}/{type}?fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&county={county}&format={format}",
       "GetInjurySeverityCounts" = "GET /CrashAPI/{data}/{type}?fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&format={format}",
       "GetVariables" = "GET /CrashAPI/{data}/{type}?dataYear={dataYear}&format={format}",
-      "GetVariableAttributes" = "GET /CrashAPI/{data}/{type}?variable={make}&caseYear={caseYear}&format={format}",
-      "GetVariableAttributesForModel" = "GET /CrashAPI/{data}/{type}?variable={model}&caseYear={caseYear}&make={make}&format={format}",
-      "GetVariableAttributesForbodyType" = "GET /CrashAPI/{data}/{type}?variable={bodytype}&make={make}&model={model}&format={format}",
+      "GetVariableAttributes" = "GET /CrashAPI/{data}/{type}?variable={variable}&caseYear={caseYear}&format={format}",
+      "GetVariableAttributesForModel" = "GET /CrashAPI/{data}/{type}?variable={variable}&caseYear={caseYear}&make={make}&format={format}",
+      "GetVariableAttributesForbodyType" = "GET /CrashAPI/{data}/{type}?variable={variable}&make={make}&model={model}&format={format}",
       "GetFARSData" = "GET /CrashAPI/{data}/{type}?dataset={dataset}&caseYear={caseYear}&format={format}"
     )
 

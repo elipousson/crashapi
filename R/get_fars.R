@@ -309,7 +309,7 @@ get_fars_summary <- function(year = NULL,
 
   summary <-
     read_crashapi(
-      data = "crashes",
+      data = "analytics",
       type = "GetInjurySeverityCounts",
       fromCaseYear = min(year),
       toCaseYear = max(year),

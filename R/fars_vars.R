@@ -23,17 +23,40 @@
 #' @importFrom jsonlite read_json
 fars_vars <- function(year, var = NULL, make = NULL, model = NULL) {
   year <- validate_year(year, year_range = c(2010, 2019))
+  data <- "definitions"
 
-  if (!is.null(var)) {
-    var <- match.arg(var, c("make", "model", "bodytype"))
-    if (var == "make") {
-      read_api("/definitions/GetVariableAttributes?variable={var}&caseYear={year}")
-    } else if (var == "model") {
-      read_api("/definitions/GetVariableAttributesForModel?variable={var}&caseYear={year}&make={make}")
-    } else if (var == "bodytype") {
-      read_api("/definitions/GetVariableAttributesForbodyType?variable={var}&make={make}&model={model}")
-    }
-  } else {
-    read_api("/definitions/GetVariables?dataYear={year}")
+  if (is.null(var)) {
+    return(
+      read_crashapi(
+        data = data,
+        type = "GetVariables",
+        dataYear = year
+      )
+    )
   }
+
+  var <- match.arg(var, c("make", "model", "bodytype"))
+
+  switch(var,
+    "make" = read_crashapi(
+      data = data,
+      type = "GetVariableAttributes",
+      variable = "make",
+      caseYear = year
+    ),
+    "model" = read_crashapi(
+      data = data,
+      type = "GetVariableAttributesForModel",
+      variable = "model",
+      make = make,
+      caseYear = year
+    ),
+    "bodytype" = read_crashapi(
+      data = data,
+      type = "GetVariableAttributesForbodyType",
+      variable = "bodytype",
+      make = make,
+      model = model
+    ),
+  )
 }
