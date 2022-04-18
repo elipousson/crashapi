@@ -8,6 +8,15 @@
 \description{
 Get Fatality Analysis Reporting System (FARS) data with the FARS API.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/elipousson/crashapi}
+  \item \url{https://elipousson.github.io/crashapi/}
+  \item Report bugs at \url{https://github.com/elipousson/crashapi/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Eli Pousson \email{eli.pousson@gmail.com} (\href{https://orcid.org/0000-0001-8280-1706}{ORCID})
 
