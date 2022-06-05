@@ -20,17 +20,19 @@ read_api <- function(url,
   }
 }
 
-#' Read data from the CrashAPI
+#' Read data from the CrashAPI using a url template
 #'
-#' An updated utility function using the httr2 package to read data from the CrashAPI.
+#' An updated utility function using the httr2 package to read data from the
+#' CrashAPI using the API URL templates listed on the NHSTA website:
+#' <https://crashviewer.nhtsa.dot.gov/CrashAPI>
 #'
 #' @param url Base url for CrashAPI.
 #' @param data Data (crashes, analytics, or fars), Default: 'crashes'
-#' @param type Type of API to use, Default: NULL
+#' @param type Type of API to use, Default: `NULL`
 #' @param format Format to return, Default: 'json'
-#' @param results If FALSE, return formatted url, Default: TRUE
+#' @param results If `FALSE`, return formatted url, Default: `TRUE`
 #' @param ... Additional parameters used in template (varies by type).
-#' @return Data frame with requested data or a formatted url
+#' @return Data frame with requested data or a formatted url (if `results = FALSE`)
 #' @export
 #' @importFrom httr2 req_template request req_perform resp_body_json
 read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
@@ -213,6 +215,24 @@ format_crashes <- function(x, details = TRUE) {
   }
 
   crash_df
+}
+
+#' Helper function to return date added or updated for package data for documentation
+#'
+#' @noRd
+pkg_data_date <- function(data, date = "added", format = "%B %d %Y", verbose = TRUE, pkg = "crashapi") {
+
+  data_date <-
+    pkg_data_index[pkg_data_index[["data"]] == data,][[paste0("date_", date)]]
+
+  if (!verbose) {
+    return(data_date)
+  }
+
+  data_date <-
+    format(as.Date(data_date), format = format)
+
+  glue::glue("{stringr::str_to_sentence(date)}: {data_date}")
 }
 
 utils::globalVariables(c(

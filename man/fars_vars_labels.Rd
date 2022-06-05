@@ -31,4 +31,8 @@ A table of FARS table variable names extracted from the Fatality
 Analysis Reporting System (FARS) Analytical User's Manual, 1975-2019,
 documentation of the SAS format data files.
 }
+\details{
+Added: January 31 2022
+Updated: March 27 2022
+}
 \keyword{datasets}

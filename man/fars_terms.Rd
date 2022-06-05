@@ -3,7 +3,7 @@
 \docType{data}
 \name{fars_terms}
 \alias{fars_terms}
-\title{NHSTA Terms and Defintions}
+\title{NHSTA Terms and Definitions}
 \format{
 A data frame with 66 rows and 2 variables:
 \describe{
@@ -21,5 +21,9 @@ fars_terms
 FARS-related terms defined by the National Highway Traffic
 Safety Administration based on ANSI D16.1-1996: Manual on Classification of
 Motor Vehicle Traffic Accidents.
+}
+\details{
+Added: October 25 2021
+Updated: October 25 2021
 }
 \keyword{datasets}

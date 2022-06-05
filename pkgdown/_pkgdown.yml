@@ -8,6 +8,7 @@ reference:
 - title: Get data from the FARS API
   contents:
   - starts_with("get")
+  - "read_crashapi"
 - title: Get variable definitions
   contents:
   - "fars_vars"

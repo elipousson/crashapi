@@ -46,7 +46,10 @@ the crash data provided varies considerably.
 }
 \details{
 This index was compiled by Eli Pousson between October 2021 and February
-2022 with contributions from Mae Hanzlik.
+2022 with additional contributions from Mae Hanzlik.
+
+Added: March 27 2022
+Updated: June 05 2022
 
 Corrections, updates, or additional sources should be added to this public
 Google Sheet:

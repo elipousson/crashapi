@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{read_crashapi}
 \alias{read_crashapi}
-\title{Read data from the CrashAPI}
+\title{Read data from the CrashAPI using a url template}
 \usage{
 read_crashapi(
   url = "https://crashviewer.nhtsa.dot.gov",
@@ -18,17 +18,19 @@ read_crashapi(
 
 \item{data}{Data (crashes, analytics, or fars), Default: 'crashes'}
 
-\item{type}{Type of API to use, Default: NULL}
+\item{type}{Type of API to use, Default: \code{NULL}}
 
 \item{format}{Format to return, Default: 'json'}
 
-\item{results}{If FALSE, return formatted url, Default: TRUE}
+\item{results}{If \code{FALSE}, return formatted url, Default: \code{TRUE}}
 
 \item{...}{Additional parameters used in template (varies by type).}
 }
 \value{
-Data frame with requested data or a formatted url
+Data frame with requested data or a formatted url (if \code{results = FALSE})
 }
 \description{
-An updated utility function using the httr2 package to read data from the CrashAPI.
+An updated utility function using the httr2 package to read data from the
+CrashAPI using the API URL templates listed on the NHSTA website:
+\url{https://crashviewer.nhtsa.dot.gov/CrashAPI}
 }

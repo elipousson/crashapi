@@ -1,7 +1,12 @@
-#' @title NHSTA Terms and Defintions
-#' @description FARS-related terms defined by the National Highway Traffic
+#' NHSTA Terms and Definitions
+#'
+#' FARS-related terms defined by the National Highway Traffic
 #'   Safety Administration based on ANSI D16.1-1996: Manual on Classification of
 #'   Motor Vehicle Traffic Accidents.
+#'
+#' `r pkg_data_date("fars_terms", "added")`
+#' `r pkg_data_date("fars_terms", "updated")`
+#'
 #' @format A data frame with 66 rows and 2 variables:
 #' \describe{
 #'   \item{\code{term}}{character Term}
@@ -11,10 +16,15 @@
 "fars_terms"
 
 
-#' @title FARS variable names and labels
-#' @description A table of FARS table variable names extracted from the Fatality
+#' FARS variable names and labels
+#'
+#' A table of FARS table variable names extracted from the Fatality
 #'   Analysis Reporting System (FARS) Analytical User's Manual, 1975-2019,
 #'   documentation of the SAS format data files.
+#'
+#' `r pkg_data_date("fars_vars_labels", "added")`
+#' `r pkg_data_date("fars_vars_labels", "updated")`
+#'
 #' @format A data frame with 498 rows and 14 variables:
 #' \describe{
 #'   \item{\code{name}}{character Variable name}
@@ -63,6 +73,9 @@
 #' contributed through external forums (Federal Register) and at the 2016
 #' Traffic Records Forum.
 #'
+#' - `r pkg_data_date("mmucc_codes", "added")`
+#' - `r pkg_data_date("mmucc_codes", "updated")`
+#'
 #' @format A data frame with 700 rows and 6 variables:
 #' \describe{
 #'   \item{\code{code}}{Attribute code}
@@ -87,7 +100,10 @@
 #' the crash data provided varies considerably.
 #'
 #' This index was compiled by Eli Pousson between October 2021 and February
-#' 2022 with contributions from Mae Hanzlik.
+#' 2022 with additional contributions from Mae Hanzlik.
+#'
+#' `r pkg_data_date("crash_data_index", "added")`
+#' `r pkg_data_date("crash_data_index", "updated")`
 #'
 #' Corrections, updates, or additional sources should be added to this public
 #' Google Sheet:
