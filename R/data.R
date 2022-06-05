@@ -133,5 +133,5 @@
 #'   \item{\code{date_note}}{Note on the dates for the crash data}
 #'   \item{\code{updates}}{Information on update schedule if available}
 #'   \item{\code{note}}{General notes}
-#'}
+#' }
 "crash_data_index"

@@ -1,3 +1,17 @@
+.onLoad <- function(libname, pkgname) {
+  utils::data("fars_vars_labels",
+    package = pkgname,
+    envir = parent.env(environment())
+  )
+}
+
+
+utils::globalVariables(c(
+  "CITY", "CITYNAME", "COUNTY", "COUNTYNAME", "FATALS", "LATITUDE", "LONGITUD", "STATENAME",
+  "TWAY_ID", "TWAY_ID2", "VE_FORMS", "abb", "day", "get_area_crashes",
+  "hour", "minute", "month", "name", "st_case", "state_abb", "statewide_yn", "time", "year"
+))
+
 # Utility functions
 
 #' Build query URL and download data from API
@@ -221,9 +235,8 @@ format_crashes <- function(x, details = TRUE) {
 #'
 #' @noRd
 pkg_data_date <- function(data, date = "added", format = "%B %d %Y", verbose = TRUE, pkg = "crashapi") {
-
   data_date <-
-    pkg_data_index[pkg_data_index[["data"]] == data,][[paste0("date_", date)]]
+    pkg_data_index[pkg_data_index[["data"]] == data, ][[paste0("date_", date)]]
 
   if (!verbose) {
     return(data_date)
@@ -234,9 +247,3 @@ pkg_data_date <- function(data, date = "added", format = "%B %d %Y", verbose = T
 
   glue::glue("{stringr::str_to_sentence(date)}: {data_date}")
 }
-
-utils::globalVariables(c(
-  "CITY", "CITYNAME", "COUNTY", "COUNTYNAME", "FATALS", "LATITUDE", "LONGITUD", "STATENAME",
-  "TWAY_ID", "TWAY_ID2", "VE_FORMS", "abb", "day", "fars_vars_labels", "get_area_crashes",
-  "hour", "minute", "month", "name", "st_case", "state_abb", "statewide_yn", "time", "year"
-))
