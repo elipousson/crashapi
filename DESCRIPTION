@@ -33,9 +33,8 @@ Imports:
     stringr,
     sf,
     tigris,
-    usethis,
     utils,
-    progress
+    cli
 Suggests: 
     rmarkdown,
     knitr,

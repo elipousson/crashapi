@@ -44,8 +44,7 @@ get_fars_cases(
   cases,
   details = NULL,
   geometry = FALSE,
-  crs = 4326,
-  progress_bar = TRUE
+  crs = 4326
 )
 
 get_fars_crash_list(
@@ -93,17 +92,17 @@ dataset" api or \code{get_fars_year}. Supported values include "ACCIDENT",
 "VISION", and "VSOE". Lowercase or mixed case values are permitted.}
 
 \item{details}{Type of detailed crash data to return (either "events" or
-"vehicles"). If TRUE for \code{get_fars} or \code{get_fars_crashes}, detailed case
+"vehicles"). If \code{TRUE} for \code{get_fars} or \code{get_fars_crashes}, detailed case
 data (excluding event and vehicle data) is attached to the returned crash
 data. If NULL for \code{get_fars_cases}, events and vehicle data are excluded
 from the returned case data. returned by \code{get_fars_cases}. Optional for
-\code{get_fars_crash_details}. Default: NULL for \code{get_fars_cases}; FALSE for
+\code{get_fars_crash_details}. Default: NULL for \code{get_fars_cases}; \code{FALSE} for
 \code{get_fars} and \code{get_fars_crashes}.}
 
-\item{geometry}{If TRUE, return sf object. Optional for \code{get_fars_crashes}.}
+\item{geometry}{If \code{TRUE}, return sf object. Optional for \code{get_fars_crashes}.}
 
 \item{crs}{Coordinate reference system to return for \code{get_fars_crashes} if
-\code{geometry} is TRUE.}
+\code{geometry} is \code{TRUE}.}
 
 \item{cases}{One or more FARS case numbers. Required if \code{api} is "cases" or
 using \code{get_fars_cases}. Multiple case numbers can be provided.}
@@ -115,22 +114,18 @@ for \code{get_fars_crash_list}.}
 \item{format}{Default "json". "csv" is supported when using the "year
 dataset" api. "sas" is supporting for the "zip" api.}
 
-\item{pr}{logical. If TRUE, download zip file with FARS data for Puerto Rico.
-No Puerto Rico data available for years 1975-1977. Default: FALSE for
+\item{pr}{logical. If \code{TRUE}, download zip file with FARS data for Puerto Rico.
+No Puerto Rico data available for years 1975-1977. Default: \code{FALSE} for
 \code{get_fars_zip} only.}
 
-\item{path}{File path used if download is TRUE.}
+\item{path}{File path used if download is \code{TRUE}.}
 
-\item{download}{logical. If TRUE and the \code{api} is "year dataset" or "zip",
-download the data to a file. Default FALSE.}
+\item{download}{logical. If \code{TRUE} and the \code{api} is "year dataset" or "zip",
+download the data to a file. Default \code{FALSE}.}
 
 \item{start_year}{Start year for crash reports.}
 
 \item{end_year}{End year for crash reports.}
-
-\item{progress_bar}{If TRUE, display a progress bar when downloading detailed
-data with \code{get_fars_cases()} or another function that calls this function.
-Default TRUE.}
 }
 \description{
 This function provides a convenient interface for accessing FARS

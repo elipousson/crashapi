@@ -64,7 +64,7 @@ get_fars_zip function to download this data.'><!-- mathjax --><script src="https
     
     <a class="navbar-brand me-2" href="../index.html">crashapi</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.12</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,17 @@ get_fars_zip function to download this data.'><!-- mathjax --><script src="https
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/elipousson/crashapi/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+
+        
+        
+        
+      </ul></div>
 
     
   </div>
@@ -89,7 +99,7 @@ get_fars_zip function to download this data.'><!-- mathjax --><script src="https
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Get Fatality Analysis Reporting System (FARS) data with the FARS API</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/elipousson/crashapi/blob/HEAD/R/get_fars.R" class="external-link"><code>R/get_fars.R</code></a></small>
       <div class="d-none name"><code>get_fars.Rd</code></div>
     </div>
 
@@ -151,8 +161,7 @@ NHTSA data downloads server in a zip format. Set <code>api</code> to "zip" or us
   <span class="va">cases</span>,
   details <span class="op">=</span> <span class="cn">NULL</span>,
   geometry <span class="op">=</span> <span class="cn">FALSE</span>,
-  crs <span class="op">=</span> <span class="fl">4326</span>,
-  progress_bar <span class="op">=</span> <span class="cn">TRUE</span>
+  crs <span class="op">=</span> <span class="fl">4326</span>
 <span class="op">)</span>
 
 <span class="fu">get_fars_crash_list</span><span class="op">(</span>
@@ -203,17 +212,17 @@ dataset" api or <code>get_fars_year</code>. Supported values include "ACCIDENT",
 "VISION", and "VSOE". Lowercase or mixed case values are permitted.</p></dd>
 <dt>details</dt>
 <dd><p>Type of detailed crash data to return (either "events" or
-"vehicles"). If TRUE for <code>get_fars</code> or <code>get_fars_crashes</code>, detailed case
+"vehicles"). If <code>TRUE</code> for <code>get_fars</code> or <code>get_fars_crashes</code>, detailed case
 data (excluding event and vehicle data) is attached to the returned crash
 data. If NULL for <code>get_fars_cases</code>, events and vehicle data are excluded
 from the returned case data. returned by <code>get_fars_cases</code>. Optional for
-<code>get_fars_crash_details</code>. Default: NULL for <code>get_fars_cases</code>; FALSE for
+<code>get_fars_crash_details</code>. Default: NULL for <code>get_fars_cases</code>; <code>FALSE</code> for
 <code>get_fars</code> and <code>get_fars_crashes</code>.</p></dd>
 <dt>geometry</dt>
-<dd><p>If TRUE, return sf object. Optional for <code>get_fars_crashes</code>.</p></dd>
+<dd><p>If <code>TRUE</code>, return sf object. Optional for <code>get_fars_crashes</code>.</p></dd>
 <dt>crs</dt>
 <dd><p>Coordinate reference system to return for <code>get_fars_crashes</code> if
-<code>geometry</code> is TRUE.</p></dd>
+<code>geometry</code> is <code>TRUE</code>.</p></dd>
 <dt>cases</dt>
 <dd><p>One or more FARS case numbers. Required if <code>api</code> is "cases" or
 using <code>get_fars_cases</code>. Multiple case numbers can be provided.</p></dd>
@@ -225,22 +234,18 @@ for <code>get_fars_crash_list</code>.</p></dd>
 <dd><p>Default "json". "csv" is supported when using the "year
 dataset" api. "sas" is supporting for the "zip" api.</p></dd>
 <dt>pr</dt>
-<dd><p>logical. If TRUE, download zip file with FARS data for Puerto Rico.
-No Puerto Rico data available for years 1975-1977. Default: FALSE for
+<dd><p>logical. If <code>TRUE</code>, download zip file with FARS data for Puerto Rico.
+No Puerto Rico data available for years 1975-1977. Default: <code>FALSE</code> for
 <code>get_fars_zip</code> only.</p></dd>
 <dt>path</dt>
-<dd><p>File path used if download is TRUE.</p></dd>
+<dd><p>File path used if download is <code>TRUE</code>.</p></dd>
 <dt>download</dt>
-<dd><p>logical. If TRUE and the <code>api</code> is "year dataset" or "zip",
-download the data to a file. Default FALSE.</p></dd>
+<dd><p>logical. If <code>TRUE</code> and the <code>api</code> is "year dataset" or "zip",
+download the data to a file. Default <code>FALSE</code>.</p></dd>
 <dt>start_year</dt>
 <dd><p>Start year for crash reports.</p></dd>
 <dt>end_year</dt>
 <dd><p>End year for crash reports.</p></dd>
-<dt>progress_bar</dt>
-<dd><p>If TRUE, display a progress bar when downloading detailed
-data with <code>get_fars_cases()</code> or another function that calls this function.
-Default TRUE.</p></dd>
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -252,7 +257,7 @@ Default TRUE.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
