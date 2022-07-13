@@ -32,7 +32,7 @@ Supported APIs for this package include:
 -   [X] Get Crash Details
 -   [x] Get Crashes By Location
 -   [X] Get Crashes By Vehicle
--   [x] Get Summary Counts (not currently working)
+-   [x] Get Summary Counts
 -   [x] Get Variables and Get Variable Attributes
 -   [x] Get FARS Data By Year
 -   [X] Get Crashes By Occupant (partial support)
@@ -41,7 +41,7 @@ Most of these APIs support XML, JSV, CSV, and JSON output formats. This package 
 
 For reference, this package also includes a list of terms and NHTSA technical definitions in `fars_terms` and a list of variable labels in `fars_vars_labels`.
 
-The FARS API currently only provides access to data from 2010 to 2019. The `get_fars_zip` function can be used to access FARS data files from 1975 to 2019 that that are available for download on through [the NHTSA File Downloads site](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/) as zipped CSV or SAS files (not available through the NHTSA FARS API). This site also provides extensive technical documentation on coding and use of the FARS data files.
+The FARS API currently provides access to data from 2010 to 2020. The `get_fars_zip` function can be used to access FARS data files from 1975 to 2020 that that are available for download on through [the NHTSA File Downloads site](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/) as zipped CSV or SAS files (not available through the NHTSA FARS API). This site also provides extensive technical documentation on coding and use of the FARS data files.
 
 Earlier data along with data from the the [General Estimates System](https://www.nhtsa.gov/national-automotive-sampling-system-nass/nass-general-estimates-system) (GES) / [Crash Report Sampling System](https://www.nhtsa.gov/crash-data-systems/crash-report-sampling-system-crss) (CRSS) is also available through the [Fatality and Injury Reporting System Tool](https://cdan.dot.gov/query) (FIRST).
 
@@ -58,14 +58,15 @@ The [NHTSA website](https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx) also pro
 | 2016      | Final        | December 14, 2017 |
 | 2017      | Final        | December 18, 2018 |
 | 2018      | Final        | June 24, 2021     |
-| 2019      | Annual       | June 24, 2021     |
+| 2019      | Final        | March 2, 2022     |
+| 2020      | Annual       | March 2, 2022     |
 
 ## Installation
 
-You can install the development version of crashapi using the remotes package:
+You can install the development version of crashapi using the pak package:
 
 ``` r
-remotes::install_github("elipousson/crashapi")
+pak::pkg_install("elipousson/crashapi")
 ```
 
 ## Examples
@@ -79,11 +80,11 @@ Most features for the package can be accessed using the `get_fars()` function th
 
 For example, you can use the `get_fars()` access state-level summary data on crash and fatality counts.
 
-```{r get_fars_summary, eval = FALSE}
+```{r get_fars_summary}
 # Get summary crash count and fatality count data for Maryland from 2010 to 2019
 md_summary <-
   get_fars(
-    year = c(2010, 2019),
+    year = c(2010, 2020),
     state = "MD",
     api = "summary count"
   )
@@ -99,7 +100,7 @@ You can download crash data and set geometry to TRUE optionally convert the data
 ```{r map_fars_crashes}
 crashes_sf <-
   get_fars(
-  year = c(2010, 2012),
+  year = c(2018, 2020),
   state = "MD",
   county = "Baltimore city",
   geometry = TRUE
@@ -134,7 +135,8 @@ If you call `get_fars()` or `get_fars_crashes()` with details set to TRUE, addit
 
 ```{r get_fars_crashes}
 # Get fatal crashes for Anne Arundel County, MD for 2019 and append details
-crashes_detailed <- get_fars(
+crashes_detailed <-
+  get_fars(
   year = 2019,
   state = "MD",
   county = "Anne Arundel County",
@@ -151,4 +153,4 @@ dplyr::slice_sample(crashes_detailed, n = 10)
 -   [njtr1](https://github.com/gavinrozzi/njtr1): "An R interface to New Jersey traffic crash data reported on form NJTR-1."
 -   [nzcrash](https://github.com/nacnudus/nzcrash): "An R package to distribute New Zealand crash data in a convenient form."
 -   [GraphHopper Open Traffic Collection](https://github.com/graphhopper/open-traffic-collection): "Collections of URLs pointing to traffic information portals which contain open data or at least data which is free to use."
--   [Open Crash Data Index](https://docs.google.com/spreadsheets/d/1rmn6GbHNkfWLLDEEmA87iuy2yHdh7hBybCTZiQJEY0k/edit?usp=sharing): A Google Sheet listing a range of city, county, regional and state sources for crash data including non-injury crashes as well as the fatal crashes available through the FARS API. Contributions for crash data from other U.S. cities adn states are welcome.
+-   [Open Crash Data Index](https://docs.google.com/spreadsheets/d/1rmn6GbHNkfWLLDEEmA87iuy2yHdh7hBybCTZiQJEY0k/edit?usp=sharing): A Google Sheet listing a range of city, county, regional and state sources for crash data including non-injury crashes as well as the fatal crashes available through the FARS API. Contributions for crash data from other U.S. cities and states are welcome.
