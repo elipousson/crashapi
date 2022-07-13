@@ -6,18 +6,6 @@ test_that("Test lookup_fips outputs", {
   expect_warning(lookup_fips(state = "XX"), "not a valid FIPS code or state name/abbreviation")
 })
 
-
-test_that("get_fars", {
-  expect_error(get_fars(year = 2000), "Check on 'year' failed")
-  #  expect_error(get_fars(year = 2019, state = "XX", county = "Garrett County"), "A valid county name or FIPS is required")
-  # expect_error(get_fars(year = 2019, state = "MD", api = "crashes"), "valid county name or FIPS")
-  expect_type(get_fars(year = 2019, state = "MD", county = "Garrett County"), "list")
-  expect_type(get_fars(year = 2019, state = "MD", county = "Garrett County", details = TRUE), "list")
-  expect_type(get_fars(year = 2019, state = "MD", api = "summary count"), "list")
-  expect_type(get_fars(year = 2019, state = "MD", api = "state list", vehicles = 1), "list")
-})
-
-
 test_that("get_fars", {
   expect_error(get_fars(year = 2000), "Check on 'year' failed")
   expect_error(get_fars(year = 2019, state = "MD", api = "crashes"), "A valid county name or FIPS is required")
@@ -27,18 +15,6 @@ test_that("get_fars", {
   expect_type(get_fars(year = 2019, state = "MD", api = "state list", vehicles = 1), "list")
   expect_type(get_fars(year = 2019, state = "MD", api = "state list", vehicles = 1), "list")
 })
-
-
-test_that("get_fars", {
-  expect_error(get_fars(year = 2000), "Check on 'year' failed")
-  expect_error(get_fars(year = 2019, state = "MD", api = "crashes"), "A valid county name or FIPS is required")
-  expect_type(get_fars(year = 2019, state = "MD", county = "Garrett County"), "list")
-  expect_type(get_fars(year = 2019, state = "MD", county = "Garrett County", details = TRUE), "list")
-  expect_type(get_fars(year = 2019, state = "MD", api = "summary count"), "list")
-  expect_type(get_fars(year = 2019, state = "MD", api = "state list", vehicles = 1), "list")
-  expect_type(get_fars(year = 2019, state = "MD", api = "state list", vehicles = 1), "list")
-})
-
 
 test_that("get_cases", {
   # Works with character and numeric inputs
