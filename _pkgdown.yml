@@ -1,23 +1,23 @@
+url: https://elipousson.github.io/crashapi/
 template:
-  package: preferably
   bootstrap: 5
 home:
-  title: An R package for accessing the Fatality Analysis Reporting System (FARS) API
+  title: An R package for accessing the Fatality Analysis Reporting System (FARS)
+    API
   description: Get crash data for U.S. states and counties.
 reference:
 - title: Get data from the FARS API
   contents:
   - starts_with("get")
-  - "read_crashapi"
+  - read_crashapi
 - title: Get variable definitions
-  contents:
-  - "fars_vars"
+  contents: fars_vars
 - title: Data formatting functions
-  contents:
-  - starts_with("format")
+  contents: starts_with("format")
 - title: Reference information
   contents:
-  - "fars_terms"
-  - "fars_vars_labels"
-  - "mmucc_codes"
-  - "crash_data_index"
+  - fars_terms
+  - fars_vars_labels
+  - mmucc_codes
+  - crash_data_index
+
