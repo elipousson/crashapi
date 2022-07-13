@@ -2,40 +2,13 @@
 
 # crashapi 0.1.1
 
-- refactor: update 2019 -> 2020 max year
-- feat: add geometry and state parameter support to get_fars_year
-- refactor: set default crs to NULL and switch to use df_to_sf from sfext
-- refactor: replace usethis and progress w/ cli in Imports
-- test: update tests with corrected error messages
-- docs: minor updates to get_fars documentation
-- fix: correct onLoad handling of fars_vars_labels data
-- style: run styler
-- docs: finish update to pkgdown site
-- docs: add date added/updated to data documentation
-- feat: update crash_data_index with recent additions (e.g. Wyoming)
-- docs: update pkgdown site
-- fix: correct issue w/ analytics API template
-- refactor: reorganize fars_vars
-- test: restore tests for "summary count" data
--refactor: switch to use httr2 package + read_crashapi for data access (except for zip)
-- test: add tests and set up code coverage tests
-- feat: Add get_fars_crash_persons function
-- docs: update pkgdown site
-- fix: Fix issue w/ inaccurate derived time column by updating `format_crashes()` to correctly pad and combine hour/minute columns
-- refactor: Rename `tidy_crashes()` to `format_crashes()`
-- docs: Update pkgdown site (again)
-- feat: Add progress_bar parameter to `get_fars_cases()`
-- docs: Update pkgdown site (again)
-- docs: Update README and pkgdown site
-- feat: rename `get_fars_crash_details` to `get_fars_cases`
-- refactor: remove automatic API parameter message
-- feat: Add details parameter to `get_fars_crashes()` to supported appending detailed case information
-- feat: Add `tidy_crashes()` utility function to clean/reorder column names and append date/time columns
-- fix: remove broken case number check from  `get_fars_cases()`
-- refactor: rename "case" parameter to "cases" for `get_fars()` and `get_fars_cases()`
-- refactor: update `validate_year()` helper function/defaults to better handle start_year and end_year
-- feat: Add `fars_vars_labels` with names and labels derived from current analytical manual
+CrashAPI now has data from 2010 to 2020. `get_fars_year()` is also updated to support multiple years and to include a state parameter which makes it much easier to use.
 
+- refactor: update 2019 -> 2020 max year
+- feat: add geometry and state parameter support to `get_fars_year()`
+- refactor: set default crs to NULL and switch to use `sfext::df_to_sf`
+- refactor: switch to use `httr2` package + `read_crashapi()` for data access (except for zip)
+- test: add tests and set up code coverage tests
 
 # crashapi 0.1.0.12
 
