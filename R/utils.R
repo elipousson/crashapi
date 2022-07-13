@@ -67,7 +67,8 @@ read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
       "GetVariableAttributes" = "GET /CrashAPI/{data}/{type}?variable={variable}&caseYear={caseYear}&format={format}",
       "GetVariableAttributesForModel" = "GET /CrashAPI/{data}/{type}?variable={variable}&caseYear={caseYear}&make={make}&format={format}",
       "GetVariableAttributesForbodyType" = "GET /CrashAPI/{data}/{type}?variable={variable}&make={make}&model={model}&format={format}",
-      "GetFARSData" = "GET /CrashAPI/{data}/{type}?dataset={dataset}&caseYear={caseYear}&format={format}"
+      # "GetFARSData" = "GET /CrashAPI/{data}/{type}?dataset={dataset}&caseYear={caseYear}&format={format}"
+      "GetFARSData" = "GET /CrashAPI/{data}/{type}?dataset={dataset}&FromYear={FromYear}&ToYear={ToYear}&State={State}&format={format}"
     )
 
   request <- httr2::req_template(
@@ -95,14 +96,14 @@ read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
 #' @noRd
 #' @importFrom cli cli_abort
 #' @importFrom checkmate expect_integerish
-validate_year <- function(year, year_range = c(2010, 2019), start_year, end_year) {
+validate_year <- function(year, year_range = c(2010, 2020), start_year, end_year) {
   if (is.null(year)) {
     if (!missing(start_year) | !missing(end_year)) {
       year <- c(start_year, end_year)
     } else {
       cli::cli_abort(
         "A {.arg year}, {.arg start_year}, or {.arg end_year} must be provided to download FARS data."
-        )
+      )
     }
   }
   year <- as.integer(year)

@@ -28,8 +28,8 @@
 #'   `get_fars_crash_details`, `get_fars_year`, or `get_fars_zip` functions), a
 #'   single year is required. All other `api` options support a range with the
 #'   minimum value is used as a start year and the maximum value used as a end
-#'   year. Most `api` options support the years from 2010 to 2019. "year
-#'   dataset" only supports 2010 to 2017 and "zip" supports 1975 to 2019.
+#'   year. Most `api` options support the years from 2010 through the most recent year of release. "year
+#'   dataset" only supports 2010 to 2017 and "zip" supports 1975 to 2020.
 #'   `start_year` and `end_year` are ignored if `year` is not NULL.
 #' @param api character. API function to use. Supported values include
 #'   "crashes", "cases", "state list", "summary count", "year dataset", and
@@ -72,14 +72,14 @@
 #' @export
 #' @md
 #' @importFrom jsonlite read_json
-get_fars <- function(year = 2019,
+get_fars <- function(year = 2020,
                      state,
                      county = NULL,
                      api = c("crashes", "cases", "state list", "summary count", "year dataset", "zip"),
                      type,
                      details = FALSE,
                      geometry = FALSE,
-                     crs = 4326,
+                     crs = NULL,
                      cases,
                      vehicles,
                      format = "json",
@@ -132,6 +132,7 @@ get_fars <- function(year = 2019,
       get_fars_year(
         year = year,
         type = type,
+        state = state,
         format = format,
         download = download
       ),
@@ -149,7 +150,7 @@ get_fars <- function(year = 2019,
 #' @aliases get_fars_crashes
 #' @export
 #' @importFrom cli cli_abort
-#' @importFrom overedge df_to_sf
+#' @importFrom sfext df_to_sf
 get_fars_crashes <- function(year = NULL,
                              start_year,
                              end_year,
@@ -157,7 +158,7 @@ get_fars_crashes <- function(year = NULL,
                              county = NULL,
                              details = FALSE,
                              geometry = FALSE,
-                             crs = 4326) {
+                             crs = NULL) {
   year <- validate_year(year, start_year = start_year, end_year = end_year)
   fips <- lookup_fips(state, county, list = TRUE)
 
@@ -189,11 +190,13 @@ get_fars_crashes <- function(year = NULL,
   }
 
   if (geometry) {
-    crash_df <- overedge::df_to_sf(
-      x = crash_df,
-      coords = c("LONGITUD", "LATITUDE"),
-      crs = crs
-    )
+    crash_df <-
+      sfext::df_to_sf(
+        x = crash_df,
+        coords = c("LONGITUD", "LATITUDE"),
+        from_crs = 4326,
+        crs = crs
+      )
   }
 
   crash_df <- format_crashes(crash_df, details = details)
@@ -206,12 +209,12 @@ get_fars_crashes <- function(year = NULL,
 #' @export
 #' @importFrom cli cli_abort cli_progress_along
 #' @importFrom purrr map_dfr
-get_fars_cases <- function(year = 2019,
+get_fars_cases <- function(year = 2020,
                            state,
                            cases,
                            details = NULL,
                            geometry = FALSE,
-                           crs = 4326) {
+                           crs = NULL) {
   year <- validate_year(year)
   state_fips <- lookup_fips(state)
 
@@ -245,7 +248,16 @@ get_fars_cases <- function(year = 2019,
       return(crash_df)
     }
 
-    return(df_to_sf(crash_df, longitude = "LONGITUD", latitude = "LATITUDE"))
+    crash_sf <-
+      sfext::df_to_sf(
+        crash_df,
+        longitude = "LONGITUD",
+        latitude = "LATITUDE",
+        from_crs = 4326,
+        crs = crs
+      )
+
+    return(crash_sf)
   }
 
   details <- match.arg(details, c("events", "vehicles"))
@@ -300,13 +312,31 @@ get_fars_summary <- function(year = NULL,
 #' @importFrom jsonlite read_json
 #' @importFrom readr read_csv
 #' @importFrom stringr str_to_sentence
-get_fars_year <- function(year = 2017,
+#' @importFrom sfext df_to_sf
+#' @importFrom cli cli_warn
+get_fars_year <- function(year = c(2019, 2020),
                           type = "accident",
+                          state,
                           format = "json",
                           path = NULL,
+                          geometry = FALSE,
+                          crs = NULL,
                           download = FALSE) {
-  year <- validate_year(year, year_range = c(2010, 2017))
-  type <- match.arg(toupper(type), c("ACCIDENT", "CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "FACTOR", "MANEUVER", "NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE", "PERSON", "SAFETYEQ", "VEHICLE", "VEVENT VINDECODE", "VINDERIVED", "VIOLATION", "VISION", "VSOE"))
+  year <- validate_year(year)
+  state_fips <- lookup_fips(state)
+
+  fars_tabs <- c("ACCIDENT", "CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "DRUGS", "FACTOR", "MANEUVER", "NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE", "PERSON", "SAFETYEQ", "VEHICLE", "VEVENT", "VINDECODE", "VINDERIVED", "VIOLATION", "VISION", "VSOE")
+
+  # Add 2019 and 2020 onwards tables to the data
+  if (min(year) >= 2019) {
+    fars_tabs <- c(fars_tabs, "NMDISTRACT")
+    if (min(year) >= 2020) {
+      fars_tabs <- c(fars_tabs, "CRASHRF", "DRIVERRF", "PERSONRF", "PVEHICLESF", "VEHICLESF", "WEATHER")
+    }
+  }
+
+  type <- toupper(type)
+  type <- match.arg(type, fars_tabs)
   format <- match.arg(format, c("json", "csv"))
 
   url <-
@@ -315,33 +345,60 @@ get_fars_year <- function(year = 2017,
       type = "GetFARSData",
       dataset = stringr::str_to_sentence(type),
       caseYear = year,
+      FromYear = min(year),
+      ToYear = max(year),
+      State = state_fips,
       format = format,
       results = FALSE
     )
 
-  if (download) {
-    filename <- paste0(year, "_", type, ".", format)
+  if (!download) {
+    crash_df <-
+      switch(format,
+        "json" = jsonlite::read_json(url, simplifyVector = TRUE)[["Results"]][[1]],
+        "csv" = readr::read_csv(url)
+      )
 
-    if (!is.null(path)) {
-      filename <- file.path(path, filename)
+    if (!geometry) {
+      return(crash_df)
     }
 
-    utils::download.file(
-      url = url,
-      destfile = filename,
-      method = "auto"
-    )
-  } else {
-    switch(format,
-      "json" = jsonlite::read_json(url, simplifyVector = TRUE)[["Results"]][[1]],
-      "csv" = readr::read_csv(url)
-    )
+    coords <- c("LONGITUD", "LATITUDE")
+
+    if (all(c("LONGITUD", "LATITUDE") %in% names(crash_df))) {
+      crash_sf <-
+        sfext::df_to_sf(
+          x = crash_df,
+          coords = coords,
+          from_crs = 4326,
+          crs = crs
+        )
+
+      return(crash_sf)
+    } else {
+      cli::cli_warn(c("Coordinate columns {coords} can't be found in data of the type {.val {type}}.",
+        "i" = "Use {.code type = 'accident'} with {.code geometry = 'TRUE'} to return an sf object."
+      ))
+      return(crash_df)
+    }
   }
+
+  filename <- paste0(min(year), "_", max(year), "_", type, ".", format)
+
+  if (!is.null(path)) {
+    filename <- file.path(path, filename)
+  }
+
+  utils::download.file(
+    url = url,
+    destfile = filename,
+    method = "auto"
+  )
 }
 
 #' @title Download FARS data files as zipped CSV or SAS files
 #' @description This function provides an alternative to get_fars_year that downloads files directly from NHTSA FTP site.
-#' @param year Year of data from 1975 to 2019, Default: 2019
+#' @param year Year of data from 1975 to 2020, Default: 2020
 #' @param format Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
 #' @param path Path to download zip file with FARS tables.
 #' @param pr If TRUE, download FARS data for Puerto Rico. No Puerto Rico data available for years 1975-1977. Default: FALSE
@@ -350,11 +407,11 @@ get_fars_year <- function(year = 2017,
 #' @export
 #' @importFrom utils URLencode
 #' @importFrom glue glue
-get_fars_zip <- function(year = 2019,
+get_fars_zip <- function(year = 2020,
                          format = "csv",
                          path = NULL,
                          pr = FALSE) {
-  year <- validate_year(year = year, year_range = c(1975:2019))
+  year <- validate_year(year = year, year_range = c(1975:2020))
   format <- match.arg(format, c("csv", "sas"))
 
   if (pr) {
@@ -393,7 +450,7 @@ get_fars_zip <- function(year = 2019,
 #'   that have occurred throughout United States.
 #'
 #' @inheritParams get_fars
-#' @param year numeric vector. Year or range with start and end year. 2010 to 2019 supported.
+#' @param year numeric vector. Year or range with start and end year. 2010 to 2020 supported.
 #' @param state Required. State name, abbreviation, or FIPS number.
 #' @param age numeric
 #' @param sex Options "m", "f", "male", "female", "unknown", "not reported."
@@ -482,7 +539,7 @@ get_fars_crash_persons <- function(year = NULL,
 #'   options that are converted to ID numbers for use in the API query.
 #'
 #' @inheritParams get_fars
-#' @param year numeric vector. Year or range with start and end year. 2010 to 2019 supported.
+#' @param year numeric vector. Year or range with start and end year. 2010 to 2020 supported.
 #' @param state Required. State name, abbreviation, or FIPS number.
 #' @param make Make name or ID, Required. The start_year is used to return a
 #'   list of support make options. Default: NULL
@@ -564,7 +621,7 @@ read_fars_zip <- function(year,
                           data_dir = NULL,
                           format = "csv",
                           ask = FALSE) {
-  year <- validate_year(year, year_range = c(1975:2019))
+  year <- validate_year(year, year_range = c(1975:2020))
 
   if (pr) {
     geo <- utils::URLencode("Puerto Rico")
