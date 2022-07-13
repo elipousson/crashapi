@@ -6,7 +6,7 @@
 \alias{crashapi-package}
 \title{crashapi: CrashAPI}
 \description{
-Get Fatality Analysis Reporting System (FARS) data with the FARS API.
+Get Fatality Analysis Reporting System (FARS) data with the FARS API from the U.S. National Highway Traffic Safety Administration (NHTSA).
 }
 \seealso{
 Useful links:

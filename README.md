@@ -13,6 +13,9 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Codecov test
 coverage](https://codecov.io/gh/elipousson/crashapi/branch/main/graph/badge.svg)](https://app.codecov.io/gh/elipousson/crashapi?branch=main)
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 <!-- badges: end -->
 
 The goal of the crashapi R package is to provide functions for
@@ -186,183 +189,182 @@ crashes_detailed <-
   county = "Anne Arundel County",
   details = TRUE
 )
-#> ■■■                                5% | ETA:  1m
-#> ■■■■■                             15% | ETA:  1m
-#> ■■■■■■■                           20% | ETA:  1m
-#> ■■■■■■■■■                         25% | ETA: 47s
-#> ■■■■■■■■■■                        30% | ETA: 44s
-#> ■■■■■■■■■■■                       35% | ETA: 41s
+#> ■■■                                8% | ETA:  1m
+#> ■■■■■■                            18% | ETA:  1m
+#> ■■■■■■■■                          22% | ETA:  1m
+#> ■■■■■■■■■                         28% | ETA: 47s
+#> ■■■■■■■■■■                        30% | ETA: 45s
+#> ■■■■■■■■■■■                       35% | ETA: 42s
 #> ■■■■■■■■■■■■■                     40% | ETA: 39s
-#> ■■■■■■■■■■■■■■                    42% | ETA: 37s
-#> ■■■■■■■■■■■■■■■                   48% | ETA: 34s
-#> ■■■■■■■■■■■■■■■■■                 52% | ETA: 31s
-#> ■■■■■■■■■■■■■■■■■■                57% | ETA: 27s
-#> ■■■■■■■■■■■■■■■■■■■■              62% | ETA: 24s
-#> ■■■■■■■■■■■■■■■■■■■■■             65% | ETA: 23s
+#> ■■■■■■■■■■■■■■■                   45% | ETA: 35s
+#> ■■■■■■■■■■■■■■■■                  50% | ETA: 32s
+#> ■■■■■■■■■■■■■■■■■                 55% | ETA: 29s
+#> ■■■■■■■■■■■■■■■■■■■               60% | ETA: 25s
+#> ■■■■■■■■■■■■■■■■■■■■■             65% | ETA: 22s
 #> ■■■■■■■■■■■■■■■■■■■■■■            70% | ETA: 19s
 #> ■■■■■■■■■■■■■■■■■■■■■■■           75% | ETA: 16s
 #> ■■■■■■■■■■■■■■■■■■■■■■■■■         80% | ETA: 13s
-#> ■■■■■■■■■■■■■■■■■■■■■■■■■■■       85% | ETA: 10s
-#> ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      90% | ETA:  6s
+#> ■■■■■■■■■■■■■■■■■■■■■■■■■■        82% | ETA: 11s
+#> ■■■■■■■■■■■■■■■■■■■■■■■■■■■       88% | ETA:  8s
 #> ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     92% | ETA:  5s
 #> ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    98% | ETA:  2s
 
 # Show 10 fatal crashes at random
 dplyr::slice_sample(crashes_detailed, n = 10)
 #>    case_year totalvehicles state statename st_case       date  time
-#> 1       2019             3    24  Maryland  240291 2019-09-12 08:00
-#> 2       2019             2    24  Maryland  240389 2019-09-27 20:31
-#> 3       2019             2    24  Maryland  240162 2019-06-07 14:36
-#> 4       2019             1    24  Maryland  240302 2019-09-21 17:11
-#> 5       2019             2    24  Maryland  240333 2019-08-26 11:57
-#> 6       2019             1    24  Maryland  240119 2019-05-05 11:39
-#> 7       2019             1    24  Maryland  240236 2019-07-30 17:54
-#> 8       2019             2    24  Maryland  240429 2019-12-11 15:16
-#> 9       2019             1    24  Maryland  240463 2019-01-05 23:42
-#> 10      2019             2    24  Maryland  240116 2019-04-22 08:00
+#> 1       2019             2    24  Maryland  240265 2019-08-27 07:08
+#> 2       2019             2    24  Maryland  240149 2019-06-02 13:07
+#> 3       2019             1    24  Maryland  240236 2019-07-30 17:54
+#> 4       2019             1    24  Maryland  240048 2019-02-20 18:25
+#> 5       2019             1    24  Maryland  240319 2019-09-20 21:02
+#> 6       2019             1    24  Maryland  240242 2019-06-29 23:14
+#> 7       2019             1    24  Maryland  240366 2019-11-04 15:58
+#> 8       2019             1    24  Maryland  240373 2019-11-10 18:10
+#> 9       2019             2    24  Maryland  240429 2019-12-11 15:16
+#> 10      2019             3    24  Maryland  240069 2019-03-15 01:26
 #>               datetime peds pernotmvit ve_total ve_forms pvh_invl
-#> 1  2019-09-12 08:00:00    0          0        3        3        0
-#> 2  2019-09-27 20:31:00    0          0        2        2        0
-#> 3  2019-06-07 14:36:00    0          0        2        2        0
-#> 4  2019-09-21 17:11:00    1          1        1        1        0
-#> 5  2019-08-26 11:57:00    0          0        2        2        0
-#> 6  2019-05-05 11:39:00    1          1        1        1        0
-#> 7  2019-07-30 17:54:00    0          0        1        1        0
-#> 8  2019-12-11 15:16:00    0          0        2        2        0
-#> 9  2019-01-05 23:42:00    0          0        1        1        0
-#> 10 2019-04-22 08:00:00    0          0        2        2        0
-#>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 n_persons
-#> 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    NULL
-#> 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    NULL
-#> 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    NULL
-#> 4  47, 47 Years, 97, Not a Motor Vehicle Occupant, 9, Not Reported, 200, 0.200 % BAC, 2, Test Given, 1, Blood, NA, NA, NA, 3, ANNE ARUNDEL (3), 2019, 21, 21, 21, 17, 17:00-17:59, 45, 45, 9, September, 1745, 1745, 2019, 2019, 0, Not Applicable, 9, Reported as Unknown, NA, NA, NA, NA, NA, NA, 9, Reported as Unknown, NA, NA, NA, NA, NA, NA, 8, Not Reported, 2, Test Given, 8, Not Applicable, 0, Ejection Path Not Applicable, NA, NA, 0, Not Extricated or Not Applicable, NA, NA, 3, Principal Arterial - Other, 8, Pedestrian, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, 7, Non-Hispanic, 5, EMS Ground, 17, 5:00pm-5:59pm, NA, NA, NA, NA, NA, NA, 4, Fatal Injury (K), 0, 0, 34, 34, 1, At Intersection - In Marked Crosswalk, NA, NA, NA, NA, 0, The First Harmful Event was Not a Collision with a Motor Vehicle in Transport, 11, 11, NA, NA, 9, September, NA, NA, 1, 5, Pedestrian, 0, None, 0, None, 0, None, NA, NA, NA, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, NA, NA, NA, NA, 2, Urban, NA, 0, No, 0, Not a Motor Vehicle Occupant, 1, Male, NA, NA, 24, Maryland, 1, NA, 240302, NA, NA, 0, 1, NA, NA, NA, NA, NA, NA, 0, No
-#> 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    NULL
-#> 6                   55, 55 Years, 97, Not a Motor Vehicle Occupant, 9, Not Reported, 130, 0.130 % BAC, 2, Test Given, 1, Blood, NA, NA, NA, 3, ANNE ARUNDEL (3), 2019, 5, 5, 5, 13, 13:00-13:59, 39, 39, 5, May, 1339, 1339, 2019, 2019, 0, Not Applicable, 9, Reported as Unknown, NA, NA, NA, NA, NA, NA, 9, Reported as Unknown, NA, NA, NA, NA, NA, NA, 8, Not Reported, 2, Test Given, 8, Not Applicable, 0, Ejection Path Not Applicable, NA, NA, 0, Not Extricated or Not Applicable, NA, NA, 3, Principal Arterial - Other, 9, Pedalcyclist, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, 7, Non-Hispanic, 5, EMS Ground, 11, 11:00am-11:59am, NA, NA, NA, NA, NA, NA, 4, Fatal Injury (K), 2, 2, 0, 0, 3, At Intersection - Not In Crosswalk, NA, NA, NA, NA, 0, The First Harmful Event was Not a Collision with a Motor Vehicle in Transport, 39, 39, NA, NA, 5, May, NA, NA, 1, 6, Bicyclist, 0, None, 0, None, 0, None, NA, NA, NA, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, NA, NA, NA, NA, 2, Urban, NA, 0, No, 0, Not a Motor Vehicle Occupant, 1, Male, NA, NA, 24, Maryland, 1, NA, 240119, NA, NA, 0, 1, NA, NA, NA, NA, NA, NA, 0, No
-#> 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    NULL
-#> 8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    NULL
-#> 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    NULL
-#> 10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   NULL
+#> 1  2019-08-27 07:08:00    0          0        2        2        0
+#> 2  2019-06-02 13:07:00    0          0        2        2        0
+#> 3  2019-07-30 17:54:00    0          0        1        1        0
+#> 4  2019-02-20 18:25:00    1          1        1        1        0
+#> 5  2019-09-20 21:02:00    0          0        1        1        0
+#> 6  2019-06-29 23:14:00    1          1        1        1        0
+#> 7  2019-11-04 15:58:00    0          0        1        1        0
+#> 8  2019-11-10 18:10:00    1          1        1        1        0
+#> 9  2019-12-11 15:16:00    0          0        2        2        0
+#> 10 2019-03-15 01:26:00    0          0        3        3        0
+#>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      n_persons
+#> 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         NULL
+#> 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         NULL
+#> 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         NULL
+#> 4             26, 26 Years, 97, Not a Motor Vehicle Occupant, 9, Not Reported, 0, 0.000 % BAC, 2, Test Given, 1, Blood, NA, NA, NA, 3, ANNE ARUNDEL (3), 2019, 20, 20, 20, 18, 18:00-18:59, 43, 43, 2, February, 1843, 1843, 2019, 2019, 7, Died at Scene, 9, Reported as Unknown, NA, NA, NA, NA, NA, NA, 9, Reported as Unknown, NA, NA, NA, NA, NA, NA, 8, Not Reported, 2, Test Given, 8, Not Applicable, 0, Ejection Path Not Applicable, NA, NA, 0, Not Extricated or Not Applicable, NA, NA, 5, Major Collector, 8, Pedestrian, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, 7, Non-Hispanic, 0, Not Transported, 18, 6:00pm-6:59pm, NA, NA, NA, NA, NA, NA, 4, Fatal Injury (K), 0, 0, 18, 18, 11, Not at Intersection - On Roadway, Not in Marked Crosswalk, NA, NA, NA, NA, 0, The First Harmful Event was Not a Collision with a Motor Vehicle in Transport, 25, 25, NA, NA, 2, February, NA, NA, 1, 5, Pedestrian, 0, None, 0, None, 0, None, NA, NA, NA, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, NA, NA, NA, NA, 2, Urban, NA, 0, No, 0, Not a Motor Vehicle Occupant, 1, Male, NA, NA, 24, Maryland, 1, NA, 240048, NA, NA, 0, 1, NA, NA, NA, NA, NA, NA, 0, No
+#> 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         NULL
+#> 6         32, 32 Years, 97, Not a Motor Vehicle Occupant, 9, Not Reported, 0, 0.000 % BAC, 2, Test Given, 1, Blood, NA, NA, NA, 3, ANNE ARUNDEL (3), 2019, 29, 29, 29, 23, 23:00-23:59, 32, 32, 6, June, 2332, 2332, 2019, 2019, 7, Died at Scene, 8, Not Reported, NA, NA, NA, NA, NA, NA, 0, No (drugs not involved), NA, NA, NA, NA, NA, NA, 1, Evidential Test (Blood, Urine), 2, Test Given, 8, Not Applicable, 0, Ejection Path Not Applicable, NA, NA, 0, Not Extricated or Not Applicable, NA, NA, 1, Interstate, 8, Pedestrian, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, 7, Non-Hispanic, 0, Not Transported, 23, 11:00pm-11:59pm, NA, NA, NA, NA, NA, NA, 4, Fatal Injury (K), 0, 0, 18, 18, 11, Not at Intersection - On Roadway, Not in Marked Crosswalk, NA, NA, NA, NA, 0, The First Harmful Event was Not a Collision with a Motor Vehicle in Transport, 14, 14, NA, NA, 6, June, NA, NA, 1, 5, Pedestrian, 0, None, 0, None, 0, None, NA, NA, NA, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, NA, NA, NA, NA, 2, Urban, NA, 0, No, 0, Not a Motor Vehicle Occupant, 1, Male, NA, NA, 24, Maryland, 1, NA, 240242, NA, NA, 0, 1, NA, NA, NA, NA, NA, NA, 0, No
+#> 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         NULL
+#> 8  50, 50 Years, 97, Not a Motor Vehicle Occupant, 9, Not Reported, 130, 0.130 % BAC, 2, Test Given, 1, Blood, NA, NA, NA, 3, ANNE ARUNDEL (3), 2019, 10, 10, 10, 18, 18:00-18:59, 25, 25, 11, November, 1825, 1825, 2019, 2019, 7, Died at Scene, 1, Yes (Alcohol Involved), NA, NA, NA, NA, NA, NA, 8, Not Reported, NA, NA, NA, NA, NA, NA, 8, Not Reported, 2, Test Given, 8, Not Applicable, 0, Ejection Path Not Applicable, NA, NA, 0, Not Extricated or Not Applicable, NA, NA, 3, Principal Arterial - Other, 8, Pedestrian, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, 7, Non-Hispanic, 0, Not Transported, 18, 6:00pm-6:59pm, NA, NA, NA, NA, NA, NA, 4, Fatal Injury (K), 0, 0, 15, 15, 11, Not at Intersection - On Roadway, Not in Marked Crosswalk, NA, NA, NA, NA, 0, The First Harmful Event was Not a Collision with a Motor Vehicle in Transport, 10, 10, NA, NA, 11, November, NA, NA, 1, 5, Pedestrian, 0, None, 0, None, 0, None, NA, NA, NA, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, NA, NA, NA, NA, 2, Urban, NA, 0, No, 0, Not a Motor Vehicle Occupant, 1, Male, NA, NA, 24, Maryland, 1, NA, 240373, NA, NA, 0, 1, NA, NA, NA, NA, NA, NA, 0, No
+#> 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         NULL
+#> 10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        NULL
 #>    persons permvit county       countyname city       cityname month month_name
-#> 1        3       3      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     9  September
-#> 2        3       3      3 ANNE ARUNDEL (3) 1415         SEVERN     9  September
-#> 3        2       2      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     6       June
-#> 4        1       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     9  September
-#> 5        2       2      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     8     August
-#> 6        1       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     5        May
-#> 7        1       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     7       July
-#> 8        2       2      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE    12   December
-#> 9        1       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     1    January
-#> 10       2       2      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     4      April
+#> 1        2       2      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     8     August
+#> 2        3       3      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     6       June
+#> 3        1       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     7       July
+#> 4        2       2      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     2   February
+#> 5        4       4      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     9  September
+#> 6        1       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     6       June
+#> 7        1       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE    11   November
+#> 8        1       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE    11   November
+#> 9        2       2      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE    12   December
+#> 10       6       6      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     3      March
 #>    day day_week day_weekname year hour        hourname minute minutename
-#> 1   12        5     Thursday 2019    8   8:00am-8:59am      0          0
-#> 2   27        6       Friday 2019   20   8:00pm-8:59pm     31         31
-#> 3    7        6       Friday 2019   14   2:00pm-2:59pm     36         36
-#> 4   21        7     Saturday 2019   17   5:00pm-5:59pm     11         11
-#> 5   26        2       Monday 2019   11 11:00am-11:59am     57         57
-#> 6    5        1       Sunday 2019   11 11:00am-11:59am     39         39
-#> 7   30        3      Tuesday 2019   17   5:00pm-5:59pm     54         54
-#> 8   11        4    Wednesday 2019   15   3:00pm-3:59pm     16         16
-#> 9    5        7     Saturday 2019   23 11:00pm-11:59pm     42         42
-#> 10  22        2       Monday 2019    8   8:00am-8:59am      0          0
-#>                tway_id             tway_id2 route     routename rur_urb
-#> 1              CR-5461                 <NA>     4   County Road       2
-#> 2  SR-175 ANNAPOLIS RD              CR-5454     3 State Highway       2
-#> 3              CR-1178                 <NA>     4   County Road       2
-#> 4       SR-3 CRAIN HWY CR-3828 CRAINMONT DR     3 State Highway       2
-#> 5               SR-710              CR-3700     3 State Highway       2
-#> 6                 SR-2               OP-226     3 State Highway       2
-#> 7                CR-10                 <NA>     4   County Road       2
-#> 8               SR-176               CR-597     3 State Highway       2
-#> 9               SR-295                 <NA>     3 State Highway       2
-#> 10              SR-450                 <NA>     3 State Highway       2
-#>    rur_urbname func_sys               func_sysname rd_owner
-#> 1        Urban        4             Minor Arterial        2
-#> 2        Urban        4             Minor Arterial        1
-#> 3        Urban        5            Major Collector        2
-#> 4        Urban        3 Principal Arterial - Other        1
-#> 5        Urban        4             Minor Arterial        1
-#> 6        Urban        3 Principal Arterial - Other        1
-#> 7        Urban        5            Major Collector        2
-#> 8        Urban        4             Minor Arterial        1
-#> 9        Urban        3 Principal Arterial - Other        1
-#> 10       Urban        3 Principal Arterial - Other        1
+#> 1   27        3      Tuesday 2019    7   7:00am-7:59am      8          8
+#> 2    2        1       Sunday 2019   13   1:00pm-1:59pm      7          7
+#> 3   30        3      Tuesday 2019   17   5:00pm-5:59pm     54         54
+#> 4   20        4    Wednesday 2019   18   6:00pm-6:59pm     25         25
+#> 5   20        6       Friday 2019   21   9:00pm-9:59pm      2          2
+#> 6   29        7     Saturday 2019   23 11:00pm-11:59pm     14         14
+#> 7    4        2       Monday 2019   15   3:00pm-3:59pm     58         58
+#> 8   10        1       Sunday 2019   18   6:00pm-6:59pm     10         10
+#> 9   11        4    Wednesday 2019   15   3:00pm-3:59pm     16         16
+#> 10  15        6       Friday 2019    1   1:00am-1:59am     26         26
+#>        tway_id tway_id2 route     routename rur_urb rur_urbname func_sys
+#> 1      CR-5461     <NA>     4   County Road       2       Urban        4
+#> 2        SR-10     <NA>     3 State Highway       2       Urban        2
+#> 3        CR-10     <NA>     4   County Road       2       Urban        5
+#> 4      CR-2633     <NA>     4   County Road       2       Urban        5
+#> 5      CR-3549     <NA>     4   County Road       2       Urban        5
+#> 6       I-895B     <NA>     1    Interstate       2       Urban        1
+#> 7  SR-176 RAMP     <NA>     3 State Highway       2       Urban        4
+#> 8         SR-2     <NA>     3 State Highway       2       Urban        3
+#> 9       SR-176   CR-597     3 State Highway       2       Urban        4
+#> 10       I-195     <NA>     1    Interstate       2       Urban        1
+#>                                           func_sysname rd_owner
+#> 1                                       Minor Arterial        2
+#> 2  Principal Arterial - Other Freeways and Expressways        1
+#> 3                                      Major Collector        2
+#> 4                                      Major Collector        2
+#> 5                                      Major Collector        2
+#> 6                                           Interstate        1
+#> 7                                       Minor Arterial        1
+#> 8                           Principal Arterial - Other        1
+#> 9                                       Minor Arterial        1
+#> 10                                          Interstate        1
 #>             rd_ownername nhs                        nhsname sp_jur
 #> 1  County Highway Agency   0 This section IS NOT on the NHS      0
 #> 2   State Highway Agency   0 This section IS NOT on the NHS      0
 #> 3  County Highway Agency   0 This section IS NOT on the NHS      0
-#> 4   State Highway Agency   0 This section IS NOT on the NHS      0
-#> 5   State Highway Agency   0 This section IS NOT on the NHS      0
-#> 6   State Highway Agency   0 This section IS NOT on the NHS      0
-#> 7  County Highway Agency   0 This section IS NOT on the NHS      0
+#> 4  County Highway Agency   0 This section IS NOT on the NHS      0
+#> 5  County Highway Agency   0 This section IS NOT on the NHS      0
+#> 6   State Highway Agency   1     This section IS ON the NHS      0
+#> 7   State Highway Agency   0 This section IS NOT on the NHS      0
 #> 8   State Highway Agency   0 This section IS NOT on the NHS      0
-#> 9   State Highway Agency   1     This section IS ON the NHS      1
-#> 10  State Highway Agency   0 This section IS NOT on the NHS      0
+#> 9   State Highway Agency   0 This section IS NOT on the NHS      0
+#> 10  State Highway Agency   1     This section IS ON the NHS      0
 #>                 sp_jurname milept mileptname    latitude latitudename
-#> 1  No Special Jurisdiction      4          4 39.07551111  39.07551111
-#> 2  No Special Jurisdiction     47         47 39.09596667  39.09596667
-#> 3  No Special Jurisdiction     20         20 39.08629167  39.08629167
-#> 4  No Special Jurisdiction     10         10 39.13292222  39.13292222
-#> 5  No Special Jurisdiction      9          9 39.19551111  39.19551111
-#> 6  No Special Jurisdiction    343        343 39.13838333  39.13838333
-#> 7  No Special Jurisdiction      3          3 39.19875000  39.19875000
-#> 8  No Special Jurisdiction     35         35 39.16266389  39.16266389
-#> 9    National Park Service      0       None 39.11144722  39.11144722
-#> 10 No Special Jurisdiction    102        102 38.98215833  38.98215833
+#> 1  No Special Jurisdiction     20         20 39.09671667  39.09671667
+#> 2  No Special Jurisdiction     50         50 39.17210278  39.17210278
+#> 3  No Special Jurisdiction      3          3 39.19875000  39.19875000
+#> 4  No Special Jurisdiction     12         12 39.02736667  39.02736667
+#> 5  No Special Jurisdiction     73         73 38.81967778  38.81967778
+#> 6  No Special Jurisdiction      0       None 39.22533056  39.22533056
+#> 7  No Special Jurisdiction    147        147 39.16499167  39.16499167
+#> 8  No Special Jurisdiction    275        275 39.05690556  39.05690556
+#> 9  No Special Jurisdiction     35         35 39.16266389  39.16266389
+#> 10 No Special Jurisdiction     26         26 39.21617222  39.21617222
 #>         longitud  longitudname harm_ev                harm_evname man_coll
-#> 1  -76.629047220 -76.629047220      12 Motor Vehicle In-Transport        7
-#> 2  -76.720419440 -76.720419440      12 Motor Vehicle In-Transport        6
-#> 3  -76.659530560 -76.659530560       1          Rollover/Overturn        0
-#> 4  -76.636916670 -76.636916670       8                 Pedestrian        0
-#> 5  -76.597869440 -76.597869440      12 Motor Vehicle In-Transport        2
-#> 6  -76.600591670 -76.600591670       9               Pedalcyclist        0
-#> 7  -76.672713890 -76.672713890      42       Tree (Standing Only)        0
-#> 8  -76.668719440 -76.668719440      12 Motor Vehicle In-Transport        2
-#> 9  -76.781183330 -76.781183330      42       Tree (Standing Only)        0
-#> 10 -76.531572220 -76.531572220      12 Motor Vehicle In-Transport        6
+#> 1  -76.624222220 -76.624222220      12 Motor Vehicle In-Transport        6
+#> 2  -76.608405560 -76.608405560      12 Motor Vehicle In-Transport        6
+#> 3  -76.672713890 -76.672713890      42       Tree (Standing Only)        0
+#> 4  -76.708527780 -76.708527780       8                 Pedestrian        0
+#> 5  -76.690894440 -76.690894440      42       Tree (Standing Only)        0
+#> 6  -76.624466670 -76.624466670       8                 Pedestrian        0
+#> 7  -76.642452780 -76.642452780      42       Tree (Standing Only)        0
+#> 8  -76.527052780 -76.527052780       8                 Pedestrian        0
+#> 9  -76.668719440 -76.668719440      12 Motor Vehicle In-Transport        2
+#> 10 -76.698411110 -76.698411110      12 Motor Vehicle In-Transport        2
 #>                                                                     man_collname
-#> 1                                                     Sideswipe - Same Direction
+#> 1                                                                          Angle
 #> 2                                                                          Angle
 #> 3  The First Harmful Event was Not a Collision with a Motor Vehicle in Transport
 #> 4  The First Harmful Event was Not a Collision with a Motor Vehicle in Transport
-#> 5                                                                 Front-to-Front
+#> 5  The First Harmful Event was Not a Collision with a Motor Vehicle in Transport
 #> 6  The First Harmful Event was Not a Collision with a Motor Vehicle in Transport
 #> 7  The First Harmful Event was Not a Collision with a Motor Vehicle in Transport
-#> 8                                                                 Front-to-Front
-#> 9  The First Harmful Event was Not a Collision with a Motor Vehicle in Transport
-#> 10                                                                         Angle
+#> 8  The First Harmful Event was Not a Collision with a Motor Vehicle in Transport
+#> 9                                                                 Front-to-Front
+#> 10                                                                Front-to-Front
 #>    reljct1 reljct1name reljct2                reljct2name typ_int
-#> 1        0          No       1               Non-Junction       1
-#> 2        0          No       2               Intersection       3
+#> 1        0          No       8    Driveway Access Related       1
+#> 2        0          No       1               Non-Junction       1
 #> 3        0          No       1               Non-Junction       1
-#> 4        0          No       3       Intersection-Related       2
-#> 5        0          No       2               Intersection       2
-#> 6        0          No       2               Intersection       2
-#> 7        0          No       1               Non-Junction       1
-#> 8        0          No       2               Intersection       3
-#> 9        0          No       5 Entrance/Exit Ramp Related       1
-#> 10       0          No       8    Driveway Access Related       1
-#>              typ_intname rel_road rel_roadname wrk_zone wrk_zonename lgt_cond
-#> 1    Not an Intersection        1   On Roadway        0         None        1
-#> 2         T-Intersection        1   On Roadway        0         None        3
-#> 3    Not an Intersection        1   On Roadway        0         None        1
-#> 4  Four-Way Intersection        1   On Roadway        0         None        1
-#> 5  Four-Way Intersection        1   On Roadway        0         None        1
-#> 6  Four-Way Intersection        1   On Roadway        0         None        1
-#> 7    Not an Intersection        4  On Roadside        0         None        1
-#> 8         T-Intersection        1   On Roadway        0         None        1
-#> 9    Not an Intersection        3    On Median        0         None        3
-#> 10   Not an Intersection        1   On Roadway        0         None        1
-#>      lgt_condname weather weathername weather1 weather1name weather2
-#> 1        Daylight       1       Clear        1        Clear        0
-#> 2  Dark - Lighted       1       Clear        1        Clear        0
-#> 3        Daylight       1       Clear        1        Clear        0
-#> 4        Daylight       1       Clear        1        Clear        0
-#> 5        Daylight       1       Clear        1        Clear        0
-#> 6        Daylight       2        Rain        2         Rain        0
-#> 7        Daylight       1       Clear        1        Clear        0
-#> 8        Daylight       1       Clear        1        Clear        0
-#> 9  Dark - Lighted       1       Clear        1        Clear        0
-#> 10       Daylight      10      Cloudy       10       Cloudy        0
+#> 4        0          No       1               Non-Junction       1
+#> 5        0          No       1               Non-Junction       1
+#> 6        0          No       1               Non-Junction       1
+#> 7        0          No       5 Entrance/Exit Ramp Related       1
+#> 8        0          No       1               Non-Junction       1
+#> 9        0          No       2               Intersection       3
+#> 10       0          No       1               Non-Junction       1
+#>            typ_intname rel_road rel_roadname wrk_zone wrk_zonename lgt_cond
+#> 1  Not an Intersection        1   On Roadway        0         None        1
+#> 2  Not an Intersection        1   On Roadway        0         None        1
+#> 3  Not an Intersection        4  On Roadside        0         None        1
+#> 4  Not an Intersection        1   On Roadway        0         None        2
+#> 5  Not an Intersection        4  On Roadside        0         None        3
+#> 6  Not an Intersection        1   On Roadway        0         None        2
+#> 7  Not an Intersection        4  On Roadside        0         None        1
+#> 8  Not an Intersection        1   On Roadway        0         None        2
+#> 9       T-Intersection        1   On Roadway        0         None        1
+#> 10 Not an Intersection        1   On Roadway        0         None        2
+#>          lgt_condname weather  weathername weather1 weather1name weather2
+#> 1            Daylight      10       Cloudy       10       Cloudy        0
+#> 2            Daylight       1        Clear        1        Clear        0
+#> 3            Daylight       1        Clear        1        Clear        0
+#> 4  Dark - Not Lighted       4         Snow        4         Snow        0
+#> 5      Dark - Lighted       1        Clear        1        Clear        0
+#> 6  Dark - Not Lighted       2         Rain        2         Rain        0
+#> 7            Daylight       1        Clear        1        Clear        0
+#> 8  Dark - Not Lighted       1        Clear        1        Clear        0
+#> 9            Daylight       1        Clear        1        Clear        0
+#> 10 Dark - Not Lighted      98 Not Reported       98 Not Reported        0
 #>                            weather2name sch_bus sch_busname    rail
 #> 1  No Additional Atmospheric Conditions       0          No 0000000
 #> 2  No Additional Atmospheric Conditions       0          No 0000000
@@ -391,99 +393,99 @@ dplyr::slice_sample(crashes_detailed, n = 10)
 #> 3  Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes
 #> 4  Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes
 #> 5  Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes
-#> 6  Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes
+#> 6  Unknown EMS Scene Arrival Hour      98                Unknown if Arrived
 #> 7  Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes
 #> 8  Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes
 #> 9  Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes
 #> 10 Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes
 #>    hosp_hr                      hosp_hrname hosp_mn
-#> 1       99                          Unknown      99
-#> 2       88 Not Applicable (Not Transported)      88
-#> 3       88 Not Applicable (Not Transported)      88
-#> 4       99                          Unknown      99
+#> 1       88 Not Applicable (Not Transported)      88
+#> 2       99                          Unknown      99
+#> 3       99                          Unknown      99
+#> 4       88 Not Applicable (Not Transported)      88
 #> 5       99                          Unknown      99
-#> 6       99                          Unknown      99
-#> 7       99                          Unknown      99
-#> 8       99                          Unknown      99
-#> 9       88 Not Applicable (Not Transported)      88
+#> 6       88 Not Applicable (Not Transported)      88
+#> 7       88 Not Applicable (Not Transported)      88
+#> 8       88 Not Applicable (Not Transported)      88
+#> 9       99                          Unknown      99
 #> 10      99                          Unknown      99
 #>                          hosp_mnname cf1 cf1name cf2 cf2name cf3 cf3name fatals
-#> 1  Unknown EMS Hospital Arrival Time   0    None   0    None   0    None      1
-#> 2   Not Applicable (Not Transported)   0    None   0    None   0    None      1
-#> 3   Not Applicable (Not Transported)   0    None   0    None   0    None      1
-#> 4  Unknown EMS Hospital Arrival Time   0    None   0    None   0    None      1
+#> 1   Not Applicable (Not Transported)   0    None   0    None   0    None      1
+#> 2  Unknown EMS Hospital Arrival Time   0    None   0    None   0    None      1
+#> 3  Unknown EMS Hospital Arrival Time   0    None   0    None   0    None      1
+#> 4   Not Applicable (Not Transported)   0    None   0    None   0    None      1
 #> 5  Unknown EMS Hospital Arrival Time   0    None   0    None   0    None      1
-#> 6  Unknown EMS Hospital Arrival Time   0    None   0    None   0    None      1
-#> 7  Unknown EMS Hospital Arrival Time   0    None   0    None   0    None      1
-#> 8  Unknown EMS Hospital Arrival Time   0    None   0    None   0    None      1
-#> 9   Not Applicable (Not Transported)   0    None   0    None   0    None      1
+#> 6   Not Applicable (Not Transported)   0    None   0    None   0    None      1
+#> 7   Not Applicable (Not Transported)   0    None   0    None   0    None      1
+#> 8   Not Applicable (Not Transported)   0    None   0    None   0    None      1
+#> 9  Unknown EMS Hospital Arrival Time   0    None   0    None   0    None      1
 #> 10 Unknown EMS Hospital Arrival Time   0    None   0    None   0    None      1
 #>    drunk_dr road_fnc road_fncname
 #> 1         0       NA           NA
-#> 2         1       NA           NA
+#> 2         0       NA           NA
 #> 3         0       NA           NA
 #> 4         0       NA           NA
 #> 5         0       NA           NA
 #> 6         0       NA           NA
 #> 7         0       NA           NA
 #> 8         0       NA           NA
-#> 9         1       NA           NA
-#> 10        0       NA           NA
-#>                                                                                                                                                                                                                                            nm_crashes
-#> 1                                                                                                                                                                                                                                                NULL
-#> 2                                                                                                                                                                                                                                                NULL
-#> 3                                                                                                                                                                                                                                                NULL
-#> 4  2019, 2019, 2, 3, Failure to Yield Right-Of-Way, Failure to Obey Traffic Signs, Signals or Officer, 2, 3, Failure to Yield Right-Of-Way, Failure to Obey Traffic Signs, Signals or Officer, 1, 1, 24, 24, Maryland, Maryland, 240302, 240302, 0, 0
-#> 5                                                                                                                                                                                                                                                NULL
-#> 6  2019, 2019, 2, 3, Failure to Yield Right-Of-Way, Failure to Obey Traffic Signs, Signals or Officer, 2, 3, Failure to Yield Right-Of-Way, Failure to Obey Traffic Signs, Signals or Officer, 1, 1, 24, 24, Maryland, Maryland, 240119, 240119, 0, 0
-#> 7                                                                                                                                                                                                                                                NULL
-#> 8                                                                                                                                                                                                                                                NULL
-#> 9                                                                                                                                                                                                                                                NULL
-#> 10                                                                                                                                                                                                                                               NULL
+#> 9         0       NA           NA
+#> 10        1       NA           NA
+#>                                                                                                                                                                                                                                                                                                            nm_crashes
+#> 1                                                                                                                                                                                                                                                                                                                NULL
+#> 2                                                                                                                                                                                                                                                                                                                NULL
+#> 3                                                                                                                                                                                                                                                                                                                NULL
+#> 4                                          2019, 2019, 4, 9, In Roadway Improperly (Standing, Lying, Working, Playing, etc.), Wrong-Way Riding or Walking, 4, 9, In Roadway Improperly (Standing, Lying, Working, Playing, etc.), Wrong-Way Riding or Walking, 1, 1, 24, 24, Maryland, Maryland, 240048, 240048, 0, 0
+#> 5                                                                                                                                                                                                                                                                                                                NULL
+#> 6  2019, 2019, 4, 19, In Roadway Improperly (Standing, Lying, Working, Playing, etc.), Not Visible (Dark clothing, No Lighting, etc.), 4, 19, In Roadway Improperly (Standing, Lying, Working, Playing, etc.), Not Visible (Dark clothing, No Lighting, etc.), 1, 1, 24, 24, Maryland, Maryland, 240242, 240242, 0, 0
+#> 7                                                                                                                                                                                                                                                                                                                NULL
+#> 8                                                                                                                                                                                                                2019, 2, Failure to Yield Right-Of-Way, 2, Failure to Yield Right-Of-Way, 1, 24, Maryland, 240373, 0
+#> 9                                                                                                                                                                                                                                                                                                                NULL
+#> 10                                                                                                                                                                                                                                                                                                               NULL
 #>                                                               nm_impairs
 #> 1                                                                   NULL
 #> 2                                                                   NULL
 #> 3                                                                   NULL
-#> 4  2019, 99, Reported as Unknown if Impaired, 1, 24, Maryland, 240302, 0
+#> 4  2019, 99, Reported as Unknown if Impaired, 1, 24, Maryland, 240048, 0
 #> 5                                                                   NULL
-#> 6  2019, 99, Reported as Unknown if Impaired, 1, 24, Maryland, 240119, 0
+#> 6                     2019, 98, Not Reported, 1, 24, Maryland, 240242, 0
 #> 7                                                                   NULL
-#> 8                                                                   NULL
+#> 8                     2019, 98, Not Reported, 1, 24, Maryland, 240373, 0
 #> 9                                                                   NULL
 #> 10                                                                  NULL
-#>                                                        nm_priors
-#> 1                                                           NULL
-#> 2                                                           NULL
-#> 3                                                           NULL
-#> 4  2019, 3, Crossing Roadway, NA, NA, 1, 24, Maryland, 240302, 0
-#> 5                                                           NULL
-#> 6  2019, 3, Crossing Roadway, NA, NA, 1, 24, Maryland, 240119, 0
-#> 7                                                           NULL
-#> 8                                                           NULL
-#> 9                                                           NULL
-#> 10                                                          NULL
+#>                                                                                                              nm_priors
+#> 1                                                                                                                 NULL
+#> 2                                                                                                                 NULL
+#> 3                                                                                                                 NULL
+#> 4     2019, 5, Movement Along Roadway with Traffic (In or Adjacent to Travel Lane), NA, NA, 1, 24, Maryland, 240048, 0
+#> 5                                                                                                                 NULL
+#> 6  2019, 6, Movement Along Roadway Against Traffic (In or Adjacent to Travel Lane), NA, NA, 1, 24, Maryland, 240242, 0
+#> 7                                                                                                                 NULL
+#> 8                                                        2019, 3, Crossing Roadway, NA, NA, 1, 24, Maryland, 240373, 0
+#> 9                                                                                                                 NULL
+#> 10                                                                                                                NULL
 #>                                 safety_e_qs park_works
 #> 1                                      NULL       NULL
 #> 2                                      NULL       NULL
 #> 3                                      NULL       NULL
-#> 4  2019, NA, NA, 1, 24, Maryland, 240302, 0       NULL
+#> 4  2019, NA, NA, 1, 24, Maryland, 240048, 0       NULL
 #> 5                                      NULL       NULL
-#> 6  2019, NA, NA, 1, 24, Maryland, 240119, 0       NULL
+#> 6  2019, NA, NA, 1, 24, Maryland, 240242, 0       NULL
 #> 7                                      NULL       NULL
-#> 8                                      NULL       NULL
+#> 8  2019, NA, NA, 1, 24, Maryland, 240373, 0       NULL
 #> 9                                      NULL       NULL
 #> 10                                     NULL       NULL
-#>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            pb_types
-#> 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              NULL
-#> 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              NULL
-#> 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              NULL
-#> 4  0, 0, Not a Cyclist, Not a Cyclist, 0, 0, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 2019, 2019, 1, 1, Northbound, Northbound, 3, 3, Straight through, Straight through, 47, 47, 47 Years, 47 Years, 1, 1, Yes, Yes, 5, 5, Pedestrian, Pedestrian, 1, 1, Male, Male, 1, 1, Yes, Yes, 0, 0, None Noted, None Noted, 750, 750, Crossing Roadway - Vehicle Not Turning, Crossing Roadway - Vehicle Not Turning, 760, 760, Pedestrian Failed to Yield, Pedestrian Failed to Yield, 2, 2, Eastbound, Eastbound, 1, 1, Nearside, Nearside, 1, 1, At Intersection, At Intersection, 2, 2, Crosswalk Area, Crosswalk Area, 1a, 1a, Motorist traveling straight through - Crash Occurred on Near (Approach) Side of Intersection / Pedestrian within crosswalk area, traveled from motorist`s left, Motorist traveling straight through - Crash Occurred on Near (Approach) Side of Intersection / Pedestrian within crosswalk area, traveled from motorist`s left, 1, 1, 24, 24, Maryland, Maryland, 240302, 240302, 0, 1
-#> 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              NULL
-#> 6                                                                                                                                        158, 158, Bicyclist Failed to Yield - Signalized Intersection, Bicyclist Failed to Yield - Signalized Intersection, 153, 153, Bicyclist Ride Out - Signalized Intersection, Bicyclist Ride Out - Signalized Intersection, 2, 2, Facing Traffic, Facing Traffic, 1, 1, At Intersection, At Intersection, 1, 1, Travel Lane, Travel Lane, 2019, 2019, 7, 7, Not a Pedestrian, Not a Pedestrian, 7, 7, Not a Pedestrian, Not a Pedestrian, 55, 55, 55 Years, 55 Years, 0, 0, None Noted, None Noted, 6, 6, Bicyclist, Bicyclist, 1, 1, Male, Male, 0, 0, None Noted, None Noted, 0, 0, None Noted, None Noted, 0, 0, Not a Pedestrian, Not a Pedestrian, 0, 0, Not a Pedestrian, Not a Pedestrian, 7, 7, Not a Pedestrian, Not a Pedestrian, 7, 7, Not a Pedestrian, Not a Pedestrian, 7, 7, Not a Pedestrian, Not a Pedestrian, 77, 77, Not a Pedestrian, Not a Pedestrian, 7, 7, Not a Pedestrian, Not a Pedestrian, 1, 1, 24, 24, Maryland, Maryland, 240119, 240119, 0, 1
-#> 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              NULL
-#> 8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              NULL
-#> 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              NULL
-#> 10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             NULL
+#>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     pb_types
+#> 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       NULL
+#> 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       NULL
+#> 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       NULL
+#> 4  0, 0, 0, Not a Cyclist, Not a Cyclist, Not a Cyclist, 0, 0, 0, Not a Cyclist, Not a Cyclist, Not a Cyclist, 7, 7, 7, Not a Cyclist, Not a Cyclist, Not a Cyclist, 7, 7, 7, Not a Cyclist, Not a Cyclist, Not a Cyclist, 7, 7, 7, Not a Cyclist, Not a Cyclist, Not a Cyclist, 2019, 2019, 2019, 8, 8, 8, Not Applicable, Not Applicable, Not Applicable, 8, 8, 8, Not Applicable, Not Applicable, Not Applicable, 26, 26, 26, 26 Years, 26 Years, 26 Years, 0, 0, 0, None Noted, None Noted, None Noted, 5, 5, 5, Pedestrian, Pedestrian, Pedestrian, 1, 1, 1, Male, Male, Male, 0, 0, 0, None Noted, None Noted, None Noted, 0, 0, 0, None Noted, None Noted, None Noted, 400, 400, 400, Walking/Running Along Roadway, Walking/Running Along Roadway, Walking/Running Along Roadway, 410, 410, 410, Walking/Running Along Roadway With Traffic - From Behind, Walking/Running Along Roadway With Traffic - From Behind, Walking/Running Along Roadway With Traffic - From Behind, 8, 8, 8, Not Applicable, Not Applicable, Not Applicable, 8, 8, 8, Not Applicable, Not Applicable, Not Applicable, 3, 3, 3, Not At Intersection, Not At Intersection, Not At Intersection, 3, 3, 3, Travel Lane, Travel Lane, Travel Lane, 8, 8, 8, Not Applicable, Not Applicable, Not Applicable, 1, 1, 2, 24, 24, 24, Maryland, Maryland, Maryland, 240048, 240048, 240048, 0, 1, 1
+#> 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       NULL
+#> 6                                                                                                                                                                                                                                                                                                                                                                                                                                                       0, 0, Not a Cyclist, Not a Cyclist, 0, 0, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 2019, 2019, 8, 8, Not Applicable, Not Applicable, 8, 8, Not Applicable, Not Applicable, 32, 32, 32 Years, 32 Years, 0, 0, None Noted, None Noted, 5, 5, Pedestrian, Pedestrian, 1, 1, Male, Male, 0, 0, None Noted, None Noted, 0, 0, None Noted, None Noted, 400, 400, Walking/Running Along Roadway, Walking/Running Along Roadway, 440, 440, Walking/Running Along Roadway Against Traffic - From Front, Walking/Running Along Roadway Against Traffic - From Front, 8, 8, Not Applicable, Not Applicable, 8, 8, Not Applicable, Not Applicable, 3, 3, Not At Intersection, Not At Intersection, 3, 3, Travel Lane, Travel Lane, 8, 8, Not Applicable, Not Applicable, 1, 1, 24, 24, Maryland, Maryland, 240242, 240242, 0, 1
+#> 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       NULL
+#> 8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     0, 0, Not a Cyclist, Not a Cyclist, 0, 0, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 2019, 2019, 8, 8, Not Applicable, Not Applicable, 8, 8, Not Applicable, Not Applicable, 50, 50, 50 Years, 50 Years, 0, 0, None Noted, None Noted, 5, 5, Pedestrian, Pedestrian, 1, 1, Male, Male, 0, 0, None Noted, None Noted, 0, 0, None Noted, None Noted, 750, 750, Crossing Roadway - Vehicle Not Turning, Crossing Roadway - Vehicle Not Turning, 760, 760, Pedestrian Failed to Yield, Pedestrian Failed to Yield, 8, 8, Not Applicable, Not Applicable, 8, 8, Not Applicable, Not Applicable, 3, 3, Not At Intersection, Not At Intersection, 3, 3, Travel Lane, Travel Lane, 8, 8, Not Applicable, Not Applicable, 1, 1, 24, 24, Maryland, Maryland, 240373, 240373, 0, 1
+#> 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       NULL
+#> 10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      NULL
 ```
 
 ## Related packages and projects
