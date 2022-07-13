@@ -18,7 +18,7 @@ get_fars_crash_persons(
 )
 }
 \arguments{
-\item{year}{numeric vector. Year or range with start and end year. 2010 to 2019 supported.}
+\item{year}{numeric vector. Year or range with start and end year. 2010 to 2020 supported.}
 
 \item{start_year}{Start year for crash reports.}
 

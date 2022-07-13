@@ -4,10 +4,10 @@
 \alias{get_fars_zip}
 \title{Download FARS data files as zipped CSV or SAS files}
 \usage{
-get_fars_zip(year = 2019, format = "csv", path = NULL, pr = FALSE)
+get_fars_zip(year = 2020, format = "csv", path = NULL, pr = FALSE)
 }
 \arguments{
-\item{year}{Year of data from 1975 to 2019, Default: 2019}
+\item{year}{Year of data from 1975 to 2020, Default: 2020}
 
 \item{format}{Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.}
 
