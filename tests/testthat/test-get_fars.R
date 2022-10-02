@@ -7,8 +7,8 @@ test_that("Test lookup_fips outputs", {
 })
 
 test_that("get_fars", {
-  expect_error(get_fars(year = 2000), "Check on 'year' failed")
-  expect_error(get_fars(year = 2019, state = "MD", api = "crashes"), "A valid county name or FIPS is required")
+  expect_error(get_fars(year = 2000), "must be greater than or equal to")
+  expect_error(get_fars(year = 2019, state = "MD", api = "crashes"), "must be a valid county name or FIPS code")
   expect_type(get_fars(year = 2019, state = "MD", county = "Garrett County"), "list")
   expect_type(get_fars(year = 2019, state = "MD", county = "Garrett County", details = TRUE), "list")
   expect_type(get_fars(year = 2019, state = "MD", api = "summary count"), "list")
