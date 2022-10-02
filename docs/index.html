@@ -8,8 +8,8 @@
 <meta name="description" content="Get crash data for U.S. states and counties.">
 <title>An R package for accessing the Fatality Analysis Reporting System (FARS) API • crashapi</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="An R package for accessing the Fatality Analysis Reporting System (FARS) API">
 <meta property="og:description" content="Get crash data for U.S. states and counties.">
@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="index.html">crashapi</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,7 @@ Get Crashes By Location</li>
 Get Crashes By Vehicle</li>
 <li>
 <input type="checkbox" disabled checked>
-Get Summary Counts (not currently working)</li>
+Get Summary Counts</li>
 <li>
 <input type="checkbox" disabled checked>
 Get Variables and Get Variable Attributes</li>
@@ -96,7 +96,7 @@ Get Crashes By Occupant (partial support)</li>
 </ul>
 <p>Most of these APIs support XML, JSV, CSV, and JSON output formats. This package only uses JSON with the exception of get_fars_year (which supports downloading CSV files).</p>
 <p>For reference, this package also includes a list of terms and NHTSA technical definitions in <code>fars_terms</code> and a list of variable labels in <code>fars_vars_labels</code>.</p>
-<p>The FARS API currently only provides access to data from 2010 to 2019. The <code>get_fars_zip</code> function can be used to access FARS data files from 1975 to 2019 that that are available for download on through <a href="https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/" class="external-link">the NHTSA File Downloads site</a> as zipped CSV or SAS files (not available through the NHTSA FARS API). This site also provides extensive technical documentation on coding and use of the FARS data files.</p>
+<p>The FARS API currently provides access to data from 2010 to 2020. The <code>get_fars_zip</code> function can be used to access FARS data files from 1975 to 2020 that that are available for download on through <a href="https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/" class="external-link">the NHTSA File Downloads site</a> as zipped CSV or SAS files (not available through the NHTSA FARS API). This site also provides extensive technical documentation on coding and use of the FARS data files.</p>
 <p>Earlier data along with data from the the <a href="https://www.nhtsa.gov/national-automotive-sampling-system-nass/nass-general-estimates-system" class="external-link">General Estimates System</a> (GES) / <a href="https://www.nhtsa.gov/crash-data-systems/crash-report-sampling-system-crss" class="external-link">Crash Report Sampling System</a> (CRSS) is also available through the <a href="https://cdan.dot.gov/query" class="external-link">Fatality and Injury Reporting System Tool</a> (FIRST).</p>
 <p>The <a href="https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx" class="external-link">NHTSA website</a> also provides additional information on the release data and version status for the FARS data files:</p>
 <table class="table">
@@ -153,17 +153,22 @@ Get Crashes By Occupant (partial support)</li>
 </tr>
 <tr class="even">
 <td>2019</td>
+<td>Final</td>
+<td>March 2, 2022</td>
+</tr>
+<tr class="odd">
+<td>2020</td>
 <td>Annual</td>
-<td>June 24, 2021</td>
+<td>March 2, 2022</td>
 </tr>
 </tbody>
 </table>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of crashapi using the remotes package:</p>
+<p>You can install the development version of crashapi using the pak package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"elipousson/crashapi"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="http://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"elipousson/crashapi"</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -177,7 +182,7 @@ Get Crashes By Occupant (partial support)</li>
 <code class="sourceCode R"><span class="co"># Get summary crash count and fatality count data for Maryland from 2010 to 2019</span>
 <span class="va">md_summary</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="reference/get_fars.html">get_fars</a></span><span class="op">(</span>
-    year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2010</span>, <span class="fl">2019</span><span class="op">)</span>,
+    year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2010</span>, <span class="fl">2020</span><span class="op">)</span>,
     state <span class="op">=</span> <span class="st">"MD"</span>,
     api <span class="op">=</span> <span class="st">"summary count"</span>
   <span class="op">)</span>
@@ -186,11 +191,12 @@ Get Crashes By Occupant (partial support)</li>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"red"</span>, group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/README-get_fars_summary-1.png" width="100%"></p>
 <p>You can download crash data and set geometry to TRUE optionally convert the data frame into an <code>sf</code> object for mapping.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">crashes_sf</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="reference/get_fars.html">get_fars</a></span><span class="op">(</span>
-  year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2010</span>, <span class="fl">2012</span><span class="op">)</span>,
+  year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2018</span>, <span class="fl">2020</span><span class="op">)</span>,
   state <span class="op">=</span> <span class="st">"MD"</span>,
   county <span class="op">=</span> <span class="st">"Baltimore city"</span>,
   geometry <span class="op">=</span> <span class="cn">TRUE</span>
@@ -220,215 +226,234 @@ Get Crashes By Occupant (partial support)</li>
 <span class="co">#&gt;      CountyName                  CrashDate Fatals Peds Persons St_Case State</span>
 <span class="co">#&gt; 1     BRONX (5) /Date(1549865820000-0500)/      2    1       7  360042    36</span>
 <span class="co">#&gt; 2     ERIE (29) /Date(1551915000000-0500)/      1    0       4  360159    36</span>
-<span class="co">#&gt; 3   ORANGE (71) /Date(1558274040000-0400)/      1    0       1  360277    36</span>
-<span class="co">#&gt; 4   QUEENS (81) /Date(1561656240000-0400)/      1    0       6  360319    36</span>
-<span class="co">#&gt; 5     BRONX (5) /Date(1561866000000-0400)/      1    0      11  360339    36</span>
-<span class="co">#&gt; 6    KINGS (47) /Date(1564564080000-0400)/      1    0       5  360440    36</span>
-<span class="co">#&gt; 7 SUFFOLK (103) /Date(1563792360000-0400)/      1    0       2  360551    36</span>
+<span class="co">#&gt; 3   QUEENS (81) /Date(1561656240000-0400)/      1    0       6  360319    36</span>
+<span class="co">#&gt; 4     BRONX (5) /Date(1561866000000-0400)/      1    0      11  360339    36</span>
+<span class="co">#&gt; 5    KINGS (47) /Date(1564564080000-0400)/      1    0       5  360440    36</span>
+<span class="co">#&gt; 6 SUFFOLK (103) /Date(1563792360000-0400)/      1    0       2  360551    36</span>
+<span class="co">#&gt; 7   ORANGE (71) /Date(1558274040000-0400)/      1    0       1  360277    36</span>
 <span class="co">#&gt;   StateName TotalVehicles</span>
 <span class="co">#&gt; 1  New York             5</span>
 <span class="co">#&gt; 2  New York             5</span>
-<span class="co">#&gt; 3  New York             6</span>
+<span class="co">#&gt; 3  New York             5</span>
 <span class="co">#&gt; 4  New York             5</span>
 <span class="co">#&gt; 5  New York             5</span>
-<span class="co">#&gt; 6  New York             5</span>
+<span class="co">#&gt; 6  New York             6</span>
 <span class="co">#&gt; 7  New York             6</span></code></pre></div>
 <p>If you call <code><a href="reference/get_fars.html">get_fars()</a></code> or <code><a href="reference/get_fars.html">get_fars_crashes()</a></code> with details set to TRUE, additional information from <code><a href="reference/get_fars.html">get_fars_cases()</a></code> (including the crash date and time) is appended to the crash data frame.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Get fatal crashes for Anne Arundel County, MD for 2019 and append details</span>
-<span class="va">crashes_detailed</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_fars.html">get_fars</a></span><span class="op">(</span>
+<span class="va">crashes_detailed</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="reference/get_fars.html">get_fars</a></span><span class="op">(</span>
   year <span class="op">=</span> <span class="fl">2019</span>,
   state <span class="op">=</span> <span class="st">"MD"</span>,
   county <span class="op">=</span> <span class="st">"Anne Arundel County"</span>,
   details <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span>
-<span class="co">#&gt; ℹ Downloading case data for MD crashes.</span>
+<span class="co">#&gt; ■■■                                8% | ETA:  1m</span>
+<span class="co">#&gt; ■■■■■■                            18% | ETA:  1m</span>
+<span class="co">#&gt; ■■■■■■■■                          22% | ETA:  1m</span>
+<span class="co">#&gt; ■■■■■■■■■                         28% | ETA: 47s</span>
+<span class="co">#&gt; ■■■■■■■■■■                        30% | ETA: 45s</span>
+<span class="co">#&gt; ■■■■■■■■■■■                       35% | ETA: 42s</span>
+<span class="co">#&gt; ■■■■■■■■■■■■■                     40% | ETA: 39s</span>
+<span class="co">#&gt; ■■■■■■■■■■■■■■■                   45% | ETA: 35s</span>
+<span class="co">#&gt; ■■■■■■■■■■■■■■■■                  50% | ETA: 32s</span>
+<span class="co">#&gt; ■■■■■■■■■■■■■■■■■                 55% | ETA: 29s</span>
+<span class="co">#&gt; ■■■■■■■■■■■■■■■■■■■               60% | ETA: 25s</span>
+<span class="co">#&gt; ■■■■■■■■■■■■■■■■■■■■■             65% | ETA: 22s</span>
+<span class="co">#&gt; ■■■■■■■■■■■■■■■■■■■■■■            70% | ETA: 19s</span>
+<span class="co">#&gt; ■■■■■■■■■■■■■■■■■■■■■■■           75% | ETA: 16s</span>
+<span class="co">#&gt; ■■■■■■■■■■■■■■■■■■■■■■■■■         80% | ETA: 13s</span>
+<span class="co">#&gt; ■■■■■■■■■■■■■■■■■■■■■■■■■■        82% | ETA: 11s</span>
+<span class="co">#&gt; ■■■■■■■■■■■■■■■■■■■■■■■■■■■       88% | ETA:  8s</span>
+<span class="co">#&gt; ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     92% | ETA:  5s</span>
+<span class="co">#&gt; ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    98% | ETA:  2s</span>
 
 <span class="co"># Show 10 fatal crashes at random</span>
 <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_sample</a></span><span class="op">(</span><span class="va">crashes_detailed</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
 <span class="co">#&gt;    case_year totalvehicles state statename st_case       date  time</span>
-<span class="co">#&gt; 1       2019             2    24  Maryland  240162 2019-06-07 14:36</span>
-<span class="co">#&gt; 2       2019             2    24  Maryland  240294 2019-09-14 15:46</span>
-<span class="co">#&gt; 3       2019             1    24  Maryland  240119 2019-05-05 11:39</span>
-<span class="co">#&gt; 4       2019             2    24  Maryland  240190 2019-06-30 18:20</span>
-<span class="co">#&gt; 5       2019             1    24  Maryland  240236 2019-07-30 17:54</span>
-<span class="co">#&gt; 6       2019             2    24  Maryland  240169 2019-06-14 22:30</span>
-<span class="co">#&gt; 7       2019             2    24  Maryland  240265 2019-08-27 07:08</span>
-<span class="co">#&gt; 8       2019             1    24  Maryland  240096 2019-04-16 20:06</span>
-<span class="co">#&gt; 9       2019             2    24  Maryland  240389 2019-09-27 20:31</span>
-<span class="co">#&gt; 10      2019             1    24  Maryland  240048 2019-02-20 18:25</span>
+<span class="co">#&gt; 1       2019             2    24  Maryland  240265 2019-08-27 07:08</span>
+<span class="co">#&gt; 2       2019             2    24  Maryland  240149 2019-06-02 13:07</span>
+<span class="co">#&gt; 3       2019             1    24  Maryland  240236 2019-07-30 17:54</span>
+<span class="co">#&gt; 4       2019             1    24  Maryland  240048 2019-02-20 18:25</span>
+<span class="co">#&gt; 5       2019             1    24  Maryland  240319 2019-09-20 21:02</span>
+<span class="co">#&gt; 6       2019             1    24  Maryland  240242 2019-06-29 23:14</span>
+<span class="co">#&gt; 7       2019             1    24  Maryland  240366 2019-11-04 15:58</span>
+<span class="co">#&gt; 8       2019             1    24  Maryland  240373 2019-11-10 18:10</span>
+<span class="co">#&gt; 9       2019             2    24  Maryland  240429 2019-12-11 15:16</span>
+<span class="co">#&gt; 10      2019             3    24  Maryland  240069 2019-03-15 01:26</span>
 <span class="co">#&gt;               datetime peds pernotmvit ve_total ve_forms pvh_invl</span>
-<span class="co">#&gt; 1  2019-06-07 14:36:00    0          0        2        2        0</span>
-<span class="co">#&gt; 2  2019-09-14 15:46:00    0          2        2        1        1</span>
-<span class="co">#&gt; 3  2019-05-05 11:39:00    1          1        1        1        0</span>
-<span class="co">#&gt; 4  2019-06-30 18:20:00    1          1        2        1        1</span>
-<span class="co">#&gt; 5  2019-07-30 17:54:00    0          0        1        1        0</span>
-<span class="co">#&gt; 6  2019-06-14 22:30:00    0          0        2        2        0</span>
-<span class="co">#&gt; 7  2019-08-27 07:08:00    0          0        2        2        0</span>
-<span class="co">#&gt; 8  2019-04-16 20:06:00    1          1        1        1        0</span>
-<span class="co">#&gt; 9  2019-09-27 20:31:00    0          0        2        2        0</span>
-<span class="co">#&gt; 10 2019-02-20 18:25:00    1          1        1        1        0</span>
-<span class="co">#&gt;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       n_persons</span>
-<span class="co">#&gt; 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          NULL</span>
-<span class="co">#&gt; 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          NULL</span>
-<span class="co">#&gt; 3                             55, 55 Years, 97, Not a Motor Vehicle Occupant, 9, Not Reported, 130, 0.130 % BAC, 2, Test Given, 1, Blood, NA, NA, NA, 3, ANNE ARUNDEL (3), 2019, 5, 5, 5, 13, 13:00-13:59, 39, 39, 5, May, 1339, 1339, 2019, 2019, 0, Not Applicable, 9, Reported as Unknown, NA, NA, NA, NA, NA, NA, 9, Reported as Unknown, NA, NA, NA, NA, NA, NA, 8, Not Reported, 2, Test Given, 8, Not Applicable, 0, Ejection Path Not Applicable, NA, NA, 0, Not Extricated or Not Applicable, NA, NA, 3, Principal Arterial - Other, 9, Pedalcyclist, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, 7, Non-Hispanic, 5, EMS Ground, 11, 11:00am-11:59am, NA, NA, NA, NA, NA, NA, 4, Fatal Injury (K), 2, 2, 0, 0, 3, At Intersection - Not In Crosswalk, NA, NA, NA, NA, 0, The First Harmful Event was Not a Collision with a Motor Vehicle in Transport, 39, 39, NA, NA, 5, May, NA, 1, 6, Bicyclist, 0, None, 0, None, 0, None, NA, NA, NA, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, NA, NA, NA, NA, 2, Urban, NA, 0, No, 0, Not a Motor Vehicle Occupant, 1, Male, NA, NA, 24, Maryland, 1, NA, 240119, NA, NA, 0, 1, NA, NA, NA, NA, NA, NA, 0, No</span>
-<span class="co">#&gt; 4                           41, 41 Years, 97, Not a Motor Vehicle Occupant, 9, Not Reported, 20, 0.020 % BAC, 2, Test Given, 1, Blood, NA, NA, NA, 3, ANNE ARUNDEL (3), 2019, 30, 30, 30, 18, 18:00-18:59, 33, 33, 6, June, 1833, 1833, 2019, 2019, 7, Died at Scene, 0, No (Alcohol Not Involved), NA, NA, NA, NA, NA, NA, 0, No (drugs not involved), NA, NA, NA, NA, NA, NA, 8, Not Reported, 2, Test Given, 8, Not Applicable, 0, Ejection Path Not Applicable, NA, NA, 0, Not Extricated or Not Applicable, NA, NA, 3, Principal Arterial - Other, 8, Pedestrian, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, 7, Non-Hispanic, 0, Not Transported, 18, 6:00pm-6:59pm, NA, NA, NA, NA, NA, NA, 4, Fatal Injury (K), 0, 0, 13, 13, 20, Shoulder/Roadside, NA, NA, NA, NA, 0, The First Harmful Event was Not a Collision with a Motor Vehicle in Transport, 20, 20, NA, NA, 6, June, NA, 1, 5, Pedestrian, 0, None, 0, None, 0, None, NA, NA, NA, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, NA, NA, NA, NA, 2, Urban, NA, 0, No, 0, Not a Motor Vehicle Occupant, 1, Male, NA, NA, 24, Maryland, 1, NA, 240190, NA, NA, 0, 1, NA, NA, NA, NA, NA, NA, 1, Yes</span>
-<span class="co">#&gt; 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          NULL</span>
-<span class="co">#&gt; 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          NULL</span>
-<span class="co">#&gt; 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          NULL</span>
-<span class="co">#&gt; 8                                         12, 12 Years, 97, Not a Motor Vehicle Occupant, 9, Not Reported, 0, 0.000 % BAC, 2, Test Given, 1, Blood, NA, NA, NA, 3, ANNE ARUNDEL (3), 2019, 16, 17, 17, 8, 8:00-8:59, 15, 15, 4, April, 815, 815, 2019, 2019, 0, Not Applicable, 0, No (Alcohol Not Involved), NA, NA, NA, NA, NA, NA, 0, No (drugs not involved), NA, NA, NA, NA, NA, NA, 8, Not Reported, 2, Test Given, 8, Not Applicable, 0, Ejection Path Not Applicable, NA, NA, 0, Not Extricated or Not Applicable, NA, NA, 7, Local, 8, Pedestrian, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, 7, Non-Hispanic, 5, EMS Ground, 20, 8:00pm-8:59pm, NA, NA, NA, NA, NA, NA, 4, Fatal Injury (K), 12, 12, 9, 9, 3, At Intersection - Not In Crosswalk, NA, NA, NA, NA, 0, The First Harmful Event was Not a Collision with a Motor Vehicle in Transport, 6, 6, NA, NA, 4, April, NA, 1, 5, Pedestrian, 0, None, 0, None, 0, None, NA, NA, NA, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, NA, NA, NA, NA, 2, Urban, NA, 0, No, 0, Not a Motor Vehicle Occupant, 2, Female, NA, NA, 24, Maryland, 1, NA, 240096, NA, NA, 0, 1, NA, NA, NA, NA, NA, NA, 0, No</span>
-<span class="co">#&gt; 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          NULL</span>
-<span class="co">#&gt; 10 26, 26 Years, 97, Not a Motor Vehicle Occupant, 9, Not Reported, 0, 0.000 % BAC, 2, Test Given, 1, Blood, NA, NA, NA, 3, ANNE ARUNDEL (3), 2019, 20, 20, 20, 18, 18:00-18:59, 43, 43, 2, February, 1843, 1843, 2019, 2019, 7, Died at Scene, 9, Reported as Unknown, NA, NA, NA, NA, NA, NA, 9, Reported as Unknown, NA, NA, NA, NA, NA, NA, 8, Not Reported, 2, Test Given, 8, Not Applicable, 0, Ejection Path Not Applicable, NA, NA, 0, Not Extricated or Not Applicable, NA, NA, 5, Major Collector, 8, Pedestrian, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, 7, Non-Hispanic, 0, Not Transported, 18, 6:00pm-6:59pm, NA, NA, NA, NA, NA, NA, 4, Fatal Injury (K), 0, 0, 18, 18, 11, Not at Intersection - On Roadway, Not in Marked Crosswalk, NA, NA, NA, NA, 0, The First Harmful Event was Not a Collision with a Motor Vehicle in Transport, 25, 25, NA, NA, 2, February, NA, 1, 5, Pedestrian, 0, None, 0, None, 0, None, NA, NA, NA, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, NA, NA, NA, NA, 2, Urban, NA, 0, No, 0, Not a Motor Vehicle Occupant, 1, Male, NA, NA, 24, Maryland, 1, NA, 240048, NA, NA, 0, 1, NA, NA, NA, NA, NA, NA, 0, No</span>
+<span class="co">#&gt; 1  2019-08-27 07:08:00    0          0        2        2        0</span>
+<span class="co">#&gt; 2  2019-06-02 13:07:00    0          0        2        2        0</span>
+<span class="co">#&gt; 3  2019-07-30 17:54:00    0          0        1        1        0</span>
+<span class="co">#&gt; 4  2019-02-20 18:25:00    1          1        1        1        0</span>
+<span class="co">#&gt; 5  2019-09-20 21:02:00    0          0        1        1        0</span>
+<span class="co">#&gt; 6  2019-06-29 23:14:00    1          1        1        1        0</span>
+<span class="co">#&gt; 7  2019-11-04 15:58:00    0          0        1        1        0</span>
+<span class="co">#&gt; 8  2019-11-10 18:10:00    1          1        1        1        0</span>
+<span class="co">#&gt; 9  2019-12-11 15:16:00    0          0        2        2        0</span>
+<span class="co">#&gt; 10 2019-03-15 01:26:00    0          0        3        3        0</span>
+<span class="co">#&gt;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      n_persons</span>
+<span class="co">#&gt; 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         NULL</span>
+<span class="co">#&gt; 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         NULL</span>
+<span class="co">#&gt; 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         NULL</span>
+<span class="co">#&gt; 4             26, 26 Years, 97, Not a Motor Vehicle Occupant, 9, Not Reported, 0, 0.000 % BAC, 2, Test Given, 1, Blood, NA, NA, NA, 3, ANNE ARUNDEL (3), 2019, 20, 20, 20, 18, 18:00-18:59, 43, 43, 2, February, 1843, 1843, 2019, 2019, 7, Died at Scene, 9, Reported as Unknown, NA, NA, NA, NA, NA, NA, 9, Reported as Unknown, NA, NA, NA, NA, NA, NA, 8, Not Reported, 2, Test Given, 8, Not Applicable, 0, Ejection Path Not Applicable, NA, NA, 0, Not Extricated or Not Applicable, NA, NA, 5, Major Collector, 8, Pedestrian, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, 7, Non-Hispanic, 0, Not Transported, 18, 6:00pm-6:59pm, NA, NA, NA, NA, NA, NA, 4, Fatal Injury (K), 0, 0, 18, 18, 11, Not at Intersection - On Roadway, Not in Marked Crosswalk, NA, NA, NA, NA, 0, The First Harmful Event was Not a Collision with a Motor Vehicle in Transport, 25, 25, NA, NA, 2, February, NA, NA, 1, 5, Pedestrian, 0, None, 0, None, 0, None, NA, NA, NA, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, NA, NA, NA, NA, 2, Urban, NA, 0, No, 0, Not a Motor Vehicle Occupant, 1, Male, NA, NA, 24, Maryland, 1, NA, 240048, NA, NA, 0, 1, NA, NA, NA, NA, NA, NA, 0, No</span>
+<span class="co">#&gt; 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         NULL</span>
+<span class="co">#&gt; 6         32, 32 Years, 97, Not a Motor Vehicle Occupant, 9, Not Reported, 0, 0.000 % BAC, 2, Test Given, 1, Blood, NA, NA, NA, 3, ANNE ARUNDEL (3), 2019, 29, 29, 29, 23, 23:00-23:59, 32, 32, 6, June, 2332, 2332, 2019, 2019, 7, Died at Scene, 8, Not Reported, NA, NA, NA, NA, NA, NA, 0, No (drugs not involved), NA, NA, NA, NA, NA, NA, 1, Evidential Test (Blood, Urine), 2, Test Given, 8, Not Applicable, 0, Ejection Path Not Applicable, NA, NA, 0, Not Extricated or Not Applicable, NA, NA, 1, Interstate, 8, Pedestrian, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, 7, Non-Hispanic, 0, Not Transported, 23, 11:00pm-11:59pm, NA, NA, NA, NA, NA, NA, 4, Fatal Injury (K), 0, 0, 18, 18, 11, Not at Intersection - On Roadway, Not in Marked Crosswalk, NA, NA, NA, NA, 0, The First Harmful Event was Not a Collision with a Motor Vehicle in Transport, 14, 14, NA, NA, 6, June, NA, NA, 1, 5, Pedestrian, 0, None, 0, None, 0, None, NA, NA, NA, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, NA, NA, NA, NA, 2, Urban, NA, 0, No, 0, Not a Motor Vehicle Occupant, 1, Male, NA, NA, 24, Maryland, 1, NA, 240242, NA, NA, 0, 1, NA, NA, NA, NA, NA, NA, 0, No</span>
+<span class="co">#&gt; 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         NULL</span>
+<span class="co">#&gt; 8  50, 50 Years, 97, Not a Motor Vehicle Occupant, 9, Not Reported, 130, 0.130 % BAC, 2, Test Given, 1, Blood, NA, NA, NA, 3, ANNE ARUNDEL (3), 2019, 10, 10, 10, 18, 18:00-18:59, 25, 25, 11, November, 1825, 1825, 2019, 2019, 7, Died at Scene, 1, Yes (Alcohol Involved), NA, NA, NA, NA, NA, NA, 8, Not Reported, NA, NA, NA, NA, NA, NA, 8, Not Reported, 2, Test Given, 8, Not Applicable, 0, Ejection Path Not Applicable, NA, NA, 0, Not Extricated or Not Applicable, NA, NA, 3, Principal Arterial - Other, 8, Pedestrian, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, 7, Non-Hispanic, 0, Not Transported, 18, 6:00pm-6:59pm, NA, NA, NA, NA, NA, NA, 4, Fatal Injury (K), 0, 0, 15, 15, 11, Not at Intersection - On Roadway, Not in Marked Crosswalk, NA, NA, NA, NA, 0, The First Harmful Event was Not a Collision with a Motor Vehicle in Transport, 10, 10, NA, NA, 11, November, NA, NA, 1, 5, Pedestrian, 0, None, 0, None, 0, None, NA, NA, NA, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, NA, NA, NA, NA, 2, Urban, NA, 0, No, 0, Not a Motor Vehicle Occupant, 1, Male, NA, NA, 24, Maryland, 1, NA, 240373, NA, NA, 0, 1, NA, NA, NA, NA, NA, NA, 0, No</span>
+<span class="co">#&gt; 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         NULL</span>
+<span class="co">#&gt; 10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        NULL</span>
 <span class="co">#&gt;    persons permvit county       countyname city       cityname month month_name</span>
-<span class="co">#&gt; 1        2       2      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     6       June</span>
-<span class="co">#&gt; 2        3       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     9  September</span>
-<span class="co">#&gt; 3        1       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     5        May</span>
-<span class="co">#&gt; 4        1       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     6       June</span>
-<span class="co">#&gt; 5        1       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     7       July</span>
-<span class="co">#&gt; 6        3       3      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     6       June</span>
-<span class="co">#&gt; 7        2       2      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     8     August</span>
-<span class="co">#&gt; 8        1       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     4      April</span>
-<span class="co">#&gt; 9        3       3      3 ANNE ARUNDEL (3) 1415         SEVERN     9  September</span>
-<span class="co">#&gt; 10       2       2      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     2   February</span>
+<span class="co">#&gt; 1        2       2      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     8     August</span>
+<span class="co">#&gt; 2        3       3      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     6       June</span>
+<span class="co">#&gt; 3        1       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     7       July</span>
+<span class="co">#&gt; 4        2       2      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     2   February</span>
+<span class="co">#&gt; 5        4       4      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     9  September</span>
+<span class="co">#&gt; 6        1       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     6       June</span>
+<span class="co">#&gt; 7        1       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE    11   November</span>
+<span class="co">#&gt; 8        1       1      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE    11   November</span>
+<span class="co">#&gt; 9        2       2      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE    12   December</span>
+<span class="co">#&gt; 10       6       6      3 ANNE ARUNDEL (3)    0 NOT APPLICABLE     3      March</span>
 <span class="co">#&gt;    day day_week day_weekname year hour        hourname minute minutename</span>
-<span class="co">#&gt; 1    7        6       Friday 2019   14   2:00pm-2:59pm     36         36</span>
-<span class="co">#&gt; 2   14        7     Saturday 2019   15   3:00pm-3:59pm     46         46</span>
-<span class="co">#&gt; 3    5        1       Sunday 2019   11 11:00am-11:59am     39         39</span>
-<span class="co">#&gt; 4   30        1       Sunday 2019   18   6:00pm-6:59pm     20         20</span>
-<span class="co">#&gt; 5   30        3      Tuesday 2019   17   5:00pm-5:59pm     54         54</span>
-<span class="co">#&gt; 6   14        6       Friday 2019   22 10:00pm-10:59pm     30         30</span>
-<span class="co">#&gt; 7   27        3      Tuesday 2019    7   7:00am-7:59am      8          8</span>
-<span class="co">#&gt; 8   16        3      Tuesday 2019   20   8:00pm-8:59pm      6          6</span>
-<span class="co">#&gt; 9   27        6       Friday 2019   20   8:00pm-8:59pm     31         31</span>
-<span class="co">#&gt; 10  20        4    Wednesday 2019   18   6:00pm-6:59pm     25         25</span>
-<span class="co">#&gt;                tway_id     tway_id2 route     routename rur_urb rur_urbname</span>
-<span class="co">#&gt; 1              CR-1178         &lt;NA&gt;     4   County Road       2       Urban</span>
-<span class="co">#&gt; 2               SR-295         &lt;NA&gt;     3 State Highway       2       Urban</span>
-<span class="co">#&gt; 3                 SR-2       OP-226     3 State Highway       2       Urban</span>
-<span class="co">#&gt; 4               SR-295         &lt;NA&gt;     3 State Highway       2       Urban</span>
-<span class="co">#&gt; 5                CR-10         &lt;NA&gt;     4   County Road       2       Urban</span>
-<span class="co">#&gt; 6               SR-295         &lt;NA&gt;     3 State Highway       2       Urban</span>
-<span class="co">#&gt; 7              CR-5461         &lt;NA&gt;     4   County Road       2       Urban</span>
-<span class="co">#&gt; 8               CR-938 GLENEAGLE DR     4   County Road       2       Urban</span>
-<span class="co">#&gt; 9  SR-175 ANNAPOLIS RD      CR-5454     3 State Highway       2       Urban</span>
-<span class="co">#&gt; 10             CR-2633         &lt;NA&gt;     4   County Road       2       Urban</span>
-<span class="co">#&gt;    func_sys               func_sysname rd_owner          rd_ownername nhs</span>
-<span class="co">#&gt; 1         5            Major Collector        2 County Highway Agency   0</span>
-<span class="co">#&gt; 2         4             Minor Arterial        1  State Highway Agency   0</span>
-<span class="co">#&gt; 3         3 Principal Arterial - Other        1  State Highway Agency   0</span>
-<span class="co">#&gt; 4         3 Principal Arterial - Other        1  State Highway Agency   0</span>
-<span class="co">#&gt; 5         5            Major Collector        2 County Highway Agency   0</span>
-<span class="co">#&gt; 6         7                      Local        1  State Highway Agency   0</span>
-<span class="co">#&gt; 7         4             Minor Arterial        2 County Highway Agency   0</span>
-<span class="co">#&gt; 8         7                      Local        2 County Highway Agency   0</span>
-<span class="co">#&gt; 9         4             Minor Arterial        1  State Highway Agency   0</span>
-<span class="co">#&gt; 10        5            Major Collector        2 County Highway Agency   0</span>
-<span class="co">#&gt;                           nhsname sp_jur              sp_jurname milept</span>
-<span class="co">#&gt; 1  This section IS NOT on the NHS      0 No Special Jurisdiction     20</span>
-<span class="co">#&gt; 2  This section IS NOT on the NHS      0 No Special Jurisdiction    119</span>
-<span class="co">#&gt; 3  This section IS NOT on the NHS      0 No Special Jurisdiction    343</span>
-<span class="co">#&gt; 4  This section IS NOT on the NHS      0 No Special Jurisdiction     90</span>
-<span class="co">#&gt; 5  This section IS NOT on the NHS      0 No Special Jurisdiction      3</span>
-<span class="co">#&gt; 6  This section IS NOT on the NHS      0 No Special Jurisdiction      9</span>
-<span class="co">#&gt; 7  This section IS NOT on the NHS      0 No Special Jurisdiction     20</span>
-<span class="co">#&gt; 8  This section IS NOT on the NHS      0 No Special Jurisdiction      7</span>
-<span class="co">#&gt; 9  This section IS NOT on the NHS      0 No Special Jurisdiction     47</span>
-<span class="co">#&gt; 10 This section IS NOT on the NHS      0 No Special Jurisdiction     12</span>
-<span class="co">#&gt;    mileptname    latitude latitudename      longitud longitudname harm_ev</span>
-<span class="co">#&gt; 1          20 39.08629167  39.08629167 -76.659530560 -76.65953056       1</span>
-<span class="co">#&gt; 2         119 39.20472500    39.204725 -76.690747220 -76.69074722      14</span>
-<span class="co">#&gt; 3         343 39.13838333  39.13838333 -76.600591670 -76.60059167       9</span>
-<span class="co">#&gt; 4          90 39.17808889  39.17808889 -76.723630560 -76.72363056       8</span>
-<span class="co">#&gt; 5           3 39.19875000     39.19875 -76.672713890 -76.67271389      42</span>
-<span class="co">#&gt; 6           9 39.17067778  39.17067778 -76.730925000   -76.730925      12</span>
-<span class="co">#&gt; 7          20 39.09671667  39.09671667 -76.624222220 -76.62422222      12</span>
-<span class="co">#&gt; 8           7 39.14598889  39.14598889 -76.741250000    -76.74125       8</span>
-<span class="co">#&gt; 9          47 39.09596667  39.09596667 -76.720419440 -76.72041944      12</span>
-<span class="co">#&gt; 10         12 39.02736667  39.02736667 -76.708527780 -76.70852778       8</span>
-<span class="co">#&gt;                   harm_evname man_coll</span>
-<span class="co">#&gt; 1           Rollover/Overturn        0</span>
-<span class="co">#&gt; 2        Parked Motor Vehicle        0</span>
-<span class="co">#&gt; 3                Pedalcyclist        0</span>
-<span class="co">#&gt; 4                  Pedestrian        0</span>
-<span class="co">#&gt; 5        Tree (Standing Only)        0</span>
-<span class="co">#&gt; 6  Motor Vehicle In-Transport        6</span>
-<span class="co">#&gt; 7  Motor Vehicle In-Transport        6</span>
-<span class="co">#&gt; 8                  Pedestrian        0</span>
-<span class="co">#&gt; 9  Motor Vehicle In-Transport        6</span>
-<span class="co">#&gt; 10                 Pedestrian        0</span>
+<span class="co">#&gt; 1   27        3      Tuesday 2019    7   7:00am-7:59am      8          8</span>
+<span class="co">#&gt; 2    2        1       Sunday 2019   13   1:00pm-1:59pm      7          7</span>
+<span class="co">#&gt; 3   30        3      Tuesday 2019   17   5:00pm-5:59pm     54         54</span>
+<span class="co">#&gt; 4   20        4    Wednesday 2019   18   6:00pm-6:59pm     25         25</span>
+<span class="co">#&gt; 5   20        6       Friday 2019   21   9:00pm-9:59pm      2          2</span>
+<span class="co">#&gt; 6   29        7     Saturday 2019   23 11:00pm-11:59pm     14         14</span>
+<span class="co">#&gt; 7    4        2       Monday 2019   15   3:00pm-3:59pm     58         58</span>
+<span class="co">#&gt; 8   10        1       Sunday 2019   18   6:00pm-6:59pm     10         10</span>
+<span class="co">#&gt; 9   11        4    Wednesday 2019   15   3:00pm-3:59pm     16         16</span>
+<span class="co">#&gt; 10  15        6       Friday 2019    1   1:00am-1:59am     26         26</span>
+<span class="co">#&gt;        tway_id tway_id2 route     routename rur_urb rur_urbname func_sys</span>
+<span class="co">#&gt; 1      CR-5461     &lt;NA&gt;     4   County Road       2       Urban        4</span>
+<span class="co">#&gt; 2        SR-10     &lt;NA&gt;     3 State Highway       2       Urban        2</span>
+<span class="co">#&gt; 3        CR-10     &lt;NA&gt;     4   County Road       2       Urban        5</span>
+<span class="co">#&gt; 4      CR-2633     &lt;NA&gt;     4   County Road       2       Urban        5</span>
+<span class="co">#&gt; 5      CR-3549     &lt;NA&gt;     4   County Road       2       Urban        5</span>
+<span class="co">#&gt; 6       I-895B     &lt;NA&gt;     1    Interstate       2       Urban        1</span>
+<span class="co">#&gt; 7  SR-176 RAMP     &lt;NA&gt;     3 State Highway       2       Urban        4</span>
+<span class="co">#&gt; 8         SR-2     &lt;NA&gt;     3 State Highway       2       Urban        3</span>
+<span class="co">#&gt; 9       SR-176   CR-597     3 State Highway       2       Urban        4</span>
+<span class="co">#&gt; 10       I-195     &lt;NA&gt;     1    Interstate       2       Urban        1</span>
+<span class="co">#&gt;                                           func_sysname rd_owner</span>
+<span class="co">#&gt; 1                                       Minor Arterial        2</span>
+<span class="co">#&gt; 2  Principal Arterial - Other Freeways and Expressways        1</span>
+<span class="co">#&gt; 3                                      Major Collector        2</span>
+<span class="co">#&gt; 4                                      Major Collector        2</span>
+<span class="co">#&gt; 5                                      Major Collector        2</span>
+<span class="co">#&gt; 6                                           Interstate        1</span>
+<span class="co">#&gt; 7                                       Minor Arterial        1</span>
+<span class="co">#&gt; 8                           Principal Arterial - Other        1</span>
+<span class="co">#&gt; 9                                       Minor Arterial        1</span>
+<span class="co">#&gt; 10                                          Interstate        1</span>
+<span class="co">#&gt;             rd_ownername nhs                        nhsname sp_jur</span>
+<span class="co">#&gt; 1  County Highway Agency   0 This section IS NOT on the NHS      0</span>
+<span class="co">#&gt; 2   State Highway Agency   0 This section IS NOT on the NHS      0</span>
+<span class="co">#&gt; 3  County Highway Agency   0 This section IS NOT on the NHS      0</span>
+<span class="co">#&gt; 4  County Highway Agency   0 This section IS NOT on the NHS      0</span>
+<span class="co">#&gt; 5  County Highway Agency   0 This section IS NOT on the NHS      0</span>
+<span class="co">#&gt; 6   State Highway Agency   1     This section IS ON the NHS      0</span>
+<span class="co">#&gt; 7   State Highway Agency   0 This section IS NOT on the NHS      0</span>
+<span class="co">#&gt; 8   State Highway Agency   0 This section IS NOT on the NHS      0</span>
+<span class="co">#&gt; 9   State Highway Agency   0 This section IS NOT on the NHS      0</span>
+<span class="co">#&gt; 10  State Highway Agency   1     This section IS ON the NHS      0</span>
+<span class="co">#&gt;                 sp_jurname milept mileptname    latitude latitudename</span>
+<span class="co">#&gt; 1  No Special Jurisdiction     20         20 39.09671667  39.09671667</span>
+<span class="co">#&gt; 2  No Special Jurisdiction     50         50 39.17210278  39.17210278</span>
+<span class="co">#&gt; 3  No Special Jurisdiction      3          3 39.19875000  39.19875000</span>
+<span class="co">#&gt; 4  No Special Jurisdiction     12         12 39.02736667  39.02736667</span>
+<span class="co">#&gt; 5  No Special Jurisdiction     73         73 38.81967778  38.81967778</span>
+<span class="co">#&gt; 6  No Special Jurisdiction      0       None 39.22533056  39.22533056</span>
+<span class="co">#&gt; 7  No Special Jurisdiction    147        147 39.16499167  39.16499167</span>
+<span class="co">#&gt; 8  No Special Jurisdiction    275        275 39.05690556  39.05690556</span>
+<span class="co">#&gt; 9  No Special Jurisdiction     35         35 39.16266389  39.16266389</span>
+<span class="co">#&gt; 10 No Special Jurisdiction     26         26 39.21617222  39.21617222</span>
+<span class="co">#&gt;         longitud  longitudname harm_ev                harm_evname man_coll</span>
+<span class="co">#&gt; 1  -76.624222220 -76.624222220      12 Motor Vehicle In-Transport        6</span>
+<span class="co">#&gt; 2  -76.608405560 -76.608405560      12 Motor Vehicle In-Transport        6</span>
+<span class="co">#&gt; 3  -76.672713890 -76.672713890      42       Tree (Standing Only)        0</span>
+<span class="co">#&gt; 4  -76.708527780 -76.708527780       8                 Pedestrian        0</span>
+<span class="co">#&gt; 5  -76.690894440 -76.690894440      42       Tree (Standing Only)        0</span>
+<span class="co">#&gt; 6  -76.624466670 -76.624466670       8                 Pedestrian        0</span>
+<span class="co">#&gt; 7  -76.642452780 -76.642452780      42       Tree (Standing Only)        0</span>
+<span class="co">#&gt; 8  -76.527052780 -76.527052780       8                 Pedestrian        0</span>
+<span class="co">#&gt; 9  -76.668719440 -76.668719440      12 Motor Vehicle In-Transport        2</span>
+<span class="co">#&gt; 10 -76.698411110 -76.698411110      12 Motor Vehicle In-Transport        2</span>
 <span class="co">#&gt;                                                                     man_collname</span>
-<span class="co">#&gt; 1  The First Harmful Event was Not a Collision with a Motor Vehicle in Transport</span>
-<span class="co">#&gt; 2  The First Harmful Event was Not a Collision with a Motor Vehicle in Transport</span>
+<span class="co">#&gt; 1                                                                          Angle</span>
+<span class="co">#&gt; 2                                                                          Angle</span>
 <span class="co">#&gt; 3  The First Harmful Event was Not a Collision with a Motor Vehicle in Transport</span>
 <span class="co">#&gt; 4  The First Harmful Event was Not a Collision with a Motor Vehicle in Transport</span>
 <span class="co">#&gt; 5  The First Harmful Event was Not a Collision with a Motor Vehicle in Transport</span>
-<span class="co">#&gt; 6                                                                          Angle</span>
-<span class="co">#&gt; 7                                                                          Angle</span>
+<span class="co">#&gt; 6  The First Harmful Event was Not a Collision with a Motor Vehicle in Transport</span>
+<span class="co">#&gt; 7  The First Harmful Event was Not a Collision with a Motor Vehicle in Transport</span>
 <span class="co">#&gt; 8  The First Harmful Event was Not a Collision with a Motor Vehicle in Transport</span>
-<span class="co">#&gt; 9                                                                          Angle</span>
-<span class="co">#&gt; 10 The First Harmful Event was Not a Collision with a Motor Vehicle in Transport</span>
-<span class="co">#&gt;    reljct1 reljct1name reljct2                            reljct2name typ_int</span>
-<span class="co">#&gt; 1        0          No       1                           Non-Junction       1</span>
-<span class="co">#&gt; 2        1         Yes      19 Other location within Interchange Area       1</span>
-<span class="co">#&gt; 3        0          No       2                           Intersection       2</span>
-<span class="co">#&gt; 4        0          No       1                           Non-Junction       1</span>
-<span class="co">#&gt; 5        0          No       1                           Non-Junction       1</span>
-<span class="co">#&gt; 6        0          No       5             Entrance/Exit Ramp Related       1</span>
-<span class="co">#&gt; 7        0          No       8                Driveway Access Related       1</span>
-<span class="co">#&gt; 8        0          No       3                   Intersection-Related       2</span>
-<span class="co">#&gt; 9        0          No       2                           Intersection       3</span>
-<span class="co">#&gt; 10       0          No       1                           Non-Junction       1</span>
-<span class="co">#&gt;              typ_intname rel_road rel_roadname wrk_zone wrk_zonename lgt_cond</span>
-<span class="co">#&gt; 1    Not an Intersection        1   On Roadway        0         None        1</span>
-<span class="co">#&gt; 2    Not an Intersection        8         Gore        0         None        1</span>
-<span class="co">#&gt; 3  Four-Way Intersection        1   On Roadway        0         None        1</span>
-<span class="co">#&gt; 4    Not an Intersection        2  On Shoulder        0         None        1</span>
-<span class="co">#&gt; 5    Not an Intersection        4  On Roadside        0         None        1</span>
-<span class="co">#&gt; 6    Not an Intersection        1   On Roadway        0         None        3</span>
-<span class="co">#&gt; 7    Not an Intersection        1   On Roadway        0         None        1</span>
-<span class="co">#&gt; 8  Four-Way Intersection        1   On Roadway        0         None        5</span>
-<span class="co">#&gt; 9         T-Intersection        1   On Roadway        0         None        3</span>
-<span class="co">#&gt; 10   Not an Intersection        1   On Roadway        0         None        2</span>
-<span class="co">#&gt;          lgt_condname weather weathername weather1 weather1name weather2</span>
-<span class="co">#&gt; 1            Daylight       1       Clear        1        Clear        0</span>
-<span class="co">#&gt; 2            Daylight      10      Cloudy       10       Cloudy        0</span>
-<span class="co">#&gt; 3            Daylight       2        Rain        2         Rain        0</span>
-<span class="co">#&gt; 4            Daylight       1       Clear        1        Clear        0</span>
-<span class="co">#&gt; 5            Daylight       1       Clear        1        Clear        0</span>
-<span class="co">#&gt; 6      Dark - Lighted       1       Clear        1        Clear        0</span>
-<span class="co">#&gt; 7            Daylight      10      Cloudy       10       Cloudy        0</span>
-<span class="co">#&gt; 8                Dusk       1       Clear        1        Clear        0</span>
-<span class="co">#&gt; 9      Dark - Lighted       1       Clear        1        Clear        0</span>
-<span class="co">#&gt; 10 Dark - Not Lighted       4        Snow        4         Snow        0</span>
-<span class="co">#&gt;                            weather2name sch_bus sch_busname rail       railname</span>
-<span class="co">#&gt; 1  No Additional Atmospheric Conditions       0          No    0 Not Applicable</span>
-<span class="co">#&gt; 2  No Additional Atmospheric Conditions       0          No    0 Not Applicable</span>
-<span class="co">#&gt; 3  No Additional Atmospheric Conditions       0          No    0 Not Applicable</span>
-<span class="co">#&gt; 4  No Additional Atmospheric Conditions       0          No    0 Not Applicable</span>
-<span class="co">#&gt; 5  No Additional Atmospheric Conditions       0          No    0 Not Applicable</span>
-<span class="co">#&gt; 6  No Additional Atmospheric Conditions       0          No    0 Not Applicable</span>
-<span class="co">#&gt; 7  No Additional Atmospheric Conditions       0          No    0 Not Applicable</span>
-<span class="co">#&gt; 8  No Additional Atmospheric Conditions       0          No    0 Not Applicable</span>
-<span class="co">#&gt; 9  No Additional Atmospheric Conditions       0          No    0 Not Applicable</span>
-<span class="co">#&gt; 10 No Additional Atmospheric Conditions       0          No    0 Not Applicable</span>
-<span class="co">#&gt;    not_hour not_hourname not_min not_minname arr_hour</span>
-<span class="co">#&gt; 1        99      Unknown      99     Unknown       99</span>
-<span class="co">#&gt; 2        99      Unknown      99     Unknown       99</span>
-<span class="co">#&gt; 3        99      Unknown      99     Unknown       99</span>
-<span class="co">#&gt; 4        99      Unknown      99     Unknown       99</span>
-<span class="co">#&gt; 5        99      Unknown      99     Unknown       99</span>
-<span class="co">#&gt; 6        99      Unknown      99     Unknown       99</span>
-<span class="co">#&gt; 7        99      Unknown      99     Unknown       99</span>
-<span class="co">#&gt; 8        99      Unknown      99     Unknown       99</span>
-<span class="co">#&gt; 9        99      Unknown      99     Unknown       99</span>
-<span class="co">#&gt; 10       99      Unknown      99     Unknown       99</span>
+<span class="co">#&gt; 9                                                                 Front-to-Front</span>
+<span class="co">#&gt; 10                                                                Front-to-Front</span>
+<span class="co">#&gt;    reljct1 reljct1name reljct2                reljct2name typ_int</span>
+<span class="co">#&gt; 1        0          No       8    Driveway Access Related       1</span>
+<span class="co">#&gt; 2        0          No       1               Non-Junction       1</span>
+<span class="co">#&gt; 3        0          No       1               Non-Junction       1</span>
+<span class="co">#&gt; 4        0          No       1               Non-Junction       1</span>
+<span class="co">#&gt; 5        0          No       1               Non-Junction       1</span>
+<span class="co">#&gt; 6        0          No       1               Non-Junction       1</span>
+<span class="co">#&gt; 7        0          No       5 Entrance/Exit Ramp Related       1</span>
+<span class="co">#&gt; 8        0          No       1               Non-Junction       1</span>
+<span class="co">#&gt; 9        0          No       2               Intersection       3</span>
+<span class="co">#&gt; 10       0          No       1               Non-Junction       1</span>
+<span class="co">#&gt;            typ_intname rel_road rel_roadname wrk_zone wrk_zonename lgt_cond</span>
+<span class="co">#&gt; 1  Not an Intersection        1   On Roadway        0         None        1</span>
+<span class="co">#&gt; 2  Not an Intersection        1   On Roadway        0         None        1</span>
+<span class="co">#&gt; 3  Not an Intersection        4  On Roadside        0         None        1</span>
+<span class="co">#&gt; 4  Not an Intersection        1   On Roadway        0         None        2</span>
+<span class="co">#&gt; 5  Not an Intersection        4  On Roadside        0         None        3</span>
+<span class="co">#&gt; 6  Not an Intersection        1   On Roadway        0         None        2</span>
+<span class="co">#&gt; 7  Not an Intersection        4  On Roadside        0         None        1</span>
+<span class="co">#&gt; 8  Not an Intersection        1   On Roadway        0         None        2</span>
+<span class="co">#&gt; 9       T-Intersection        1   On Roadway        0         None        1</span>
+<span class="co">#&gt; 10 Not an Intersection        1   On Roadway        0         None        2</span>
+<span class="co">#&gt;          lgt_condname weather  weathername weather1 weather1name weather2</span>
+<span class="co">#&gt; 1            Daylight      10       Cloudy       10       Cloudy        0</span>
+<span class="co">#&gt; 2            Daylight       1        Clear        1        Clear        0</span>
+<span class="co">#&gt; 3            Daylight       1        Clear        1        Clear        0</span>
+<span class="co">#&gt; 4  Dark - Not Lighted       4         Snow        4         Snow        0</span>
+<span class="co">#&gt; 5      Dark - Lighted       1        Clear        1        Clear        0</span>
+<span class="co">#&gt; 6  Dark - Not Lighted       2         Rain        2         Rain        0</span>
+<span class="co">#&gt; 7            Daylight       1        Clear        1        Clear        0</span>
+<span class="co">#&gt; 8  Dark - Not Lighted       1        Clear        1        Clear        0</span>
+<span class="co">#&gt; 9            Daylight       1        Clear        1        Clear        0</span>
+<span class="co">#&gt; 10 Dark - Not Lighted      98 Not Reported       98 Not Reported        0</span>
+<span class="co">#&gt;                            weather2name sch_bus sch_busname    rail</span>
+<span class="co">#&gt; 1  No Additional Atmospheric Conditions       0          No 0000000</span>
+<span class="co">#&gt; 2  No Additional Atmospheric Conditions       0          No 0000000</span>
+<span class="co">#&gt; 3  No Additional Atmospheric Conditions       0          No 0000000</span>
+<span class="co">#&gt; 4  No Additional Atmospheric Conditions       0          No 0000000</span>
+<span class="co">#&gt; 5  No Additional Atmospheric Conditions       0          No 0000000</span>
+<span class="co">#&gt; 6  No Additional Atmospheric Conditions       0          No 0000000</span>
+<span class="co">#&gt; 7  No Additional Atmospheric Conditions       0          No 0000000</span>
+<span class="co">#&gt; 8  No Additional Atmospheric Conditions       0          No 0000000</span>
+<span class="co">#&gt; 9  No Additional Atmospheric Conditions       0          No 0000000</span>
+<span class="co">#&gt; 10 No Additional Atmospheric Conditions       0          No 0000000</span>
+<span class="co">#&gt;          railname not_hour not_hourname not_min not_minname arr_hour</span>
+<span class="co">#&gt; 1  Not Applicable       99      Unknown      99     Unknown       99</span>
+<span class="co">#&gt; 2  Not Applicable       99      Unknown      99     Unknown       99</span>
+<span class="co">#&gt; 3  Not Applicable       99      Unknown      99     Unknown       99</span>
+<span class="co">#&gt; 4  Not Applicable       99      Unknown      99     Unknown       99</span>
+<span class="co">#&gt; 5  Not Applicable       99      Unknown      99     Unknown       99</span>
+<span class="co">#&gt; 6  Not Applicable       99      Unknown      99     Unknown       99</span>
+<span class="co">#&gt; 7  Not Applicable       99      Unknown      99     Unknown       99</span>
+<span class="co">#&gt; 8  Not Applicable       99      Unknown      99     Unknown       99</span>
+<span class="co">#&gt; 9  Not Applicable       99      Unknown      99     Unknown       99</span>
+<span class="co">#&gt; 10 Not Applicable       99      Unknown      99     Unknown       99</span>
 <span class="co">#&gt;                      arr_hourname arr_min                       arr_minname</span>
 <span class="co">#&gt; 1  Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes</span>
 <span class="co">#&gt; 2  Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes</span>
 <span class="co">#&gt; 3  Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes</span>
 <span class="co">#&gt; 4  Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes</span>
 <span class="co">#&gt; 5  Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes</span>
-<span class="co">#&gt; 6  Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes</span>
+<span class="co">#&gt; 6  Unknown EMS Scene Arrival Hour      98                Unknown if Arrived</span>
 <span class="co">#&gt; 7  Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes</span>
 <span class="co">#&gt; 8  Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes</span>
 <span class="co">#&gt; 9  Unknown EMS Scene Arrival Hour      99 Unknown EMS Scene Arrival Minutes</span>
@@ -437,112 +462,90 @@ Get Crashes By Occupant (partial support)</li>
 <span class="co">#&gt; 1       88 Not Applicable (Not Transported)      88</span>
 <span class="co">#&gt; 2       99                          Unknown      99</span>
 <span class="co">#&gt; 3       99                          Unknown      99</span>
-<span class="co">#&gt; 4       99                          Unknown      99</span>
+<span class="co">#&gt; 4       88 Not Applicable (Not Transported)      88</span>
 <span class="co">#&gt; 5       99                          Unknown      99</span>
 <span class="co">#&gt; 6       88 Not Applicable (Not Transported)      88</span>
 <span class="co">#&gt; 7       88 Not Applicable (Not Transported)      88</span>
-<span class="co">#&gt; 8       99                          Unknown      99</span>
-<span class="co">#&gt; 9       88 Not Applicable (Not Transported)      88</span>
-<span class="co">#&gt; 10      88 Not Applicable (Not Transported)      88</span>
-<span class="co">#&gt;                          hosp_mnname cf1</span>
-<span class="co">#&gt; 1   Not Applicable (Not Transported)   0</span>
-<span class="co">#&gt; 2  Unknown EMS Hospital Arrival Time   0</span>
-<span class="co">#&gt; 3  Unknown EMS Hospital Arrival Time   0</span>
-<span class="co">#&gt; 4  Unknown EMS Hospital Arrival Time  14</span>
-<span class="co">#&gt; 5  Unknown EMS Hospital Arrival Time   0</span>
-<span class="co">#&gt; 6   Not Applicable (Not Transported)   0</span>
-<span class="co">#&gt; 7   Not Applicable (Not Transported)   0</span>
-<span class="co">#&gt; 8  Unknown EMS Hospital Arrival Time   0</span>
-<span class="co">#&gt; 9   Not Applicable (Not Transported)   0</span>
-<span class="co">#&gt; 10  Not Applicable (Not Transported)   0</span>
-<span class="co">#&gt;                                                                                                                     cf1name</span>
-<span class="co">#&gt; 1                                                                                                                      None</span>
-<span class="co">#&gt; 2                                                                                                                      None</span>
-<span class="co">#&gt; 3                                                                                                                      None</span>
-<span class="co">#&gt; 4  Motor Vehicle struck by falling cargo,or something that came loose from or something that was set in motion by a vehicle</span>
-<span class="co">#&gt; 5                                                                                                                      None</span>
-<span class="co">#&gt; 6                                                                                                                      None</span>
-<span class="co">#&gt; 7                                                                                                                      None</span>
-<span class="co">#&gt; 8                                                                                                                      None</span>
-<span class="co">#&gt; 9                                                                                                                      None</span>
-<span class="co">#&gt; 10                                                                                                                     None</span>
-<span class="co">#&gt;    cf2 cf2name cf3 cf3name fatals drunk_dr road_fnc road_fncname</span>
-<span class="co">#&gt; 1    0    None   0    None      1        0       NA           NA</span>
-<span class="co">#&gt; 2    0    None   0    None      1        1       NA           NA</span>
-<span class="co">#&gt; 3    0    None   0    None      1        0       NA           NA</span>
-<span class="co">#&gt; 4    0    None   0    None      1        0       NA           NA</span>
-<span class="co">#&gt; 5    0    None   0    None      1        0       NA           NA</span>
-<span class="co">#&gt; 6    0    None   0    None      2        0       NA           NA</span>
-<span class="co">#&gt; 7    0    None   0    None      1        0       NA           NA</span>
-<span class="co">#&gt; 8    0    None   0    None      1        0       NA           NA</span>
-<span class="co">#&gt; 9    0    None   0    None      1        1       NA           NA</span>
-<span class="co">#&gt; 10   0    None   0    None      1        0       NA           NA</span>
-<span class="co">#&gt;                                                                                                                                                                                nm_crashes</span>
-<span class="co">#&gt; 1                                                                                                                                                                                    NULL</span>
-<span class="co">#&gt; 2                                                                                                                                                                                    NULL</span>
-<span class="co">#&gt; 3              2019, 2019, 2, 3, Failure to Yield Right-Of-Way, Failure to Obey Traffic Signs, Signals or Officer, NA, NA, NA, NA, 1, 1, 24, 24, Maryland, Maryland, 240119, 240119, 0, 0</span>
-<span class="co">#&gt; 4                                                                                                                                 2019, 0, None Noted, NA, NA, 1, 24, Maryland, 240190, 0</span>
-<span class="co">#&gt; 5                                                                                                                                                                                    NULL</span>
-<span class="co">#&gt; 6                                                                                                                                                                                    NULL</span>
-<span class="co">#&gt; 7                                                                                                                                                                                    NULL</span>
-<span class="co">#&gt; 8                                                                                                   2019, 11, Dash - Run, No Visual Obstruction Noted, NA, NA, 1, 24, Maryland, 240096, 0</span>
-<span class="co">#&gt; 9                                                                                                                                                                                    NULL</span>
-<span class="co">#&gt; 10 2019, 2019, 4, 9, In Roadway Improperly (Standing, Lying, Working, Playing, etc.), Wrong-Way Riding or Walking, NA, NA, NA, NA, 1, 1, 24, 24, Maryland, Maryland, 240048, 240048, 0, 0</span>
+<span class="co">#&gt; 8       88 Not Applicable (Not Transported)      88</span>
+<span class="co">#&gt; 9       99                          Unknown      99</span>
+<span class="co">#&gt; 10      99                          Unknown      99</span>
+<span class="co">#&gt;                          hosp_mnname cf1 cf1name cf2 cf2name cf3 cf3name fatals</span>
+<span class="co">#&gt; 1   Not Applicable (Not Transported)   0    None   0    None   0    None      1</span>
+<span class="co">#&gt; 2  Unknown EMS Hospital Arrival Time   0    None   0    None   0    None      1</span>
+<span class="co">#&gt; 3  Unknown EMS Hospital Arrival Time   0    None   0    None   0    None      1</span>
+<span class="co">#&gt; 4   Not Applicable (Not Transported)   0    None   0    None   0    None      1</span>
+<span class="co">#&gt; 5  Unknown EMS Hospital Arrival Time   0    None   0    None   0    None      1</span>
+<span class="co">#&gt; 6   Not Applicable (Not Transported)   0    None   0    None   0    None      1</span>
+<span class="co">#&gt; 7   Not Applicable (Not Transported)   0    None   0    None   0    None      1</span>
+<span class="co">#&gt; 8   Not Applicable (Not Transported)   0    None   0    None   0    None      1</span>
+<span class="co">#&gt; 9  Unknown EMS Hospital Arrival Time   0    None   0    None   0    None      1</span>
+<span class="co">#&gt; 10 Unknown EMS Hospital Arrival Time   0    None   0    None   0    None      1</span>
+<span class="co">#&gt;    drunk_dr road_fnc road_fncname</span>
+<span class="co">#&gt; 1         0       NA           NA</span>
+<span class="co">#&gt; 2         0       NA           NA</span>
+<span class="co">#&gt; 3         0       NA           NA</span>
+<span class="co">#&gt; 4         0       NA           NA</span>
+<span class="co">#&gt; 5         0       NA           NA</span>
+<span class="co">#&gt; 6         0       NA           NA</span>
+<span class="co">#&gt; 7         0       NA           NA</span>
+<span class="co">#&gt; 8         0       NA           NA</span>
+<span class="co">#&gt; 9         0       NA           NA</span>
+<span class="co">#&gt; 10        1       NA           NA</span>
+<span class="co">#&gt;                                                                                                                                                                                                                                                                                                            nm_crashes</span>
+<span class="co">#&gt; 1                                                                                                                                                                                                                                                                                                                NULL</span>
+<span class="co">#&gt; 2                                                                                                                                                                                                                                                                                                                NULL</span>
+<span class="co">#&gt; 3                                                                                                                                                                                                                                                                                                                NULL</span>
+<span class="co">#&gt; 4                                          2019, 2019, 4, 9, In Roadway Improperly (Standing, Lying, Working, Playing, etc.), Wrong-Way Riding or Walking, 4, 9, In Roadway Improperly (Standing, Lying, Working, Playing, etc.), Wrong-Way Riding or Walking, 1, 1, 24, 24, Maryland, Maryland, 240048, 240048, 0, 0</span>
+<span class="co">#&gt; 5                                                                                                                                                                                                                                                                                                                NULL</span>
+<span class="co">#&gt; 6  2019, 2019, 4, 19, In Roadway Improperly (Standing, Lying, Working, Playing, etc.), Not Visible (Dark clothing, No Lighting, etc.), 4, 19, In Roadway Improperly (Standing, Lying, Working, Playing, etc.), Not Visible (Dark clothing, No Lighting, etc.), 1, 1, 24, 24, Maryland, Maryland, 240242, 240242, 0, 0</span>
+<span class="co">#&gt; 7                                                                                                                                                                                                                                                                                                                NULL</span>
+<span class="co">#&gt; 8                                                                                                                                                                                                                2019, 2, Failure to Yield Right-Of-Way, 2, Failure to Yield Right-Of-Way, 1, 24, Maryland, 240373, 0</span>
+<span class="co">#&gt; 9                                                                                                                                                                                                                                                                                                                NULL</span>
+<span class="co">#&gt; 10                                                                                                                                                                                                                                                                                                               NULL</span>
 <span class="co">#&gt;                                                               nm_impairs</span>
 <span class="co">#&gt; 1                                                                   NULL</span>
 <span class="co">#&gt; 2                                                                   NULL</span>
-<span class="co">#&gt; 3  2019, 99, Reported as Unknown if Impaired, 1, 24, Maryland, 240119, 0</span>
-<span class="co">#&gt; 4            2019, 0, None/Apparently Normal, 1, 24, Maryland, 240190, 0</span>
+<span class="co">#&gt; 3                                                                   NULL</span>
+<span class="co">#&gt; 4  2019, 99, Reported as Unknown if Impaired, 1, 24, Maryland, 240048, 0</span>
 <span class="co">#&gt; 5                                                                   NULL</span>
-<span class="co">#&gt; 6                                                                   NULL</span>
+<span class="co">#&gt; 6                     2019, 98, Not Reported, 1, 24, Maryland, 240242, 0</span>
 <span class="co">#&gt; 7                                                                   NULL</span>
-<span class="co">#&gt; 8            2019, 0, None/Apparently Normal, 1, 24, Maryland, 240096, 0</span>
+<span class="co">#&gt; 8                     2019, 98, Not Reported, 1, 24, Maryland, 240373, 0</span>
 <span class="co">#&gt; 9                                                                   NULL</span>
-<span class="co">#&gt; 10 2019, 99, Reported as Unknown if Impaired, 1, 24, Maryland, 240048, 0</span>
-<span class="co">#&gt;                                                                                                            nm_priors</span>
-<span class="co">#&gt; 1                                                                                                               NULL</span>
-<span class="co">#&gt; 2                                                                                                               NULL</span>
-<span class="co">#&gt; 3                                                      2019, 3, Crossing Roadway, NA, NA, 1, 24, Maryland, 240119, 0</span>
-<span class="co">#&gt; 4  2019, 12, Disabled Vehicle Related (Working on, Pushing, Leaving/Approaching), NA, NA, 1, 24, Maryland, 240190, 0</span>
-<span class="co">#&gt; 5                                                                                                               NULL</span>
-<span class="co">#&gt; 6                                                                                                               NULL</span>
-<span class="co">#&gt; 7                                                                                                               NULL</span>
-<span class="co">#&gt; 8                                                      2019, 3, Crossing Roadway, NA, NA, 1, 24, Maryland, 240096, 0</span>
-<span class="co">#&gt; 9                                                                                                               NULL</span>
-<span class="co">#&gt; 10  2019, 5, Movement Along Roadway with Traffic (In or Adjacent to Travel Lane), NA, NA, 1, 24, Maryland, 240048, 0</span>
-<span class="co">#&gt;                                 safety_e_qs</span>
-<span class="co">#&gt; 1                                      NULL</span>
-<span class="co">#&gt; 2                                      NULL</span>
-<span class="co">#&gt; 3  2019, NA, NA, 1, 24, Maryland, 240119, 0</span>
-<span class="co">#&gt; 4  2019, NA, NA, 1, 24, Maryland, 240190, 0</span>
-<span class="co">#&gt; 5                                      NULL</span>
-<span class="co">#&gt; 6                                      NULL</span>
-<span class="co">#&gt; 7                                      NULL</span>
-<span class="co">#&gt; 8  2019, NA, NA, 1, 24, Maryland, 240096, 0</span>
-<span class="co">#&gt; 9                                      NULL</span>
-<span class="co">#&gt; 10 2019, NA, NA, 1, 24, Maryland, 240048, 0</span>
-<span class="co">#&gt;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    park_works</span>
-<span class="co">#&gt; 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        NULL</span>
-<span class="co">#&gt; 2                        2019, 4, 4-door sedan, hardtop, 0, Not a Bus, 0, Not Applicable (N/A), 14, 1, 0, Not Applicable, 0, No or Not Reported, 0, Not Applicable, NA, NA, NA, NA, 14, Parked Motor Vehicle, 0, Not Applicable, 0, Not Applicable, 0, Not Applicable, 1, No, 0, Not Applicable, 0, No, 15, 3:00pm-3:59pm, NA, NA, 6, 6 Clock Point, NA, NA, 41, Mazda, NA, Mazda Mazda3, 0, The First Harmful Event was Not a Collision with a Motor Vehicle in Transport, 0, Not Applicable, 0, Not Applicable, 0, Not Applicable, 46, 46, 51, NA, 2018, 2018, 9, September, 12, Motor Vehicle In-Transport, 2, 2, 6, Driverless/Motor Vehicle Parked/Stopped Off Roadway, 34, New Jersey, 0, No Special Use, 2, Towed Due to Disabling Damage, 0, No Trailing Units, NA, NA, NA, No Trailing Units, NA, NA, NA, No Trailing Units, NA, NA, NA, No Trailing Units, 2, Motor Vehicle Not In-Transport Within the Trafficway, 0, No Underride or Override Noted, 0, None, 0, None, 6, Disabling Damage, 1, 3MZBN1V34JM2, 3MZBN1V34JM2, 3, J, M, 2, M, Z, B, N, 1, V, 3, 4, NA, NA, NA, NA, NA, NA, 0, Not Applicable, 24, Maryland, 240294, 2</span>
-<span class="co">#&gt; 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        NULL</span>
-<span class="co">#&gt; 4  2019, 51, Cross Country/Intercity Bus, 5, Charter/Tour, 22, Bus, 30, 0, 0, Not Applicable, 0, No or Not Reported, 3, 26,001 lbs. or more, NA, NA, NA, NA, 8, Pedestrian, 0, Not Applicable, 0, Not Applicable, 0, Not Applicable, 1, No, 0, Not Applicable, 0, No, 18, 6:00pm-6:59pm, NA, NA, 8, 8 Clock Point, NA, NA, 98, Other Make, NA, Other Make Van Hool, 0, The First Harmful Event was Not a Collision with a Motor Vehicle in Transport, 57, US DOT, 1759030, 1759030, 571759030, 571759030, 20, 20, 908, NA, 2012, 2012, 6, June, 12, Motor Vehicle In-Transport, 0, None, 6, Driverless/Motor Vehicle Parked/Stopped Off Roadway, 17, Illinois, 3, Vehicle Used as Other Bus, 5, Not Towed, 0, No Trailing Units, NA, NA, NA, No Trailing Units, NA, NA, NA, No Trailing Units, NA, NA, NA, No Trailing Units, 2, Motor Vehicle Not In-Transport Within the Trafficway, 0, No Underride or Override Noted, 0, None, 0, None, 2, Minor Damage, 1, YE2DG13B5C20, YE2DG13B5C20, Y, C, 2, 0, E, 2, D, G, 1, 3, B, 5, NA, NA, NA, NA, NA, NA, 21, Bus (seats for more than 15 occupants, including driver), 24, Maryland, 240190, 2</span>
-<span class="co">#&gt; 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        NULL</span>
-<span class="co">#&gt; 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        NULL</span>
-<span class="co">#&gt; 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        NULL</span>
-<span class="co">#&gt; 8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        NULL</span>
-<span class="co">#&gt; 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        NULL</span>
-<span class="co">#&gt; 10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       NULL</span>
+<span class="co">#&gt; 10                                                                  NULL</span>
+<span class="co">#&gt;                                                                                                              nm_priors</span>
+<span class="co">#&gt; 1                                                                                                                 NULL</span>
+<span class="co">#&gt; 2                                                                                                                 NULL</span>
+<span class="co">#&gt; 3                                                                                                                 NULL</span>
+<span class="co">#&gt; 4     2019, 5, Movement Along Roadway with Traffic (In or Adjacent to Travel Lane), NA, NA, 1, 24, Maryland, 240048, 0</span>
+<span class="co">#&gt; 5                                                                                                                 NULL</span>
+<span class="co">#&gt; 6  2019, 6, Movement Along Roadway Against Traffic (In or Adjacent to Travel Lane), NA, NA, 1, 24, Maryland, 240242, 0</span>
+<span class="co">#&gt; 7                                                                                                                 NULL</span>
+<span class="co">#&gt; 8                                                        2019, 3, Crossing Roadway, NA, NA, 1, 24, Maryland, 240373, 0</span>
+<span class="co">#&gt; 9                                                                                                                 NULL</span>
+<span class="co">#&gt; 10                                                                                                                NULL</span>
+<span class="co">#&gt;                                 safety_e_qs park_works</span>
+<span class="co">#&gt; 1                                      NULL       NULL</span>
+<span class="co">#&gt; 2                                      NULL       NULL</span>
+<span class="co">#&gt; 3                                      NULL       NULL</span>
+<span class="co">#&gt; 4  2019, NA, NA, 1, 24, Maryland, 240048, 0       NULL</span>
+<span class="co">#&gt; 5                                      NULL       NULL</span>
+<span class="co">#&gt; 6  2019, NA, NA, 1, 24, Maryland, 240242, 0       NULL</span>
+<span class="co">#&gt; 7                                      NULL       NULL</span>
+<span class="co">#&gt; 8  2019, NA, NA, 1, 24, Maryland, 240373, 0       NULL</span>
+<span class="co">#&gt; 9                                      NULL       NULL</span>
+<span class="co">#&gt; 10                                     NULL       NULL</span>
 <span class="co">#&gt;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     pb_types</span>
 <span class="co">#&gt; 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       NULL</span>
 <span class="co">#&gt; 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       NULL</span>
-<span class="co">#&gt; 3                                                                                                                                                                                                                                                                                                                                                                                                 158, 158, Bicyclist Failed to Yield - Signalized Intersection, Bicyclist Failed to Yield - Signalized Intersection, 153, 153, Bicyclist Ride Out - Signalized Intersection, Bicyclist Ride Out - Signalized Intersection, 2, 2, Facing Traffic, Facing Traffic, 1, 1, At Intersection, At Intersection, 1, 1, Travel Lane, Travel Lane, 2019, 2019, 7, 7, Not a Pedestrian, Not a Pedestrian, 7, 7, Not a Pedestrian, Not a Pedestrian, 55, 55, 55 Years, 55 Years, 0, 0, None Noted, None Noted, 6, 6, Bicyclist, Bicyclist, 1, 1, Male, Male, 0, 0, None Noted, None Noted, 0, 0, None Noted, None Noted, 0, 0, Not a Pedestrian, Not a Pedestrian, 0, 0, Not a Pedestrian, Not a Pedestrian, 7, 7, Not a Pedestrian, Not a Pedestrian, 7, 7, Not a Pedestrian, Not a Pedestrian, 7, 7, Not a Pedestrian, Not a Pedestrian, 77, 77, Not a Pedestrian, Not a Pedestrian, 7, 7, Not a Pedestrian, Not a Pedestrian, 1, 1, 24, 24, Maryland, Maryland, 240119, 240119, 0, 1</span>
-<span class="co">#&gt; 4                                                                                                                                                                                                                                                                                                                                                                                                                                                               0, 0, Not a Cyclist, Not a Cyclist, 0, 0, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 2019, 2019, 8, 8, Not Applicable, Not Applicable, 8, 8, Not Applicable, Not Applicable, 41, 41, 41 Years, 41 Years, 0, 0, None Noted, None Noted, 5, 5, Pedestrian, Pedestrian, 1, 1, Male, Male, 0, 0, None Noted, None Noted, 0, 0, None Noted, None Noted, 100, 100, Unusual Circumstances, Unusual Circumstances, 150, 150, Motor Vehicle Loss of Control, Motor Vehicle Loss of Control, 8, 8, Not Applicable, Not Applicable, 8, 8, Not Applicable, Not Applicable, 3, 3, Not At Intersection, Not At Intersection, 4, 4, Paved Shoulder / Bicycle Lane / Parking Lane, Paved Shoulder / Bicycle Lane / Parking Lane, 8, 8, Not Applicable, Not Applicable, 1, 1, 24, 24, Maryland, Maryland, 240190, 240190, 0, 1</span>
+<span class="co">#&gt; 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       NULL</span>
+<span class="co">#&gt; 4  0, 0, 0, Not a Cyclist, Not a Cyclist, Not a Cyclist, 0, 0, 0, Not a Cyclist, Not a Cyclist, Not a Cyclist, 7, 7, 7, Not a Cyclist, Not a Cyclist, Not a Cyclist, 7, 7, 7, Not a Cyclist, Not a Cyclist, Not a Cyclist, 7, 7, 7, Not a Cyclist, Not a Cyclist, Not a Cyclist, 2019, 2019, 2019, 8, 8, 8, Not Applicable, Not Applicable, Not Applicable, 8, 8, 8, Not Applicable, Not Applicable, Not Applicable, 26, 26, 26, 26 Years, 26 Years, 26 Years, 0, 0, 0, None Noted, None Noted, None Noted, 5, 5, 5, Pedestrian, Pedestrian, Pedestrian, 1, 1, 1, Male, Male, Male, 0, 0, 0, None Noted, None Noted, None Noted, 0, 0, 0, None Noted, None Noted, None Noted, 400, 400, 400, Walking/Running Along Roadway, Walking/Running Along Roadway, Walking/Running Along Roadway, 410, 410, 410, Walking/Running Along Roadway With Traffic - From Behind, Walking/Running Along Roadway With Traffic - From Behind, Walking/Running Along Roadway With Traffic - From Behind, 8, 8, 8, Not Applicable, Not Applicable, Not Applicable, 8, 8, 8, Not Applicable, Not Applicable, Not Applicable, 3, 3, 3, Not At Intersection, Not At Intersection, Not At Intersection, 3, 3, 3, Travel Lane, Travel Lane, Travel Lane, 8, 8, 8, Not Applicable, Not Applicable, Not Applicable, 1, 1, 2, 24, 24, 24, Maryland, Maryland, Maryland, 240048, 240048, 240048, 0, 1, 1</span>
 <span class="co">#&gt; 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       NULL</span>
-<span class="co">#&gt; 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       NULL</span>
+<span class="co">#&gt; 6                                                                                                                                                                                                                                                                                                                                                                                                                                                       0, 0, Not a Cyclist, Not a Cyclist, 0, 0, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 2019, 2019, 8, 8, Not Applicable, Not Applicable, 8, 8, Not Applicable, Not Applicable, 32, 32, 32 Years, 32 Years, 0, 0, None Noted, None Noted, 5, 5, Pedestrian, Pedestrian, 1, 1, Male, Male, 0, 0, None Noted, None Noted, 0, 0, None Noted, None Noted, 400, 400, Walking/Running Along Roadway, Walking/Running Along Roadway, 440, 440, Walking/Running Along Roadway Against Traffic - From Front, Walking/Running Along Roadway Against Traffic - From Front, 8, 8, Not Applicable, Not Applicable, 8, 8, Not Applicable, Not Applicable, 3, 3, Not At Intersection, Not At Intersection, 3, 3, Travel Lane, Travel Lane, 8, 8, Not Applicable, Not Applicable, 1, 1, 24, 24, Maryland, Maryland, 240242, 240242, 0, 1</span>
 <span class="co">#&gt; 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       NULL</span>
-<span class="co">#&gt; 8                                                                                                                                                                                                                                                                                                                                     0, 0, Not a Cyclist, Not a Cyclist, 0, 0, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 2019, 2019, 4, 4, Westbound, Westbound, 3, 3, Straight through, Straight through, 12, 12, 12 Years, 12 Years, 0, 0, None Noted, None Noted, 5, 5, Pedestrian, Pedestrian, 2, 2, Female, Female, 0, 0, None Noted, None Noted, 0, 0, None Noted, None Noted, 740, 740, Dash / Dart-Out, Dash / Dart-Out, 741, 741, Dash, Dash, 3, 3, Southbound, Southbound, 2, 2, Farside, Farside, 1, 1, At Intersection, At Intersection, 1, 1, Intersection Area, Intersection Area, 4b, 4b, Motorist traveling straight through - Crash Occurred on Far Side of Intersection / Pedestrian outside crosswalk area, traveled from motorist`s right, Motorist traveling straight through - Crash Occurred on Far Side of Intersection / Pedestrian outside crosswalk area, traveled from motorist`s right, 1, 1, 24, 24, Maryland, Maryland, 240096, 240096, 0, 1</span>
+<span class="co">#&gt; 8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     0, 0, Not a Cyclist, Not a Cyclist, 0, 0, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 2019, 2019, 8, 8, Not Applicable, Not Applicable, 8, 8, Not Applicable, Not Applicable, 50, 50, 50 Years, 50 Years, 0, 0, None Noted, None Noted, 5, 5, Pedestrian, Pedestrian, 1, 1, Male, Male, 0, 0, None Noted, None Noted, 0, 0, None Noted, None Noted, 750, 750, Crossing Roadway - Vehicle Not Turning, Crossing Roadway - Vehicle Not Turning, 760, 760, Pedestrian Failed to Yield, Pedestrian Failed to Yield, 8, 8, Not Applicable, Not Applicable, 8, 8, Not Applicable, Not Applicable, 3, 3, Not At Intersection, Not At Intersection, 3, 3, Travel Lane, Travel Lane, 8, 8, Not Applicable, Not Applicable, 1, 1, 24, 24, Maryland, Maryland, 240373, 240373, 0, 1</span>
 <span class="co">#&gt; 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       NULL</span>
-<span class="co">#&gt; 10 0, 0, 0, Not a Cyclist, Not a Cyclist, Not a Cyclist, 0, 0, 0, Not a Cyclist, Not a Cyclist, Not a Cyclist, 7, 7, 7, Not a Cyclist, Not a Cyclist, Not a Cyclist, 7, 7, 7, Not a Cyclist, Not a Cyclist, Not a Cyclist, 7, 7, 7, Not a Cyclist, Not a Cyclist, Not a Cyclist, 2019, 2019, 2019, 8, 8, 8, Not Applicable, Not Applicable, Not Applicable, 8, 8, 8, Not Applicable, Not Applicable, Not Applicable, 26, 26, 26, 26 Years, 26 Years, 26 Years, 0, 0, 0, None Noted, None Noted, None Noted, 5, 5, 5, Pedestrian, Pedestrian, Pedestrian, 1, 1, 1, Male, Male, Male, 0, 0, 0, None Noted, None Noted, None Noted, 0, 0, 0, None Noted, None Noted, None Noted, 400, 400, 400, Walking/Running Along Roadway, Walking/Running Along Roadway, Walking/Running Along Roadway, 410, 410, 410, Walking/Running Along Roadway With Traffic - From Behind, Walking/Running Along Roadway With Traffic - From Behind, Walking/Running Along Roadway With Traffic - From Behind, 8, 8, 8, Not Applicable, Not Applicable, Not Applicable, 8, 8, 8, Not Applicable, Not Applicable, Not Applicable, 3, 3, 3, Not At Intersection, Not At Intersection, Not At Intersection, 3, 3, 3, Travel Lane, Travel Lane, Travel Lane, 8, 8, 8, Not Applicable, Not Applicable, Not Applicable, 1, 1, 2, 24, 24, 24, Maryland, Maryland, Maryland, 240048, 240048, 240048, 0, 1, 1</span></code></pre></div>
+<span class="co">#&gt; 10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      NULL</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="related-packages-and-projects">Related packages and projects<a class="anchor" aria-label="anchor" href="#related-packages-and-projects"></a>
@@ -557,7 +560,7 @@ Get Crashes By Occupant (partial support)</li>
 <li>
 <a href="https://github.com/graphhopper/open-traffic-collection" class="external-link">GraphHopper Open Traffic Collection</a>: “Collections of URLs pointing to traffic information portals which contain open data or at least data which is free to use.”</li>
 <li>
-<a href="https://docs.google.com/spreadsheets/d/1rmn6GbHNkfWLLDEEmA87iuy2yHdh7hBybCTZiQJEY0k/edit?usp=sharing" class="external-link">Open Crash Data Index</a>: A Google Sheet listing a range of city, county, regional and state sources for crash data including non-injury crashes as well as the fatal crashes available through the FARS API. Contributions for crash data from other U.S. cities adn states are welcome.</li>
+<a href="https://docs.google.com/spreadsheets/d/1rmn6GbHNkfWLLDEEmA87iuy2yHdh7hBybCTZiQJEY0k/edit?usp=sharing" class="external-link">Open Crash Data Index</a>: A Google Sheet listing a range of city, county, regional and state sources for crash data including non-injury crashes as well as the fatal crashes available through the FARS API. Contributions for crash data from other U.S. cities and states are welcome.</li>
 </ul>
 </div>
 </div>
@@ -600,6 +603,7 @@ Get Crashes By Occupant (partial support)</li>
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 <li><a href="https://opensource.org/licenses/MIT" class="external-link"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a></li>
 <li><a href="https://app.codecov.io/gh/elipousson/crashapi?branch=main" class="external-link"><img src="https://codecov.io/gh/elipousson/crashapi/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://www.repostatus.org/#active" class="external-link"><img src="https://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active – The project has reached a stable, usable state and is being actively developed."></a></li>
 </ul>
 </div>
 

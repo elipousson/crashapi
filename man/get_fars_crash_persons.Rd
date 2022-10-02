@@ -7,7 +7,7 @@
 get_fars_crash_persons(
   year = NULL,
   start_year,
-  end_year,
+  end_year = NULL,
   state,
   age = NULL,
   sex = NULL,
@@ -18,7 +18,8 @@ get_fars_crash_persons(
 )
 }
 \arguments{
-\item{year}{numeric vector. Year or range with start and end year. 2010 to 2020 supported.}
+\item{year}{numeric vector. Year or range with start and end year. 2010 to
+2020 supported.}
 
 \item{start_year}{Start year for crash reports.}
 
@@ -40,6 +41,6 @@ get_fars_crash_persons(
 \item{nonoccupants}{Include non-occupants in query; defaults to \code{TRUE}}
 }
 \description{
-This function returns a list of fatal crashes by occupant
-that have occurred throughout United States.
+This function returns a list of fatal crashes by occupant that have occurred
+throughout United States.
 }

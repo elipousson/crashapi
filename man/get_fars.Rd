@@ -30,9 +30,9 @@ get_fars(
 get_fars_crashes(
   year = NULL,
   start_year,
-  end_year,
+  end_year = NULL,
   state,
-  county = NULL,
+  county,
   details = FALSE,
   geometry = FALSE,
   crs = NULL
@@ -50,12 +50,12 @@ get_fars_cases(
 get_fars_crash_list(
   year = NULL,
   start_year,
-  end_year,
+  end_year = NULL,
   state,
   vehicles = c(1, 50)
 )
 
-get_fars_summary(year = NULL, start_year, end_year, state)
+get_fars_summary(year = NULL, start_year, end_year = NULL, state)
 
 get_fars_year(
   year = c(2019, 2020),
@@ -97,9 +97,9 @@ dataset" api or \code{get_fars_year}. Supported values include "ACCIDENT",
 \item{details}{Type of detailed crash data to return (either "events" or
 "vehicles"). If \code{TRUE} for \code{get_fars} or \code{get_fars_crashes}, detailed case
 data (excluding event and vehicle data) is attached to the returned crash
-data. If NULL for \code{get_fars_cases}, events and vehicle data are excluded
+data. If \code{NULL} for \code{get_fars_cases}, events and vehicle data are excluded
 from the returned case data. returned by \code{get_fars_cases}. Optional for
-\code{get_fars_crash_details}. Default: NULL for \code{get_fars_cases}; \code{FALSE} for
+\code{get_fars_crash_details}. Default: \code{NULL} for \code{get_fars_cases}; \code{FALSE} for
 \code{get_fars} and \code{get_fars_crashes}.}
 
 \item{geometry}{If \code{TRUE}, return sf object. Optional for \code{get_fars_crashes}.}
