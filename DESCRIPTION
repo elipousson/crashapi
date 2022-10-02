@@ -9,7 +9,8 @@ Authors@R: c(
            comment = "Author of tigris helper functions bundled with crashapi (see tigris-utils.R).")
   )
 Description: Get Fatality Analysis Reporting System (FARS) data with the
-    FARS API from the U.S. National Highway Traffic Safety Administration (NHTSA).
+    FARS API from the U.S. National Highway Traffic Safety Administration
+    (NHTSA).
 License: MIT + file LICENSE
 URL: https://github.com/elipousson/crashapi,
     https://elipousson.github.io/crashapi/
@@ -17,21 +18,15 @@ BugReports: https://github.com/elipousson/crashapi/issues
 Depends: 
     R (>= 2.10)
 Imports:
-    checkmate,
     cli,
     dplyr,
-    fs,
     glue,
     httr2,
     janitor,
-    jsonlite,
-    lubridate,
     purrr,
     readr,
     sf,
-    sfext,
     stringr,
-    tigris,
     utils
 Suggests: 
     covr,
@@ -40,8 +35,6 @@ Suggests:
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
-Remotes:
-    elipousson/sfext
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Encoding: UTF-8

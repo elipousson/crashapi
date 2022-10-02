@@ -5,34 +5,11 @@
   )
 }
 
-
 utils::globalVariables(c(
   "CITY", "CITYNAME", "COUNTY", "COUNTYNAME", "FATALS", "LATITUDE", "LONGITUD", "STATENAME",
   "TWAY_ID", "TWAY_ID2", "VE_FORMS", "abb", "day", "get_area_crashes",
   "hour", "minute", "month", "name", "st_case", "state_abb", "statewide_yn", "time", "year"
 ))
-
-# Utility functions
-
-#' Build query URL and download data from API
-#' @noRd
-#' @importFrom glue glue
-#' @importFrom jsonlite read_json
-read_api <- function(url,
-                     base = "https://crashviewer.nhtsa.dot.gov/CrashAPI",
-                     format = "json", results = TRUE, .envir = parent.frame()) {
-  url <- paste0(base, glue::glue(url, .envir = .envir))
-
-  if (!is.null(format)) {
-    url <- glue::glue("{url}&format={format}")
-  }
-
-  if (results && (format == "json")) {
-    jsonlite::read_json(url, simplifyVector = TRUE)[["Results"]][[1]]
-  } else {
-    url
-  }
-}
 
 #' Read data from the CrashAPI using a url template
 #'
@@ -71,46 +48,75 @@ read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
       "GetFARSData" = "GET /CrashAPI/{data}/{type}?dataset={dataset}&FromYear={FromYear}&ToYear={ToYear}&State={State}&format={format}"
     )
 
-  request <- httr2::req_template(
-    req = httr2::request(url),
-    template = template,
-    data = data,
-    type = type,
-    format = format,
-    ...,
-    .env = parent.frame()
-  )
+  request <-
+    httr2::req_template(
+      req = httr2::request(url),
+      template = template,
+      data = data,
+      type = type,
+      format = format,
+      ...,
+      .env = parent.frame()
+    )
 
-  if (results && (format == "json")) {
-    data <- request |>
-      httr2::req_perform() |>
-      httr2::resp_body_json(check_type = FALSE, simplifyVector = TRUE)
-
-    return(data$Results[[1]])
-  } else {
+  if (!results) {
     return(request$url)
   }
+
+  # FIXME: Implement a way of dealing with alternate formats
+  # if (format != "json") {}
+
+  data <-
+    httr2::resp_body_json(
+      httr2::req_perform(request),
+      check_type = FALSE,
+      simplifyVector = TRUE
+    )
+
+  data$Results[[1]]
 }
 
 #' Validate start and end year
 #' @noRd
 #' @importFrom cli cli_abort
-#' @importFrom checkmate expect_integerish
-validate_year <- function(year, year_range = c(2010, 2020), start_year, end_year) {
+validate_year <- function(year,
+                          year_range = c(2010, 2020),
+                          start_year = NULL,
+                          end_year = NULL,
+                          call = .envir,
+                          .envir = parent.frame()) {
   if (is.null(year)) {
-    if (!missing(start_year) | !missing(end_year)) {
-      year <- c(start_year, end_year)
-    } else {
+    if (is.null(start_year) && is.null(end_year)) {
       cli::cli_abort(
         "A {.arg year}, {.arg start_year}, or {.arg end_year} must be provided to download FARS data."
       )
     }
+
+    year <- c(start_year, end_year)
   }
+
   year <- as.integer(year)
 
-  suppressMessages(
-    checkmate::expect_integer(year, lower = min(year_range), upper = max(year_range))
-  )
+  if (any(is.na(year))) {
+    cli::cli_abort(
+      "{.arg year} must be an integer or coercible to an integer.",
+      call = call
+    )
+  }
+
+  if (!all(year >= min(year_range))) {
+    cli::cli_abort(
+      "{.arg year} must be greater than or equal to {.val {min(year_range)}}.",
+      call = call
+    )
+  }
+
+  if (!all(year <= max(year_range))) {
+    cli::cli_abort(
+      "{.arg year} must be less than or equal to {.val {max(year_range)}}.",
+      call = call
+    )
+  }
 
   year
 }
@@ -120,33 +126,30 @@ validate_year <- function(year, year_range = c(2010, 2020), start_year, end_year
 #' @noRd
 #' @importFrom sf st_as_sf st_transform
 df_to_sf <- function(x,
-                     longitude = "LONGITUD",
-                     latitude = "LATITUDE",
-                     crs = 4326) {
-
-  # Check that lat/lon are numeric
-  if (!is.numeric(x[[longitude]])) {
-    x[[longitude]] <- as.double(x[[longitude]])
-    x[[latitude]] <- as.double(x[[latitude]])
+                     coords = c("LONGITUD", "LATITUDE"),
+                     crs = 4326,
+                     na.fail = FALSE,
+                     remove = FALSE) {
+  if (is.null(crs)) {
+    crs <- 4326
   }
 
-  # Exclude rows with missing coordinates
-  x <- x[!is.na(x[longitude]), ]
+  if (!all(coords %in% names(x))) {
+    # FIXME: Consider adding a warning if coords not found
+    return(x)
+  }
 
-  x <-
-    sf::st_transform(
-      sf::st_as_sf(
-        x,
-        coords = c(longitude, latitude),
-        agr = "constant",
-        crs = 4326,
-        stringsAsFactors = FALSE,
-        remove = FALSE
-      ),
-      crs
-    )
-
-  return(x)
+  sf::st_transform(
+    sf::st_as_sf(
+      x,
+      coords = coords,
+      agr = "constant",
+      crs = 4326,
+      na.fail = na.fail,
+      remove = remove
+    ),
+    crs
+  )
 }
 
 
@@ -157,11 +160,14 @@ lookup_fips <- function(state, county = NULL, several.ok = FALSE, list = FALSE, 
     state_fips <- suppressMessages(validate_state(state))
     county_fips <- suppressMessages(validate_county(state, county))
   } else {
-    state_fips <- suppressMessages(vapply(state, validate_state, USE.NAMES = FALSE, FUN.VALUE = "1"))
+    state_fips <-
+      suppressMessages(vapply(state, validate_state, USE.NAMES = FALSE, FUN.VALUE = "1"))
+
+    county_fips <- NULL
+
     if (!is.null(county)) {
-      county_fips <- suppressMessages(mapply(validate_county, state_fips, county, USE.NAMES = FALSE))
-    } else {
-      county_fips <- NULL
+      county_fips <-
+        suppressMessages(mapply(validate_county, state_fips, county, USE.NAMES = FALSE))
     }
   }
 
@@ -205,33 +211,30 @@ reorder_fars_vars <- function(x) {
 #' @importFrom janitor clean_names
 #' @importFrom dplyr mutate
 #' @importFrom stringr str_pad
-#' @importFrom lubridate ymd_hm ymd
 format_crashes <- function(x, details = TRUE) {
-
   # Reorder column names
   crash_df <- reorder_fars_vars(x)
 
   # Clean column names
   crash_df <- janitor::clean_names(crash_df, "snake")
 
+  if (!details) {
+    return(crash_df)
+  }
+
   pad_hm <- function(x) {
     stringr::str_pad(x, width = 2, pad = "0")
   }
 
   # Append date/time columns
-  if (details) {
-    crash_df <-
-      dplyr::mutate(
-        crash_df,
-        date = paste(year, month, day, sep = "-"),
-        time = paste(pad_hm(hour), pad_hm(minute), sep = ":"),
-        datetime = lubridate::ymd_hm(paste(date, time)),
-        date = lubridate::ymd(date),
-        .after = st_case
-      )
-  }
-
-  crash_df
+  dplyr::mutate(
+    crash_df,
+    date = paste(year, month, day, sep = "-"),
+    time = paste(pad_hm(hour), pad_hm(minute), sep = ":"),
+    datetime = as.POSIXct(paste(date, time), format = "%Y-%m-%d %H:%M", tz = "UTC"),
+    date = as.Date(date),
+    .after = st_case
+  )
 }
 
 #' Helper function to return date added or updated for package data for documentation

@@ -40,9 +40,11 @@ fips_state_table <- structure(list(abb = c(
 
 # Called to check to see if "state" is a FIPS code, full name or abbreviation.
 #
-# returns NULL if input is NULL
-# returns valid state FIPS code if input is even pseud-valid (i.e. single digit but w/in range)
-# returns NULL if input is not a valid FIPS code
+# returns `NULL` if input is `NULL`
+# returns valid state FIPS code if input is even pseud-valid (i.e. single digit
+# but w/in range)
+# returns `NULL` if input is not a valid FIPS code
+#' @noRd
 #' @importFrom stringr str_trim
 validate_state <- function(state, .msg = interactive()) {
   if (is.null(state)) {
@@ -51,7 +53,8 @@ validate_state <- function(state, .msg = interactive()) {
 
   state <- tolower(stringr::str_trim(state)) # forgive white space
 
-  if (grepl("^[[:digit:]]+$", state)) { # we prbly have FIPS
+  if (grepl("^[[:digit:]]+$", state)) {
+    # we prbly have FIPS
 
     state <- sprintf("%02d", as.numeric(state)) # forgive 1-digit FIPS codes
 
@@ -62,12 +65,13 @@ validate_state <- function(state, .msg = interactive()) {
       # but warn the caller
       state_sub <- substr(state, 1, 2)
       if (state_sub %in% fips_state_table$fips) {
-        message(sprintf(
-          "Using first two digits of %s - '%s' (%s) - for FIPS code.",
-          state, state_sub,
-          fips_state_table[fips_state_table$fips == state_sub, "name"]
-        ),
-        call. = FALSE
+        message(
+          sprintf(
+            "Using first two digits of %s - '%s' (%s) - for FIPS code.",
+            state, state_sub,
+            fips_state_table[fips_state_table$fips == state_sub, "name"]
+          ),
+          call. = FALSE
         )
         return(state_sub)
       } else {
@@ -75,9 +79,11 @@ validate_state <- function(state, .msg = interactive()) {
         return(NULL)
       }
     }
-  } else if (grepl("^[[:alpha:]]+", state)) { # we might have state abbrev or name
+  } else if (grepl("^[[:alpha:]]+", state)) {
+    # we might have state abbrev or name
 
-    if (nchar(state) == 2 & state %in% fips_state_table$abb) { # yay, an abbrev!
+    if (nchar(state) == 2 & state %in% fips_state_table$abb) {
+      # yay, an abbrev!
 
       if (.msg) {
         message(sprintf(
@@ -87,7 +93,8 @@ validate_state <- function(state, .msg = interactive()) {
         ))
       }
       return(fips_state_table[fips_state_table$abb == state, "fips"])
-    } else if (nchar(state) > 2 & state %in% fips_state_table$name) { # yay, a name!
+    } else if (nchar(state) > 2 & state %in% fips_state_table$name) {
+      # yay, a name!
 
       if (.msg) {
         message(sprintf(
@@ -121,9 +128,10 @@ validate_county <- function(state, county, .msg = interactive()) {
 
   state <- validate_state(state, .msg = .msg) # Get the state of the county
 
-  county_table <- tigris::fips_codes[tigris::fips_codes$state_code == state, ] # Get a df for the requested state to work with
+  county_table <- fips_codes[fips_codes$state_code == state, ] # Get a df for the requested state to work with
 
-  if (grepl("^[[:digit:]]+$", county)) { # probably a FIPS code
+  if (grepl("^[[:digit:]]+$", county)) {
+    # probably a FIPS code
 
     county <- sprintf("%03d", as.numeric(county)) # in case they passed in 1 or 2 digit county codes
 
@@ -135,7 +143,8 @@ validate_county <- function(state, county, .msg = interactive()) {
       )
       return(NULL)
     }
-  } else if ((grepl("^[[:alpha:]]+", county))) { # should be a county name
+  } else if ((grepl("^[[:alpha:]]+", county))) {
+    # should be a county name
 
     county_index <- grepl(sprintf("^%s", county), county_table$county, ignore.case = TRUE)
 

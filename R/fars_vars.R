@@ -20,7 +20,6 @@
 #' @rdname fars_vars
 #' @aliases get_vars
 #' @export
-#' @importFrom jsonlite read_json
 fars_vars <- function(year, var = NULL, make = NULL, model = NULL) {
   year <- validate_year(year, year_range = c(2010, 2019))
   data <- "definitions"
