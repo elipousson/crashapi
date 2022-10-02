@@ -9,3 +9,4 @@
 ^codecov\.yml$
 ^\.github$
 ^codemeta\.json$
+^CITATION\.cff$
