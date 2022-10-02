@@ -101,11 +101,11 @@ You can download crash data and set geometry to TRUE optionally convert the data
 ```{r map_fars_crashes}
 crashes_sf <-
   get_fars(
-  year = c(2018, 2020),
-  state = "MD",
-  county = "Baltimore city",
-  geometry = TRUE
-)
+    year = c(2018, 2020),
+    state = "MD",
+    county = "Baltimore city",
+    geometry = TRUE
+  )
 
 # Map crashes
 ggplot() +
@@ -138,11 +138,11 @@ If you call `get_fars()` or `get_fars_crashes()` with details set to TRUE, addit
 # Get fatal crashes for Anne Arundel County, MD for 2019 and append details
 crashes_detailed <-
   get_fars(
-  year = 2019,
-  state = "MD",
-  county = "Anne Arundel County",
-  details = TRUE
-)
+    year = 2019,
+    state = "MD",
+    county = "Anne Arundel County",
+    details = TRUE
+  )
 
 # Show 10 fatal crashes at random
 dplyr::slice_sample(crashes_detailed, n = 10)
