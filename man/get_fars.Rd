@@ -28,7 +28,7 @@ get_fars(
 )
 
 get_fars_crashes(
-  year = NULL,
+  year = 2020,
   start_year,
   end_year = NULL,
   state,
@@ -48,17 +48,17 @@ get_fars_cases(
 )
 
 get_fars_crash_list(
-  year = NULL,
+  year = 2020,
   start_year,
   end_year = NULL,
   state,
   vehicles = c(1, 50)
 )
 
-get_fars_summary(year = NULL, start_year, end_year = NULL, state)
+get_fars_summary(year = 2020, start_year, end_year = NULL, state)
 
 get_fars_year(
-  year = c(2019, 2020),
+  year = 2020,
   type = "accident",
   state,
   format = "json",

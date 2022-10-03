@@ -139,6 +139,15 @@ df_to_sf <- function(x,
     return(x)
   }
 
+  x <-
+    dplyr::mutate(
+      x,
+      dplyr::across(
+        dplyr::all_of(coords),
+        ~ as.numeric(.x)
+      )
+    )
+
   sf::st_transform(
     sf::st_as_sf(
       x,
@@ -195,6 +204,11 @@ lookup_fips <- function(state, county = NULL, several.ok = FALSE, list = FALSE, 
 reorder_fars_vars <- function(x) {
   # Reorder columns to match analytical manual order
   x_vars <- dplyr::filter(fars_vars_labels, name %in% names(x))
+
+  if (!all(names(x) %in% x_vars)) {
+    return(x)
+  }
+
   x[, match(x_vars$name, colnames(x))]
 }
 
@@ -218,12 +232,32 @@ format_crashes <- function(x, details = TRUE) {
   # Clean column names
   crash_df <- janitor::clean_names(crash_df, "snake")
 
+  crash_df <-
+    dplyr::mutate(
+      crash_df,
+      dplyr::across(
+        dplyr::any_of(c("latitude", "longitud")),
+        ~ as.numeric(.x)
+      ),
+      dplyr::across(
+        dplyr::any_of(c(
+          "case_year", "totalvehicles", "total_vehicles",
+          "ve_forms", "fatals", "peds", "persons"
+        )),
+        ~ as.integer(.x)
+      )
+    )
+
   if (!details) {
     return(crash_df)
   }
 
   pad_hm <- function(x) {
     stringr::str_pad(x, width = 2, pad = "0")
+  }
+
+  if (!all(c("year", "month", "day") %in% names(crash_df))) {
+    return(crash_df)
   }
 
   # Append date/time columns

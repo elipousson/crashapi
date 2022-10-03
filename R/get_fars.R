@@ -149,7 +149,7 @@ get_fars <- function(year = 2020,
 #' @aliases get_fars_crashes
 #' @export
 #' @importFrom cli cli_abort
-get_fars_crashes <- function(year = NULL,
+get_fars_crashes <- function(year = 2020,
                              start_year,
                              end_year = NULL,
                              state,
@@ -287,7 +287,7 @@ get_fars_cases <- function(year = 2020,
 #' @rdname get_fars
 #' @aliases get_fars_crash_list
 #' @export
-get_fars_crash_list <- function(year = NULL,
+get_fars_crash_list <- function(year = 2020,
                                 start_year,
                                 end_year = NULL,
                                 state,
@@ -297,33 +297,39 @@ get_fars_crash_list <- function(year = NULL,
   states_fips <-
     paste0(lookup_fips(state, several.ok = TRUE), collapse = ",")
 
-  read_crashapi(
-    states = states_fips,
-    type = "GetCaseList",
-    fromYear = min(year),
-    toYear = max(year),
-    minNumOfVehicles = min(vehicles),
-    maxNumOfVehicles = max(vehicles)
-  )
+  crash_df <-
+    read_crashapi(
+      states = states_fips,
+      type = "GetCaseList",
+      fromYear = min(year),
+      toYear = max(year),
+      minNumOfVehicles = min(vehicles),
+      maxNumOfVehicles = max(vehicles)
+    )
+
+  format_crashes(crash_df)
 }
 
 #' @rdname get_fars
 #' @aliases get_fars_summary
 #' @export
-get_fars_summary <- function(year = NULL,
+get_fars_summary <- function(year = 2020,
                              start_year,
                              end_year = NULL,
                              state) {
   year <-
     validate_year(year, start_year = start_year, end_year = end_year)
 
-  read_crashapi(
-    data = "analytics",
-    type = "GetInjurySeverityCounts",
-    fromCaseYear = min(year),
-    toCaseYear = max(year),
-    state = lookup_fips(state)
-  )
+  crash_df <-
+    read_crashapi(
+      data = "analytics",
+      type = "GetInjurySeverityCounts",
+      fromCaseYear = min(year),
+      toCaseYear = max(year),
+      state = lookup_fips(state)
+    )
+
+  format_crashes(crash_df)
 }
 
 #' @rdname get_fars
@@ -333,7 +339,7 @@ get_fars_summary <- function(year = NULL,
 #' @importFrom stringr str_to_sentence
 #' @importFrom cli cli_warn
 #' @importFrom httr2 resp_body_json req_perform request
-get_fars_year <- function(year = c(2019, 2020),
+get_fars_year <- function(year = 2020,
                           type = "accident",
                           state,
                           format = "json",
