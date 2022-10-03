@@ -27,6 +27,18 @@ The goal of the crashapi R package is to provide functions for downloading data 
 
 What is FARS? NHTSA explains: "The Fatality Analysis Reporting System (FARS) contains data on all vehicle crashes in the United States that occur on a public roadway and involve a fatality."
 
+## Installation
+
+You can install the development version of crashapi using the pak package:
+
+``` r
+pak::pkg_install("elipousson/crashapi")
+```
+
+## Background
+
+### Fatality Analysis Reporting System (FARS) API support
+
 Supported APIs for this package include:
 
 -   [x] Get Crash List Information
@@ -38,15 +50,11 @@ Supported APIs for this package include:
 -   [x] Get FARS Data By Year
 -   [X] Get Crashes By Occupant (partial support)
 
-Most of these APIs support XML, JSV, CSV, and JSON output formats. This package only uses JSON with the exception of get_fars_year (which supports downloading CSV files).
+Most of these APIs support XML, JSV, CSV, and JSON output formats. This package only uses JSON with the exception of `get_fars_year()` (which supports downloading CSV files).
 
 For reference, this package also includes a list of terms and NHTSA technical definitions in `fars_terms` and a list of variable labels in `fars_vars_labels`.
 
-The FARS API currently provides access to data from 2010 to 2020. The `get_fars_zip` function can be used to access FARS data files from 1975 to 2020 that that are available for download on through [the NHTSA File Downloads site](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/) as zipped CSV or SAS files (not available through the NHTSA FARS API). This site also provides extensive technical documentation on coding and use of the FARS data files.
-
-Earlier data along with data from the the [General Estimates System](https://www.nhtsa.gov/national-automotive-sampling-system-nass/nass-general-estimates-system) (GES) / [Crash Report Sampling System](https://www.nhtsa.gov/crash-data-systems/crash-report-sampling-system-crss) (CRSS) is also available through the [Fatality and Injury Reporting System Tool](https://cdan.dot.gov/query) (FIRST).
-
-The [NHTSA website](https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx) also provides additional information on the release data and version status for the FARS data files:
+The FARS API currently provides access to data from 2010 to 2020. The [NHTSA website](https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx) also provides additional information on the release data and version status for the FARS data files available through the API:
 
 | Data Year | File Version | Release Date      |
 |-----------|--------------|-------------------|
@@ -62,13 +70,12 @@ The [NHTSA website](https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx) also pro
 | 2019      | Final        | March 2, 2022     |
 | 2020      | Annual       | March 2, 2022     |
 
-## Installation
 
-You can install the development version of crashapi using the pak package:
+### Additional data access functionality
 
-``` r
-pak::pkg_install("elipousson/crashapi")
-```
+The `get_fars_zip()` function can be used to access FARS data files from 1975 to 2020 that that are not available via the API but are available for download on through [the NHTSA File Downloads site](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/) as zipped CSV or SAS files (not available through the NHTSA FARS API). This site also provides extensive technical documentation on coding and use of the FARS data files.
+
+Earlier data along with data from the the [General Estimates System](https://www.nhtsa.gov/national-automotive-sampling-system-nass/nass-general-estimates-system) (GES) / [Crash Report Sampling System](https://www.nhtsa.gov/crash-data-systems/crash-report-sampling-system-crss) (CRSS) is also available through the [Fatality and Injury Reporting System Tool](https://cdan.dot.gov/query) (FIRST).
 
 ## Examples
 
@@ -90,7 +97,7 @@ md_summary <-
     api = "summary count"
   )
 
-ggplot(md_summary, aes(x = CaseYear, y = TotalFatalCounts)) +
+ggplot(md_summary, aes(x = case_year, y = total_fatal_counts)) +
   geom_point(color = "red") +
   geom_line(color = "red", group = 1) +
   theme_minimal()
@@ -102,19 +109,22 @@ You can download crash data and set geometry to TRUE optionally convert the data
 crashes_sf <-
   get_fars(
     year = c(2018, 2020),
-    state = "MD",
-    county = "Baltimore city",
+    state = "NC",
+    county = "Wake County",
     geometry = TRUE
   )
+
+nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
+wake_co <- sf::st_transform(nc[nc$NAME == "Wake",], 4326)
 
 # Map crashes
 ggplot() +
   geom_sf(
-    data = mapbaltimore::baltimore_city,
+    data = wake_co,
     fill = NA, color = "black"
   ) +
   geom_sf(
-    data = crashes_sf,
+    data = sf::st_crop(crashes_sf, wake_co),
     aes(color = totalvehicles),
     alpha = 0.75
   ) +
