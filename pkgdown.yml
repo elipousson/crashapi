@@ -2,7 +2,7 @@ pandoc: 2.14.2
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles: {}
-last_built: 2022-10-03T14:27Z
+last_built: 2022-10-04T00:23Z
 urls:
   reference: https://elipousson.github.io/crashapi/reference
   article: https://elipousson.github.io/crashapi/articles
