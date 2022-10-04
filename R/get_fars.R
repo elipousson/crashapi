@@ -517,7 +517,7 @@ get_fars_zip <- function(year = 2020,
 
   stopifnot(format == "csv")
 
-  crash_tbls <-
+  crash_tables <-
     setNames(
       purrr::map(
         cli::cli_progress_along(files),
@@ -531,8 +531,8 @@ get_fars_zip <- function(year = 2020,
     )
 
   if (geometry) {
-    crash_tbls$accident <-
-      df_to_sf(crash_tbls$accident)
+    crash_tables$accident <-
+      df_to_sf(crash_tables$accident)
   }
 
   crash_tables
