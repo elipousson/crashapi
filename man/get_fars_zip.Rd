@@ -9,6 +9,7 @@ get_fars_zip(
   format = "csv",
   path = NULL,
   pr = FALSE,
+  aux = FALSE,
   read = TRUE,
   geometry = FALSE
 )
@@ -23,6 +24,18 @@ unzip and geo options are only supported if format is "csv".}
 
 \item{pr}{If \code{TRUE}, download FARS data for Puerto Rico. No Puerto Rico data
 available for years 1975-1977. Default: \code{FALSE}}
+
+\item{aux}{If \code{TRUE} and year is between 1982 and 2009, download auxiliary
+FARS datasets that "contain data derived from the regular FARS/GES
+variables using NCSA analytical data classifications." In 2010, the NHTSA
+explained: "These classifications are widely used in NCSA publications and
+research. Many definitions such as "speeding-related" or "distracted
+driving" comprise a combination of variables whose names or attributes have
+changed over time. The derived variables in the auxiliary files incorporate
+these nuances, thus simplifying the use of standard classifications in any
+traffic safety research." Learn more from the FARS and GES Auxiliary
+Datasets Q & A:
+\url{https://crashstats.nhtsa.dot.gov/Api/Public/ViewPublication/811364}}
 
 \item{read}{If \code{TRUE}, unzip the downloaded file and read CSV files into a
 list of tables with each list item corresponding to one CSV file.}

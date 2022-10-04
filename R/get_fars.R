@@ -448,12 +448,22 @@ get_fars_year <- function(year = 2020,
 #' @param format Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
 #'   unzip and geo options are only supported if format is "csv".
 #' @param path Path to download zip file with FARS tables.
+#' @param pr If `TRUE`, download FARS data for Puerto Rico. No Puerto Rico data
+#'   available for years 1975-1977. Default: `FALSE`
+#' @param aux If `TRUE` and year is between 1982 and 2009, download auxiliary
+#'   FARS datasets that "contain data derived from the regular FARS/GES
+#'   variables using NCSA analytical data classifications." In 2010, the NHTSA
+#'   explained: "These classifications are widely used in NCSA publications and
+#'   research. Many definitions such as "speeding-related" or "distracted
+#'   driving" comprise a combination of variables whose names or attributes have
+#'   changed over time. The derived variables in the auxiliary files incorporate
+#'   these nuances, thus simplifying the use of standard classifications in any
+#'   traffic safety research." Learn more from the FARS and GES Auxiliary
+#'   Datasets Q & A:
+#'   <https://crashstats.nhtsa.dot.gov/Api/Public/ViewPublication/811364>
 #' @param read If `TRUE`, unzip the downloaded file and read CSV files into a
 #'   list of tables with each list item corresponding to one CSV file.
 #' @param geometry If `TRUE`, convert the accident table to a sf object.
-#' @param pr If `TRUE`, download FARS data for Puerto Rico. No Puerto Rico data
-#'   available for years 1975-1977. Default: `FALSE`
-#'
 #' @return Downloads zip file with CSV or SAS tables and returns `NULL` invisibly
 #'   or returns a list of data frames (if geo is `FALSE`), or returns a list of
 #'   data frames with the accident table converted to a sf object.
@@ -465,6 +475,7 @@ get_fars_zip <- function(year = 2020,
                          format = "csv",
                          path = NULL,
                          pr = FALSE,
+                         aux = FALSE,
                          read = TRUE,
                          geometry = FALSE) {
   year <- validate_year(year = year, year_range = c(1975:2020))
@@ -475,8 +486,22 @@ get_fars_zip <- function(year = 2020,
     scope <- utils::URLencode("Puerto Rico")
   }
 
+  auxiliary <- ""
+
+  if (aux) {
+    auxiliary <- "Auxiliary"
+    if (year > 2009 | year < 1982) {
+      cli_warn(
+        c("Auxiliary data (when {.code aux = TRUE}) is only available for years
+        between 1982 and 2009.",
+         "i" = "Returning non-auxiliary data instead.")
+      )
+      auxiliary <- ""
+    }
+  }
+
   filename <-
-    glue::glue("FARS{year}{scope}{toupper(format)}.zip")
+    glue::glue("FARS{year}{scope}{auxiliary}{toupper(format)}.zip")
 
   url <-
     glue::glue(
@@ -520,7 +545,7 @@ get_fars_zip <- function(year = 2020,
   crash_tables <-
     setNames(
       purrr::map(
-        cli::cli_progress_along(files),
+        cli::cli_progress_along(files, "Reading data"),
         ~ readr::read_csv(
           file = files[.x],
           progress = FALSE,
