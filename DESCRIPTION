@@ -26,6 +26,7 @@ Imports:
     purrr,
     readr,
     sf,
+    stats,
     stringr,
     utils
 Suggests: 

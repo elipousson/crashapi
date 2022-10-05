@@ -15,8 +15,8 @@
 #'   - `get_fars_year` provides one of 20 FARS data tables for a single year.
 #'   Supports downloading to a CSV or JSON file.
 #'
-#'   Both `get_fars_crash_list` and `get_fars_crashes` limit the returned data to
-#'   5000 records so consider limiting the range of years requested if data
+#'   Both `get_fars_crash_list` and `get_fars_crashes` limit the returned data
+#'   to 5000 records so consider limiting the range of years requested if data
 #'   exceeds that threshold.
 #'
 #'   This package also enables access to the FARS data available through the
@@ -28,9 +28,10 @@
 #'   `get_fars_crash_details`, `get_fars_year`, or `get_fars_zip` functions), a
 #'   single year is required. All other `api` options support a range with the
 #'   minimum value is used as a start year and the maximum value used as a end
-#'   year. Most `api` options support the years from 2010 through the most recent year of release. "year
-#'   dataset" only supports 2010 to 2017 and "zip" supports 1975 to 2020.
-#'   `start_year` and `end_year` are ignored if `year` is not NULL.
+#'   year. Most `api` options support the years from 2010 through the most
+#'   recent year of release. "year dataset" only supports 2010 to 2017 and "zip"
+#'   supports 1975 to 2020. `start_year` and `end_year` are ignored if `year` is
+#'   not `NULL`.
 #' @param api character. API function to use. Supported values include
 #'   "crashes", "cases", "state list", "summary count", "year dataset", and
 #'   "zip". Default: "crashes".
@@ -60,9 +61,9 @@
 #' @param vehicles numeric vector with the minimum and maximum number of
 #'   vehicles, e.g. c(1, 2) for minimum of 1 vehicle and maximum of 2. Required
 #'   for `get_fars_crash_list`.
-#' @param pr logical. If `TRUE`, download zip file with FARS data for Puerto Rico.
-#'   No Puerto Rico data available for years 1975-1977. Default: `FALSE` for
-#'   `get_fars_zip` only.
+#' @param pr logical. If `TRUE`, download zip file with FARS data for Puerto
+#'   Rico. No Puerto Rico data available for years 1975-1977. Default: `FALSE`
+#'   for `get_fars_zip` only.
 #' @param format Default "json". "csv" is supported when using the "year
 #'   dataset" api. "sas" is supporting for the "zip" api.
 #' @param path File path used if download is `TRUE`.
@@ -74,7 +75,8 @@
 get_fars <- function(year = 2020,
                      state,
                      county = NULL,
-                     api = c("crashes", "cases", "state list", "summary count", "year dataset", "zip"),
+                     api = c("crashes", "cases", "state list",
+                             "summary count", "year dataset", "zip"),
                      type,
                      details = FALSE,
                      geometry = FALSE,
@@ -387,10 +389,18 @@ get_fars_year <- function(year = 2020,
     )
 
   if (!download) {
+    if (format == "json") {
+      request <-
+        httr2::req_user_agent(
+          httr2::request(url),
+          "crashapi https://elipousson.github.io/crashapi/"
+        )
+    }
+
     crash_df <-
       switch(format,
         "json" = httr2::resp_body_json(
-          httr2::req_perform(httr2::request(url)),
+          httr2::req_perform(request),
           simplifyVector = TRUE,
           check_type = FALSE
         )[["Results"]][[1]],
@@ -450,7 +460,7 @@ get_fars_year <- function(year = 2020,
 #' @param path Path to download zip file with FARS tables.
 #' @param pr If `TRUE`, download FARS data for Puerto Rico. No Puerto Rico data
 #'   available for years 1975-1977. Default: `FALSE`
-#' @param aux If `TRUE` and year is between 1982 and 2009, download auxiliary
+#' @param aux If `TRUE` and year is after 1982, download auxiliary
 #'   FARS datasets that "contain data derived from the regular FARS/GES
 #'   variables using NCSA analytical data classifications." In 2010, the NHTSA
 #'   explained: "These classifications are widely used in NCSA publications and
@@ -471,6 +481,7 @@ get_fars_year <- function(year = 2020,
 #' @export
 #' @importFrom utils URLencode
 #' @importFrom glue glue
+#' @importFrom stats setNames
 get_fars_zip <- function(year = 2020,
                          format = "csv",
                          path = NULL,
@@ -490,11 +501,12 @@ get_fars_zip <- function(year = 2020,
 
   if (aux) {
     auxiliary <- "Auxiliary"
-    if (year > 2009 | year < 1982) {
+    if (year < 1982) {
       cli_warn(
         c("Auxiliary data (when {.code aux = TRUE}) is only available for years
-        between 1982 and 2009.",
-         "i" = "Returning non-auxiliary data instead.")
+        after 1982.",
+          "i" = "Setting {.code aux = FALSE} to return non-auxiliary data."
+        )
       )
       auxiliary <- ""
     }
@@ -543,7 +555,7 @@ get_fars_zip <- function(year = 2020,
   stopifnot(format == "csv")
 
   crash_tables <-
-    setNames(
+    stats::setNames(
       purrr::map(
         cli::cli_progress_along(files, "Reading data"),
         ~ readr::read_csv(
@@ -694,16 +706,26 @@ get_fars_crash_vehicles <- function(year = NULL,
     model_options <- fars_vars(year = model_year, make = make, var = "model")
 
     if (model %in% model_options$MODELNAME) {
-      model <- as.character(model_options[model_options$MODELNAME == model, ]$ID)
+      model <-
+        as.character(model_options[model_options$MODELNAME == model, ]$ID)
     }
 
     model <- match.arg(as.character(model), as.character(model_options$ID))
 
     if (!is.null(body_type)) {
-      body_type_options <- fars_vars(year = model_year, make = make, model = model, var = "bodytype")
+      body_type_options <-
+        fars_vars(
+          year = model_year,
+          make = make,
+          model = model,
+          var = "bodytype"
+          )
 
       if (body_type %in% body_type_options$BODY_DEF) {
-        body_type <- as.character(body_type_options[body_type_options$BODY_DEF == body_type, ]$BODY_ID)
+        body_type <-
+          as.character(
+            body_type_options[body_type_options$BODY_DEF == body_type, ]$BODY_ID
+            )
       }
 
       body_type <- match.arg(body_type, body_type_options$BODY_ID)

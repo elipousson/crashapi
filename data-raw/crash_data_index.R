@@ -28,6 +28,8 @@ fips_codes <- tigris:::fips_codes
 usethis::use_data(fips_codes, pkg_data_index, internal = TRUE, overwrite = TRUE)
 
 crash_data_index <-
-  googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1rmn6GbHNkfWLLDEEmA87iuy2yHdh7hBybCTZiQJEY0k/edit#gid=0")
+  googlesheets4::read_sheet(
+    "https://docs.google.com/spreadsheets/d/1rmn6GbHNkfWLLDEEmA87iuy2yHdh7hBybCTZiQJEY0k/edit#gid=0"
+    )
 
 usethis::use_data(crash_data_index, overwrite = TRUE)

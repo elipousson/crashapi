@@ -10,33 +10,39 @@
 # but put "state_codes" to all lowercase for utility functions and then
 # use string transformations when presenting messages to the user
 
-fips_state_table <- structure(list(abb = c(
-  "ak", "al", "ar", "as", "az", "ca", "co",
-  "ct", "dc", "de", "fl", "ga", "gu", "hi", "ia", "id", "il", "in",
-  "ks", "ky", "la", "ma", "md", "me", "mi", "mn", "mo", "ms", "mt",
-  "nc", "nd", "ne", "nh", "nj", "nm", "nv", "ny", "oh", "ok", "or",
-  "pa", "pr", "ri", "sc", "sd", "tn", "tx", "ut", "va", "vi", "vt",
-  "wa", "wi", "wv", "wy", "mp"
-), fips = c(
-  "02", "01", "05", "60", "04",
-  "06", "08", "09", "11", "10", "12", "13", "66", "15", "19", "16",
-  "17", "18", "20", "21", "22", "25", "24", "23", "26", "27", "29",
-  "28", "30", "37", "38", "31", "33", "34", "35", "32", "36", "39",
-  "40", "41", "42", "72", "44", "45", "46", "47", "48", "49", "51",
-  "78", "50", "53", "55", "54", "56", "69"
-), name = c(
-  "alaska", "alabama",
-  "arkansas", "american samoa", "arizona", "california", "colorado",
-  "connecticut", "district of columbia", "delaware", "florida",
-  "georgia", "guam", "hawaii", "iowa", "idaho", "illinois", "indiana",
-  "kansas", "kentucky", "louisiana", "massachusetts", "maryland",
-  "maine", "michigan", "minnesota", "missouri", "mississippi",
-  "montana", "north carolina", "north dakota", "nebraska", "new hampshire",
-  "new jersey", "new mexico", "nevada", "new york", "ohio", "oklahoma",
-  "oregon", "pennsylvania", "puerto rico", "rhode island", "south carolina",
-  "south dakota", "tennessee", "texas", "utah", "virginia", "virgin islands",
-  "vermont", "washington", "wisconsin", "west virginia", "wyoming", "northern mariana islands"
-)), .Names = c("abb", "fips", "name"), row.names = c(NA, -56L), class = "data.frame")
+fips_state_table <- structure(
+  list(abb = c(
+    "ak", "al", "ar", "as", "az", "ca", "co",
+    "ct", "dc", "de", "fl", "ga", "gu", "hi", "ia", "id", "il", "in",
+    "ks", "ky", "la", "ma", "md", "me", "mi", "mn", "mo", "ms", "mt",
+    "nc", "nd", "ne", "nh", "nj", "nm", "nv", "ny", "oh", "ok", "or",
+    "pa", "pr", "ri", "sc", "sd", "tn", "tx", "ut", "va", "vi", "vt",
+    "wa", "wi", "wv", "wy", "mp"
+  ), fips = c(
+    "02", "01", "05", "60", "04",
+    "06", "08", "09", "11", "10", "12", "13", "66", "15", "19", "16",
+    "17", "18", "20", "21", "22", "25", "24", "23", "26", "27", "29",
+    "28", "30", "37", "38", "31", "33", "34", "35", "32", "36", "39",
+    "40", "41", "42", "72", "44", "45", "46", "47", "48", "49", "51",
+    "78", "50", "53", "55", "54", "56", "69"
+  ), name = c(
+    "alaska", "alabama",
+    "arkansas", "american samoa", "arizona", "california", "colorado",
+    "connecticut", "district of columbia", "delaware", "florida",
+    "georgia", "guam", "hawaii", "iowa", "idaho", "illinois", "indiana",
+    "kansas", "kentucky", "louisiana", "massachusetts", "maryland",
+    "maine", "michigan", "minnesota", "missouri", "mississippi",
+    "montana", "north carolina", "north dakota", "nebraska", "new hampshire",
+    "new jersey", "new mexico", "nevada", "new york", "ohio", "oklahoma",
+    "oregon", "pennsylvania", "puerto rico", "rhode island", "south carolina",
+    "south dakota", "tennessee", "texas", "utah", "virginia", "virgin islands",
+    "vermont", "washington", "wisconsin", "west virginia", "wyoming",
+    "northern mariana islands"
+  )),
+  .Names = c("abb", "fips", "name"),
+  row.names = c(NA, -56L),
+  class = "data.frame"
+)
 
 # Called to check to see if "state" is a FIPS code, full name or abbreviation.
 #
@@ -75,8 +81,11 @@ validate_state <- function(state, .msg = interactive()) {
         )
         return(state_sub)
       } else {
-        warning(sprintf("'%s' is not a valid FIPS code or state name/abbreviation", state), call. = FALSE)
-        return(NULL)
+        cli::cli_warn(
+        "{.arg state} ({.val state}) is not a valid FIPS code or
+        state name/abbreviation."
+        )
+        return(invisible(NULL))
       }
     }
   } else if (grepl("^[[:alpha:]]+", state)) {
@@ -105,11 +114,17 @@ validate_state <- function(state, .msg = interactive()) {
       }
       return(fips_state_table[fips_state_table$name == state, "fips"])
     } else {
-      warning(sprintf("'%s' is not a valid FIPS code or state name/abbreviation", state), call. = FALSE)
+      cli::cli_warn(
+        "{.arg state} ({.val state}) is not a valid FIPS code or
+        state name/abbreviation."
+      )
       return(NULL)
     }
   } else {
-    warning(sprintf("'%s' is not a valid FIPS code or state name/abbreviation", state), call. = FALSE)
+    cli::cli_warn(
+      "{.arg state} ({.val state}) is not a valid FIPS code or
+        state name/abbreviation."
+    )
     return(NULL)
   }
 }
@@ -126,19 +141,22 @@ validate_county <- function(state, county, .msg = interactive()) {
     return(NULL)
   }
 
-  state <- validate_state(state, .msg = .msg) # Get the state of the county
+  # Get the state of the county
+  state <- validate_state(state, .msg = .msg)
 
-  county_table <- fips_codes[fips_codes$state_code == state, ] # Get a df for the requested state to work with
-
+  # Get a df for the requested state to work with
+  county_table <- fips_codes[fips_codes$state_code == state, ]
   if (grepl("^[[:digit:]]+$", county)) {
-    # probably a FIPS code
+    # if probably a FIPS code
 
-    county <- sprintf("%03d", as.numeric(county)) # in case they passed in 1 or 2 digit county codes
+    # in case they passed in 1 or 2 digit county codes
+    county <- sprintf("%03d", as.numeric(county))
 
     if (county %in% county_table$county_code) {
       return(county)
     } else {
-      warning(sprintf("'%s' is not a valid FIPS code for counties in %s", county, county_table$state_name[1]),
+      warning(sprintf("'%s' is not a valid FIPS code for counties in %s",
+                      county, county_table$state_name[1]),
         call. = FALSE
       )
       return(NULL)
@@ -146,12 +164,14 @@ validate_county <- function(state, county, .msg = interactive()) {
   } else if ((grepl("^[[:alpha:]]+", county))) {
     # should be a county name
 
-    county_index <- grepl(sprintf("^%s", county), county_table$county, ignore.case = TRUE)
+    county_index <- grepl(sprintf("^%s", county),
+                          county_table$county, ignore.case = TRUE)
 
     matching_counties <- county_table$county[county_index] # Get the counties that match
 
     if (length(matching_counties) == 0) {
-      warning(sprintf("'%s' is not a valid name for counties in %s", county, county_table$state_name[1]),
+      warning(sprintf("'%s' is not a valid name for counties in %s",
+                      county, county_table$state_name[1]),
         call. = FALSE
       )
       return(NULL)
@@ -164,11 +184,14 @@ validate_county <- function(state, county, .msg = interactive()) {
         ))
       }
 
-      return(county_table[county_table$county == matching_counties, "county_code"])
+      return(
+        county_table[county_table$county == matching_counties, "county_code"]
+        )
     } else if (length(matching_counties) > 1) {
       ctys <- format_vec(matching_counties)
 
-      warning(paste0("Your county string matches ", ctys, " Please refine your selection."), call. = FALSE)
+      warning(paste0("Your county string matches ", ctys,
+                     " Please refine your selection."), call. = FALSE)
       return(NULL)
     }
   }

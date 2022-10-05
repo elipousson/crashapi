@@ -48,9 +48,15 @@ read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
       "GetFARSData" = "GET /CrashAPI/{data}/{type}?dataset={dataset}&FromYear={FromYear}&ToYear={ToYear}&State={State}&format={format}"
     )
 
+  req <-
+    httr2::req_user_agent(
+      httr2::request(url),
+      "crashapi https://elipousson.github.io/crashapi/"
+    )
+
   request <-
     httr2::req_template(
-      req = httr2::request(url),
+      req = req,
       template = template,
       data = data,
       type = type,

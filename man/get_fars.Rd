@@ -74,9 +74,10 @@ is "details", "year dataset", or "zip" (or using the
 \code{get_fars_crash_details}, \code{get_fars_year}, or \code{get_fars_zip} functions), a
 single year is required. All other \code{api} options support a range with the
 minimum value is used as a start year and the maximum value used as a end
-year. Most \code{api} options support the years from 2010 through the most recent year of release. "year
-dataset" only supports 2010 to 2017 and "zip" supports 1975 to 2020.
-\code{start_year} and \code{end_year} are ignored if \code{year} is not NULL.}
+year. Most \code{api} options support the years from 2010 through the most
+recent year of release. "year dataset" only supports 2010 to 2017 and "zip"
+supports 1975 to 2020. \code{start_year} and \code{end_year} are ignored if \code{year} is
+not \code{NULL}.}
 
 \item{state}{Required. State name, abbreviation, or FIPS number.
 \code{get_fars_crash_list} supports multiple states.}
@@ -117,9 +118,9 @@ for \code{get_fars_crash_list}.}
 \item{format}{Default "json". "csv" is supported when using the "year
 dataset" api. "sas" is supporting for the "zip" api.}
 
-\item{pr}{logical. If \code{TRUE}, download zip file with FARS data for Puerto Rico.
-No Puerto Rico data available for years 1975-1977. Default: \code{FALSE} for
-\code{get_fars_zip} only.}
+\item{pr}{logical. If \code{TRUE}, download zip file with FARS data for Puerto
+Rico. No Puerto Rico data available for years 1975-1977. Default: \code{FALSE}
+for \code{get_fars_zip} only.}
 
 \item{path}{File path used if download is \code{TRUE}.}
 
@@ -148,8 +149,8 @@ throughout U.S. including count of fatalities and crashes.
 Supports downloading to a CSV or JSON file.
 }
 
-Both \code{get_fars_crash_list} and \code{get_fars_crashes} limit the returned data to
-5000 records so consider limiting the range of years requested if data
+Both \code{get_fars_crash_list} and \code{get_fars_crashes} limit the returned data
+to 5000 records so consider limiting the range of years requested if data
 exceeds that threshold.
 
 This package also enables access to the FARS data available through the
