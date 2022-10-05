@@ -15,8 +15,8 @@ get_fars_year provides one of 20 FARS data tables for a single year.
 Supports downloading to a CSV or JSON file.
 
 
-Both get_fars_crash_list and get_fars_crashes limit the returned data to
-5000 records so consider limiting the range of years requested if data
+Both get_fars_crash_list and get_fars_crashes limit the returned data
+to 5000 records so consider limiting the range of years requested if data
 exceeds that threshold.
 This package also enables access to the FARS data available through the
 NHTSA data downloads server in a zip format. Set api to "zip" or use the
@@ -36,8 +36,8 @@ get_fars_year provides one of 20 FARS data tables for a single year.
 Supports downloading to a CSV or JSON file.
 
 
-Both get_fars_crash_list and get_fars_crashes limit the returned data to
-5000 records so consider limiting the range of years requested if data
+Both get_fars_crash_list and get_fars_crashes limit the returned data
+to 5000 records so consider limiting the range of years requested if data
 exceeds that threshold.
 This package also enables access to the FARS data available through the
 NHTSA data downloads server in a zip format. Set api to "zip" or use the
@@ -101,8 +101,8 @@ throughout U.S.</p></li>
 throughout U.S. including count of fatalities and crashes.</p></li>
 <li><p><code>get_fars_year</code> provides one of 20 FARS data tables for a single year.
 Supports downloading to a CSV or JSON file.</p></li>
-</ul><p>Both <code>get_fars_crash_list</code> and <code>get_fars_crashes</code> limit the returned data to
-5000 records so consider limiting the range of years requested if data
+</ul><p>Both <code>get_fars_crash_list</code> and <code>get_fars_crashes</code> limit the returned data
+to 5000 records so consider limiting the range of years requested if data
 exceeds that threshold.</p>
 <p>This package also enables access to the FARS data available through the
 NHTSA data downloads server in a zip format. Set <code>api</code> to "zip" or use the
@@ -178,9 +178,10 @@ is "details", "year dataset", or "zip" (or using the
 <code>get_fars_crash_details</code>, <code>get_fars_year</code>, or <code>get_fars_zip</code> functions), a
 single year is required. All other <code>api</code> options support a range with the
 minimum value is used as a start year and the maximum value used as a end
-year. Most <code>api</code> options support the years from 2010 through the most recent year of release. "year
-dataset" only supports 2010 to 2017 and "zip" supports 1975 to 2020.
-<code>start_year</code> and <code>end_year</code> are ignored if <code>year</code> is not NULL.</p></dd>
+year. Most <code>api</code> options support the years from 2010 through the most
+recent year of release. "year dataset" only supports 2010 to 2017 and "zip"
+supports 1975 to 2020. <code>start_year</code> and <code>end_year</code> are ignored if <code>year</code> is
+not <code>NULL</code>.</p></dd>
 
 
 <dt>state</dt>
@@ -243,9 +244,9 @@ dataset" api. "sas" is supporting for the "zip" api.</p></dd>
 
 
 <dt>pr</dt>
-<dd><p>logical. If <code>TRUE</code>, download zip file with FARS data for Puerto Rico.
-No Puerto Rico data available for years 1975-1977. Default: <code>FALSE</code> for
-<code>get_fars_zip</code> only.</p></dd>
+<dd><p>logical. If <code>TRUE</code>, download zip file with FARS data for Puerto
+Rico. No Puerto Rico data available for years 1975-1977. Default: <code>FALSE</code>
+for <code>get_fars_zip</code> only.</p></dd>
 
 
 <dt>path</dt>
