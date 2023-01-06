@@ -4,7 +4,7 @@ variables for the data year specified. If vars is &quot;make&quot;, &quot;model&
 &quot;bodytype&quot;, the function returns #'   list of variable attributes for the
 specified variable name or attributes for make model and body type
 specified in the FARS dataset."><title>Get variables and variable attributes for the Fatality Analysis
-Reporting System (FARS) API — fars_vars • crashapi</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Get variables and variable attributes for the Fatality Analysis
+Reporting System (FARS) API — fars_vars • crashapi</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Get variables and variable attributes for the Fatality Analysis
 Reporting System (FARS) API — fars_vars"><meta property="og:description" content="By default, this function returns the returns the list of
 variables for the data year specified. If vars is &quot;make&quot;, &quot;model&quot;, or
 &quot;bodytype&quot;, the function returns #'   list of variable attributes for the
@@ -95,6 +95,59 @@ selected year with a valid make ID number, e.g. <code>fars_vars(year = 2010, var
 
 </dl></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">fars_vars</span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2020</span>, var <span class="op">=</span> <span class="st">"make"</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   FROM_YEAR ID            TEXT TO_YEAR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      1994 54           Acura      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      1994 31      Alfa Romeo      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      1994  3      AM General      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      2010  1 American Motors      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      1994 32            Audi      NA</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">fars_vars</span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2020</span>, var <span class="op">=</span> <span class="st">"model"</span>, make <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    ID</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 401</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 421</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 981</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                   MODELNAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                                                                                                  Aerostar</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                                                                                    Aspire</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Bronco (thru 1977)/Bronco II/Explorer/Explorer Sport (Explorer for 1990-2018 only.  For model years 2019 on, see 12-425.)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                                                                                 Bronco-fullsize (1978-on)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                                                                    Bus**: Conventional (Engine out front)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Make</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   NA</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">fars_vars</span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2020</span>, var <span class="op">=</span> <span class="st">"bodytype"</span>, make <span class="op">=</span> <span class="fl">12</span>, model <span class="op">=</span> <span class="fl">37</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                        BODY_DEF BODY_ID FROM_YEAR MAKE_DEF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                    2-door sedan,hardtop,coupe       2      1994     Ford</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                       3-door/2-door hatchback       3      1994     Ford</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                         4-door sedan, hardtop       4      1994     Ford</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                       5-door/4-door hatchback       5      1994     Ford</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Station Wagon (excluding van and truck based)       6      1994     Ford</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        Sedan/Hardtop, number of doors unknown       8      2017     Ford</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7              Other or Unknown automobile type       9      1994     Ford</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                  Not Reported      98      1994     Ford</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   MAKE_ID MODEL_DEF MODEL_ID TO_YEAR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      12     Focus       37    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      12     Focus       37    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      12     Focus       37    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      12     Focus       37    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      12     Focus       37    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      12     Focus       37    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      12     Focus       37    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      12     Focus       37    2010</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
@@ -104,7 +157,7 @@ selected year with a valid make ID number, e.g. <code>fars_vars(year = 2010, var
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer></div>

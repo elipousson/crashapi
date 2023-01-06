@@ -20,7 +20,7 @@ to 5000 records so consider limiting the range of years requested if data
 exceeds that threshold.
 This package also enables access to the FARS data available through the
 NHTSA data downloads server in a zip format. Set api to "zip" or use the
-get_fars_zip function to download this data.'><title>Get Fatality Analysis Reporting System (FARS) data with the FARS API — get_fars • crashapi</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Get Fatality Analysis Reporting System (FARS) data with the FARS API — get_fars"><meta property="og:description" content='This function provides a convenient interface for accessing FARS
+get_fars_zip function to download this data.'><title>Get Fatality Analysis Reporting System (FARS) data with the FARS API — get_fars • crashapi</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Get Fatality Analysis Reporting System (FARS) data with the FARS API — get_fars"><meta property="og:description" content='This function provides a convenient interface for accessing FARS
 data or data summaries using a range of criteria. The api parameter
 allows you to call one of the following functions to access DOT NHTSA’s
 Crash API:
@@ -267,6 +267,261 @@ download the data to a file. Default <code>FALSE</code>.</p></dd>
 
 </dl></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">get_fars_crashes</span><span class="op">(</span>state <span class="op">=</span> <span class="st">"MD"</span>, county <span class="op">=</span> <span class="st">"Baltimore city"</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   city  cityname county      countyname case_year fatals latitude  longitud</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   50 BALTIMORE    510 BALTIMORE (510)      2020      1 39.29745 -76.59408</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   50 BALTIMORE    510 BALTIMORE (510)      2020      1 39.26703 -76.60339</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   50 BALTIMORE    510 BALTIMORE (510)      2020      1 39.30192 -76.54154</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   50 BALTIMORE    510 BALTIMORE (510)      2020      1 39.29782 -76.60842</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   50 BALTIMORE    510 BALTIMORE (510)      2020      1 39.32635 -76.67879</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   state statename st_case totalvehicles tway_id tway_id2 ve_forms</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    24  Maryland  240070             1 MU-1445     &lt;NA&gt;        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    24  Maryland  240089             2    I-95     &lt;NA&gt;        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    24  Maryland  240129             2  SR-151     &lt;NA&gt;        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    24  Maryland  240141             1 MU-1370     &lt;NA&gt;        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    24  Maryland  240160             3   SR-26  MU-2900        3</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">get_fars_cases</span><span class="op">(</span>state <span class="op">=</span> <span class="st">"MD"</span>, cases <span class="op">=</span> <span class="st">"240274"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ARR_HOUR                   ARR_HOURNAME ARR_MIN</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       99 Unknown EMS Scene Arrival Hour      99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         ARR_MINNAME CF1 CF1NAME CF2 CF2NAME CF3 CF3NAME CITY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Unknown EMS Scene Arrival Minutes  NA      NA  NA      NA  NA      NA   50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    CITYNAME COUNTY      COUNTYNAME CaseYear</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 BALTIMORE    510 BALTIMORE (510)     2020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  CrashRFs DAY DAY_WEEK DAY_WEEKNAME DRUNK_DR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0, None, 2020, 24, MD, Maryland, 240274  10        3      Tuesday        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   FATALS FUNC_SYS               FUNC_SYSNAME HARM_EV HARM_EVNAME HOSP_HR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      1        3 Principal Arterial - Other       8  Pedestrian      99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   HOSP_HRNAME HOSP_MN                       HOSP_MNNAME HOUR        HOURNAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     Unknown      99 Unknown EMS Hospital Arrival Time   23 11:00pm-11:59pm</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      LATITUDE LATITUDENAME LGT_COND       LGT_CONDNAME      LONGITUD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 39.29421111  39.29421111        2 Dark - Not Lighted -76.668097220</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    LONGITUDNAME MAN_COLL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -76.668097220        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                    MAN_COLLNAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 The First Harmful Event was Not a Collision with a Motor Vehicle in Transport</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   MILEPT MILEPTNAME MINUTE MINUTENAME MONTH MonthName NHS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     23         23      0          0     3     March   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      NHSNAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 This section IS ON the NHS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                                                                                                                                   NMDrugs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2020, 2020, 2020, 2020, 2020, 2020, 407, 167, 151, 996, 151, 167, COCAINE, METHADONE, FENTANYL, Other Drug, FENTANYL, METHADONE, 2, 2, 2, 2, 1, 1, Urine, Urine, Urine, Urine, Whole Blood, Whole Blood, 1, 1, 1, 1, 1, 1, 24, 24, 24, 24, 24, 24, MD, MD, MD, MD, MD, MD, Maryland, Maryland, Maryland, Maryland, Maryland, Maryland, 240274, 240274, 240274, 240274, 240274, 240274, 0, 0, 0, 0, 0, 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                      NMPersonRF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2020, 0, None, 1, 24, MD, Maryland, 240274, 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                         NMRace</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2020, False, 1, 1, 2, Black or African American, 24, MD, Maryland, 240274, 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   NOT_HOUR NOT_HOURNAME NOT_MIN NOT_MINNAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       99      Unknown      99     Unknown</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    NPersons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 51, 51 Years, 97, Not a Motor Vehicle Occupant, 9, Not Reported, 0, 0.000 % BAC, 2, Test Given, 1, Blood, NA, NA, NA, 510, BALTIMORE (510), 2020, 10, 10, 10, 23, 23:00-23:59, 59, 59, 3, March, 2359, 2359, 2020, 2020, 0, Not Applicable, 0, No (Alcohol Not Involved), NA, NA, NA, NA, NA, NA, 0, No (drugs not involved), NA, NA, NA, NA, NA, NA, 8, Not Reported, 2, Test Given, 8, Not Applicable, 0, Ejection Path Not Applicable, NA, NA, 0, Not Extricated or Not Applicable, NA, NA, 3, Principal Arterial - Other, 8, Pedestrian, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, 7, Non-Hispanic, 5, EMS Ground, 23, 11:00pm-11:59pm, NA, NA, NA, NA, NA, NA, 4, Fatal Injury (K), 0, 0, 59, 59, 11, Not at Intersection - On Roadway, Not in Marked Crosswalk, NA, NA, NA, NA, 0, The First Harmful Event was Not a Collision with a Motor Vehicle in Transport, 0, 0, NA, NA, 3, March, NA, NA, 1, 5, Pedestrian, NA, NA, NA, NA, NA, NA, NA, NA, NA, 8, Not a Motor Vehicle Occupant, 96, Not a Motor Vehicle Occupant, NA, NA, NA, NA, 2, Urban, NA, 0, No, 0, Not a Motor Vehicle Occupant, 1, Male, NA, NA, 24, Maryland, 1, NA, 240274, NA, NA, 0, 1, NA, NA, NA, NA, NA, NA, 0, No</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                    NmCrashes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2020, NA, NA, 2, Failure to Yield Right-Of-Way, 1, 24, Maryland, 240274, 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                        NmDistract</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2020, NA, NA, 0, Not Distracted, 1, 24, MD, Maryland, 240274, 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                            NmImpairs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2020, 98, Not Reported, 1, 24, Maryland, 240274, 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                        NmPriors PEDS PERMVIT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2020, NA, NA, 3, Crossing Roadway, 1, 24, Maryland, 240274, 0    1       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   PERNOTMVIT PERSONS PVH_INVL ParkWorks</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          1       1        0        NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    PbTypes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0, 0, Not a Cyclist, Not a Cyclist, 0, 0, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 7, 7, Not a Cyclist, Not a Cyclist, 2020, 2020, 8, 8, Not Applicable, Not Applicable, 8, 8, Not Applicable, Not Applicable, 51, 51, 51 Years, 51 Years, 0, 0, None Noted, None Noted, 5, 5, Pedestrian, Pedestrian, 1, 1, Male, Male, 1, 1, Yes, Yes, 0, 0, None Noted, None Noted, 750, 750, Crossing Roadway - Vehicle Not Turning, Crossing Roadway - Vehicle Not Turning, 760, 760, Pedestrian Failed to Yield, Pedestrian Failed to Yield, 8, 8, Not Applicable, Not Applicable, 8, 8, Not Applicable, Not Applicable, 3, 3, Not At Intersection, Not At Intersection, 3, 3, Travel Lane, Travel Lane, 8, 8, Not Applicable, Not Applicable, 1, 1, 24, 24, Maryland, Maryland, 240274, 240274, 0, 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      RAIL       RAILNAME RD_OWNER         RD_OWNERNAME RELJCT1 RELJCT1NAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0000000 Not Applicable        1 State Highway Agency       0          No</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   RELJCT2  RELJCT2NAME REL_ROAD REL_ROADNAME ROAD_FNC ROAD_FNCNAME ROUTE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       1 Non-Junction        1   On Roadway       NA           NA     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ROUTENAME RUR_URB RUR_URBNAME SCH_BUS SCH_BUSNAME SP_JUR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 U.S. Highway       2       Urban       0          No      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                SP_JURNAME STATENAME ST_CASE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 No Special Jurisdiction  Maryland  240274</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  SafetyEQs State TWAY_ID TWAY_ID2 TYP_INT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2020, NA, NA, 1, 24, Maryland, 240274, 0    24   US-40       NA       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           TYP_INTNAME VE_FORMS VE_TOTAL WEATHER WEATHER1 WEATHER1NAME WEATHER2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Not an Intersection        1        1       1       NA           NA       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   WEATHER2NAME WEATHERNAME WRK_ZONE            WRK_ZONENAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           NA       Clear        4 Work Zone, Type Unknown</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                   Weathers YEAR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2020, 24, MD, Maryland, 240274, 1, Clear 2020</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">get_fars_crash_list</span><span class="op">(</span>state <span class="op">=</span> <span class="st">"MD"</span>, vehicles <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       county_name                 crash_date fatals peds persons st_case state</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 MONTGOMERY (31) /Date(1599691020000-0400)/      2    0       5  240297    24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 BALTIMORE (510) /Date(1594930320000-0400)/      1    0       4  240307    24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 BALTIMORE (510) /Date(1592318340000-0400)/      1    0       7  240407    24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 ST. MARY`S (37) /Date(1607365080000-0500)/      1    0       7  240467    24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   state_name total_vehicles</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   Maryland              5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   Maryland              5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   Maryland              5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   Maryland              5</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">get_fars_summary</span><span class="op">(</span>state <span class="op">=</span> <span class="st">"MD"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   case_year crash_counts total_fatal_counts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      2020          540                567</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">get_fars_year</span><span class="op">(</span>state <span class="op">=</span> <span class="st">"MD"</span>, type <span class="op">=</span> <span class="st">"PERSON"</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   AGE  AGENAME AIR_BAG                  AIR_BAGNAME ALC_DET  ALC_DETNAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  28 28 Years      97 Not a Motor Vehicle Occupant       9 Not Reported</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  37 37 Years      20                 Not Deployed       9 Not Reported</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   6  6 Years      97 Not a Motor Vehicle Occupant       9 Not Reported</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  38 38 Years      97 Not a Motor Vehicle Occupant       9 Not Reported</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  78 78 Years      20                 Not Deployed       9 Not Reported</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ALC_RES    ALC_RESNAME ALC_STATUS ALC_STATUSNAME ATST_TYP   ATST_TYPNAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      50    0.050 % BAC          2     Test Given        1          Blood</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     996 Test Not Given          0 Test Not Given        0 Test Not Given</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       0    0.000 % BAC          2     Test Given        1          Blood</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     996 Test Not Given          0 Test Not Given        0 Test Not Given</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     996 Test Not Given          0 Test Not Given        0 Test Not Given</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   BODY_TYP               BODY_TYPNAME CASEYEAR CERT_NO COUNTY   COUNTYNAME DAY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     &lt;NA&gt;                       &lt;NA&gt;     2020      NA     13 CARROLL (13)   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        2 2-door sedan,hardtop,coupe     2020      NA     13 CARROLL (13)   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     &lt;NA&gt;                       &lt;NA&gt;     2020      NA     27  HOWARD (27)   6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     &lt;NA&gt;                       &lt;NA&gt;     2020      NA     27  HOWARD (27)   6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       34               Light Pickup     2020      NA     27  HOWARD (27)   6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   DEATH_DA               DEATH_DANAME DEATH_HR               DEATH_HRNAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        2                          2       22                22:00-22:59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       88 Not Applicable (Non-Fatal)       88 Not Applicable (Non-fatal)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        6                          6       15                15:00-15:59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       88 Not Applicable (Non-Fatal)       88 Not Applicable (Non-fatal)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       88 Not Applicable (Non-Fatal)       88 Not Applicable (Non-fatal)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   DEATH_MN               DEATH_MNNAME DEATH_MO               DEATH_MONAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       16                         16        1                    January</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       88 Not Applicable (Non-fatal)       88 Not Applicable (Non-Fatal)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        7                          7        1                    January</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       88 Not Applicable (Non-fatal)       88 Not Applicable (Non-Fatal)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       88 Not Applicable (Non-fatal)       88 Not Applicable (Non-Fatal)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   DEATH_TM DEATH_YR               DEATH_YRNAME DOA        DOANAME DRINKING</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     2216     2020                       2020   7  Died at Scene        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     8888     8888 Not Applicable (Non-fatal)   0 Not Applicable        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     1507     2020                       2020   0 Not Applicable        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     8888     8888 Not Applicable (Non-fatal)   0 Not Applicable        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     8888     8888 Not Applicable (Non-fatal)   0 Not Applicable        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                DRINKINGNAME DRUGRES1 DRUGRES1NAME DRUGRES2 DRUGRES2NAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    Yes (Alcohol Involved)       NA           NA       NA           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 No (Alcohol Not Involved)       NA           NA       NA           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 No (Alcohol Not Involved)       NA           NA       NA           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 No (Alcohol Not Involved)       NA           NA       NA           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 No (Alcohol Not Involved)       NA           NA       NA           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   DRUGRES3 DRUGRES3NAME DRUGS               DRUGSNAME DRUGTST1 DRUGTST1NAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       NA           NA     0 No (drugs not involved)       NA           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       NA           NA     0 No (drugs not involved)       NA           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       NA           NA     0 No (drugs not involved)       NA           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       NA           NA     0 No (drugs not involved)       NA           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       NA           NA     0 No (drugs not involved)       NA           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   DRUGTST2 DRUGTST2NAME DRUGTST3 DRUGTST3NAME DRUG_DET DRUG_DETNAME DSTATUS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       NA           NA       NA           NA        8 Not Reported       2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       NA           NA       NA           NA        8 Not Reported       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       NA           NA       NA           NA        8 Not Reported       2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       NA           NA       NA           NA        8 Not Reported       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       NA           NA       NA           NA        8 Not Reported       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      DSTATUSNAME EJECTION   EJECTIONNAME EJ_PATH                  EJ_PATHNAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     Test Given        8 Not Applicable       0 Ejection Path Not Applicable</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Test Not Given        0    Not Ejected       0 Ejection Path Not Applicable</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     Test Given        8 Not Applicable       0 Ejection Path Not Applicable</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Test Not Given        8 Not Applicable       0 Ejection Path Not Applicable</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Test Not Given        0    Not Ejected       0 Ejection Path Not Applicable</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   EMER_USE   EMER_USENAME EXTRICAT                     EXTRICATNAME FIRE_EXP</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     &lt;NA&gt;           &lt;NA&gt;        0 Not Extricated or Not Applicable     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        0 Not Applicable        0 Not Extricated or Not Applicable        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     &lt;NA&gt;           &lt;NA&gt;        0 Not Extricated or Not Applicable     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     &lt;NA&gt;           &lt;NA&gt;        0 Not Extricated or Not Applicable     &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        0 Not Applicable        0 Not Extricated or Not Applicable        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         FIRE_EXPNAME FUNC_SYS               FUNC_SYSNAME HARM_EV HARM_EVNAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1               &lt;NA&gt;        3 Principal Arterial - Other       8  Pedestrian</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 No or Not Reported        3 Principal Arterial - Other       8  Pedestrian</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3               &lt;NA&gt;        4             Minor Arterial       8  Pedestrian</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4               &lt;NA&gt;        4             Minor Arterial       8  Pedestrian</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 No or Not Reported        4             Minor Arterial       8  Pedestrian</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   HISPANIC                    HISPANICNAME HOSPITAL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        7                    Non-Hispanic        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        0 Not A Fatality (not Applicable)        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       99                         Unknown        5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        0 Not A Fatality (not Applicable)        5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        0 Not A Fatality (not Applicable)        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    HOSPITALNAME HOUR        HOURNAME IMPACT1    IMPACT1NAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Not Transported for Treatment   22 10:00pm-10:59pm    &lt;NA&gt;           &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Not Transported for Treatment   22 10:00pm-10:59pm      12 12 Clock Point</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                    EMS Ground   14   2:00pm-2:59pm    &lt;NA&gt;           &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                    EMS Ground   14   2:00pm-2:59pm    &lt;NA&gt;           &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Not Transported for Treatment   14   2:00pm-2:59pm      12 12 Clock Point</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   INJ_SEV                  INJ_SEVNAME LAG_HRS LAG_MINS LOCATION</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       4             Fatal Injury (K)       0        1       11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       0       No Apparent Injury (O)     999       99        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       4             Fatal Injury (K)       1        7        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       3 Suspected Serious Injury (A)     999       99        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       0       No Apparent Injury (O)     999       99        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                LOCATIONNAME MAKE      MAKENAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Not at Intersection - On Roadway, Not in Marked Crosswalk &lt;NA&gt;          &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                               Occupant of a Motor Vehicle   22       Pontiac</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                     At Intersection - In Marked Crosswalk &lt;NA&gt;          &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                     At Intersection - In Marked Crosswalk &lt;NA&gt;          &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                               Occupant of a Motor Vehicle   35 Nissan/Datsun</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   MAK_MOD MAN_COLL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      NA        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      NA        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      NA        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      NA        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      NA        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                    MAN_COLLNAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 The First Harmful Event was Not a Collision with a Motor Vehicle in Transport</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 The First Harmful Event was Not a Collision with a Motor Vehicle in Transport</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 The First Harmful Event was Not a Collision with a Motor Vehicle in Transport</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 The First Harmful Event was Not a Collision with a Motor Vehicle in Transport</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 The First Harmful Event was Not a Collision with a Motor Vehicle in Transport</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   MINUTE MINUTENAME MOD_YEAR MOD_YEARNAME MONTH MONTHNAME PER_NO PER_TYP</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     15         15     &lt;NA&gt;         &lt;NA&gt;     1   January      1       5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     15         15     2002         2002     1   January      1       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      0          0     &lt;NA&gt;         &lt;NA&gt;     1   January      1       5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      0          0     &lt;NA&gt;         &lt;NA&gt;     1   January      2       5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      0          0     2010         2010     1   January      1       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              PER_TYPNAME P_SF1 P_SF1NAME P_SF2 P_SF2NAME P_SF3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                             Pedestrian    NA        NA    NA        NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Driver of a Motor Vehicle In-Transport    NA        NA    NA        NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                             Pedestrian    NA        NA    NA        NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                             Pedestrian    NA        NA    NA        NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Driver of a Motor Vehicle In-Transport    NA        NA    NA        NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   P_SF3NAME RACE RACENAME REST_MIS                 REST_MISNAME REST_USE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        NA   NA       NA        8 Not a Motor Vehicle Occupant       96</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        NA   NA       NA        0     No Indication of Mis-Use        3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        NA   NA       NA        8 Not a Motor Vehicle Occupant       96</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA   NA       NA        8 Not a Motor Vehicle Occupant       96</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA   NA       NA        0     No Indication of Mis-Use        3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   REST_USENAME ROAD_FNC ROAD_FNCNAME ROLLOVER ROLLOVERNAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Not a Motor Vehicle Occupant       NA           NA     &lt;NA&gt;         &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   Shoulder and Lap Belt Used       NA           NA        0  No Rollover</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Not a Motor Vehicle Occupant       NA           NA     &lt;NA&gt;         &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Not a Motor Vehicle Occupant       NA           NA     &lt;NA&gt;         &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   Shoulder and Lap Belt Used       NA           NA        0  No Rollover</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   RUR_URB RUR_URBNAME SCH_BUS SCH_BUSNAME SEAT_POS                 SEAT_POSNAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       2       Urban       0          No        0 Not a Motor Vehicle Occupant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       2       Urban       0          No       11        Front Seat, Left Side</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       2       Urban       0          No        0 Not a Motor Vehicle Occupant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       2       Urban       0          No        0 Not a Motor Vehicle Occupant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       2       Urban       0          No       11        Front Seat, Left Side</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   SEX SEXNAME SPEC_USE   SPEC_USENAME STATE STATENAME STR_VEH STR_VEHNAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   2  Female     &lt;NA&gt;           &lt;NA&gt;    24  Maryland       1          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2  Female        0 No Special Use    24  Maryland       0          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   1    Male     &lt;NA&gt;           &lt;NA&gt;    24  Maryland       1          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   2  Female     &lt;NA&gt;           &lt;NA&gt;    24  Maryland       1          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   1    Male        0 No Special Use    24  Maryland       0          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ST_CASE TOW_VEH       TOW_VEHNAME VEH_NO VE_FORMS WORK_INJ</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  240001    &lt;NA&gt;              &lt;NA&gt;      0        1        9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  240001       0 No Trailing Units      1        1        8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  240002    &lt;NA&gt;              &lt;NA&gt;      0        1        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  240002    &lt;NA&gt;              &lt;NA&gt;      0        1        8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  240002       0 No Trailing Units      1        1        8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      WORK_INJNAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                         Unknown</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Not Applicable (not a fatality)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                              No</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Not Applicable (not a fatality)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Not Applicable (not a fatality)</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
@@ -276,7 +531,7 @@ download the data to a file. Default <code>FALSE</code>.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer></div>
