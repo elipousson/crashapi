@@ -70,6 +70,18 @@
 #' @param download logical. If `TRUE` and the `api` is "year dataset" or "zip",
 #'   download the data to a file. Default `FALSE`.
 #' @rdname get_fars
+#' @examples
+#'
+#' head(get_fars_crashes(state = "MD", county = "Baltimore city"), 5)
+#'
+#' get_fars_cases(state = "MD", cases = "240274")
+#'
+#' get_fars_crash_list(state = "MD", vehicles = 5)
+#'
+#' get_fars_summary(state = "MD")
+#'
+#' head(get_fars_year(state = "MD", type = "PERSON"), 5)
+#'
 #' @export
 #' @md
 get_fars <- function(year = 2020,

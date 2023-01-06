@@ -157,3 +157,16 @@ This package also enables access to the FARS data available through the
 NHTSA data downloads server in a zip format. Set \code{api} to "zip" or use the
 \code{get_fars_zip} function to download this data.
 }
+\examples{
+
+head(get_fars_crashes(state = "MD", county = "Baltimore city"), 5)
+
+get_fars_cases(state = "MD", cases = "240274")
+
+get_fars_crash_list(state = "MD", vehicles = 5)
+
+get_fars_summary(state = "MD")
+
+head(get_fars_year(state = "MD", type = "PERSON"), 5)
+
+}

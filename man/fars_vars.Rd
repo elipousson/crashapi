@@ -31,3 +31,12 @@ variables for the data year specified. If \code{vars} is "make", "model", or
 specified variable name or attributes for make model and body type
 specified in the FARS dataset.
 }
+\examples{
+
+head(fars_vars(year = 2020, var = "make"), 5)
+
+head(fars_vars(year = 2020, var = "model", make = 12), 5)
+
+fars_vars(year = 2020, var = "bodytype", make = 12, model = 37)
+
+}

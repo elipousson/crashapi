@@ -19,9 +19,17 @@
 #'   = "model", make = 37)`
 #' @rdname fars_vars
 #' @aliases get_vars
+#' @examples
+#'
+#' head(fars_vars(year = 2020, var = "make"), 5)
+#'
+#' head(fars_vars(year = 2020, var = "model", make = 12), 5)
+#'
+#' fars_vars(year = 2020, var = "bodytype", make = 12, model = 37)
+#'
 #' @export
 fars_vars <- function(year, var = NULL, make = NULL, model = NULL) {
-  year <- validate_year(year, year_range = c(2010, 2019))
+  year <- validate_year(year, year_range = c(2010, 2020))
   data <- "definitions"
 
   if (is.null(var)) {
