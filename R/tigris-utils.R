@@ -82,7 +82,7 @@ validate_state <- function(state, .msg = interactive()) {
         return(state_sub)
       } else {
         cli::cli_warn(
-        "{.arg state} ({.val state}) is not a valid FIPS code or
+          "{.arg state} ({.val state}) is not a valid FIPS code or
         state name/abbreviation."
         )
         return(invisible(NULL))
@@ -155,8 +155,11 @@ validate_county <- function(state, county, .msg = interactive()) {
     if (county %in% county_table$county_code) {
       return(county)
     } else {
-      warning(sprintf("'%s' is not a valid FIPS code for counties in %s",
-                      county, county_table$state_name[1]),
+      warning(
+        sprintf(
+          "'%s' is not a valid FIPS code for counties in %s",
+          county, county_table$state_name[1]
+        ),
         call. = FALSE
       )
       return(NULL)
@@ -165,13 +168,18 @@ validate_county <- function(state, county, .msg = interactive()) {
     # should be a county name
 
     county_index <- grepl(sprintf("^%s", county),
-                          county_table$county, ignore.case = TRUE)
+      county_table$county,
+      ignore.case = TRUE
+    )
 
     matching_counties <- county_table$county[county_index] # Get the counties that match
 
     if (length(matching_counties) == 0) {
-      warning(sprintf("'%s' is not a valid name for counties in %s",
-                      county, county_table$state_name[1]),
+      warning(
+        sprintf(
+          "'%s' is not a valid name for counties in %s",
+          county, county_table$state_name[1]
+        ),
         call. = FALSE
       )
       return(NULL)
@@ -186,12 +194,14 @@ validate_county <- function(state, county, .msg = interactive()) {
 
       return(
         county_table[county_table$county == matching_counties, "county_code"]
-        )
+      )
     } else if (length(matching_counties) > 1) {
       ctys <- format_vec(matching_counties)
 
-      warning(paste0("Your county string matches ", ctys,
-                     " Please refine your selection."), call. = FALSE)
+      warning(paste0(
+        "Your county string matches ", ctys,
+        " Please refine your selection."
+      ), call. = FALSE)
       return(NULL)
     }
   }
