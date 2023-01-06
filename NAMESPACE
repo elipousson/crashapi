@@ -2,6 +2,7 @@
 
 export(fars_vars)
 export(format_crashes)
+export(get_crss_zip)
 export(get_fars)
 export(get_fars_cases)
 export(get_fars_crash_list)
