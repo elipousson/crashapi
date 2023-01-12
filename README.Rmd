@@ -115,7 +115,7 @@ crashes_sf <-
   )
 
 nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"))
-wake_co <- sf::st_transform(nc[nc$NAME == "Wake",], 4326)
+wake_co <- sf::st_transform(nc[nc$NAME == "Wake", ], 4326)
 
 # Map crashes
 ggplot() +
@@ -160,8 +160,10 @@ dplyr::slice_sample(crashes_detailed, n = 10)
 
 ## Related packages and projects
 
+-   [rfars](https://github.com/s87jackson/rfars) aims to "simplify the process of analyzing FARS data" by providing access to FARS downloads and preprocessed data back to 2015.
 -   [stats19](https://github.com/ropensci/stats19) "provides functions for downloading and formatting road crash data" from "the UK's official road traffic casualty database, STATS19."
 -   [njtr1](https://github.com/gavinrozzi/njtr1): "An R interface to New Jersey traffic crash data reported on form NJTR-1."
+-   [wisdotcrashdatabase](https://github.com/jacciz/wisdotcrashdatabase): "A package used for internal WisDOT crash database pulls and analysis."
 -   [nzcrash](https://github.com/nacnudus/nzcrash): "An R package to distribute New Zealand crash data in a convenient form."
 -   [GraphHopper Open Traffic Collection](https://github.com/graphhopper/open-traffic-collection): "Collections of URLs pointing to traffic information portals which contain open data or at least data which is free to use."
 -   [Open Crash Data Index](https://docs.google.com/spreadsheets/d/1rmn6GbHNkfWLLDEEmA87iuy2yHdh7hBybCTZiQJEY0k/edit?usp=sharing): A Google Sheet listing a range of city, county, regional and state sources for crash data including non-injury crashes as well as the fatal crashes available through the FARS API. Contributions for crash data from other U.S. cities and states are welcome.
