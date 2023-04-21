@@ -17,22 +17,24 @@ URL: https://github.com/elipousson/crashapi,
 BugReports: https://github.com/elipousson/crashapi/issues
 Depends: 
     R (>= 2.10)
-Imports:
+Imports: 
     cli,
-    dplyr,
+    dplyr (>= 1.1.0),
     glue,
     httr2,
     janitor,
-    purrr,
-    readr,
-    sf,
+    rlang,
     stats,
     stringr,
-    utils
+    utils,
+    vctrs
 Suggests: 
     covr,
+    httptest2,
     knitr,
+    readr,
     rmarkdown,
+    sf,
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
