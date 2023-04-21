@@ -40,6 +40,7 @@
 #'   \item{\code{api_only}}{logical Indicator for variables only used by API}
 #'   \item{\code{api}}{character Name(s) of corresponding CrashAPI service}
 #'   \item{\code{name_var}}{logical Indicator for "NAME" variable returned by API}
+#'   \item{\code{nm}}{Short version of the variable name}
 #'   \item{\code{api_list_col}}{logical Indicator for list columns returned by API}
 #' }
 "fars_vars_labels"

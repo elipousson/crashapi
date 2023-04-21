@@ -54,7 +54,7 @@ Most of these APIs support XML, JSV, CSV, and JSON output formats. This package 
 
 For reference, this package also includes a list of terms and NHTSA technical definitions in `fars_terms` and a list of variable labels in `fars_vars_labels`.
 
-The FARS API currently provides access to data from 2010 to 2020. The [NHTSA website](https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx) also provides additional information on the release data and version status for the FARS data files available through the API:
+The FARS API currently provides access to data from 2010 to 2021. The [NHTSA website](https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx) also provides additional information on the release data and version status for the FARS data files available through the API:
 
 | Data Year | File Version | Release Date      |
 |-----------|--------------|-------------------|
@@ -69,6 +69,7 @@ The FARS API currently provides access to data from 2010 to 2020. The [NHTSA web
 | 2018      | Final        | June 24, 2021     |
 | 2019      | Final        | March 2, 2022     |
 | 2020      | Annual       | March 2, 2022     |
+| 2021      | Annual       | April 2023        |
 
 
 ### Additional data access functionality
@@ -92,12 +93,12 @@ For example, you can use the `get_fars()` access state-level summary data on cra
 # Get summary crash count and fatality count data for Maryland from 2010 to 2019
 md_summary <-
   get_fars(
-    year = c(2010, 2020),
+    year = c(2010, 2021),
     state = "MD",
     api = "summary count"
   )
 
-ggplot(md_summary, aes(x = case_year, y = total_fatal_counts)) +
+ggplot(md_summary, aes(x = CaseYear, y = TotalFatalCounts)) +
   geom_point(color = "red") +
   geom_line(color = "red", group = 1) +
   theme_minimal()
@@ -108,7 +109,7 @@ You can download crash data and set geometry to TRUE optionally convert the data
 ```{r map_fars_crashes}
 crashes_sf <-
   get_fars(
-    year = c(2018, 2020),
+    year = c(2018, 2021),
     state = "NC",
     county = "Wake County",
     geometry = TRUE
@@ -125,7 +126,7 @@ ggplot() +
   ) +
   geom_sf(
     data = sf::st_crop(crashes_sf, wake_co),
-    aes(color = totalvehicles),
+    aes(color = TOTALVEHICLES),
     alpha = 0.75
   ) +
   theme_void()
