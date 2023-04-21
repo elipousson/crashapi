@@ -5,7 +5,7 @@
 \title{Download FARS data files as zipped CSV or SAS files}
 \usage{
 get_fars_zip(
-  year = 2020,
+  year = 2021,
   format = "csv",
   path = NULL,
   pr = FALSE,
@@ -16,7 +16,7 @@ get_fars_zip(
 )
 }
 \arguments{
-\item{year}{Year of data from 1975 to 2020, Default: 2020}
+\item{year}{Year of data from 1975 to 2021, Default: 2021}
 
 \item{format}{Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
 unzip and geo options are only supported if format is "csv".}
@@ -47,13 +47,14 @@ list of tables with each list item corresponding to one CSV file.}
 \code{TRUE}, overwrite file.}
 }
 \value{
-Downloads zip file with CSV or SAS tables and returns \code{NULL} invisibly
-or returns a list of data frames (if geo is \code{FALSE}), or returns a list of
-data frames with the accident table converted to a sf object.
+Downloads zip file with CSV or SAS tables and returns the zip file
+path invisibly or returns a list of data frames (if geometry is \code{FALSE}),
+or returns a list of data frames with the accident table converted to a sf
+object.
 }
 \description{
 This function provides an alternative to \code{\link[=get_fars_year]{get_fars_year()}} that downloads
 files directly from NHTSA FTP site. If read is \code{TRUE}, the function reads a
 list containing data frames for each table available in the selected year. If
-geo is \code{TRUE}, the accident table is converted to an sf object.
+geometry is \code{TRUE}, the accident table is converted to an sf object.
 }

@@ -19,7 +19,7 @@ get_fars_crash_persons(
 }
 \arguments{
 \item{year}{numeric vector. Year or range with start and end year. 2010 to
-2020 supported.}
+2021 supported.}
 
 \item{start_year}{Start year for crash reports.}
 
@@ -42,5 +42,5 @@ get_fars_crash_persons(
 }
 \description{
 This function returns a list of fatal crashes by occupant that have occurred
-throughout United States.
+throughout United States. This function is not currently working.
 }

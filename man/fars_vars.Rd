@@ -33,10 +33,10 @@ specified in the FARS dataset.
 }
 \examples{
 
-head(fars_vars(year = 2020, var = "make"), 5)
+head(fars_vars(year = 2021, var = "make"), 5)
 
-head(fars_vars(year = 2020, var = "model", make = 12), 5)
+head(fars_vars(year = 2021, var = "model", make = 12), 5)
 
-fars_vars(year = 2020, var = "bodytype", make = 12, model = 37)
+fars_vars(year = 2021, var = "bodytype", make = 12, model = 37)
 
 }

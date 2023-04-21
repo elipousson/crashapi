@@ -1,13 +1,12 @@
-
 #' Get Crashes By Occupant
 #'
 #' This function returns a list of fatal crashes by occupant that have occurred
-#' throughout United States.
+#' throughout United States. This function is not currently working.
 #'
 #' @rdname get_fars_crash_persons
 #' @inheritParams get_fars
 #' @param year numeric vector. Year or range with start and end year. 2010 to
-#'   2020 supported.
+#'   2021 supported.
 #' @param state Required. State name, abbreviation, or FIPS number.
 #' @param age numeric
 #' @param sex Options "m", "f", "male", "female", "unknown", "not reported."
@@ -65,7 +64,7 @@ get_fars_crash_persons <- function(year = NULL,
 
   stopifnot(
     is.numeric(age),
-    is.character(sex),
+    is.numeric(sex),
     is.numeric(seat),
     is.numeric(injury)
   )

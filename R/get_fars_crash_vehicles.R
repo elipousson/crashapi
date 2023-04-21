@@ -7,7 +7,7 @@
 #'
 #' @inheritParams get_fars
 #' @param year numeric vector. Year or range with start and end year. 2010 to
-#'   2020 supported.
+#'   2021 supported.
 #' @param state Required. State name, abbreviation, or FIPS number.
 #' @param make Make name or ID, Required. The start_year is used to return a
 #'   list of support make options. Default: `NULL`
@@ -77,6 +77,6 @@ get_fars_crash_vehicles <- function(year = NULL,
     toCaseYear = max(year),
     state = state_fips,
     format = "json",
-    results = FALSE
+    results = TRUE
   )
 }

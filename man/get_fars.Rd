@@ -11,24 +11,24 @@
 \title{Get Fatality Analysis Reporting System (FARS) data with the FARS API}
 \usage{
 get_fars(
-  year = 2020,
+  year = 2021,
   state,
   county = NULL,
   api = c("crashes", "cases", "state list", "summary count", "year dataset", "zip"),
-  type,
+  type = NULL,
   details = FALSE,
   geometry = FALSE,
   crs = NULL,
-  cases,
-  vehicles,
+  cases = NULL,
+  vehicles = NULL,
   format = "json",
-  pr,
+  pr = FALSE,
   path = NULL,
   download = FALSE
 )
 
 get_fars_crashes(
-  year = 2020,
+  year = 2021,
   start_year,
   end_year = NULL,
   state,
@@ -39,26 +39,26 @@ get_fars_crashes(
 )
 
 get_fars_cases(
-  year = 2020,
+  year = 2021,
   state,
   cases,
-  details = NULL,
+  details = FALSE,
   geometry = FALSE,
   crs = NULL
 )
 
 get_fars_crash_list(
-  year = 2020,
+  year = 2021,
   start_year,
   end_year = NULL,
   state,
   vehicles = c(1, 50)
 )
 
-get_fars_summary(year = 2020, start_year, end_year = NULL, state)
+get_fars_summary(year = 2021, start_year, end_year = NULL, state)
 
 get_fars_year(
-  year = 2020,
+  year = 2021,
   type = "accident",
   state,
   format = "json",
@@ -76,7 +76,7 @@ single year is required. All other \code{api} options support a range with the
 minimum value is used as a start year and the maximum value used as a end
 year. Most \code{api} options support the years from 2010 through the most
 recent year of release. "year dataset" only supports 2010 to 2017 and "zip"
-supports 1975 to 2020. \code{start_year} and \code{end_year} are ignored if \code{year} is
+supports 1975 to 2021. \code{start_year} and \code{end_year} are ignored if \code{year} is
 not \code{NULL}.}
 
 \item{state}{Required. State name, abbreviation, or FIPS number.

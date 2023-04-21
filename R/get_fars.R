@@ -30,7 +30,7 @@
 #'   minimum value is used as a start year and the maximum value used as a end
 #'   year. Most `api` options support the years from 2010 through the most
 #'   recent year of release. "year dataset" only supports 2010 to 2017 and "zip"
-#'   supports 1975 to 2020. `start_year` and `end_year` are ignored if `year` is
+#'   supports 1975 to 2021. `start_year` and `end_year` are ignored if `year` is
 #'   not `NULL`.
 #' @param api character. API function to use. Supported values include
 #'   "crashes", "cases", "state list", "summary count", "year dataset", and
@@ -84,34 +84,31 @@
 #'
 #' @export
 #' @md
-get_fars <- function(year = 2020,
+get_fars <- function(year = 2021,
                      state,
                      county = NULL,
                      api = c(
                        "crashes", "cases", "state list",
                        "summary count", "year dataset", "zip"
                      ),
-                     type,
+                     type = NULL,
                      details = FALSE,
                      geometry = FALSE,
                      crs = NULL,
-                     cases,
-                     vehicles,
+                     cases = NULL,
+                     vehicles = NULL,
                      format = "json",
-                     pr,
+                     pr = FALSE,
                      path = NULL,
                      download = FALSE) {
-  if (!missing(cases)) {
-    api <- "cases"
-  } else if (!missing(vehicles)) {
-    api <- "state list"
-  } else if (!missing(type)) {
-    api <- "year dataset"
-  } else if (!missing(pr)) {
-    api <- "zip"
-  }
-
-  api <- match.arg(api)
+  api <-
+    dplyr::case_when(
+      !is.null(cases) ~ "cases",
+      !is.null(vehicles) ~ "state list",
+      !is.null(type) ~ "year dataset",
+      isTRUE(pr) ~ "zip",
+      .default = match.arg(api)
+    )
 
   switch(api,
     "crashes" =
@@ -165,7 +162,7 @@ get_fars <- function(year = 2020,
 #' @aliases get_fars_crashes
 #' @export
 #' @importFrom cli cli_abort
-get_fars_crashes <- function(year = 2020,
+get_fars_crashes <- function(year = 2021,
                              start_year,
                              end_year = NULL,
                              state,
@@ -175,18 +172,8 @@ get_fars_crashes <- function(year = 2020,
                              crs = NULL) {
   year <- validate_year(year, start_year = start_year, end_year = end_year)
 
-  if ((max(year) - min(year)) > 4) {
-    cli::cli_inform(
-      c(
-        "!" = "Use longer year ranges with caution.",
-        "i" = "The Get Crashes By Location API endpoint used by
-        {.fn get_fars_crashes} limits responses to a maximum of 5000 records."
-      )
-    )
-  }
-
-  if (missing(county) | is.null(county)) {
-    cli::cli_abort(
+  if (any(c(missing(county), is.null(county)))) {
+    cli_abort(
       "{.arg county} must be a valid county name or FIPS code."
     )
   }
@@ -199,19 +186,36 @@ get_fars_crashes <- function(year = 2020,
       type = "GetCrashesByLocation",
       fromCaseYear = min(year),
       toCaseYear = max(year),
-      state = fips$state,
-      county = fips$county,
+      state = fips[["state"]],
+      county = fips[["county"]],
       format = "json"
     )
 
-  if (details) {
+  if (rlang::is_empty(crash_df)) {
+    cli::cli_warn(
+      "No records found with the provided parameters."
+    )
+    return(invisible(NULL))
+  }
+
+  if (nrow(crash_df) == 5000) {
+    cli_bullets(
+      c(
+        "!" = "Additional records may be available for this query.",
+        "i" = "The API used by {.fn get_fars_crashes} limits responses
+        to 5000 records or less."
+      )
+    )
+  }
+
+  if (isTRUE(details)) {
     # FIXME: This could break for multi year searches.
     cases_df <-
       get_fars_cases(
         year = year,
         state = state,
         cases = crash_df$ST_CASE,
-        details = NULL,
+        details = TRUE,
         geometry = FALSE
       )
 
@@ -243,41 +247,45 @@ get_fars_crashes <- function(year = 2020,
 #' @aliases get_fars_cases get_fars_crash_details
 #' @export
 #' @importFrom cli cli_abort cli_progress_along
-#' @importFrom purrr map_dfr
-get_fars_cases <- function(year = 2020,
+get_fars_cases <- function(year = 2021,
                            state,
                            cases,
-                           details = NULL,
+                           details = FALSE,
                            geometry = FALSE,
                            crs = NULL) {
   year <- validate_year(year)
   state_fips <- lookup_fips(state)
 
   if (missing(cases)) {
-    cli::cli_abort(
-      "A valid FARS case number is required to download detailed crash data."
+    cli_abort(
+      "One or more valid FARS case numbers must be provided
+      to download detailed crash data."
     )
   }
 
   crash_df <-
-    purrr::map_dfr(
-      cli::cli_progress_along(cases),
-      ~ read_crashapi(
-        type = "GetCaseDetails",
-        stateCase = as.list(cases)[[.x]],
-        caseYear = year,
-        state = state_fips,
-        results = TRUE,
-        format = "json"
-      )[["CrashResultSet"]]
+    list_rbind(
+      map(
+        cli::cli_progress_along(cases),
+        ~ read_crashapi(
+          type = "GetCaseDetails",
+          stateCase = as.list(cases)[[.x]],
+          caseYear = year,
+          state = state_fips,
+          results = TRUE,
+          format = "json"
+        )[["CrashResultSet"]]
+      )
     )
 
-  if (is.null(details)) {
-    crash_df <-
-      subset(
-        crash_df,
-        select = !(names(crash_df) %in% c("CEvents", "Vehicles"))
-      )
+  if (is.logical(details)) {
+    if (!isTRUE(details)) {
+      crash_df <-
+        subset(
+          crash_df,
+          select = !(names(crash_df) %in% c("CEvents", "Vehicles"))
+        )
+    }
 
     if (!geometry) {
       return(crash_df)
@@ -292,6 +300,9 @@ get_fars_cases <- function(year = 2020,
     return(crash_sf)
   }
 
+  stopifnot(is.character(details))
+
+  details <- tolower(details)
   details <- match.arg(details, c("events", "vehicles"))
 
   switch(details,
@@ -303,7 +314,7 @@ get_fars_cases <- function(year = 2020,
 #' @rdname get_fars
 #' @aliases get_fars_crash_list
 #' @export
-get_fars_crash_list <- function(year = 2020,
+get_fars_crash_list <- function(year = 2021,
                                 start_year,
                                 end_year = NULL,
                                 state,
@@ -329,12 +340,11 @@ get_fars_crash_list <- function(year = 2020,
 #' @rdname get_fars
 #' @aliases get_fars_summary
 #' @export
-get_fars_summary <- function(year = 2020,
+get_fars_summary <- function(year = 2021,
                              start_year,
                              end_year = NULL,
                              state) {
-  year <-
-    validate_year(year, start_year = start_year, end_year = end_year)
+  year <- validate_year(year, start_year = start_year, end_year = end_year)
 
   crash_df <-
     read_crashapi(
@@ -351,11 +361,10 @@ get_fars_summary <- function(year = 2020,
 #' @rdname get_fars
 #' @export
 #' @importFrom utils download.file
-#' @importFrom readr read_csv
 #' @importFrom stringr str_to_sentence
 #' @importFrom cli cli_warn
 #' @importFrom httr2 resp_body_json req_perform request
-get_fars_year <- function(year = 2020,
+get_fars_year <- function(year = 2021,
                           type = "accident",
                           state,
                           format = "json",
@@ -411,6 +420,10 @@ get_fars_year <- function(year = 2020,
         )
     }
 
+    if (format == "csv") {
+      rlang::check_installed("readr")
+    }
+
     crash_df <-
       switch(format,
         "json" = httr2::resp_body_json(
@@ -440,8 +453,8 @@ get_fars_year <- function(year = 2020,
     cli::cli_warn(
       c("Coordinate columns {coords} can't be found in data of
           the type {.val {type}}.",
-        "i" = "Use {.code type = 'accident'} with
-          {.code geometry = 'TRUE'} to return an sf object."
+        "i" = 'Use {.code type = "accident"} with
+          {.code geometry = TRUE} to return an sf object.'
       )
     )
 

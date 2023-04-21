@@ -61,12 +61,11 @@ read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
       data = data,
       type = type,
       format = format,
-      ...,
-      .env = parent.frame()
+      ...
     )
 
   if (!results) {
-    return(request$url)
+    return(request[["url"]])
   }
 
   # FIXME: Implement a way of dealing with alternate formats
@@ -79,22 +78,22 @@ read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
       simplifyVector = TRUE
     )
 
-  data$Results[[1]]
+  data[["Results"]][[1]]
 }
 
 #' Validate start and end year
 #' @noRd
-#' @importFrom cli cli_abort
 validate_year <- function(year,
-                          year_range = c(2010, 2020),
+                          year_range = c(2010, 2021),
                           start_year = NULL,
                           end_year = NULL,
-                          call = .envir,
-                          .envir = parent.frame()) {
+                          call = caller_env()) {
   if (is.null(year)) {
     if (is.null(start_year) && is.null(end_year)) {
-      cli::cli_abort(
-        "A {.arg year}, {.arg start_year}, or {.arg end_year} must be provided to download FARS data."
+      cli_abort(
+        "A {.arg year}, {.arg start_year}, or
+        {.arg end_year} must be provided to download FARS data.",
+        call = call
       )
     }
 
@@ -104,21 +103,21 @@ validate_year <- function(year,
   year <- as.integer(year)
 
   if (any(is.na(year))) {
-    cli::cli_abort(
+    cli_abort(
       "{.arg year} must be an integer or coercible to an integer.",
       call = call
     )
   }
 
   if (!all(year >= min(year_range))) {
-    cli::cli_abort(
+    cli_abort(
       "{.arg year} must be greater than or equal to {.val {min(year_range)}}.",
       call = call
     )
   }
 
   if (!all(year <= max(year_range))) {
-    cli::cli_abort(
+    cli_abort(
       "{.arg year} must be less than or equal to {.val {max(year_range)}}.",
       call = call
     )
@@ -130,15 +129,14 @@ validate_year <- function(year,
 #' Convert data frame to sf object
 #'
 #' @noRd
-#' @importFrom sf st_as_sf st_transform
+#' @importFrom dplyr mutate across all_of
+#' @importFrom rlang check_installed %||%
 df_to_sf <- function(x,
                      coords = c("LONGITUD", "LATITUDE"),
                      crs = 4326,
                      na.fail = FALSE,
                      remove = FALSE) {
-  if (is.null(crs)) {
-    crs <- 4326
-  }
+  crs <- crs %||% 4326
 
   if (!all(coords %in% names(x))) {
     # FIXME: Consider adding a warning if coords not found
@@ -153,6 +151,8 @@ df_to_sf <- function(x,
         ~ as.numeric(.x)
       )
     )
+
+  rlang::check_installed("sf")
 
   sf::st_transform(
     sf::st_as_sf(
@@ -170,52 +170,85 @@ df_to_sf <- function(x,
 
 #' Validate state and county name/abbreviation and convert to FIPS number
 #' @noRd
-lookup_fips <- function(state, county = NULL, several.ok = FALSE, list = FALSE, int = TRUE) {
+lookup_fips <- function(state,
+                        county = NULL,
+                        several.ok = FALSE,
+                        list = FALSE,
+                        int = TRUE) {
   if (!several.ok) {
     state_fips <- suppressMessages(validate_state(state))
     county_fips <- suppressMessages(validate_county(state, county))
   } else {
-    state_fips <-
-      suppressMessages(vapply(state, validate_state, USE.NAMES = FALSE, FUN.VALUE = "1"))
+    state_fips <- suppressMessages(vapply(
+      state,
+      validate_state,
+      USE.NAMES = FALSE,
+      FUN.VALUE = "1"
+    ))
 
     county_fips <- NULL
 
     if (!is.null(county)) {
-      county_fips <-
-        suppressMessages(mapply(validate_county, state_fips, county, USE.NAMES = FALSE))
+      county_fips <- suppressMessages(mapply(
+        validate_county,
+        state_fips,
+        county,
+        USE.NAMES = FALSE
+      ))
     }
   }
 
   if (int) {
     state_fips <- as.integer(state_fips)
+
     if (!is.null(county_fips)) {
       county_fips <- as.integer(county_fips)
     }
   }
 
   if (list) {
-    list(
-      "state" = state_fips,
-      "county" = county_fips
+    return(
+      list(
+        "state" = state_fips,
+        "county" = county_fips
+      )
     )
-  } else if (!is.null(county_fips)) {
-    county_fips
-  } else {
-    state_fips
   }
+
+  if (!is.null(county_fips)) {
+    return(county_fips)
+  }
+
+  state_fips
 }
 
 #' @noRd
-#' @importFrom dplyr filter
-reorder_fars_vars <- function(x) {
+#' @importFrom rlang has_name
+rename_fars_vars <- function(x, reorder = TRUE, rename = TRUE) {
   # Reorder columns to match analytical manual order
-  x_vars <- dplyr::filter(fars_vars_labels, name %in% names(x))
+  x_vars <- fars_vars_labels[fars_vars_labels[["name"]] %in% names(x), ]
 
-  if (!all(names(x) %in% x_vars)) {
+  if (!all(rlang::has_name(x, x_vars))) {
     return(x)
   }
 
-  x[, match(x_vars$name, colnames(x))]
+  x_name <- x_vars[["name"]]
+
+  if (isTRUE(reorder)) {
+    x <- x[, match(x_name, colnames(x))]
+  }
+
+  if (!isTRUE(rename)) {
+    return(x)
+  }
+
+  x_name <- rlang::set_names(x_vars[["name"]], x_vars[["nm"]])
+
+  dplyr::rename_with(
+    x,
+    ~ names(x_name)[which(x_name == .x)],
+    .cols = dplyr::any_of(as.character(x_name))
+  )
 }
 
 #' Format crash data
@@ -232,11 +265,8 @@ reorder_fars_vars <- function(x) {
 #' @importFrom dplyr mutate
 #' @importFrom stringr str_pad
 format_crashes <- function(x, details = TRUE) {
-  # Reorder column names
-  crash_df <- reorder_fars_vars(x)
-
-  # Clean column names
-  crash_df <- janitor::clean_names(crash_df, "snake")
+  # Reorder and clean column names
+  crash_df <- rename_fars_vars(x)
 
   crash_df <-
     dplyr::mutate(
@@ -254,7 +284,7 @@ format_crashes <- function(x, details = TRUE) {
       )
     )
 
-  if (!details) {
+  if (!isTRUE(details)) {
     return(crash_df)
   }
 
@@ -271,7 +301,11 @@ format_crashes <- function(x, details = TRUE) {
     crash_df,
     date = paste(year, month, day, sep = "-"),
     time = paste(pad_hm(hour), pad_hm(minute), sep = ":"),
-    datetime = as.POSIXct(paste(date, time), format = "%Y-%m-%d %H:%M", tz = "UTC"),
+    datetime = as.POSIXct(
+      paste(date, time),
+      format = "%Y-%m-%d %H:%M",
+      tz = "UTC"
+    ),
     date = as.Date(date),
     .after = st_case
   )
@@ -280,7 +314,12 @@ format_crashes <- function(x, details = TRUE) {
 #' Helper function to return date added or updated for package data for documentation
 #'
 #' @noRd
-pkg_data_date <- function(data, date = "added", format = "%B %d %Y", verbose = TRUE, pkg = "crashapi") {
+#' @importFrom stringr str_to_sentence
+pkg_data_date <- function(data,
+                          date = "added",
+                          format = "%B %d %Y",
+                          verbose = TRUE,
+                          pkg = "crashapi") {
   data_date <-
     pkg_data_index[pkg_data_index[["data"]] == data, ][[paste0("date_", date)]]
 
@@ -292,4 +331,45 @@ pkg_data_date <- function(data, date = "added", format = "%B %d %Y", verbose = T
     format(as.Date(data_date), format = format)
 
   glue::glue("{stringr::str_to_sentence(date)}: {data_date}")
+}
+
+# ---
+# repo: r-lib/rlang
+# file: standalone-purrr.R
+# last-updated: 2022-06-07
+# license: https://unlicense.org
+# ---
+
+#' @keywords internal
+#' @importFrom rlang as_function global_env
+map <- function(.x, .f, ...) {
+  .f <- rlang::as_function(.f, env = rlang::global_env())
+  lapply(.x, .f, ...)
+}
+
+
+# ---
+# repo: tidyverse/purrr
+# file: list-combine.R
+# last-updated: 2022-11-10
+# license: https://purrr.tidyverse.org/LICENSE.html
+# ---
+
+#' Combine list elements into a single data structure
+#'
+#' @description
+#'
+#' * `list_rbind()` combines elements into a data frame by row-binding them
+#'   together with [vctrs::vec_rbind()].
+#' @keywords internal
+#' @importFrom rlang zap check_dots_empty current_env
+#' @importFrom vctrs vec_rbind
+list_rbind <- function(x, ..., names_to = rlang::zap(), ptype = NULL) {
+  rlang::check_dots_empty(...)
+  vctrs::vec_rbind(
+    !!!x,
+    .names_to = names_to,
+    .ptype = ptype,
+    .error_call = rlang::current_env()
+  )
 }

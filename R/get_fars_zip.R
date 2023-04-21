@@ -1,12 +1,11 @@
-
 #' Download FARS data files as zipped CSV or SAS files
 #'
 #' This function provides an alternative to [get_fars_year()] that downloads
 #' files directly from NHTSA FTP site. If read is `TRUE`, the function reads a
 #' list containing data frames for each table available in the selected year. If
-#' geo is `TRUE`, the accident table is converted to an sf object.
+#' geometry is `TRUE`, the accident table is converted to an sf object.
 #'
-#' @param year Year of data from 1975 to 2020, Default: 2020
+#' @param year Year of data from 1975 to 2021, Default: 2021
 #' @param format Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
 #'   unzip and geo options are only supported if format is "csv".
 #' @param path Path to download zip file. Set to [getwd()] if `NULL` (default).
@@ -28,15 +27,18 @@
 #' @param geometry If `TRUE`, convert the accident table to a sf object.
 #' @param overwrite If `FALSE`, abort if file exists at the provided path. If
 #'   `TRUE`, overwrite file.
-#' @return Downloads zip file with CSV or SAS tables and returns `NULL` invisibly
-#'   or returns a list of data frames (if geo is `FALSE`), or returns a list of
-#'   data frames with the accident table converted to a sf object.
+#' @return Downloads zip file with CSV or SAS tables and returns the zip file
+#'   path invisibly or returns a list of data frames (if geometry is `FALSE`),
+#'   or returns a list of data frames with the accident table converted to a sf
+#'   object.
 #' @rdname get_fars_zip
 #' @export
-#' @importFrom utils URLencode
+#' @importFrom utils URLencode unzip
 #' @importFrom glue glue
+#' @importFrom cli cli_bullets cli_progress_along
+#' @importFrom rlang check_installed
 #' @importFrom stats setNames
-get_fars_zip <- function(year = 2020,
+get_fars_zip <- function(year = 2021,
                          format = "csv",
                          path = NULL,
                          pr = FALSE,
@@ -44,7 +46,7 @@ get_fars_zip <- function(year = 2020,
                          read = TRUE,
                          geometry = FALSE,
                          overwrite = FALSE) {
-  year <- validate_year(year = year, year_range = c(1975:2020))
+  year <- validate_year(year = year, year_range = c(1975:2021))
   format <- match.arg(format, c("csv", "sas"))
   scope <- "National"
 
@@ -54,21 +56,20 @@ get_fars_zip <- function(year = 2020,
 
   auxiliary <- ""
 
-  if (aux) {
-    auxiliary <- "Auxiliary"
+  if (isTRUE(aux)) {
     if (year < 1982) {
       cli_warn(
         c("Auxiliary data (when {.code aux = TRUE}) is only available for years
         after 1982.",
-          "i" = "Setting {.code aux = FALSE} to return non-auxiliary data."
+          "i" = "Returning non-auxiliary data only."
         )
       )
-      auxiliary <- ""
+    } else {
+      auxiliary <- "Auxiliary"
     }
   }
 
-  filename <-
-    glue::glue("FARS{year}{scope}{auxiliary}{toupper(format)}.zip")
+  filename <- glue::glue("FARS{year}{scope}{auxiliary}{toupper(format)}.zip")
 
   url <-
     glue::glue(
@@ -76,26 +77,34 @@ get_fars_zip <- function(year = 2020,
     )
 
   if (is.null(path)) {
-    path <- getwd() # gsub("//", "/", tempdir())
+    path <- getwd()
   }
 
   destfile <- file.path(path, filename)
 
-  if (file.exists(destfile) & !overwrite) {
-    cli::cli_abort(
-      c("File {.file {filename}} exists at {.path {path}}.",
-        "i" = "Set {.code overwrite = TRUE} to overwrite existing file.")
+  if (file.exists(destfile)) {
+    if (isTRUE(overwrite)) {
+      file.remove(destfile)
+    } else {
+      cli_bullets(
+        c(
+          ">" = "Reading existing {.file {filename}} at {.path {path}}.",
+          "i" = "Set {.code overwrite = TRUE} to overwrite existing file."
+        )
+      )
+    }
+  }
+
+  if (!file.exists(destfile)) {
+    download.file(
+      url = url,
+      destfile = destfile,
+      method = "auto"
     )
   }
 
-  download.file(
-    url = url,
-    destfile = destfile,
-    method = "auto"
-  )
-
   if (!read) {
-    return(invisible(NULL))
+    return(invisible(destfile))
   }
 
   exdir <-
@@ -116,9 +125,11 @@ get_fars_zip <- function(year = 2020,
 
   stopifnot(format == "csv")
 
+  rlang::check_installed("readr")
+
   crash_tables <-
     stats::setNames(
-      purrr::map(
+      map(
         cli::cli_progress_along(files, "Reading data"),
         ~ readr::read_csv(
           file = files[.x],
@@ -130,8 +141,7 @@ get_fars_zip <- function(year = 2020,
     )
 
   if (geometry) {
-    crash_tables$accident <-
-      df_to_sf(crash_tables$accident)
+    crash_tables[["accident"]] <- df_to_sf(crash_tables[["accident"]])
   }
 
   crash_tables
