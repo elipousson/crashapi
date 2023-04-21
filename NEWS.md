@@ -1,4 +1,9 @@
-<!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
+<!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
+
+# crashapi 0.1.1.9
+
+- Update year range to cover 2021 data.
+- Add `get_crss_zip()` function
 
 # crashapi 0.1.1
 
