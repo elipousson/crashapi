@@ -10,7 +10,8 @@ read_crashapi(
   type = NULL,
   format = "json",
   results = TRUE,
-  ...
+  ...,
+  call = caller_env()
 )
 }
 \arguments{

@@ -31,7 +31,8 @@ read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
                           type = NULL,
                           format = "json",
                           results = TRUE,
-                          ...) {
+                          ...,
+                          call = caller_env()) {
   template <-
     switch(type,
       "GetCaseList" = "GET /CrashAPI/{data}/{type}?states={states}&fromYear={fromYear}&toYear={toYear}&minNumOfVehicles={minNumOfVehicles}&maxNumOfVehicles={maxNumOfVehicles}&format={format}",
@@ -69,14 +70,18 @@ read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
   }
 
   # FIXME: Implement a way of dealing with alternate formats
-  # if (format != "json") {}
-
-  data <-
-    httr2::resp_body_json(
-      httr2::req_perform(request),
+  data <- httr2::resp_body_json(
+      httr2::req_perform(request, error_call = call),
       check_type = FALSE,
       simplifyVector = TRUE
     )
+
+  if (data[["Count"]] == 0) {
+    cli::cli_bullets(
+      c("!" = data[["Message"]],
+        "*" = "Adjust search criteria and try again: {data[['SearchCriteria']]}")
+    )
+  }
 
   data[["Results"]][[1]]
 }
