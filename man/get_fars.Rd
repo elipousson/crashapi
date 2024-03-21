@@ -49,7 +49,7 @@ get_fars_cases(
 
 get_fars_crash_list(
   year = 2021,
-  start_year,
+  start_year = NULL,
   end_year = NULL,
   state,
   vehicles = c(1, 50)

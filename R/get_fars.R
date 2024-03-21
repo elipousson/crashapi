@@ -315,7 +315,7 @@ get_fars_cases <- function(year = 2021,
 #' @aliases get_fars_crash_list
 #' @export
 get_fars_crash_list <- function(year = 2021,
-                                start_year,
+                                start_year = NULL,
                                 end_year = NULL,
                                 state,
                                 vehicles = c(1, 50)) {
@@ -333,6 +333,10 @@ get_fars_crash_list <- function(year = 2021,
       minNumOfVehicles = min(vehicles),
       maxNumOfVehicles = max(vehicles)
     )
+
+  if (rlang::is_empty(crash_df)) {
+    return(NULL)
+  }
 
   format_crashes(crash_df)
 }
