@@ -1,4 +1,3 @@
-
 pkg_data <-
   utils::data(package = "crashapi", envir = .GlobalEnv)$results[, "Item"]
 
