@@ -30,7 +30,7 @@
 #'   minimum value is used as a start year and the maximum value used as a end
 #'   year. Most `api` options support the years from 2010 through the most
 #'   recent year of release. "year dataset" only supports 2010 to 2017 and "zip"
-#'   supports 1975 to 2021. `start_year` and `end_year` are ignored if `year` is
+#'   supports 1975 to 2022. `start_year` and `end_year` are ignored if `year` is
 #'   not `NULL`.
 #' @param api character. API function to use. Supported values include
 #'   "crashes", "cases", "state list", "summary count", "year dataset", and
@@ -84,7 +84,7 @@
 #'
 #' @export
 #' @md
-get_fars <- function(year = 2021,
+get_fars <- function(year = 2022,
                      state,
                      county = NULL,
                      api = c(
@@ -162,7 +162,7 @@ get_fars <- function(year = 2021,
 #' @aliases get_fars_crashes
 #' @export
 #' @importFrom cli cli_abort
-get_fars_crashes <- function(year = 2021,
+get_fars_crashes <- function(year = 2022,
                              start_year,
                              end_year = NULL,
                              state,
@@ -247,7 +247,7 @@ get_fars_crashes <- function(year = 2021,
 #' @aliases get_fars_cases get_fars_crash_details
 #' @export
 #' @importFrom cli cli_abort cli_progress_along
-get_fars_cases <- function(year = 2021,
+get_fars_cases <- function(year = 2022,
                            state,
                            cases,
                            details = FALSE,
@@ -314,7 +314,7 @@ get_fars_cases <- function(year = 2021,
 #' @rdname get_fars
 #' @aliases get_fars_crash_list
 #' @export
-get_fars_crash_list <- function(year = 2021,
+get_fars_crash_list <- function(year = 2022,
                                 start_year = NULL,
                                 end_year = NULL,
                                 state,
@@ -344,7 +344,7 @@ get_fars_crash_list <- function(year = 2021,
 #' @rdname get_fars
 #' @aliases get_fars_summary
 #' @export
-get_fars_summary <- function(year = 2021,
+get_fars_summary <- function(year = 2022,
                              start_year,
                              end_year = NULL,
                              state) {
@@ -368,7 +368,7 @@ get_fars_summary <- function(year = 2021,
 #' @importFrom stringr str_to_sentence
 #' @importFrom cli cli_warn
 #' @importFrom httr2 resp_body_json req_perform request
-get_fars_year <- function(year = 2021,
+get_fars_year <- function(year = 2022,
                           type = "accident",
                           state,
                           format = "json",

@@ -17,7 +17,7 @@ get_fars_crash_vehicles(
 }
 \arguments{
 \item{year}{numeric vector. Year or range with start and end year. 2010 to
-2021 supported.}
+2022 supported.}
 
 \item{start_year}{Start year for crash reports.}
 

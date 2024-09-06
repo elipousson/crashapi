@@ -23,6 +23,7 @@ utils::globalVariables(c(
 #' @param format Format to return, Default: 'json'
 #' @param results If `FALSE`, return formatted url, Default: `TRUE`
 #' @param ... Additional parameters used in template (varies by type).
+#' @inheritParams rlang::args_error_context
 #' @return Data frame with requested data or a formatted url (if `results = FALSE`)
 #' @export
 #' @importFrom httr2 req_template request req_perform resp_body_json
@@ -89,7 +90,7 @@ read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
 #' Validate start and end year
 #' @noRd
 validate_year <- function(year,
-                          year_range = c(2010, 2021),
+                          year_range = c(2010, 2022),
                           start_year = NULL,
                           end_year = NULL,
                           call = caller_env()) {

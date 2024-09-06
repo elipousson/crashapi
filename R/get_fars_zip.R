@@ -5,7 +5,7 @@
 #' list containing data frames for each table available in the selected year. If
 #' geometry is `TRUE`, the accident table is converted to an sf object.
 #'
-#' @param year Year of data from 1975 to 2021, Default: 2021
+#' @param year Year of data from 1975 to 2022, Default: 2022
 #' @param format Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
 #'   unzip and geo options are only supported if format is "csv".
 #' @param path Path to download zip file. Set to [getwd()] if `NULL` (default).
@@ -38,7 +38,7 @@
 #' @importFrom cli cli_bullets cli_progress_along
 #' @importFrom rlang check_installed
 #' @importFrom stats setNames
-get_fars_zip <- function(year = 2021,
+get_fars_zip <- function(year = 2022,
                          format = "csv",
                          path = NULL,
                          pr = FALSE,

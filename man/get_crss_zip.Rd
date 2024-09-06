@@ -5,7 +5,7 @@
 \title{Download CRSS data files as zipped CSV or SAS files}
 \usage{
 get_crss_zip(
-  year = 2021,
+  year = 2022,
   format = "csv",
   path = NULL,
   aux = FALSE,
@@ -15,7 +15,7 @@ get_crss_zip(
 )
 }
 \arguments{
-\item{year}{Year of data from 2016 to 2021, Default: 2021}
+\item{year}{Year of data from 2016 to 2022, Default: 2022}
 
 \item{format}{Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
 unzip and geo options are only supported if format is "csv".}
