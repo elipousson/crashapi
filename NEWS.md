@@ -1,5 +1,9 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# crashapi 0.1.2
+
+- Update year range to cover 2022 data.
+
 # crashapi 0.1.1.9
 
 - Update year range to cover 2021 data.
