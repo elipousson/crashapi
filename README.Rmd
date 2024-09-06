@@ -54,7 +54,7 @@ Most of these APIs support XML, JSV, CSV, and JSON output formats. This package 
 
 For reference, this package also includes a list of terms and NHTSA technical definitions in `fars_terms` and a list of variable labels in `fars_vars_labels`.
 
-The FARS API currently provides access to data from 2010 to 2021. The [NHTSA website](https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx) also provides additional information on the release data and version status for the FARS data files available through the API:
+The FARS API currently provides access to data from 2010 to 2022. The [NHTSA website](https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx) also provides additional information on the release data and version status for the FARS data files available through the API:
 
 | Data Year | File Version | Release Date      |
 |-----------|--------------|-------------------|
@@ -68,8 +68,9 @@ The FARS API currently provides access to data from 2010 to 2021. The [NHTSA web
 | 2017      | Final        | December 18, 2018 |
 | 2018      | Final        | June 24, 2021     |
 | 2019      | Final        | March 2, 2022     |
-| 2020      | Annual       | March 2, 2022     |
-| 2021      | Annual       | April 2023        |
+| 2020      | Final        | April 3, 2023     |
+| 2021      | Final        | August 19, 2024   |
+| 2022      | Annual       | August 19, 2024   |
 
 
 ### Additional data access functionality
