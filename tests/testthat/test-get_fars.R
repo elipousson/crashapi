@@ -43,7 +43,7 @@ test_that("get_fars works", {
 
 test_that("get_fars warns and errors", {
   expect_warning(
-    get_fars_crashes(year = 2021, state = "RI", county = "Bristol County"),
+    get_fars_crashes(year = 2022, state = "RI", county = "Bristol County"),
     "No records found with the provided parameters."
   )
   expect_message(
@@ -78,5 +78,5 @@ test_that("get_cases works", {
   expect_s3_class(get_fars_cases(year = 2019, state = "MD", cases = 240063, details = "vehicles"), "data.frame")
 
   skip_if_not_installed("sf")
-  expect_s3_class(get_fars_crashes(year = 2021, state = "MD", county = "Garrett", geometry = TRUE), "sf")
+  expect_s3_class(get_fars_crashes(year = 2022, state = "MD", county = "Garrett", geometry = TRUE), "sf")
 })
