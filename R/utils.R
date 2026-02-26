@@ -1,14 +1,35 @@
 .onLoad <- function(libname, pkgname) {
-  utils::data("fars_vars_labels",
+  utils::data(
+    "fars_vars_labels",
     package = pkgname,
     envir = parent.env(environment())
   )
 }
 
 utils::globalVariables(c(
-  "CITY", "CITYNAME", "COUNTY", "COUNTYNAME", "FATALS", "LATITUDE", "LONGITUD", "STATENAME",
-  "TWAY_ID", "TWAY_ID2", "VE_FORMS", "abb", "day", "get_area_crashes",
-  "hour", "minute", "month", "name", "st_case", "state_abb", "statewide_yn", "time", "year"
+  "CITY",
+  "CITYNAME",
+  "COUNTY",
+  "COUNTYNAME",
+  "FATALS",
+  "LATITUDE",
+  "LONGITUD",
+  "STATENAME",
+  "TWAY_ID",
+  "TWAY_ID2",
+  "VE_FORMS",
+  "abb",
+  "day",
+  "get_area_crashes",
+  "hour",
+  "minute",
+  "month",
+  "name",
+  "st_case",
+  "state_abb",
+  "statewide_yn",
+  "time",
+  "year"
 ))
 
 #' Read data from the CrashAPI using a url template
@@ -37,7 +58,6 @@ read_crashapi <- function(
   cookie_file = "crashapi.cookies",
   call = caller_env()
 ) {
-
   template <-
     switch(
       type,
@@ -93,7 +113,8 @@ read_crashapi <- function(
 
 req_crashapi_headers <- function(
   req,
-  cookie_file = "crashapi.cookies") {
+  cookie_file = "crashapi.cookies"
+) {
   # https://github.com/coatless-r-n-d/uscis-processing/blob/ec95d568a52d476bab8e9a81d1cb3f2814378d61/R/api.R#L9
   initial_headers <- c(
     "User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:131.0) Gecko/20100101 Firefox/131.0",
@@ -121,11 +142,13 @@ req_crashapi_headers <- function(
 
 #' Validate start and end year
 #' @noRd
-validate_year <- function(year,
-                          year_range = c(2010, 2024),
-                          start_year = NULL,
-                          end_year = NULL,
-                          call = caller_env()) {
+validate_year <- function(
+  year,
+  year_range = c(2010, 2024),
+  start_year = NULL,
+  end_year = NULL,
+  call = caller_env()
+) {
   if (is.null(year)) {
     if (is.null(start_year) && is.null(end_year)) {
       cli_abort(
@@ -169,11 +192,13 @@ validate_year <- function(year,
 #' @noRd
 #' @importFrom dplyr mutate across all_of
 #' @importFrom rlang check_installed %||%
-df_to_sf <- function(x,
-                     coords = c("LONGITUD", "LATITUDE"),
-                     crs = 4326,
-                     na.fail = FALSE,
-                     remove = FALSE) {
+df_to_sf <- function(
+  x,
+  coords = c("LONGITUD", "LATITUDE"),
+  crs = 4326,
+  na.fail = FALSE,
+  remove = FALSE
+) {
   crs <- crs %||% 4326
 
   if (!all(coords %in% names(x))) {
@@ -208,11 +233,13 @@ df_to_sf <- function(x,
 
 #' Validate state and county name/abbreviation and convert to FIPS number
 #' @noRd
-lookup_fips <- function(state,
-                        county = NULL,
-                        several.ok = FALSE,
-                        list = FALSE,
-                        int = TRUE) {
+lookup_fips <- function(
+  state,
+  county = NULL,
+  several.ok = FALSE,
+  list = FALSE,
+  int = TRUE
+) {
   if (!several.ok) {
     state_fips <- suppressMessages(validate_state(state))
     county_fips <- suppressMessages(validate_county(state, county))
@@ -315,8 +342,13 @@ format_crashes <- function(x, details = TRUE) {
       ),
       dplyr::across(
         dplyr::any_of(c(
-          "case_year", "totalvehicles", "total_vehicles",
-          "ve_forms", "fatals", "peds", "persons"
+          "case_year",
+          "totalvehicles",
+          "total_vehicles",
+          "ve_forms",
+          "fatals",
+          "peds",
+          "persons"
         )),
         ~ as.integer(.x)
       )
@@ -353,11 +385,13 @@ format_crashes <- function(x, details = TRUE) {
 #'
 #' @noRd
 #' @importFrom stringr str_to_sentence
-pkg_data_date <- function(data,
-                          date = "added",
-                          format = "%B %d %Y",
-                          verbose = TRUE,
-                          pkg = "crashapi") {
+pkg_data_date <- function(
+  data,
+  date = "added",
+  format = "%B %d %Y",
+  verbose = TRUE,
+  pkg = "crashapi"
+) {
   data_date <-
     pkg_data_index[pkg_data_index[["data"]] == data, ][[paste0("date_", date)]]
 

@@ -17,16 +17,18 @@
 #' @param nonoccupants Include non-occupants in query; defaults to `TRUE`
 #' @export
 #' @importFrom glue glue
-get_fars_crash_persons <- function(year = NULL,
-                                   start_year,
-                                   end_year = NULL,
-                                   state,
-                                   age = NULL,
-                                   sex = NULL,
-                                   seat,
-                                   injury,
-                                   occupants = TRUE,
-                                   nonoccupants = TRUE) {
+get_fars_crash_persons <- function(
+  year = NULL,
+  start_year,
+  end_year = NULL,
+  state,
+  age = NULL,
+  sex = NULL,
+  seat,
+  injury,
+  occupants = TRUE,
+  nonoccupants = TRUE
+) {
   year <- validate_year(year, start_year = start_year, end_year = end_year)
 
   if (is.character(seat)) {
@@ -41,7 +43,8 @@ get_fars_crash_persons <- function(year = NULL,
     other <- grepl("other", seat)
   }
 
-  injury <- switch(tolower(injury),
+  injury <- switch(
+    tolower(injury),
     "unknown" = 9,
     "not reported" = 9,
     "died prior" = 6,
@@ -53,7 +56,8 @@ get_fars_crash_persons <- function(year = NULL,
     "no apparent" = 0
   )
 
-  sex <- switch(tolower(sex),
+  sex <- switch(
+    tolower(sex),
     "m" = 1,
     "male" = 1,
     "f" = 2,

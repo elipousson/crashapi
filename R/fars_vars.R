@@ -44,7 +44,8 @@ fars_vars <- function(year, var = NULL, make = NULL, model = NULL) {
 
   var <- match.arg(var, c("make", "model", "bodytype"))
 
-  switch(var,
+  switch(
+    var,
     "make" = read_crashapi(
       data = data,
       type = "GetVariableAttributes",

@@ -17,14 +17,16 @@
 #'   body_type parameter. Default: `NULL`
 #' @export
 #' @importFrom glue glue
-get_fars_crash_vehicles <- function(year = NULL,
-                                    start_year,
-                                    end_year = NULL,
-                                    state,
-                                    make = NULL,
-                                    model = NULL,
-                                    model_year = 2010,
-                                    body_type = NULL) {
+get_fars_crash_vehicles <- function(
+  year = NULL,
+  start_year,
+  end_year = NULL,
+  state,
+  make = NULL,
+  model = NULL,
+  model_year = 2010,
+  body_type = NULL
+) {
   year <- validate_year(year, start_year = start_year, end_year = end_year)
   state_fips <- lookup_fips(state)
 

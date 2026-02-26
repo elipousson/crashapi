@@ -25,13 +25,15 @@
 #' @importFrom utils unzip
 #' @importFrom rlang check_installed
 #' @importFrom stats setNames
-get_crss_zip <- function(year = 2023,
-                         format = "csv",
-                         path = NULL,
-                         aux = FALSE,
-                         read = TRUE,
-                         geometry = FALSE,
-                         overwrite = FALSE) {
+get_crss_zip <- function(
+  year = 2023,
+  format = "csv",
+  path = NULL,
+  aux = FALSE,
+  read = TRUE,
+  geometry = FALSE,
+  overwrite = FALSE
+) {
   year <- validate_year(year = year, year_range = c(2016:2023))
   format <- match.arg(format, c("csv", "sas"))
 
