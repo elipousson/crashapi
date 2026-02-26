@@ -4,7 +4,12 @@ test_that("get_fars works", {
       get_fars(year = 2019, state = "MD", county = "Garrett County")
     )
     expect_GET(
-      get_fars(year = 2019, state = "MD", county = "Garrett County", cases = 240063)
+      get_fars(
+        year = 2019,
+        state = "MD",
+        county = "Garrett County",
+        cases = 240063
+      )
     )
     expect_GET(
       get_fars(year = 2019, state = "MD", county = "Garrett County", type = "ACCIDENT")
@@ -20,11 +25,21 @@ test_that("get_fars works", {
     "data.frame"
   )
   expect_s3_class(
-    get_fars(year = 2019, state = "MD", county = "Garrett County", details = TRUE),
+    get_fars(
+      year = 2019,
+      state = "MD",
+      county = "Garrett County",
+      details = TRUE
+    ),
     "data.frame"
   )
   expect_s3_class(
-    get_fars(year = 2019, state = "MD", county = "Garrett County", cases = 240063),
+    get_fars(
+      year = 2019,
+      state = "MD",
+      county = "Garrett County",
+      cases = 240063
+    ),
     "data.frame"
   )
   expect_s3_class(

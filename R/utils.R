@@ -15,7 +15,7 @@ utils::globalVariables(c(
 #'
 #' An updated utility function using the httr2 package to read data from the
 #' CrashAPI using the API URL templates listed on the NHSTA website:
-#' <https://crashviewer.nhtsa.dot.gov/CrashAPI>
+#' <https://crashviewer.nhtsa.dot.gov/crashviewer/CrashAPI>
 #'
 #' @param url Base url for CrashAPI.
 #' @param data Data (crashes, analytics, or fars), Default: 'crashes'
@@ -27,34 +27,36 @@ utils::globalVariables(c(
 #' @return Data frame with requested data or a formatted url (if `results = FALSE`)
 #' @export
 #' @importFrom httr2 req_template request req_perform resp_body_json
-read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
-                          data = "crashes",
-                          type = NULL,
-                          format = "json",
-                          results = TRUE,
-                          ...,
-                          call = caller_env()) {
+read_crashapi <- function(
+  url = "https://crashviewer.nhtsa.dot.gov/crashviewer/CrashAPI",
+  data = "crashes",
+  type = NULL,
+  format = "json",
+  results = TRUE,
+  ...,
+  cookie_file = "crashapi.cookies",
+  call = caller_env()
+) {
+
   template <-
-    switch(type,
-      "GetCaseList" = "GET /CrashAPI/{data}/{type}?states={states}&fromYear={fromYear}&toYear={toYear}&minNumOfVehicles={minNumOfVehicles}&maxNumOfVehicles={maxNumOfVehicles}&format={format}",
-      "GetCaseDetails" = "GET /CrashAPI/{data}/{type}?stateCase={stateCase}&caseYear={caseYear}&state={state}&format={format}",
-      "GetCrashesByVehicle" = "GET /CrashAPI/{data}/{type}?make={make}&model={model}&modelyear={modelyear}&bodyType={bodyType}&fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&format={format}",
-      "GetCrashesByPerson" = "GET /CrashAPI/{data}/{type}?age={age}&sex={sex}&seatPos={seatPos}&injurySeverity={injurySeverity}&fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&includeOccupants={includeOccupants}&includeNonOccupants={includeNonOccupants}&format={format}",
-      "GetCrashesByLocation" = "GET /CrashAPI/{data}/{type}?fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&county={county}&format={format}",
-      "GetInjurySeverityCounts" = "GET /CrashAPI/{data}/{type}?fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&format={format}",
-      "GetVariables" = "GET /CrashAPI/{data}/{type}?dataYear={dataYear}&format={format}",
-      "GetVariableAttributes" = "GET /CrashAPI/{data}/{type}?variable={variable}&caseYear={caseYear}&format={format}",
-      "GetVariableAttributesForModel" = "GET /CrashAPI/{data}/{type}?variable={variable}&caseYear={caseYear}&make={make}&format={format}",
-      "GetVariableAttributesForbodyType" = "GET /CrashAPI/{data}/{type}?variable={variable}&make={make}&model={model}&format={format}",
-      # "GetFARSData" = "GET /CrashAPI/{data}/{type}?dataset={dataset}&caseYear={caseYear}&format={format}"
-      "GetFARSData" = "GET /CrashAPI/{data}/{type}?dataset={dataset}&FromYear={FromYear}&ToYear={ToYear}&State={State}&format={format}"
+    switch(
+      type,
+      "GetCaseList" = "GET /{data}/{type}?states={states}&fromYear={fromYear}&toYear={toYear}&minNumOfVehicles={minNumOfVehicles}&maxNumOfVehicles={maxNumOfVehicles}&format={format}",
+      "GetCaseDetails" = "GET /{data}/{type}?stateCase={stateCase}&caseYear={caseYear}&state={state}&format={format}",
+      "GetCrashesByVehicle" = "GET /{data}/{type}?make={make}&model={model}&modelyear={modelyear}&bodyType={bodyType}&fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&format={format}",
+      "GetCrashesByPerson" = "GET /{data}/{type}?age={age}&sex={sex}&seatPos={seatPos}&injurySeverity={injurySeverity}&fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&includeOccupants={includeOccupants}&includeNonOccupants={includeNonOccupants}&format={format}",
+      "GetCrashesByLocation" = "GET /{data}/{type}?fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&county={county}&format={format}",
+      "GetInjurySeverityCounts" = "GET /{data}/{type}?fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&format={format}",
+      "GetVariables" = "GET /{data}/{type}?dataYear={dataYear}&format={format}",
+      "GetVariableAttributes" = "GET /{data}/{type}?variable={variable}&caseYear={caseYear}&format={format}",
+      "GetVariableAttributesForModel" = "GET /{data}/{type}?variable={variable}&caseYear={caseYear}&make={make}&format={format}",
+      "GetVariableAttributesForbodyType" = "GET /{data}/{type}?variable={variable}&make={make}&model={model}&format={format}",
+      # "GetFARSData" = "GET /{data}/{type}?dataset={dataset}&caseYear={caseYear}&format={format}"
+      "GetFARSData" = "GET /{data}/{type}?dataset={dataset}&FromYear={FromYear}&ToYear={ToYear}&State={State}&format={format}"
     )
 
-  req <-
-    httr2::req_user_agent(
-      httr2::request(url),
-      "crashapi https://elipousson.github.io/crashapi/"
-    )
+  req <- httr2::request(url) |>
+    req_crashapi_headers(cookie_file)
 
   request <-
     httr2::req_template(
@@ -72,25 +74,55 @@ read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
 
   # FIXME: Implement a way of dealing with alternate formats
   data <- httr2::resp_body_json(
-      httr2::req_perform(request, error_call = call),
-      check_type = FALSE,
-      simplifyVector = TRUE
-    )
+    httr2::req_perform(request, error_call = call),
+    check_type = FALSE,
+    simplifyVector = TRUE
+  )
 
   if (data[["Count"]] == 0) {
     cli::cli_bullets(
-      c("!" = data[["Message"]],
-        "*" = "Adjust search criteria and try again: {data[['SearchCriteria']]}")
+      c(
+        "!" = data[["Message"]],
+        "*" = "Adjust search criteria and try again: {data[['SearchCriteria']]}"
+      )
     )
   }
 
   data[["Results"]][[1]]
 }
 
+req_crashapi_headers <- function(
+  req,
+  cookie_file = "crashapi.cookies") {
+  # https://github.com/coatless-r-n-d/uscis-processing/blob/ec95d568a52d476bab8e9a81d1cb3f2814378d61/R/api.R#L9
+  initial_headers <- c(
+    "User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:131.0) Gecko/20100101 Firefox/131.0",
+    "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/png,image/svg+xml,*/*;q=0.8",
+    "Accept-Language" = "en-US,en;q=0.5",
+    "Accept-Encoding" = "gzip, deflate, br, zstd",
+    "DNT" = "1",
+    "Sec-GPC" = "1",
+    "Connection" = "keep-alive",
+    "Upgrade-Insecure-Requests" = "1",
+    "Sec-Fetch-Dest" = "document",
+    "Sec-Fetch-Mode" = "navigate",
+    "Sec-Fetch-Site" = "none",
+    "Sec-Fetch-User" = "?1",
+    "Priority" = "u=0, i",
+    "Pragma" = "no-cache",
+    "Cache-Control" = "no-cache"
+  )
+
+  req |>
+    httr2::req_user_agent("crashapi https://elipousson.github.io/crashapi/") |>
+    httr2::req_headers(!!!initial_headers) |>
+    httr2::req_cookie_preserve(tempfile(cookie_file))
+}
+
 #' Validate start and end year
 #' @noRd
 validate_year <- function(year,
-                          year_range = c(2010, 2022),
+                          year_range = c(2010, 2024),
                           start_year = NULL,
                           end_year = NULL,
                           call = caller_env()) {

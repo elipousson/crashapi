@@ -5,12 +5,13 @@
 \title{Read data from the CrashAPI using a url template}
 \usage{
 read_crashapi(
-  url = "https://crashviewer.nhtsa.dot.gov",
+  url = "https://crashviewer.nhtsa.dot.gov/crashviewer/CrashAPI",
   data = "crashes",
   type = NULL,
   format = "json",
   results = TRUE,
   ...,
+  cookie_file = "crashapi.cookies",
   call = caller_env()
 )
 }
@@ -38,5 +39,5 @@ Data frame with requested data or a formatted url (if \code{results = FALSE})
 \description{
 An updated utility function using the httr2 package to read data from the
 CrashAPI using the API URL templates listed on the NHSTA website:
-\url{https://crashviewer.nhtsa.dot.gov/CrashAPI}
+\url{https://crashviewer.nhtsa.dot.gov/crashviewer/CrashAPI}
 }

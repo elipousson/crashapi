@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 <!-- badges: end -->
 
-The goal of the crashapi R package is to provide functions for downloading data from the National Highway Traffic Safety Administration (NHTSA) [Fatality Analysis Reporting System (FARS) API](https://crashviewer.nhtsa.dot.gov/CrashAPI/).
+The goal of the crashapi R package is to provide functions for downloading data from the National Highway Traffic Safety Administration (NHTSA) [Fatality Analysis Reporting System (FARS) API](https://crashviewer.nhtsa.dot.gov/crashviewer/CrashAPI/).
 
 What is FARS? NHTSA explains: "The Fatality Analysis Reporting System (FARS) contains data on all vehicle crashes in the United States that occur on a public roadway and involve a fatality."
 

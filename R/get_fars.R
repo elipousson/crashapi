@@ -30,7 +30,7 @@
 #'   minimum value is used as a start year and the maximum value used as a end
 #'   year. Most `api` options support the years from 2010 through the most
 #'   recent year of release. "year dataset" only supports 2010 to 2017 and "zip"
-#'   supports 1975 to 2022. `start_year` and `end_year` are ignored if `year` is
+#'   supports 1975 to 2023. `start_year` and `end_year` are ignored if `year` is
 #'   not `NULL`.
 #' @param api character. API function to use. Supported values include
 #'   "crashes", "cases", "state list", "summary count", "year dataset", and
@@ -84,7 +84,7 @@
 #'
 #' @export
 #' @md
-get_fars <- function(year = 2022,
+get_fars <- function(year = 2024,
                      state,
                      county = NULL,
                      api = c(
@@ -162,7 +162,7 @@ get_fars <- function(year = 2022,
 #' @aliases get_fars_crashes
 #' @export
 #' @importFrom cli cli_abort
-get_fars_crashes <- function(year = 2022,
+get_fars_crashes <- function(year = 2024,
                              start_year,
                              end_year = NULL,
                              state,
@@ -247,7 +247,7 @@ get_fars_crashes <- function(year = 2022,
 #' @aliases get_fars_cases get_fars_crash_details
 #' @export
 #' @importFrom cli cli_abort cli_progress_along
-get_fars_cases <- function(year = 2022,
+get_fars_cases <- function(year = 2024,
                            state,
                            cases,
                            details = FALSE,
@@ -314,7 +314,7 @@ get_fars_cases <- function(year = 2022,
 #' @rdname get_fars
 #' @aliases get_fars_crash_list
 #' @export
-get_fars_crash_list <- function(year = 2022,
+get_fars_crash_list <- function(year = 2024,
                                 start_year = NULL,
                                 end_year = NULL,
                                 state,
@@ -344,7 +344,7 @@ get_fars_crash_list <- function(year = 2022,
 #' @rdname get_fars
 #' @aliases get_fars_summary
 #' @export
-get_fars_summary <- function(year = 2022,
+get_fars_summary <- function(year = 2024,
                              start_year,
                              end_year = NULL,
                              state) {
@@ -368,16 +368,28 @@ get_fars_summary <- function(year = 2022,
 #' @importFrom stringr str_to_sentence
 #' @importFrom cli cli_warn
 #' @importFrom httr2 resp_body_json req_perform request
-get_fars_year <- function(year = 2022,
+get_fars_year <- function(year = 2024,
                           type = "accident",
                           state,
                           format = "json",
                           path = NULL,
                           geometry = FALSE,
                           crs = NULL,
-                          download = FALSE) {
-  year <- validate_year(year)
+                          download = FALSE,
+                        call = caller_env()) {
+  year <- validate_year(year, call = call)
   state_fips <- lookup_fips(state)
+
+  # This exports the FARS data by given year (2010 - 2020). In order to get the
+  # FARS Data, please send in the Dataset Name, Case Year range (From Year - To
+  # Year) and State code. Note: To export all state data (*), please restrict
+  # the case year range to 5 years. The following are the valid dataset names:
+  # ACCIDENT, CEVENT, CRASHRF (2020 Onwards), DAMAGE, DISTRACT, DRIMPAIR,
+  # DRIVERRF (2020 Onwards), DRUGS, FACTOR, MANEUVER, NMCRASH, NMDISTRACT (2019
+  # Onwards), NMIMPAIR, NMPRIOR, PARKWORK, PBTYPE, PERSON, PERSONRF (2020
+  # Onwards), PVEHICLESF (2020 Onwards), RACE, SAFETYEQ, TRAILERVINDERIVED,
+  # VEHICLE, VEHICLESF (2020 Onwards), VEVENT, VINDECODE, VINDERIVED, VIOLATION,
+  # VISION, VSOE, WEATHER (2020 Onwards)
 
   fars_tabs <- c(
     "ACCIDENT", "CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR",
@@ -417,11 +429,7 @@ get_fars_year <- function(year = 2022,
 
   if (!download) {
     if (format == "json") {
-      request <-
-        httr2::req_user_agent(
-          httr2::request(url),
-          "crashapi https://elipousson.github.io/crashapi/"
-        )
+      request <- req_crashapi_headers(httr2::request(url))
     }
 
     if (format == "csv") {
@@ -429,9 +437,10 @@ get_fars_year <- function(year = 2022,
     }
 
     crash_df <-
-      switch(format,
+      switch(
+        format,
         "json" = httr2::resp_body_json(
-          httr2::req_perform(request),
+          httr2::req_perform(request, error_call = call),
           simplifyVector = TRUE,
           check_type = FALSE
         )[["Results"]][[1]],
@@ -462,7 +471,7 @@ get_fars_year <- function(year = 2022,
       )
     )
 
-    crash_df
+    return(crash_df)
   }
 
   filename <- paste0(min(year), "_", max(year), "_", type, ".", format)
@@ -474,6 +483,7 @@ get_fars_year <- function(year = 2022,
   utils::download.file(
     url = url,
     destfile = filename,
-    method = "auto"
+    method = "auto",
+    mode = "wb"
   )
 }

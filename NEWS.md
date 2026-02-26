@@ -1,4 +1,8 @@
-<!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
+# crashapi (development)
+
+- Fix package to use browser headers (broken since January 2025)
+- Update year range to cover 2024 data (released in April 2025)
+- Fix issue when `get_fars_year()` failed if `geometry=TRUE` but dataset had no coordinate columns.
 
 # crashapi 0.1.2
 
