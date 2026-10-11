@@ -1,18 +1,71 @@
+fars_parquet_path <- function(
+  path,
+  year,
+  scope = "National",
+  table = "accident"
+) {
+  folder <- paste0("FARS", year, scope, "CSV")
+  rlang::set_names(
+    file.path(path, "FARS", year, folder, paste0(table, ".parquet")),
+    table
+  )
+}
+
 test_that("get_fars_zip() uses the crashapi.year option for the default year", {
+  skip_if_not_installed("readr")
   path <- withr::local_tempdir()
   local_fars_zip(path, year = 2024)
   local_fars_zip(path, year = 2022)
 
   expect_identical(
     get_fars_zip(read = FALSE, path = path),
-    file.path(path, "FARS2024NationalCSV.zip")
+    fars_parquet_path(path, 2024)
   )
 
   withr::local_options(crashapi.year = 2022)
   expect_identical(
     get_fars_zip(read = FALSE, path = path),
-    file.path(path, "FARS2022NationalCSV.zip")
+    fars_parquet_path(path, 2022)
   )
+})
+
+test_that("get_fars_zip() caches parquet files and removes zip files", {
+  skip_if_not_installed("readr")
+  path <- withr::local_tempdir()
+  zipfile <- local_fars_zip(path, year = 2024)
+
+  first <- get_fars_zip(year = 2024, path = path)
+  expect_identical(list.files(dirname(zipfile)), "accident.parquet")
+
+  # Later calls read the cached parquet files without downloading
+  local_mocked_bindings(
+    download.file = function(...) stop("download.file() should not be called")
+  )
+  expect_identical(get_fars_zip(year = 2024, path = path), first)
+})
+
+test_that("get_fars_zip() keeps or replaces downloaded files", {
+  skip_if_not_installed("readr")
+  path <- withr::local_tempdir()
+  fixture <- make_fars_zip(file.path(withr::local_tempdir(), "fixture.zip"))
+  downloads <- 0
+  local_mocked_bindings(
+    download.file = function(url, destfile, ...) {
+      downloads <<- downloads + 1
+      file.copy(fixture, destfile)
+    }
+  )
+
+  get_fars_zip(year = 2024, path = path, read = FALSE, keep_files = TRUE)
+  cache <- file.path(path, "FARS", "2024", "FARS2024NationalCSV")
+  expect_identical(
+    sort(list.files(cache)),
+    c("FARS2024NationalCSV", "FARS2024NationalCSV.zip", "accident.parquet")
+  )
+
+  get_fars_zip(year = 2024, path = path, read = FALSE, overwrite = TRUE)
+  expect_identical(downloads, 2)
+  expect_identical(list.files(cache), "accident.parquet")
 })
 
 test_that("get_fars_zip() returns results for multiple years named by year", {
@@ -22,10 +75,12 @@ test_that("get_fars_zip() returns results for multiple years named by year", {
   local_fars_zip(path, year = 2024)
 
   paths <- get_fars_zip(year = 2023:2024, read = FALSE, path = path)
-  expect_named(paths, c("2023", "2024"))
   expect_identical(
-    unname(paths),
-    file.path(path, c("FARS2023NationalCSV.zip", "FARS2024NationalCSV.zip"))
+    paths,
+    list(
+      "2023" = fars_parquet_path(path, 2023),
+      "2024" = fars_parquet_path(path, 2024)
+    )
   )
 
   data <- get_fars_zip(year = 2023:2024, path = path)
@@ -34,17 +89,19 @@ test_that("get_fars_zip() returns results for multiple years named by year", {
 })
 
 test_that("get_fars_zip() builds URLs for Puerto Rico and 1996 auxiliary data", {
+  skip_if_not_installed("readr")
+  fixture <- make_fars_zip(file.path(withr::local_tempdir(), "fixture.zip"))
   urls <- NULL
   local_mocked_bindings(
     download.file = function(url, destfile, ...) {
       urls <<- c(urls, url)
-      file.create(destfile)
+      file.copy(fixture, destfile)
     }
   )
   path <- withr::local_tempdir()
 
   get_fars_zip(year = 2022, pr = TRUE, read = FALSE, path = path)
-  get_fars_zip(year = 1996, aux = TRUE, read = FALSE, path = path)
+  aux <- get_fars_zip(year = 1996, aux = TRUE, read = FALSE, path = path)
 
   expect_identical(
     urls,
@@ -54,8 +111,26 @@ test_that("get_fars_zip() builds URLs for Puerto Rico and 1996 auxiliary data", 
     )
   )
   expect_identical(
-    list.files(path, pattern = "1996"),
-    "FARS1996NationalAuxiliaryCSV.zip"
+    aux,
+    fars_parquet_path(path, 1996, scope = "NationalAuxiliary")
+  )
+})
+
+test_that("get_fars_zip() downloads SAS files without converting them", {
+  local_mocked_bindings(
+    download.file = function(url, destfile, ...) file.create(destfile)
+  )
+  path <- withr::local_tempdir()
+
+  expect_identical(
+    get_fars_zip(year = 2024, format = "sas", read = FALSE, path = path),
+    file.path(
+      path,
+      "FARS",
+      "2024",
+      "FARS2024NationalSAS",
+      "FARS2024NationalSAS.zip"
+    )
   )
 })
 
@@ -92,36 +167,19 @@ test_that("get_fars_zip() adds variable labels", {
   data <- get_fars_zip(path = path)
   expect_identical(attr(data$accident$LATITUDE, "label"), "Latitude")
 
-  data <- get_fars_zip(path = path, labels = FALSE)
+  data <- get_fars_zip(path = path, labels = FALSE, overwrite = FALSE)
   expect_null(attr(data$accident$LATITUDE, "label"))
 })
 
 test_that("get_fars_zip works", {
-  expect_true(
-    file.exists(
-      get_fars_zip(
-        year = 1978,
-        read = FALSE,
-        path = tempdir(),
-        overwrite = TRUE
-      )
-    )
-  )
-  data <-
-    suppressWarnings(
-      get_fars_zip(
-        year = 1978,
-        read = TRUE,
-        path = tempdir(),
-        overwrite = TRUE
-      )
-    )
-  expect_type(
-    data,
-    "list"
-  )
-  expect_identical(
-    names(data),
-    c("accident", "person", "vehicle")
-  )
+  skip_if_not_installed("readr")
+  path <- withr::local_tempdir()
+
+  paths <- get_fars_zip(year = 1978, read = FALSE, path = path)
+  expect_named(paths, c("accident", "person", "vehicle"))
+  expect_identical(unname(file.exists(paths)), c(TRUE, TRUE, TRUE))
+
+  data <- get_fars_zip(year = 1978, path = path)
+  expect_type(data, "list")
+  expect_named(data, c("accident", "person", "vehicle"))
 })
