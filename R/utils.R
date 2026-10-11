@@ -94,11 +94,6 @@ read_crashapi <- function(
     seconds = 180
   )
 
-  request <- httr2::req_options(
-    .req = request,
-    http_version = 1.1
-  )
-
   # FIXME: Implement a way of dealing with alternate formats
   data <- httr2::resp_body_json(
     httr2::req_perform(request, error_call = call),

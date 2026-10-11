@@ -494,24 +494,26 @@ get_fars_year <- function(
       results = FALSE
     )
 
-  if (!download) {
-    if (format == "json") {
-      request <- req_crashapi_headers(httr2::request(url))
-    }
+  # Use the same headers as read_crashapi() for both formats since the API
+  # rejects requests without browser headers
+  request <- req_crashapi_headers(httr2::request(url))
 
+  if (!download) {
     if (format == "csv") {
       rlang::check_installed("readr")
     }
+
+    resp <- httr2::req_perform(request, error_call = call)
 
     crash_df <-
       switch(
         format,
         "json" = httr2::resp_body_json(
-          httr2::req_perform(request, error_call = call),
+          resp,
           simplifyVector = TRUE,
           check_type = FALSE
         )[["Results"]][[1]],
-        "csv" = readr::read_csv(url)
+        "csv" = readr::read_csv(I(httr2::resp_body_string(resp)))
       )
 
     coords <- c("LONGITUD", "LATITUDE")
@@ -542,10 +544,8 @@ get_fars_year <- function(
     filename <- file.path(path, filename)
   }
 
-  utils::download.file(
-    url = url,
-    destfile = filename,
-    method = "auto",
-    mode = "wb"
-  )
+  resp <- httr2::req_perform(request, error_call = call)
+  writeBin(httr2::resp_body_raw(resp), filename)
+
+  invisible(filename)
 }

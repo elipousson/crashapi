@@ -21,7 +21,7 @@ Imports:
     cli,
     dplyr (>= 1.1.0),
     glue,
-    httr2 (>= 0.2.3),
+    httr2 (>= 1.0.0),
     rlang,
     stats,
     stringr,
