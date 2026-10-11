@@ -31,11 +31,13 @@ test_that("get_crss_zip() reads cached tables", {
 
   data <- get_crss_zip(year = 2024, path = path)
   expect_named(data, "accident")
-  expect_identical(data$accident$WEIGHT, 150.5)
+  expect_equal(data$accident$WEIGHT, 150.5, ignore_attr = TRUE)
+  # CRSS-only variables are labelled from the CRSS SAS data files
+  expect_identical(attr(data$accident$WEIGHT, "label"), "Case Weight")
   expect_identical(list.files(dirname(zipfile)), "accident.parquet")
 
   local_mocked_bindings(
-    download.file = function(...) stop("download.file() should not be called")
+    download_zip = function(...) stop("download_zip() should not be called")
   )
   expect_identical(get_crss_zip(year = 2024, path = path), data)
 })
@@ -56,7 +58,7 @@ test_that("get_crss_zip() builds URLs including 2019 auxiliary data", {
   fixture <- make_fars_zip(file.path(withr::local_tempdir(), "fixture.zip"))
   urls <- NULL
   local_mocked_bindings(
-    download.file = function(url, destfile, ...) {
+    download_zip = function(url, destfile, ...) {
       urls <<- c(urls, url)
       file.copy(fixture, destfile)
     }
@@ -92,7 +94,7 @@ test_that("get_crss_zip() warns that geometry is not supported", {
 
 test_that("get_crss_zip() errors for invalid years and reading SAS files", {
   local_mocked_bindings(
-    download.file = function(...) stop("download.file() should not be called")
+    download_zip = function(...) stop("download_zip() should not be called")
   )
 
   expect_snapshot(get_crss_zip(year = 2015), error = TRUE)
@@ -104,7 +106,7 @@ test_that("get_crss_zip() errors for invalid years and reading SAS files", {
 
 test_that("get_crss_zip() downloads SAS files without converting them", {
   local_mocked_bindings(
-    download.file = function(url, destfile, ...) file.create(destfile)
+    download_zip = function(url, destfile, ...) file.create(destfile)
   )
   path <- withr::local_tempdir()
 

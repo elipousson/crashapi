@@ -1,26 +1,28 @@
-# Build value labels for FARS and CRSS variables from NHTSA SAS files
+# Build variable and value labels for FARS and CRSS from NHTSA SAS files
 #
 # NHTSA's zipped SAS files for each year include a SAS PROC FORMAT program
 # (e.g. Format24.sas) with the value labels for each format and SAS data files
-# (.sas7bdat) that record the format used for each column. This script parses
-# the format programs, reads the column formats with haven::read_sas(), and
-# writes two parquet files to inst/extdata:
+# (.sas7bdat) that record the variable label and format for each column. This
+# script downloads the zipped SAS files with get_fars_zip() and get_crss_zip(),
+# parses the format programs, reads the variable labels and formats with
+# haven::read_sas(), and writes two parquet files to inst/extdata:
 #
 # - fars_formats.parquet: source, format, code, code_min, code_max, value,
 #   first_year, last_year
-# - fars_format_vars.parquet: source, year, table, variable, format
+# - fars_variables.parquet: source, year, table, variable, label, format
 #
 # Most format names include the data year (e.g. STATE24F in 2024) so the year
 # is removed from format names (e.g. STATEF) and identical values are combined
 # into a single row with the first and last year of consecutive years. Format
 # names with other years (e.g. FMKMD87F in 1991) are not changed.
 #
-# fars_value_labels() joins the two files. This script requires the haven,
-# nanoparquet, and cli packages and downloads about 1.6 GB of zip files (one
-# at a time).
+# fars_value_labels() joins the two files and fars_variables() returns the
+# variable labels. This script requires the haven, nanoparquet, and cli
+# packages. The zipped SAS files (about 1.6 GB) are cached in data-raw/sas
+# (ignored by git) so the script can be run again without downloading them.
 
+devtools::load_all()
 library(cli)
-`%||%` <- rlang::`%||%`
 
 # Parse SAS PROC FORMAT VALUE statements into a data frame with the format
 # name, code (as written, e.g. "1", "1-5", or "OTHER"), and value label
@@ -137,25 +139,27 @@ expand_codes <- function(formats) {
   formats
 }
 
-# Get the format used for each column of each SAS data file
-read_column_formats <- function(files) {
+# Get the variable label and format for each column of each SAS data file
+read_columns <- function(files) {
   rows <- lapply(files, function(file) {
     x <- haven::read_sas(file, n_max = 0)
-    fmt <- vapply(
-      x,
-      function(col) attr(col, "format.sas") %||% NA_character_,
-      character(1)
-    )
+    get_attr <- function(name) {
+      vapply(
+        x,
+        function(col) attr(col, name, exact = TRUE) %||% NA_character_,
+        character(1)
+      )
+    }
 
     data.frame(
       table = tolower(sub("[.]sas7bdat$", "", basename(file))),
       variable = names(x),
-      format = toupper(sub("[.]$", "", fmt))
+      label = trimws(get_attr("label")),
+      format = toupper(sub("[.]$", "", get_attr("format.sas")))
     )
   })
 
-  x <- do.call(rbind, rows)
-  x[!is.na(x[["format"]]), ]
+  do.call(rbind, rows)
 }
 
 # Prefer files outside of the format-32 folder if there are any
@@ -207,32 +211,34 @@ read_catalog_formats <- function(data_files, vars, formats, catalog_file) {
   do.call(rbind, rows)
 }
 
-# Download a SAS zip file and return value formats and column formats
-read_sas_zip <- function(source, year, url, dir) {
-  zipfile <- file.path(dir, basename(url))
-  exdir <- file.path(dir, sub("[.]zip$", "", basename(url)))
-  on.exit(unlink(c(zipfile, exdir), recursive = TRUE))
-
-  status <- tryCatch(
-    download.file(url, zipfile, mode = "wb", quiet = TRUE),
-    error = function(e) 1L
+# Download a SAS zip file and return value formats and variables
+read_sas_zip <- function(source, year, sas_dir) {
+  zipfile <- tryCatch(
+    switch(
+      source,
+      FARS = get_fars_zip(year, format = "sas", read = FALSE, path = sas_dir),
+      CRSS = get_crss_zip(year, format = "sas", read = FALSE, path = sas_dir)
+    ),
+    error = function(e) {
+      cli_alert_warning("{source} {year}: {conditionMessage(e)}")
+      NULL
+    }
   )
 
-  if (!identical(status, 0L)) {
-    cli_alert_warning("Can't download {.url {url}}")
+  if (is.null(zipfile)) {
     return(NULL)
   }
 
+  exdir <- tempfile("sas")
+  on.exit(unlink(exdir, recursive = TRUE))
   utils::unzip(zipfile, exdir = exdir)
   files <- list.files(exdir, recursive = TRUE, full.names = TRUE)
 
   # Some zip files include the same format program for 32-bit and 64-bit SAS
   # (or only in the format-32 folder)
-  format_files <- prefer_not_32(files[grepl(
-    "[.]sas$",
-    files,
-    ignore.case = TRUE
-  )])
+  format_files <- prefer_not_32(
+    files[grepl("[.]sas$", files, ignore.case = TRUE)]
+  )
   catalog_files <- prefer_not_32(
     files[grepl("[.]sas7bcat$", files, ignore.case = TRUE)]
   )
@@ -246,37 +252,38 @@ read_sas_zip <- function(source, year, url, dir) {
     return(NULL)
   }
 
-  formats <- do.call(rbind, lapply(format_files, parse_sas_formats))
-  formats <- unique(formats)
-  vars <- read_column_formats(data_files)
+  formats <- unique(do.call(rbind, lapply(format_files, parse_sas_formats)))
+  vars <- read_columns(data_files)
+  formatted <- vars[!is.na(vars[["format"]]), ]
 
   # Use the format catalog for formats that aren't in the format program
-  missing_formats <- setdiff(unique(vars[["format"]]), formats[["format"]])
+  missing_formats <- setdiff(unique(formatted[["format"]]), formats[["format"]])
 
   if (length(missing_formats) > 0 && length(catalog_files) > 0) {
     formats <- rbind(
       formats,
       read_catalog_formats(
         data_files,
-        vars,
+        formatted,
         missing_formats,
         catalog_files[[1]]
       )
     )
   }
 
-  # Keep column formats with value labels (dropping SAS built-in formats like
-  # $20 or BEST12)
-  missing_formats <- setdiff(unique(vars[["format"]]), formats[["format"]])
+  missing_formats <- setdiff(unique(formatted[["format"]]), formats[["format"]])
   # Don't report SAS built-in formats like $20 or BEST12
   missing_formats <- missing_formats[
     !grepl("^\\$?[0-9]*$|^(BEST|DATE|TIME|COMMA|Z)[0-9]*$", missing_formats)
   ]
-  vars <- vars[vars[["format"]] %in% formats[["format"]], ]
+
+  # Only keep formats with value labels (dropping SAS built-in formats)
+  vars[["format"]][!vars[["format"]] %in% formats[["format"]]] <- NA
 
   cli_alert_success(
-    "{source} {year}: {length(unique(formats$format))} formats,
-    {nrow(vars)} formatted columns in {length(data_files)} tables"
+    "{source} {year}: {nrow(vars)} variables ({sum(!is.na(vars$label))} with
+    labels, {sum(!is.na(vars$format))} with formats) and
+    {length(unique(formats$format))} formats in {length(data_files)} tables"
   )
 
   if (length(missing_formats) > 0) {
@@ -300,7 +307,9 @@ drop_fars_vpic <- function(x) {
 # Remove the two-digit data year before the final "F" in format names
 normalize_format <- function(x, year) {
   year_suffix <- sprintf("%02dF", as.integer(year) %% 100L)
-  has_year <- endsWith(x, year_suffix) & nchar(x) > nchar(year_suffix)
+  has_year <- !is.na(x) &
+    endsWith(x, year_suffix) &
+    nchar(x) > nchar(year_suffix)
   x[has_year] <- paste0(substr(x[has_year], 1, nchar(x[has_year]) - 3), "F")
   x
 }
@@ -339,66 +348,56 @@ compress_formats <- function(formats) {
   compressed
 }
 
-sas_urls <- rbind(
-  data.frame(
-    source = "FARS",
-    year = 1975:2024,
-    url = sprintf(
-      "https://static.nhtsa.gov/nhtsa/downloads/FARS/%1$d/National/FARS%1$dNationalSAS.zip",
-      1975:2024
-    )
-  ),
-  data.frame(
-    source = "CRSS",
-    year = 2016:2024,
-    url = sprintf(
-      "https://static.nhtsa.gov/nhtsa/downloads/CRSS/%1$d/CRSS%1$dSAS.zip",
-      2016:2024
-    )
-  )
+sas_years <- rbind(
+  data.frame(source = "FARS", year = 1975:2024),
+  data.frame(source = "CRSS", year = 2016:2024)
 )
 
-dir <- tempfile("fars_sas")
-dir.create(dir)
+# Cache the zipped SAS files so the script can be run again without
+# downloading them
+sas_dir <- "data-raw/sas"
 
 results <- Map(
   read_sas_zip,
-  sas_urls[["source"]],
-  sas_urls[["year"]],
-  sas_urls[["url"]],
-  dir
+  sas_years[["source"]],
+  sas_years[["year"]],
+  sas_dir
 )
 
 fars_formats <- do.call(rbind, lapply(results, `[[`, "formats"))
-fars_format_vars <- do.call(rbind, lapply(results, `[[`, "vars"))
+fars_variables <- do.call(rbind, lapply(results, `[[`, "vars"))
 
 # Drop vPIC formats for FARS since FARS data from the CrashAPI and zipped CSV
 # files already includes VPICMAKENAME, VPICMODELNAME, and VPICBODYCLASSNAME
 # columns (vPIC formats are only used from 2020 onwards). CRSS data doesn't
-# include these columns so the vPIC formats for CRSS are kept.
+# include these columns so the vPIC formats for CRSS are kept. The variable
+# labels for these columns are kept.
 fars_formats <- drop_fars_vpic(fars_formats)
-fars_format_vars <- drop_fars_vpic(fars_format_vars)
+fars_variables[["format"]][
+  fars_variables[["source"]] == "FARS" &
+    grepl("^VPIC", fars_variables[["format"]])
+] <- NA
 rownames(fars_formats) <- NULL
-rownames(fars_format_vars) <- NULL
+rownames(fars_variables) <- NULL
 
 fars_value_labels_full <- merge(
-  fars_format_vars,
+  fars_variables[!is.na(fars_variables[["format"]]), ],
   fars_formats,
   by = c("source", "year", "format")
 )
 
 fars_formats <- compress_formats(fars_formats)
-fars_format_vars[["format"]] <- normalize_format(
-  fars_format_vars[["format"]],
-  fars_format_vars[["year"]]
+fars_variables[["format"]] <- normalize_format(
+  fars_variables[["format"]],
+  fars_variables[["year"]]
 )
-fars_format_vars <- fars_format_vars[
-  c("source", "year", "table", "variable", "format")
+fars_variables <- fars_variables[
+  c("source", "year", "table", "variable", "label", "format")
 ]
 
 # Check that the compressed formats give the same value labels for each year
 fars_value_labels_check <- merge(
-  fars_format_vars,
+  fars_variables[!is.na(fars_variables[["format"]]), ],
   fars_formats,
   by = c("source", "format")
 )
@@ -423,7 +422,7 @@ nanoparquet::write_parquet(
 )
 
 nanoparquet::write_parquet(
-  fars_format_vars,
-  "inst/extdata/fars_format_vars.parquet",
+  fars_variables,
+  "inst/extdata/fars_variables.parquet",
   compression = "zstd"
 )

@@ -2,6 +2,7 @@
 
 export(decode_fars)
 export(fars_value_labels)
+export(fars_variables)
 export(fars_vars)
 export(format_crashes)
 export(get_crss_zip)
@@ -52,7 +53,6 @@ importFrom(stringr,
 )
 importFrom(utils,
   URLencode,
-  download.file,
   unzip
 )
 importFrom(vctrs,vec_rbind)

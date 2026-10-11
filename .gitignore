@@ -7,3 +7,6 @@
 .DS_Store
 inst/doc
 docs
+
+# Cached SAS files used by data-raw/fars_value_labels.R
+data-raw/sas/

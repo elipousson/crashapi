@@ -670,7 +670,6 @@ get_fars_summary <- function(
 
 #' @rdname get_fars_crashes
 #' @export
-#' @importFrom utils download.file
 #' @importFrom stringr str_to_sentence
 #' @importFrom cli cli_warn
 #' @importFrom httr2 resp_body_json req_perform request

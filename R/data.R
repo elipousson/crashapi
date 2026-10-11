@@ -22,6 +22,11 @@
 #'   Analysis Reporting System (FARS) Analytical User's Manual, 1975-2019,
 #'   documentation of the SAS format data files.
 #'
+#' This table is used for column order, CrashAPI metadata, and variable labels
+#' for columns that are only returned by the CrashAPI. Use [fars_variables()]
+#' for complete, year-specific variable labels from the SAS data files that
+#' NHTSA publishes for each year.
+#'
 #' The source data is installed with the package as a CSV file
 #' (`system.file("extdata", "fars_vars_labels.csv", package = "crashapi")`)
 #' with column definitions in `fars_vars_labels_definitions.csv`.

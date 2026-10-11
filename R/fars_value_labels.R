@@ -49,8 +49,8 @@ fars_value_labels <- function(
   source = c("FARS", "CRSS")
 ) {
   source <- match.arg(source)
-  vars <- read_value_label_file("fars_format_vars.parquet")
-  vars <- vars[vars[["source"]] == source, ]
+  vars <- read_value_label_file("fars_variables.parquet")
+  vars <- vars[vars[["source"]] == source & !is.na(vars[["format"]]), ]
 
   if (!is.null(year)) {
     vars <- vars[vars[["year"]] %in% as.integer(year), ]
@@ -107,6 +107,49 @@ fars_value_labels <- function(
 
   rownames(value_labels) <- NULL
   value_labels
+}
+
+#' Get variable labels for FARS and CRSS variables
+#'
+#' `fars_variables()` returns the variables in each FARS or CRSS data table by
+#' year with the variable label and SAS format name from the SAS data files
+#' that NHTSA publishes with the zipped SAS data for each year (see
+#' `data-raw/fars_value_labels.R`). Variable labels can change over time and
+#' include variables that are not in [fars_vars_labels] (e.g. variables added
+#' in recent years or only used in CRSS).
+#'
+#' @inheritParams fars_value_labels
+#' @returns A data frame with columns `source`, `year`, `table`, `variable`,
+#'   `label` (the variable label), and `format` (the SAS format name without
+#'   the year, or `NA` for variables without value labels).
+#' @examples
+#' fars_variables(year = 2024, table = "person", variable = c("AGE", "INJ_SEV"))
+#' @export
+fars_variables <- function(
+  year = NULL,
+  table = NULL,
+  variable = NULL,
+  source = c("FARS", "CRSS")
+) {
+  source <- match.arg(source)
+  vars <- read_value_label_file("fars_variables.parquet")
+  vars <- vars[vars[["source"]] == source, ]
+
+  if (!is.null(year)) {
+    vars <- vars[vars[["year"]] %in% as.integer(year), ]
+  }
+
+  if (!is.null(table)) {
+    vars <- vars[vars[["table"]] %in% tolower(table), ]
+  }
+
+  if (!is.null(variable)) {
+    vars <- vars[toupper(vars[["variable"]]) %in% toupper(variable), ]
+  }
+
+  vars <- vars[order(vars[["year"]], vars[["table"]]), ]
+  rownames(vars) <- NULL
+  as.data.frame(vars)
 }
 
 #' Add decoded value columns to FARS or CRSS data

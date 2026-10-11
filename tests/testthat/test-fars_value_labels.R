@@ -38,6 +38,39 @@ test_that("fars_value_labels() covers FARS and CRSS years", {
   )
 })
 
+test_that("fars_variables() returns variable labels by year", {
+  vars <- fars_variables(
+    year = 2024,
+    table = "person",
+    variable = c("INJ_SEV", "ICFINALBODY")
+  )
+
+  expect_named(
+    vars,
+    c("source", "year", "table", "variable", "label", "format")
+  )
+  expect_identical(
+    vars$label[vars$variable == "ICFINALBODY"],
+    "Final Stage Body Class"
+  )
+  expect_identical(vars$format[vars$variable == "INJ_SEV"], "INJURF")
+  expect_identical(
+    fars_variables(2016, "accident", "PSU", source = "CRSS")$label,
+    "Primary Sampling Unit"
+  )
+})
+
+test_that("label_fars_vars() uses variable labels for the table and year", {
+  person <- data.frame(CASEYEAR = 2024, ICFINALBODY = 1)
+
+  expect_identical(
+    attr(label_fars_vars(person, "PERSON")$ICFINALBODY, "label"),
+    "Final Stage Body Class"
+  )
+  # Without a table, only fars_vars_labels is used
+  expect_null(attr(label_fars_vars(person)$ICFINALBODY, "label"))
+})
+
 test_that("decode_fars() adds decoded columns by year", {
   person <- data.frame(
     CASEYEAR = c(1985, 2024),

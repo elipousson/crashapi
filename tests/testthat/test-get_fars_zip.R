@@ -39,7 +39,7 @@ test_that("get_fars_zip() caches parquet files and removes zip files", {
 
   # Later calls read the cached parquet files without downloading
   local_mocked_bindings(
-    download.file = function(...) stop("download.file() should not be called")
+    download_zip = function(...) stop("download_zip() should not be called")
   )
   expect_identical(get_fars_zip(year = 2024, path = path), first)
 })
@@ -50,7 +50,7 @@ test_that("get_fars_zip() keeps or replaces downloaded files", {
   fixture <- make_fars_zip(file.path(withr::local_tempdir(), "fixture.zip"))
   downloads <- 0
   local_mocked_bindings(
-    download.file = function(url, destfile, ...) {
+    download_zip = function(url, destfile, ...) {
       downloads <<- downloads + 1
       file.copy(fixture, destfile)
     }
@@ -93,7 +93,7 @@ test_that("get_fars_zip() builds URLs for Puerto Rico and 1996 auxiliary data", 
   fixture <- make_fars_zip(file.path(withr::local_tempdir(), "fixture.zip"))
   urls <- NULL
   local_mocked_bindings(
-    download.file = function(url, destfile, ...) {
+    download_zip = function(url, destfile, ...) {
       urls <<- c(urls, url)
       file.copy(fixture, destfile)
     }
@@ -118,7 +118,7 @@ test_that("get_fars_zip() builds URLs for Puerto Rico and 1996 auxiliary data", 
 
 test_that("get_fars_zip() downloads SAS files without converting them", {
   local_mocked_bindings(
-    download.file = function(url, destfile, ...) file.create(destfile)
+    download_zip = function(url, destfile, ...) file.create(destfile)
   )
   path <- withr::local_tempdir()
 
@@ -150,7 +150,7 @@ test_that("get_fars_zip() reads CSV files in a folder within the zip file", {
 
 test_that("get_fars_zip() errors before downloading SAS files to read", {
   local_mocked_bindings(
-    download.file = function(...) stop("download.file() should not be called")
+    download_zip = function(...) stop("download_zip() should not be called")
   )
 
   expect_snapshot(
@@ -165,7 +165,11 @@ test_that("get_fars_zip() adds variable labels", {
   local_fars_zip(path)
 
   data <- get_fars_zip(path = path)
-  expect_identical(attr(data$accident$LATITUDE, "label"), "Latitude")
+  # Variable labels come from the SAS data files for the year
+  expect_identical(
+    attr(data$accident$LATITUDE, "label"),
+    "Global Position (Latitude)"
+  )
 
   data <- get_fars_zip(path = path, var_labels = "none", overwrite = FALSE)
   expect_null(attr(data$accident$LATITUDE, "label"))
@@ -188,4 +192,29 @@ test_that("fix_latin1() converts text that isn't valid UTF-8 from Latin-1", {
   x <- c("Caf\xe9", "Plain", NA)
   expect_identical(fix_latin1(x), c("Café", "Plain", NA))
   expect_identical(fix_latin1(1:2), 1:2)
+})
+
+test_that("download_zip() saves the downloaded file", {
+  path <- withr::local_tempdir()
+  httr2::local_mocked_responses(function(req) {
+    httr2::response(status_code = 200, body = charToRaw("zip data"))
+  })
+
+  destfile <- file.path(path, "data.zip")
+  download_zip("https://example.com/data.zip", destfile)
+  expect_identical(readLines(destfile, warn = FALSE), "zip data")
+  expect_identical(list.files(path), "data.zip")
+})
+
+test_that("download_zip() errors without leaving a file for missing data", {
+  path <- withr::local_tempdir()
+  httr2::local_mocked_responses(function(req) {
+    httr2::response(status_code = 404)
+  })
+
+  expect_snapshot(
+    download_zip("https://example.com/data.zip", file.path(path, "data.zip")),
+    error = TRUE
+  )
+  expect_identical(list.files(path), character(0))
 })

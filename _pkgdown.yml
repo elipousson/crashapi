@@ -9,6 +9,7 @@ reference:
 - title: Get variable definitions and value labels
   contents:
   - fars_vars
+  - fars_variables
   - fars_value_labels
   - decode_fars
 - title: Data formatting functions
