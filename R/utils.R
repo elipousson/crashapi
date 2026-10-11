@@ -314,26 +314,102 @@ rename_fars_vars <- function(x, reorder = TRUE, rename = TRUE) {
   dplyr::rename(x, !!!rlang::set_names(x_name, x_vars[["nm"]]))
 }
 
+# Nested list columns returned by the CrashAPI GetCaseDetails endpoint and the
+# corresponding FARS data file
+fars_list_cols <- c(
+  "CEvents" = "CEVENT",
+  "Vehicles" = "VEHICLE",
+  "Damages" = "DAMAGE",
+  "Distractions" = "DISTRACT",
+  "DrImpairs" = "DRIMPAIR",
+  "DriverRFs" = "DRIVERRF",
+  "Factors" = "FACTOR",
+  "Maneuvers" = "MANEUVER",
+  "Persons" = "PERSON",
+  "OCCDrugs" = "DRUGS",
+  "PersonRFs" = "PERSONRF",
+  "Races" = "RACE",
+  "TrailerVinDeriveds" = "TRAILERVINDERIVED",
+  "VEvents" = "VEVENT",
+  "VehicleSFs" = "VEHICLESF",
+  "VinDecodes" = "VINDECODE",
+  "VinDeriveds" = "VINDERIVED",
+  "Violations" = "VIOLATN",
+  "Visions" = "VISION",
+  "Vsoes" = "VSOE",
+  "NPersons" = "PERSON",
+  "NmCrashes" = "NMCRASH",
+  "NmImpairs" = "NMIMPAIR",
+  "NmPriors" = "NMPRIOR",
+  "SafetyEQs" = "SAFETYEQ",
+  "PbTypes" = "PBTYPE"
+)
+
 #' Add variable labels from fars_vars_labels as column attributes
+#'
+#' Variable names are matched exactly and then, for any names not found in
+#' fars_vars_labels, case-insensitively (e.g. CASEYEAR and CaseYear). When a
+#' variable is listed more than once, labels for the matching data file are
+#' preferred, then labels for variables that are not discontinued. Columns
+#' with decoded values (e.g. BODY_TYPNAME) without their own label use the
+#' label for the coded variable. Nested data frames in list columns are
+#' labelled using the data file from fars_list_cols.
 #' @noRd
 label_fars_vars <- function(x, data_file = NULL) {
-  x_vars <- fars_vars_labels[
-    fars_vars_labels[["name"]] %in%
-      names(x) &
-      !is.na(fars_vars_labels[["label"]]),
-  ]
-
-  if (!is.null(data_file)) {
-    # Prefer labels for the matching data file when a variable is listed for
-    # more than one data file
-    x_vars <- x_vars[order(!(x_vars[["data_file"]] %in% data_file)), ]
+  for (nm in intersect(names(x), names(fars_list_cols))) {
+    if (is.list(x[[nm]]) && !is.data.frame(x[[nm]])) {
+      x[[nm]] <- lapply(x[[nm]], function(el) {
+        if (!is.data.frame(el)) {
+          return(el)
+        }
+        label_fars_vars(el, data_file = fars_list_cols[[nm]])
+      })
+    }
   }
 
-  x_vars <- x_vars[!duplicated(x_vars[["name"]]), ]
+  vars <- fars_vars_labels[!is.na(fars_vars_labels[["name"]]), ]
 
-  x_labels <- rlang::set_names(x_vars[["label"]], x_vars[["name"]])
+  # Prefer labels for the matching data file, then current variables
+  vars <- vars[
+    order(
+      !(vars[["data_file"]] %in% data_file),
+      vars[["discontinued"]] %in% TRUE
+    ),
+  ]
 
-  for (nm in names(x_labels)) {
+  exact <- vars[!duplicated(vars[["name"]]), ]
+  exact_labels <- rlang::set_names(exact[["label"]], exact[["name"]])
+
+  upper <- vars[!duplicated(toupper(vars[["name"]])), ]
+  upper_labels <- rlang::set_names(upper[["label"]], toupper(upper[["name"]]))
+
+  lookup_label <- function(name) {
+    if (name %in% names(exact_labels)) {
+      return(exact_labels[[name]])
+    }
+
+    upper_labels[toupper(name)][[1]]
+  }
+
+  x_labels <- vapply(
+    names(x),
+    function(name) {
+      label <- lookup_label(name)
+
+      if (is.na(label) && grepl("NAME$", name, ignore.case = TRUE)) {
+        code_label <- lookup_label(sub("NAME$", "", name, ignore.case = TRUE))
+
+        if (!is.na(code_label)) {
+          label <- paste(code_label, "(name)")
+        }
+      }
+
+      label
+    },
+    character(1)
+  )
+
+  for (nm in names(x_labels)[!is.na(x_labels)]) {
     attr(x[[nm]], "label") <- x_labels[[nm]]
   }
 

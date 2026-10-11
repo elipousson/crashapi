@@ -45,6 +45,47 @@ test_that("label_fars_vars() prefers labels for the matching data file", {
   )
 })
 
+test_that("label_fars_vars() prefers labels for current variables", {
+  x <- data.frame(HIT_RUN = 1)
+
+  expect_identical(attr(label_fars_vars(x)$HIT_RUN, "label"), "Hit and Run")
+  expect_identical(
+    attr(label_fars_vars(x, data_file = "ACCIDENT")$HIT_RUN, "label"),
+    "Hit and Run (discontinued)"
+  )
+})
+
+test_that("label_fars_vars() matches names case-insensitively as a fallback", {
+  out <- label_fars_vars(data.frame(CASEYEAR = 2022, Vehicles = 1))
+
+  expect_identical(attr(out$CASEYEAR, "label"), "Case Year")
+  # Vehicles is listed without a label so it is not matched to VEHICLES
+  expect_null(attr(out$Vehicles, "label"))
+})
+
+test_that("label_fars_vars() labels NAME columns from the coded variable", {
+  out <- label_fars_vars(
+    data.frame(BODY_TYP = 1, BODY_TYPNAME = "a", STATENAME = "b", ABCNAME = "c")
+  )
+
+  expect_identical(attr(out$BODY_TYPNAME, "label"), "Body Type (name)")
+  expect_identical(attr(out$STATENAME, "label"), "State Name")
+  expect_null(attr(out$ABCNAME, "label"))
+})
+
+test_that("label_fars_vars() labels nested list columns", {
+  vehicle <- data.frame(BODY_TYP = 1)
+  vehicle$Persons <- list(data.frame(AGE = 30))
+  x <- data.frame(ST_CASE = 1)
+  x$Vehicles <- list(vehicle)
+
+  out <- label_fars_vars(x)
+  out_vehicle <- out$Vehicles[[1]]
+
+  expect_identical(attr(out_vehicle$BODY_TYP, "label"), "Body Type")
+  expect_identical(attr(out_vehicle$Persons[[1]]$AGE, "label"), "Age")
+})
+
 test_that("format_crashes() adds variable labels", {
   x <- data.frame(
     ST_CASE = "500001",

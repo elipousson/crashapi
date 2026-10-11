@@ -346,7 +346,9 @@ get_fars_cases <- function(
 
   label_fars_vars(
     details_df,
-    data_file = switch(details, "events" = "CEVENT", "vehicles" = "VEHICLE")
+    data_file = fars_list_cols[[
+      switch(details, "events" = "CEvents", "vehicles" = "Vehicles")
+    ]]
   )
 }
 
