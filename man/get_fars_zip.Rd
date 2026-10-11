@@ -17,8 +17,9 @@ get_fars_zip(
 )
 }
 \arguments{
-\item{year}{Year of data from 1975 to 2024. Defaults to
-\code{getOption("crashapi.year", 2024)}.}
+\item{year}{One or more years of data from 1975 to 2024. Each year is
+downloaded separately and, if \code{read = TRUE}, returned as a list named by
+year. Defaults to \code{getOption("crashapi.year", 2024)}.}
 
 \item{format}{Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
 unzip and geo options are only supported if format is "csv".}
@@ -55,9 +56,10 @@ gtsummary.}
 }
 \value{
 Downloads zip file with CSV or SAS tables and returns the zip file
-path invisibly or returns a list of data frames (if geometry is \code{FALSE}),
-or returns a list of data frames with the accident table converted to a sf
-object.
+path invisibly if \code{read = FALSE}, or a list of data frames with one item
+for each table (with the accident table converted to an sf object if
+\code{geometry = TRUE}). If more than one year is provided, returns a named
+vector of file paths or a list of lists named by year.
 }
 \description{
 This function provides an alternative to \code{\link[=get_fars_year]{get_fars_year()}} that downloads

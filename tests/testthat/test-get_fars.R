@@ -9,7 +9,7 @@ test_that("get_fars() supports the zip api with the default format", {
   expect_s3_class(data$accident, "data.frame")
 })
 
-test_that("get_fars_summary() works with end_year and no start_year", {
+test_that("get_fars_summary() uses the minimum and maximum year", {
   local_mocked_bindings(
     read_crashapi = function(...) {
       args <- list(...)
@@ -17,9 +17,34 @@ test_that("get_fars_summary() works with end_year and no start_year", {
     }
   )
 
-  out <- get_fars_summary(state = "MD", year = NULL, end_year = 2020)
-  expect_identical(out$FromYear, 2020L)
-  expect_identical(out$ToYear, 2020L)
+  expect_no_message(out <- get_fars_summary(state = "MD", year = 2015:2020))
+  expect_identical(c(out$FromYear, out$ToYear), c(2015L, 2020L))
+
+  expect_snapshot(out <- get_fars_summary(state = "MD", year = c(2020, 2015)))
+  expect_identical(c(out$FromYear, out$ToYear), c(2015L, 2020L))
+})
+
+test_that("get_fars_cases() uses one year for each case", {
+  case_years <- NULL
+  local_mocked_bindings(
+    read_crashapi = function(...) {
+      args <- list(...)
+      case_years <<- c(case_years, args$caseYear)
+      list(CrashResultSet = data.frame(ST_CASE = args$stateCase))
+    }
+  )
+
+  get_fars_cases(state = "MD", cases = c(1, 2), year = c(2020, 2021))
+  expect_identical(case_years, c(2020L, 2021L))
+
+  case_years <- NULL
+  get_fars_cases(state = "MD", cases = c(1, 2), year = 2022)
+  expect_identical(case_years, c(2022L, 2022L))
+
+  expect_snapshot(
+    get_fars_cases(state = "MD", cases = c(1, 2), year = 2020:2022),
+    error = TRUE
+  )
 })
 
 test_that("get_fars_cases() adds variable labels", {

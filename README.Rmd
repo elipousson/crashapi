@@ -101,7 +101,7 @@ For example, you can use the `get_fars()` access state-level summary data on cra
 # Get summary crash count and fatality count data for Maryland from 2010 to 2019
 md_summary <-
   get_fars(
-    year = c(2010, 2021),
+    year = 2010:2021,
     state = "MD",
     api = "summary count"
   )
@@ -117,7 +117,7 @@ You can download crash data and set geometry to TRUE optionally convert the data
 ```{r map_fars_crashes}
 crashes_sf <-
   get_fars(
-    year = c(2018, 2021),
+    year = 2018:2021,
     state = "NC",
     county = "Wake County",
     geometry = TRUE

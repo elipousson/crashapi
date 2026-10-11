@@ -142,25 +142,18 @@ req_crashapi_headers <- function(
     httr2::req_cookie_preserve(tempfile(cookie_file))
 }
 
-#' Validate start and end year
+#' Validate one or more years
 #' @noRd
 validate_year <- function(
   year,
   year_range = c(2010, 2024),
-  start_year = NULL,
-  end_year = NULL,
   call = caller_env()
 ) {
-  if (is.null(year)) {
-    if (is.null(start_year) && is.null(end_year)) {
-      cli_abort(
-        "A {.arg year}, {.arg start_year}, or
-        {.arg end_year} must be provided to download FARS data.",
-        call = call
-      )
-    }
-
-    year <- c(start_year, end_year)
+  if (is.null(year) || length(year) == 0) {
+    cli_abort(
+      "{.arg year} must be provided to download FARS data.",
+      call = call
+    )
   }
 
   year <- as.integer(year)
@@ -187,6 +180,27 @@ validate_year <- function(
   }
 
   year
+}
+
+#' Get the start and end year for API endpoints that take a year range
+#'
+#' Informs the user if `year` has gaps since the API returns all years between
+#' the minimum and maximum year.
+#' @noRd
+year_span <- function(year) {
+  span <- range(year)
+  missing_year <- setdiff(seq(span[[1]], span[[2]]), year)
+
+  if (length(missing_year) > 0) {
+    cli::cli_inform(
+      c(
+        "i" = "Requesting data for all years from {span[[1]]} to {span[[2]]},
+        including {.val {missing_year}} not in {.arg year}."
+      )
+    )
+  }
+
+  span
 }
 
 #' Convert data frame to sf object

@@ -32,8 +32,6 @@ get_fars_crashes(
   state,
   county,
   year = getOption("crashapi.year", 2024),
-  start_year = NULL,
-  end_year = NULL,
   details = FALSE,
   geometry = FALSE,
   crs = NULL,
@@ -53,19 +51,11 @@ get_fars_cases(
 get_fars_crash_list(
   state,
   year = getOption("crashapi.year", 2024),
-  start_year = NULL,
-  end_year = NULL,
   vehicles = c(1, 50),
   labels = TRUE
 )
 
-get_fars_summary(
-  state,
-  year = getOption("crashapi.year", 2024),
-  start_year = NULL,
-  end_year = NULL,
-  labels = TRUE
-)
+get_fars_summary(state, year = getOption("crashapi.year", 2024), labels = TRUE)
 
 get_fars_year(
   state,
@@ -84,13 +74,15 @@ get_fars_year(
 \item{state}{Required. State name, abbreviation, or FIPS number.
 \code{get_fars_crash_list} supports multiple states.}
 
-\item{year}{numeric vector. Year or range with start and end year. If \code{api}
-is "cases" or "zip" (or using the \code{get_fars_cases} or \code{get_fars_zip}
-functions), a single year is required. All other \code{api} options support a
-range with the minimum value is used as a start year and the maximum value
-used as a end year. Most \code{api} options support the years from 2010 through
-2024 and "zip" supports 1975 to 2024. \code{start_year} and \code{end_year} are
-ignored if \code{year} is not \code{NULL}. Defaults to
+\item{year}{numeric vector. One or more years. For \code{get_fars_crashes},
+\code{get_fars_crash_list}, \code{get_fars_summary}, and \code{get_fars_year} (and the
+corresponding \code{api} values), the minimum and maximum values are used as
+the start and end year, so \code{year = 2015:2020} and \code{year = c(2015, 2020)}
+both request data from 2015 through 2020 (with a message if \code{year} has
+gaps). For \code{get_fars_cases}, \code{year} must be a single year or one year for
+each case in \code{cases}. For \code{get_fars_zip}, each year is downloaded
+separately. Most \code{api} options support the years from 2010 through 2024
+and "zip" supports 1975 to 2024. Defaults to
 \code{getOption("crashapi.year", 2024)} so the default year can be set for all
 functions with \code{options(crashapi.year = 2022)}.}
 
@@ -147,9 +139,6 @@ download the data to a file. Default \code{FALSE}.}
 with a variable label from \link{fars_vars_labels}. Labels are shown by
 \code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt and
 gtsummary.}
-
-\item{start_year, end_year}{Start and end year for crash reports. Only used
-if \code{year} is \code{NULL}.}
 
 \item{call}{The execution environment of a currently
 running function, e.g. \code{caller_env()}. The function will be

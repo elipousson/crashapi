@@ -1,12 +1,16 @@
 #' @title Get variables and variable attributes for the Fatality Analysis
 #'   Reporting System (FARS) API
-#' @description By default, this function returns the returns the list of
-#'   variables for the data year specified. If `vars` is "make", "model", or
-#'   "bodytype", the function returns #'   list of variable attributes for the
-#'   specified variable name or attributes for make model and body type
-#'   specified in the FARS dataset.
-#' @param year Case year. Year must be between 2010 and 2024. Defaults to
-#'   `getOption("crashapi.year", 2024)`.
+#' @description By default, this function returns the list of variables for
+#'   the data year specified. If `var` is "make", "model", or "bodytype", the
+#'   function returns a list of variable attributes for the specified variable
+#'   name or attributes for make model and body type specified in the FARS
+#'   dataset.
+#' @param year One or more case years between 2010 and 2024. If more than one
+#'   year is provided, the results for each year are combined. Ignored if `var`
+#'   is "bodytype" since body type attributes are not available by year.
+#'   Defaults to `getOption("crashapi.year", 2024)`.
+#' @return A data frame with a `year` column (except when `var` is
+#'   "bodytype").
 #' @param var Default NULL. Supported values are "make", "model", and
 #'   "bodytype". Using the var parameter returns variable attributes for the
 #'   specified variable name or attributes for make model and body type
@@ -38,39 +42,51 @@ fars_vars <- function(
   year <- validate_year(year, year_range = c(2010, 2024))
   data <- "definitions"
 
-  if (is.null(var)) {
+  if (!is.null(var)) {
+    var <- match.arg(var, c("make", "model", "bodytype"))
+  }
+
+  if (identical(var, "bodytype")) {
     return(
       read_crashapi(
         data = data,
-        type = "GetVariables",
-        dataYear = year
+        type = "GetVariableAttributesForbodyType",
+        variable = "bodytype",
+        make = make,
+        model = model
       )
     )
   }
 
-  var <- match.arg(var, c("make", "model", "bodytype"))
+  read_vars_year <- function(year) {
+    vars_df <- switch(
+      var %||% "variables",
+      "variables" = read_crashapi(
+        data = data,
+        type = "GetVariables",
+        dataYear = year
+      ),
+      "make" = read_crashapi(
+        data = data,
+        type = "GetVariableAttributes",
+        variable = "make",
+        caseYear = year
+      ),
+      "model" = read_crashapi(
+        data = data,
+        type = "GetVariableAttributesForModel",
+        variable = "model",
+        make = make,
+        caseYear = year
+      )
+    )
 
-  switch(
-    var,
-    "make" = read_crashapi(
-      data = data,
-      type = "GetVariableAttributes",
-      variable = "make",
-      caseYear = year
-    ),
-    "model" = read_crashapi(
-      data = data,
-      type = "GetVariableAttributesForModel",
-      variable = "model",
-      make = make,
-      caseYear = year
-    ),
-    "bodytype" = read_crashapi(
-      data = data,
-      type = "GetVariableAttributesForbodyType",
-      variable = "bodytype",
-      make = make,
-      model = model
-    ),
-  )
+    if (!is.data.frame(vars_df)) {
+      return(NULL)
+    }
+
+    cbind(year = year, vars_df)
+  }
+
+  list_rbind(map(unique(year), read_vars_year))
 }

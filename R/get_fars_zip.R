@@ -5,8 +5,9 @@
 #' list containing data frames for each table available in the selected year. If
 #' geometry is `TRUE`, the accident table is converted to an sf object.
 #'
-#' @param year Year of data from 1975 to 2024. Defaults to
-#'   `getOption("crashapi.year", 2024)`.
+#' @param year One or more years of data from 1975 to 2024. Each year is
+#'   downloaded separately and, if `read = TRUE`, returned as a list named by
+#'   year. Defaults to `getOption("crashapi.year", 2024)`.
 #' @param format Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
 #'   unzip and geo options are only supported if format is "csv".
 #' @param path Path to download zip file. Set to [getwd()] if `NULL` (default).
@@ -29,9 +30,10 @@
 #' @param overwrite If `FALSE`, abort if file exists at the provided path. If
 #'   `TRUE`, overwrite file.
 #' @return Downloads zip file with CSV or SAS tables and returns the zip file
-#'   path invisibly or returns a list of data frames (if geometry is `FALSE`),
-#'   or returns a list of data frames with the accident table converted to a sf
-#'   object.
+#'   path invisibly if `read = FALSE`, or a list of data frames with one item
+#'   for each table (with the accident table converted to an sf object if
+#'   `geometry = TRUE`). If more than one year is provided, returns a named
+#'   vector of file paths or a list of lists named by year.
 #' @inheritParams format_crashes
 #' @rdname get_fars_zip
 #' @export
@@ -52,6 +54,36 @@ get_fars_zip <- function(
   labels = TRUE
 ) {
   year <- validate_year(year = year, year_range = c(1975, 2024))
+
+  if (length(year) > 1) {
+    year <- unique(year)
+    crash_data <- rlang::set_names(
+      map(
+        year,
+        function(y) {
+          get_fars_zip(
+            year = y,
+            format = format,
+            path = path,
+            pr = pr,
+            aux = aux,
+            read = read,
+            geometry = geometry,
+            overwrite = overwrite,
+            labels = labels
+          )
+        }
+      ),
+      year
+    )
+
+    if (!read) {
+      return(invisible(unlist(crash_data)))
+    }
+
+    return(crash_data)
+  }
+
   format <- match.arg(format, c("csv", "sas"))
   scope <- "National"
 

@@ -23,20 +23,20 @@
 #'   NHTSA data downloads server in a zip format. Set `api` to "zip" or use the
 #'   `get_fars_zip` function to download this data.
 #'
-#' @param year numeric vector. Year or range with start and end year. If `api`
-#'   is "cases" or "zip" (or using the `get_fars_cases` or `get_fars_zip`
-#'   functions), a single year is required. All other `api` options support a
-#'   range with the minimum value is used as a start year and the maximum value
-#'   used as a end year. Most `api` options support the years from 2010 through
-#'   2024 and "zip" supports 1975 to 2024. `start_year` and `end_year` are
-#'   ignored if `year` is not `NULL`. Defaults to
+#' @param year numeric vector. One or more years. For `get_fars_crashes`,
+#'   `get_fars_crash_list`, `get_fars_summary`, and `get_fars_year` (and the
+#'   corresponding `api` values), the minimum and maximum values are used as
+#'   the start and end year, so `year = 2015:2020` and `year = c(2015, 2020)`
+#'   both request data from 2015 through 2020 (with a message if `year` has
+#'   gaps). For `get_fars_cases`, `year` must be a single year or one year for
+#'   each case in `cases`. For `get_fars_zip`, each year is downloaded
+#'   separately. Most `api` options support the years from 2010 through 2024
+#'   and "zip" supports 1975 to 2024. Defaults to
 #'   `getOption("crashapi.year", 2024)` so the default year can be set for all
 #'   functions with `options(crashapi.year = 2022)`.
 #' @param api character. API function to use. Supported values include
 #'   "crashes", "cases", "state list", "summary count", "year dataset", and
 #'   "zip". Default: "crashes".
-#' @param start_year,end_year Start and end year for crash reports. Only used
-#'   if `year` is `NULL`.
 #' @param state Required. State name, abbreviation, or FIPS number.
 #'   `get_fars_crash_list` supports multiple states.
 #' @param county  County name or FIPS number. Required for `get_fars_crashes`.
@@ -181,14 +181,12 @@ get_fars_crashes <- function(
   state,
   county,
   year = getOption("crashapi.year", 2024),
-  start_year = NULL,
-  end_year = NULL,
   details = FALSE,
   geometry = FALSE,
   crs = NULL,
   labels = TRUE
 ) {
-  year <- validate_year(year, start_year = start_year, end_year = end_year)
+  year <- year_span(validate_year(year))
 
   if (any(c(missing(county), is.null(county)))) {
     cli_abort(
@@ -202,8 +200,8 @@ get_fars_crashes <- function(
     read_crashapi(
       data = "crashes",
       type = "GetCrashesByLocation",
-      fromCaseYear = min(year),
-      toCaseYear = max(year),
+      fromCaseYear = year[[1]],
+      toCaseYear = year[[2]],
       state = fips[["state"]],
       county = fips[["county"]],
       format = "json"
@@ -227,10 +225,11 @@ get_fars_crashes <- function(
   }
 
   if (isTRUE(details)) {
-    # FIXME: This could break for multi year searches.
+    # Use the case year for each crash since case numbers are only unique
+    # within a year
     cases_df <-
       get_fars_cases(
-        year = year,
+        year = crash_df$CaseYear,
         state = state,
         cases = crash_df$ST_CASE,
         details = TRUE,
@@ -284,15 +283,24 @@ get_fars_cases <- function(
   crs = NULL,
   labels = TRUE
 ) {
-  year <- validate_year(year)
-  state_fips <- lookup_fips(state)
-
   if (missing(cases)) {
     cli_abort(
       "One or more valid FARS case numbers must be provided
       to download detailed crash data."
     )
   }
+
+  year <- validate_year(year)
+
+  if (!(length(year) %in% c(1, length(cases)))) {
+    cli_abort(
+      "{.arg year} must be a single year or one year for each case in
+      {.arg cases}, not {length(year)} year{?s} for {length(cases)} case{?s}."
+    )
+  }
+
+  year <- rep_len(year, length(cases))
+  state_fips <- lookup_fips(state)
 
   crash_df <-
     list_rbind(
@@ -301,7 +309,7 @@ get_fars_cases <- function(
         ~ read_crashapi(
           type = "GetCaseDetails",
           stateCase = as.list(cases)[[.x]],
-          caseYear = year,
+          caseYear = year[[.x]],
           state = state_fips,
           results = TRUE,
           format = "json"
@@ -358,12 +366,10 @@ get_fars_cases <- function(
 get_fars_crash_list <- function(
   state,
   year = getOption("crashapi.year", 2024),
-  start_year = NULL,
-  end_year = NULL,
   vehicles = c(1, 50),
   labels = TRUE
 ) {
-  year <- validate_year(year, start_year = start_year, end_year = end_year)
+  year <- year_span(validate_year(year))
 
   states_fips <-
     paste0(lookup_fips(state, several.ok = TRUE), collapse = ",")
@@ -372,8 +378,8 @@ get_fars_crash_list <- function(
     read_crashapi(
       states = states_fips,
       type = "GetCaseList",
-      fromYear = min(year),
-      toYear = max(year),
+      fromYear = year[[1]],
+      toYear = year[[2]],
       minNumOfVehicles = min(vehicles),
       maxNumOfVehicles = max(vehicles)
     )
@@ -391,18 +397,16 @@ get_fars_crash_list <- function(
 get_fars_summary <- function(
   state,
   year = getOption("crashapi.year", 2024),
-  start_year = NULL,
-  end_year = NULL,
   labels = TRUE
 ) {
-  year <- validate_year(year, start_year = start_year, end_year = end_year)
+  year <- year_span(validate_year(year))
 
   crash_df <-
     read_crashapi(
       data = "analytics",
       type = "GetInjurySeverityCounts",
-      fromCaseYear = min(year),
-      toCaseYear = max(year),
+      fromCaseYear = year[[1]],
+      toCaseYear = year[[2]],
       state = lookup_fips(state)
     )
 
@@ -427,7 +431,7 @@ get_fars_year <- function(
   labels = TRUE,
   call = caller_env()
 ) {
-  year <- validate_year(year, call = call)
+  year <- year_span(validate_year(year, call = call))
   state_fips <- lookup_fips(state)
 
   # This exports the FARS data by given year (2010 - 2020). In order to get the
@@ -496,9 +500,8 @@ get_fars_year <- function(
       data = "FARSData",
       type = "GetFARSData",
       dataset = stringr::str_to_sentence(type),
-      caseYear = year,
-      FromYear = min(year),
-      ToYear = max(year),
+      FromYear = year[[1]],
+      ToYear = year[[2]],
       State = state_fips,
       format = format,
       results = FALSE

@@ -6,10 +6,11 @@
 #'   options that are converted to ID numbers for use in the API query.
 #'
 #' @inheritParams get_fars
-#' @param year numeric vector. Year or range with start and end year. 2010 to
-#'   2024 supported. Defaults to `getOption("crashapi.year", 2024)`.
+#' @param year numeric vector. One or more years from 2010 to 2024. The minimum
+#'   and maximum values are used as the start and end year. Defaults to
+#'   `getOption("crashapi.year", 2024)`.
 #' @param state Required. State name, abbreviation, or FIPS number.
-#' @param make Make name or ID, Required. The start_year is used to return a
+#' @param make Make name or ID, Required. The earliest year in `year` is used to return a
 #'   list of support make options. Default: `NULL`
 #' @param model Model name or ID, Optional. Default: `NULL`
 #' @param model_year Model year, Optional. Default: `NULL`
@@ -20,18 +21,16 @@
 get_fars_crash_vehicles <- function(
   state,
   year = getOption("crashapi.year", 2024),
-  start_year = NULL,
-  end_year = NULL,
   make = NULL,
   model = NULL,
   model_year = 2010,
   body_type = NULL,
   labels = TRUE
 ) {
-  year <- validate_year(year, start_year = start_year, end_year = end_year)
+  year <- year_span(validate_year(year))
   state_fips <- lookup_fips(state)
 
-  make_options <- fars_vars(year = min(year), var = "make")
+  make_options <- fars_vars(year = year[[1]], var = "make")
 
   if (make %in% make_options$TEXT) {
     make <- make_options[make_options$TEXT == make, ]$ID
@@ -76,8 +75,8 @@ get_fars_crash_vehicles <- function(
     bodyType = body_type,
     model = model,
     modelyear = model_year,
-    fromCaseYear = min(year),
-    toCaseYear = max(year),
+    fromCaseYear = year[[1]],
+    toCaseYear = year[[2]],
     state = state_fips,
     format = "json",
     results = TRUE

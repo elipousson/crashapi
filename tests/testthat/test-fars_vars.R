@@ -1,3 +1,13 @@
+test_that("fars_vars() combines multiple years with a year column", {
+  local_mocked_bindings(
+    read_crashapi = function(...) data.frame(ID = 1, TEXT = "Ford")
+  )
+
+  out <- fars_vars(year = 2021:2022, var = "make")
+  expect_identical(out$year, c(2021L, 2022L))
+  expect_identical(out$TEXT, c("Ford", "Ford"))
+})
+
 test_that("fars_vars works", {
   with_mock_api({
     expect_GET(

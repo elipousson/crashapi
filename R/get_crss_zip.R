@@ -5,8 +5,9 @@
 #' frames for each table available in the selected year. If geometry is `TRUE`,
 #' the accident table is converted to an sf object.
 #'
-#' @param year Year of data from 2016 to 2024. Defaults to
-#'   `getOption("crashapi.year", 2024)`.
+#' @param year One or more years of data from 2016 to 2024. Each year is
+#'   downloaded separately and, if `read = TRUE`, returned as a list named by
+#'   year. Defaults to `getOption("crashapi.year", 2024)`.
 #' @param format Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
 #'   unzip and geo options are only supported if format is "csv".
 #' @param aux If `TRUE`, download auxiliary
@@ -20,9 +21,10 @@
 #'   labelled.
 #' @inheritParams get_fars_zip
 #' @return Downloads zip file with CSV or SAS tables and returns the zip file
-#'   path invisibly or returns a list of data frames (if geo is `FALSE`), or
-#'   returns a list of data frames with the accident table converted to a sf
-#'   object.
+#'   path invisibly if `read = FALSE`, or a list of data frames with one item
+#'   for each table (with the accident table converted to an sf object if
+#'   `geometry = TRUE`). If more than one year is provided, returns a named
+#'   vector of file paths or a list of lists named by year.
 #' @rdname get_crss_zip
 #' @export
 #' @importFrom glue glue
@@ -41,6 +43,35 @@ get_crss_zip <- function(
   labels = TRUE
 ) {
   year <- validate_year(year = year, year_range = c(2016, 2024))
+
+  if (length(year) > 1) {
+    year <- unique(year)
+    crash_data <- rlang::set_names(
+      map(
+        year,
+        function(y) {
+          get_crss_zip(
+            year = y,
+            format = format,
+            path = path,
+            aux = aux,
+            read = read,
+            geometry = geometry,
+            overwrite = overwrite,
+            labels = labels
+          )
+        }
+      ),
+      year
+    )
+
+    if (!read) {
+      return(invisible(unlist(crash_data)))
+    }
+
+    return(crash_data)
+  }
+
   format <- match.arg(format, c("csv", "sas"))
 
   auxiliary <- ""

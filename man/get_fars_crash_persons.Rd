@@ -9,8 +9,6 @@ get_fars_crash_persons(
   seat,
   injury,
   year = getOption("crashapi.year", 2024),
-  start_year = NULL,
-  end_year = NULL,
   age = NULL,
   sex = NULL,
   occupants = TRUE,
@@ -26,11 +24,9 @@ get_fars_crash_persons(
 \item{injury}{Options "unknown", "not reported", "died prior", "injured",
 "fatal", "suspected serious", "suspected minor", "possible", "no apparent"}
 
-\item{year}{numeric vector. Year or range with start and end year. 2010 to
-2024 supported. Defaults to \code{getOption("crashapi.year", 2024)}.}
-
-\item{start_year, end_year}{Start and end year for crash reports. Only used
-if \code{year} is \code{NULL}.}
+\item{year}{numeric vector. One or more years from 2010 to 2024. The minimum
+and maximum values are used as the start and end year. Defaults to
+\code{getOption("crashapi.year", 2024)}.}
 
 \item{age}{numeric}
 
