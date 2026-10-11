@@ -5,7 +5,8 @@
 #'   "bodytype", the function returns #'   list of variable attributes for the
 #'   specified variable name or attributes for make model and body type
 #'   specified in the FARS dataset.
-#' @param year Case year. Year must be between 2010 and 2019.
+#' @param year Case year. Year must be between 2010 and 2023. Defaults to
+#'   `getOption("crashapi.year", 2023)`.
 #' @param var Default NULL. Supported values are "make", "model", and
 #'   "bodytype". Using the var parameter returns variable attributes for the
 #'   specified variable name or attributes for make model and body type
@@ -28,8 +29,13 @@
 #' fars_vars(year = 2022, var = "bodytype", make = 12, model = 37)
 #'
 #' @export
-fars_vars <- function(year, var = NULL, make = NULL, model = NULL) {
-  year <- validate_year(year, year_range = c(2010, 2022))
+fars_vars <- function(
+  year = getOption("crashapi.year", 2023),
+  var = NULL,
+  make = NULL,
+  model = NULL
+) {
+  year <- validate_year(year, year_range = c(2010, 2023))
   data <- "definitions"
 
   if (is.null(var)) {
@@ -44,7 +50,8 @@ fars_vars <- function(year, var = NULL, make = NULL, model = NULL) {
 
   var <- match.arg(var, c("make", "model", "bodytype"))
 
-  switch(var,
+  switch(
+    var,
     "make" = read_crashapi(
       data = data,
       type = "GetVariableAttributes",

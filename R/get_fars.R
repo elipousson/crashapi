@@ -24,19 +24,19 @@
 #'   `get_fars_zip` function to download this data.
 #'
 #' @param year numeric vector. Year or range with start and end year. If `api`
-#'   is "details", "year dataset", or "zip" (or using the
-#'   `get_fars_crash_details`, `get_fars_year`, or `get_fars_zip` functions), a
-#'   single year is required. All other `api` options support a range with the
-#'   minimum value is used as a start year and the maximum value used as a end
-#'   year. Most `api` options support the years from 2010 through the most
-#'   recent year of release. "year dataset" only supports 2010 to 2017 and "zip"
-#'   supports 1975 to 2022. `start_year` and `end_year` are ignored if `year` is
-#'   not `NULL`.
+#'   is "cases" or "zip" (or using the `get_fars_cases` or `get_fars_zip`
+#'   functions), a single year is required. All other `api` options support a
+#'   range with the minimum value is used as a start year and the maximum value
+#'   used as a end year. Most `api` options support the years from 2010 through
+#'   2023 and "zip" supports 1975 to 2023. `start_year` and `end_year` are
+#'   ignored if `year` is not `NULL`. Defaults to
+#'   `getOption("crashapi.year", 2023)` so the default year can be set for all
+#'   functions with `options(crashapi.year = 2022)`.
 #' @param api character. API function to use. Supported values include
 #'   "crashes", "cases", "state list", "summary count", "year dataset", and
 #'   "zip". Default: "crashes".
-#' @param start_year Start year for crash reports.
-#' @param end_year End year for crash reports.
+#' @param start_year,end_year Start and end year for crash reports. Only used
+#'   if `year` is `NULL`.
 #' @param state Required. State name, abbreviation, or FIPS number.
 #'   `get_fars_crash_list` supports multiple states.
 #' @param county  County name or FIPS number. Required for `get_fars_crashes`.
@@ -87,8 +87,8 @@
 #' @export
 #' @md
 get_fars <- function(
-  year = 2022,
   state,
+  year = getOption("crashapi.year", 2023),
   county = NULL,
   api = c(
     "crashes",
@@ -174,11 +174,11 @@ get_fars <- function(
 #' @export
 #' @importFrom cli cli_abort
 get_fars_crashes <- function(
-  year = 2022,
-  start_year,
-  end_year = NULL,
   state,
   county,
+  year = getOption("crashapi.year", 2023),
+  start_year = NULL,
+  end_year = NULL,
   details = FALSE,
   geometry = FALSE,
   crs = NULL,
@@ -272,9 +272,9 @@ get_fars_crashes <- function(
 #' @export
 #' @importFrom cli cli_abort cli_progress_along
 get_fars_cases <- function(
-  year = 2022,
   state,
   cases,
+  year = getOption("crashapi.year", 2023),
   details = FALSE,
   geometry = FALSE,
   crs = NULL,
@@ -350,10 +350,10 @@ get_fars_cases <- function(
 #' @aliases get_fars_crash_list
 #' @export
 get_fars_crash_list <- function(
-  year = 2022,
+  state,
+  year = getOption("crashapi.year", 2023),
   start_year = NULL,
   end_year = NULL,
-  state,
   vehicles = c(1, 50),
   labels = TRUE
 ) {
@@ -383,10 +383,10 @@ get_fars_crash_list <- function(
 #' @aliases get_fars_summary
 #' @export
 get_fars_summary <- function(
-  year = 2022,
-  start_year,
-  end_year = NULL,
   state,
+  year = getOption("crashapi.year", 2023),
+  start_year = NULL,
+  end_year = NULL,
   labels = TRUE
 ) {
   year <- validate_year(year, start_year = start_year, end_year = end_year)
@@ -410,9 +410,9 @@ get_fars_summary <- function(
 #' @importFrom cli cli_warn
 #' @importFrom httr2 resp_body_json req_perform request
 get_fars_year <- function(
-  year = 2022,
-  type = "accident",
   state,
+  year = getOption("crashapi.year", 2023),
+  type = "accident",
   format = "json",
   path = NULL,
   geometry = FALSE,

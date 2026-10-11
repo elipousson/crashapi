@@ -3,10 +3,23 @@ test_that("get_fars() supports the zip api with the default format", {
   path <- withr::local_tempdir()
   local_fars_zip(path)
 
-  data <- get_fars(year = 2022, api = "zip", path = path)
+  data <- get_fars(year = 2023, api = "zip", path = path)
 
   expect_named(data, "accident")
   expect_s3_class(data$accident, "data.frame")
+})
+
+test_that("get_fars_summary() works with end_year and no start_year", {
+  local_mocked_bindings(
+    read_crashapi = function(...) {
+      args <- list(...)
+      data.frame(FromYear = args$fromCaseYear, ToYear = args$toCaseYear)
+    }
+  )
+
+  out <- get_fars_summary(state = "MD", year = NULL, end_year = 2020)
+  expect_identical(out$FromYear, 2020L)
+  expect_identical(out$ToYear, 2020L)
 })
 
 test_that("get_fars_cases() adds variable labels", {

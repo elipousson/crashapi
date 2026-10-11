@@ -11,8 +11,8 @@
 \title{Get Fatality Analysis Reporting System (FARS) data with the FARS API}
 \usage{
 get_fars(
-  year = 2022,
   state,
+  year = getOption("crashapi.year", 2023),
   county = NULL,
   api = c("crashes", "cases", "state list", "summary count", "year dataset", "zip"),
   type = NULL,
@@ -29,11 +29,11 @@ get_fars(
 )
 
 get_fars_crashes(
-  year = 2022,
-  start_year,
-  end_year = NULL,
   state,
   county,
+  year = getOption("crashapi.year", 2023),
+  start_year = NULL,
+  end_year = NULL,
   details = FALSE,
   geometry = FALSE,
   crs = NULL,
@@ -41,9 +41,9 @@ get_fars_crashes(
 )
 
 get_fars_cases(
-  year = 2022,
   state,
   cases,
+  year = getOption("crashapi.year", 2023),
   details = FALSE,
   geometry = FALSE,
   crs = NULL,
@@ -51,26 +51,26 @@ get_fars_cases(
 )
 
 get_fars_crash_list(
-  year = 2022,
+  state,
+  year = getOption("crashapi.year", 2023),
   start_year = NULL,
   end_year = NULL,
-  state,
   vehicles = c(1, 50),
   labels = TRUE
 )
 
 get_fars_summary(
-  year = 2022,
-  start_year,
-  end_year = NULL,
   state,
+  year = getOption("crashapi.year", 2023),
+  start_year = NULL,
+  end_year = NULL,
   labels = TRUE
 )
 
 get_fars_year(
-  year = 2022,
-  type = "accident",
   state,
+  year = getOption("crashapi.year", 2023),
+  type = "accident",
   format = "json",
   path = NULL,
   geometry = FALSE,
@@ -80,18 +80,18 @@ get_fars_year(
 )
 }
 \arguments{
-\item{year}{numeric vector. Year or range with start and end year. If \code{api}
-is "details", "year dataset", or "zip" (or using the
-\code{get_fars_crash_details}, \code{get_fars_year}, or \code{get_fars_zip} functions), a
-single year is required. All other \code{api} options support a range with the
-minimum value is used as a start year and the maximum value used as a end
-year. Most \code{api} options support the years from 2010 through the most
-recent year of release. "year dataset" only supports 2010 to 2017 and "zip"
-supports 1975 to 2022. \code{start_year} and \code{end_year} are ignored if \code{year} is
-not \code{NULL}.}
-
 \item{state}{Required. State name, abbreviation, or FIPS number.
 \code{get_fars_crash_list} supports multiple states.}
+
+\item{year}{numeric vector. Year or range with start and end year. If \code{api}
+is "cases" or "zip" (or using the \code{get_fars_cases} or \code{get_fars_zip}
+functions), a single year is required. All other \code{api} options support a
+range with the minimum value is used as a start year and the maximum value
+used as a end year. Most \code{api} options support the years from 2010 through
+2023 and "zip" supports 1975 to 2023. \code{start_year} and \code{end_year} are
+ignored if \code{year} is not \code{NULL}. Defaults to
+\code{getOption("crashapi.year", 2023)} so the default year can be set for all
+functions with \code{options(crashapi.year = 2022)}.}
 
 \item{county}{County name or FIPS number. Required for \code{get_fars_crashes}.}
 
@@ -144,9 +144,8 @@ with a variable label from \link{fars_vars_labels}. Labels are shown by
 \code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt and
 gtsummary.}
 
-\item{start_year}{Start year for crash reports.}
-
-\item{end_year}{End year for crash reports.}
+\item{start_year, end_year}{Start and end year for crash reports. Only used
+if \code{year} is \code{NULL}.}
 }
 \description{
 This function provides a convenient interface for accessing FARS

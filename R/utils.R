@@ -122,7 +122,7 @@ read_crashapi <- function(
 #' @noRd
 validate_year <- function(
   year,
-  year_range = c(2010, 2022),
+  year_range = c(2010, 2023),
   start_year = NULL,
   end_year = NULL,
   call = caller_env()

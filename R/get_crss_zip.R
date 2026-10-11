@@ -5,7 +5,8 @@
 #' frames for each table available in the selected year. If geometry is `TRUE`,
 #' the accident table is converted to an sf object.
 #'
-#' @param year Year of data from 2016 to 2022, Default: 2022
+#' @param year Year of data from 2016 to 2023. Defaults to
+#'   `getOption("crashapi.year", 2023)`.
 #' @param format Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
 #'   unzip and geo options are only supported if format is "csv".
 #' @param aux If `TRUE`, download auxiliary
@@ -30,7 +31,7 @@
 #' @importFrom rlang check_installed
 #' @importFrom stats setNames
 get_crss_zip <- function(
-  year = 2022,
+  year = getOption("crashapi.year", 2023),
   format = "csv",
   path = NULL,
   aux = FALSE,
@@ -39,7 +40,7 @@ get_crss_zip <- function(
   overwrite = FALSE,
   labels = TRUE
 ) {
-  year <- validate_year(year = year, year_range = c(2016:2022))
+  year <- validate_year(year = year, year_range = c(2016, 2023))
   format <- match.arg(format, c("csv", "sas"))
 
   auxiliary <- ""
