@@ -11,7 +11,8 @@ get_crss_zip(
   aux = FALSE,
   read = TRUE,
   geometry = FALSE,
-  overwrite = FALSE
+  overwrite = FALSE,
+  labels = TRUE
 )
 }
 \arguments{
@@ -32,6 +33,11 @@ list of tables with each list item corresponding to one CSV file.}
 
 \item{overwrite}{If \code{FALSE}, abort if file exists at the provided path. If
 \code{TRUE}, overwrite file.}
+
+\item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
+with a matching variable in \link{fars_vars_labels}. Labels are taken from the
+FARS Analytical User's Manual so variables only used in CRSS are not
+labelled.}
 }
 \value{
 Downloads zip file with CSV or SAS tables and returns the zip file

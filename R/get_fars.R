@@ -70,6 +70,7 @@
 #' @param path File path used if download is `TRUE`.
 #' @param download logical. If `TRUE` and the `api` is "year dataset" or "zip",
 #'   download the data to a file. Default `FALSE`.
+#' @inheritParams format_crashes
 #' @rdname get_fars
 #' @examples
 #'
@@ -106,7 +107,8 @@ get_fars <- function(
   format = "json",
   pr = FALSE,
   path = NULL,
-  download = FALSE
+  download = FALSE,
+  labels = TRUE
 ) {
   api <-
     dplyr::case_when(
@@ -125,7 +127,8 @@ get_fars <- function(
       county = county,
       details = details,
       geometry = geometry,
-      crs = crs
+      crs = crs,
+      labels = labels
     ),
     "cases" = get_fars_cases(
       year = year,
@@ -133,30 +136,35 @@ get_fars <- function(
       cases = cases,
       geometry = geometry,
       crs = crs,
-      details = details
+      details = details,
+      labels = labels
     ),
     "state list" = get_fars_crash_list(
       year = year,
       state = state,
-      vehicles = vehicles
+      vehicles = vehicles,
+      labels = labels
     ),
     "summary count" = get_fars_summary(
       year = year,
-      state = state
+      state = state,
+      labels = labels
     ),
     "year dataset" = get_fars_year(
       year = year,
       type = type,
       state = state,
       format = format,
-      download = download
+      download = download,
+      labels = labels
     ),
     "zip" = get_fars_zip(
       year = year,
       path = path,
       # "json" is the get_fars() default but is not supported for zip files
       format = if (identical(format, "json")) "csv" else format,
-      pr = pr
+      pr = pr,
+      labels = labels
     )
   )
 }
@@ -173,7 +181,8 @@ get_fars_crashes <- function(
   county,
   details = FALSE,
   geometry = FALSE,
-  crs = NULL
+  crs = NULL,
+  labels = TRUE
 ) {
   year <- validate_year(year, start_year = start_year, end_year = end_year)
 
@@ -221,7 +230,8 @@ get_fars_crashes <- function(
         state = state,
         cases = crash_df$ST_CASE,
         details = TRUE,
-        geometry = FALSE
+        geometry = FALSE,
+        labels = FALSE
       )
 
     cases_df <-
@@ -254,7 +264,7 @@ get_fars_crashes <- function(
       )
   }
 
-  format_crashes(crash_df, details = details)
+  format_crashes(crash_df, details = details, labels = labels)
 }
 
 #' @rdname get_fars
@@ -267,7 +277,8 @@ get_fars_cases <- function(
   cases,
   details = FALSE,
   geometry = FALSE,
-  crs = NULL
+  crs = NULL,
+  labels = TRUE
 ) {
   year <- validate_year(year)
   state_fips <- lookup_fips(state)
@@ -303,17 +314,15 @@ get_fars_cases <- function(
         )
     }
 
-    if (!geometry) {
-      return(crash_df)
+    if (geometry) {
+      crash_df <- df_to_sf(crash_df, crs = crs)
     }
 
-    crash_sf <-
-      df_to_sf(
-        crash_df,
-        crs = crs
-      )
+    if (isTRUE(labels)) {
+      crash_df <- label_fars_vars(crash_df, data_file = "ACCIDENT")
+    }
 
-    return(crash_sf)
+    return(crash_df)
   }
 
   stopifnot(is.character(details))
@@ -321,10 +330,19 @@ get_fars_cases <- function(
   details <- tolower(details)
   details <- match.arg(details, c("events", "vehicles"))
 
-  switch(
+  details_df <- switch(
     details,
     "events" = crash_df[, "CEvents"][[1]],
     "vehicles" = crash_df[, "Vehicles"][[1]]
+  )
+
+  if (!isTRUE(labels)) {
+    return(details_df)
+  }
+
+  label_fars_vars(
+    details_df,
+    data_file = switch(details, "events" = "CEVENT", "vehicles" = "VEHICLE")
   )
 }
 
@@ -336,7 +354,8 @@ get_fars_crash_list <- function(
   start_year = NULL,
   end_year = NULL,
   state,
-  vehicles = c(1, 50)
+  vehicles = c(1, 50),
+  labels = TRUE
 ) {
   year <- validate_year(year, start_year = start_year, end_year = end_year)
 
@@ -357,13 +376,19 @@ get_fars_crash_list <- function(
     return(NULL)
   }
 
-  format_crashes(crash_df)
+  format_crashes(crash_df, labels = labels)
 }
 
 #' @rdname get_fars
 #' @aliases get_fars_summary
 #' @export
-get_fars_summary <- function(year = 2022, start_year, end_year = NULL, state) {
+get_fars_summary <- function(
+  year = 2022,
+  start_year,
+  end_year = NULL,
+  state,
+  labels = TRUE
+) {
   year <- validate_year(year, start_year = start_year, end_year = end_year)
 
   crash_df <-
@@ -375,7 +400,7 @@ get_fars_summary <- function(year = 2022, start_year, end_year = NULL, state) {
       state = lookup_fips(state)
     )
 
-  format_crashes(crash_df)
+  format_crashes(crash_df, labels = labels)
 }
 
 #' @rdname get_fars
@@ -392,7 +417,8 @@ get_fars_year <- function(
   path = NULL,
   geometry = FALSE,
   crs = NULL,
-  download = FALSE
+  download = FALSE,
+  labels = TRUE
 ) {
   year <- validate_year(year)
   state_fips <- lookup_fips(state)
@@ -479,30 +505,24 @@ get_fars_year <- function(
         "csv" = readr::read_csv(url)
       )
 
-    if (!geometry) {
-      return(crash_df)
-    }
-
     coords <- c("LONGITUD", "LATITUDE")
 
-    if (all(coords %in% names(crash_df))) {
-      crash_sf <-
-        df_to_sf(
-          x = crash_df,
-          crs = crs
+    if (geometry && all(coords %in% names(crash_df))) {
+      crash_df <- df_to_sf(x = crash_df, crs = crs)
+    } else if (geometry) {
+      cli::cli_warn(
+        c(
+          "Coordinate columns {coords} can't be found in data of
+            the type {.val {type}}.",
+          "i" = 'Use {.code type = "accident"} with
+            {.code geometry = TRUE} to return an sf object.'
         )
-
-      return(crash_sf)
+      )
     }
 
-    cli::cli_warn(
-      c(
-        "Coordinate columns {coords} can't be found in data of
-          the type {.val {type}}.",
-        "i" = 'Use {.code type = "accident"} with
-          {.code geometry = TRUE} to return an sf object.'
-      )
-    )
+    if (isTRUE(labels)) {
+      crash_df <- label_fars_vars(crash_df, data_file = type)
+    }
 
     return(crash_df)
   }

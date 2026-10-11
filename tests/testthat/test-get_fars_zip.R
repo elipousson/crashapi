@@ -8,6 +8,18 @@ test_that("get_fars_zip() supports the default year", {
   )
 })
 
+test_that("get_fars_zip() adds variable labels", {
+  skip_if_not_installed("readr")
+  path <- withr::local_tempdir()
+  local_fars_zip(path)
+
+  data <- get_fars_zip(path = path)
+  expect_identical(attr(data$accident$LATITUDE, "label"), "Latitude")
+
+  data <- get_fars_zip(path = path, labels = FALSE)
+  expect_null(attr(data$accident$LATITUDE, "label"))
+})
+
 test_that("get_fars_zip works", {
   expect_true(
     file.exists(

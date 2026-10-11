@@ -292,12 +292,19 @@ rename_fars_vars <- function(x, reorder = TRUE, rename = TRUE) {
 
 #' Add variable labels from fars_vars_labels as column attributes
 #' @noRd
-label_fars_vars <- function(x) {
+label_fars_vars <- function(x, data_file = NULL) {
   x_vars <- fars_vars_labels[
     fars_vars_labels[["name"]] %in%
       names(x) &
       !is.na(fars_vars_labels[["label"]]),
   ]
+
+  if (!is.null(data_file)) {
+    # Prefer labels for the matching data file when a variable is listed for
+    # more than one data file
+    x_vars <- x_vars[order(!(x_vars[["data_file"]] %in% data_file)), ]
+  }
+
   x_vars <- x_vars[!duplicated(x_vars[["name"]]), ]
 
   x_labels <- rlang::set_names(x_vars[["label"]], x_vars[["name"]])

@@ -13,6 +13,10 @@
 #' @param read If `TRUE`, unzip the downloaded file and read CSV files into a
 #'   list of tables with each list item corresponding to one CSV file.
 #' @param geometry If `TRUE`, convert the accident table to a sf object.
+#' @param labels If `TRUE` (default), add a `"label"` attribute to each column
+#'   with a matching variable in [fars_vars_labels]. Labels are taken from the
+#'   FARS Analytical User's Manual so variables only used in CRSS are not
+#'   labelled.
 #' @inheritParams get_fars_zip
 #' @return Downloads zip file with CSV or SAS tables and returns the zip file
 #'   path invisibly or returns a list of data frames (if geo is `FALSE`), or
@@ -25,13 +29,16 @@
 #' @importFrom utils unzip
 #' @importFrom rlang check_installed
 #' @importFrom stats setNames
-get_crss_zip <- function(year = 2022,
-                         format = "csv",
-                         path = NULL,
-                         aux = FALSE,
-                         read = TRUE,
-                         geometry = FALSE,
-                         overwrite = FALSE) {
+get_crss_zip <- function(
+  year = 2022,
+  format = "csv",
+  path = NULL,
+  aux = FALSE,
+  read = TRUE,
+  geometry = FALSE,
+  overwrite = FALSE,
+  labels = TRUE
+) {
   year <- validate_year(year = year, year_range = c(2016:2022))
   format <- match.arg(format, c("csv", "sas"))
 
@@ -115,5 +122,9 @@ get_crss_zip <- function(year = 2022,
     crash_tables[["accident"]] <- df_to_sf(crash_tables[["accident"]])
   }
 
-  crash_tables
+  if (!isTRUE(labels)) {
+    return(crash_tables)
+  }
+
+  Map(label_fars_vars, crash_tables, toupper(names(crash_tables)))
 }

@@ -32,6 +32,19 @@ test_that("format_crashes() returns data without FARS variables unchanged", {
   expect_identical(format_crashes(x), x)
 })
 
+test_that("label_fars_vars() prefers labels for the matching data file", {
+  x <- data.frame(CDL_STAT = 1)
+
+  expect_identical(
+    attr(label_fars_vars(x)$CDL_STAT, "label"),
+    "Commercial Motor Vehicle License Status"
+  )
+  expect_identical(
+    attr(label_fars_vars(x, data_file = "PARKWORK")$CDL_STAT, "label"),
+    "Commercial Motor Vehicle License Status (discontinued)"
+  )
+})
+
 test_that("format_crashes() adds variable labels", {
   x <- data.frame(
     ST_CASE = "500001",

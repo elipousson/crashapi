@@ -24,7 +24,8 @@ get_fars(
   format = "json",
   pr = FALSE,
   path = NULL,
-  download = FALSE
+  download = FALSE,
+  labels = TRUE
 )
 
 get_fars_crashes(
@@ -35,7 +36,8 @@ get_fars_crashes(
   county,
   details = FALSE,
   geometry = FALSE,
-  crs = NULL
+  crs = NULL,
+  labels = TRUE
 )
 
 get_fars_cases(
@@ -44,7 +46,8 @@ get_fars_cases(
   cases,
   details = FALSE,
   geometry = FALSE,
-  crs = NULL
+  crs = NULL,
+  labels = TRUE
 )
 
 get_fars_crash_list(
@@ -52,10 +55,17 @@ get_fars_crash_list(
   start_year = NULL,
   end_year = NULL,
   state,
-  vehicles = c(1, 50)
+  vehicles = c(1, 50),
+  labels = TRUE
 )
 
-get_fars_summary(year = 2022, start_year, end_year = NULL, state)
+get_fars_summary(
+  year = 2022,
+  start_year,
+  end_year = NULL,
+  state,
+  labels = TRUE
+)
 
 get_fars_year(
   year = 2022,
@@ -65,7 +75,8 @@ get_fars_year(
   path = NULL,
   geometry = FALSE,
   crs = NULL,
-  download = FALSE
+  download = FALSE,
+  labels = TRUE
 )
 }
 \arguments{
@@ -127,6 +138,11 @@ for \code{get_fars_zip} only.}
 
 \item{download}{logical. If \code{TRUE} and the \code{api} is "year dataset" or "zip",
 download the data to a file. Default \code{FALSE}.}
+
+\item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
+with a variable label from \link{fars_vars_labels}. Labels are shown by
+\code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt and
+gtsummary.}
 
 \item{start_year}{Start year for crash reports.}
 

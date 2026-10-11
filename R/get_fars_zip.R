@@ -31,6 +31,7 @@
 #'   path invisibly or returns a list of data frames (if geometry is `FALSE`),
 #'   or returns a list of data frames with the accident table converted to a sf
 #'   object.
+#' @inheritParams format_crashes
 #' @rdname get_fars_zip
 #' @export
 #' @importFrom utils URLencode unzip
@@ -46,7 +47,8 @@ get_fars_zip <- function(
   aux = FALSE,
   read = TRUE,
   geometry = FALSE,
-  overwrite = FALSE
+  overwrite = FALSE,
+  labels = TRUE
 ) {
   year <- validate_year(year = year, year_range = c(1975, 2022))
   format <- match.arg(format, c("csv", "sas"))
@@ -147,5 +149,9 @@ get_fars_zip <- function(
     crash_tables[["accident"]] <- df_to_sf(crash_tables[["accident"]])
   }
 
-  crash_tables
+  if (!isTRUE(labels)) {
+    return(crash_tables)
+  }
+
+  Map(label_fars_vars, crash_tables, toupper(names(crash_tables)))
 }

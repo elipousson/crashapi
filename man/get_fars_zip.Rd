@@ -12,7 +12,8 @@ get_fars_zip(
   aux = FALSE,
   read = TRUE,
   geometry = FALSE,
-  overwrite = FALSE
+  overwrite = FALSE,
+  labels = TRUE
 )
 }
 \arguments{
@@ -45,6 +46,11 @@ list of tables with each list item corresponding to one CSV file.}
 
 \item{overwrite}{If \code{FALSE}, abort if file exists at the provided path. If
 \code{TRUE}, overwrite file.}
+
+\item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
+with a variable label from \link{fars_vars_labels}. Labels are shown by
+\code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt and
+gtsummary.}
 }
 \value{
 Downloads zip file with CSV or SAS tables and returns the zip file

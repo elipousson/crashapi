@@ -15,7 +15,8 @@ test_that("get_fars_year() returns data if geometry can't be added", {
     )
   )
   expect_s3_class(out, "data.frame")
-  expect_identical(out$AGE, 30)
+  expect_equal(out$AGE, 30, ignore_attr = TRUE)
+  expect_identical(attr(out$AGE, "label"), "Age")
 })
 
 test_that("get_fars_year works", {

@@ -9,6 +9,36 @@ test_that("get_fars() supports the zip api with the default format", {
   expect_s3_class(data$accident, "data.frame")
 })
 
+test_that("get_fars_cases() adds variable labels", {
+  local_mocked_bindings(
+    read_crashapi = function(...) {
+      crash_df <- data.frame(ST_CASE = 500001, LATITUDE = "44.5")
+      crash_df$CEvents <- list(data.frame(AOI1 = 12))
+      list(CrashResultSet = crash_df)
+    }
+  )
+
+  out <- get_fars_cases(year = 2022, state = "VT", cases = 500001)
+  expect_identical(attr(out$LATITUDE, "label"), "Latitude")
+  expect_named(out, c("ST_CASE", "LATITUDE"))
+
+  events <- get_fars_cases(
+    year = 2022,
+    state = "VT",
+    cases = 500001,
+    details = "events"
+  )
+  expect_identical(attr(events$AOI1, "label"), "Area of Impact (This Vehicle)")
+
+  out <- get_fars_cases(
+    year = 2022,
+    state = "VT",
+    cases = 500001,
+    labels = FALSE
+  )
+  expect_null(attr(out$LATITUDE, "label"))
+})
+
 test_that("get_fars works", {
   with_mock_api({
     expect_GET(

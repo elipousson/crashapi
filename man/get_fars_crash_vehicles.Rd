@@ -12,7 +12,8 @@ get_fars_crash_vehicles(
   make = NULL,
   model = NULL,
   model_year = 2010,
-  body_type = NULL
+  body_type = NULL,
+  labels = TRUE
 )
 }
 \arguments{
@@ -34,6 +35,11 @@ list of support make options. Default: \code{NULL}}
 
 \item{body_type}{Body type, Optional. \code{model} must be provided to use
 body_type parameter. Default: \code{NULL}}
+
+\item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
+with a variable label from \link{fars_vars_labels}. Labels are shown by
+\code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt and
+gtsummary.}
 }
 \description{
 This function returns a list of fatal crashes by vehicle type

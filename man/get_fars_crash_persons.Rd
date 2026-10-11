@@ -14,7 +14,8 @@ get_fars_crash_persons(
   seat,
   injury,
   occupants = TRUE,
-  nonoccupants = TRUE
+  nonoccupants = TRUE,
+  labels = TRUE
 )
 }
 \arguments{
@@ -39,6 +40,11 @@ get_fars_crash_persons(
 \item{occupants}{Include vehicle occupants in query; defaults to \code{TRUE}}
 
 \item{nonoccupants}{Include non-occupants in query; defaults to \code{TRUE}}
+
+\item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
+with a variable label from \link{fars_vars_labels}. Labels are shown by
+\code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt and
+gtsummary.}
 }
 \description{
 This function returns a list of fatal crashes by occupant that have occurred
