@@ -1,0 +1,15 @@
+column_name,sheet,definition,notes
+data_file,vars,Data file name,
+data_file_id,vars,Data file ID number,
+file_id,vars,File IDs,
+label,vars,Variable label,
+name,vars,Variable name,
+location,vars,Variable location,I think this is a page number
+order,vars,Order of appearance in FARS Manual,
+mmuc_equivalent,vars,Name of the equivalent variable in the MMUC,
+discontinued,vars,"If TRUE, variable is discontinued.",as of when?
+key,vars,"If TRUE, variable is a table key.",
+api_only,vars,"If TRUE, variable is only available via the CrashAPI",
+api,vars,"If TRUE, variable is available via the CrashAPI",
+name_var,vars,"If TRUE, variable is a ""named"" version a FARS variable with NAME appended to the end of the variable name and non-coded data.",
+api_list_col,vars,"If TRUE, CrashAPI returns this variable as a list column.",
