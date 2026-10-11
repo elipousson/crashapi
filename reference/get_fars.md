@@ -1251,8 +1251,8 @@ get_fars(state = "MD", county = "Baltimore city", year = 2022)
 # \donttest{
 # National accident table from the zipped data files
 get_fars(year = 2024)
-#> Converting CSV to parquet ■■■■■■■■■■■■■■■■■■■               61% | ETA:  3s
-#> Converting CSV to parquet ■■■■■■■■■■■■■■■■■■■■■■■■■■        82% | ETA:  2s
+#> Converting CSV to parquet ■■■■■■■■■■■■■■■■■■■               61% | ETA:  4s
+#> Converting CSV to parquet ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      91% | ETA:  1s
 #> # A data frame: 36,297 × 81
 #>    STATE STATENAME ST_CASE  PEDS PERNOTMVIT VE_TOTAL VE_FORMS PVH_INVL PERSONS
 #>    <dbl> <chr>       <dbl> <dbl>      <dbl>    <dbl>    <dbl>    <dbl>   <dbl>

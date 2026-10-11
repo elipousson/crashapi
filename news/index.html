@@ -63,6 +63,10 @@
 <li>
 <code><a href="../reference/get_fars_zip.html">get_fars_zip()</a></code> and <code><a href="../reference/get_crss_zip.html">get_crss_zip()</a></code> now read CSV files from the folder inside newer zip files, which previously caused <code>read = TRUE</code> to fail for most recent years.</li>
 <li>
+<code>get_crss_zip(year = 2019, aux = TRUE)</code> now handles the misspelled file name on the NHTSA site, and <code><a href="../reference/get_crss_zip.html">get_crss_zip()</a></code> is documented with a description of CRSS and a link to the official CRSS page.</li>
+<li>
+<code><a href="../reference/get_fars_zip.html">get_fars_zip()</a></code> and <code><a href="../reference/get_crss_zip.html">get_crss_zip()</a></code> warn if <code>geometry = TRUE</code> and the accident table has no coordinate columns (e.g. CRSS data or older FARS data) instead of silently returning a data frame.</li>
+<li>
 <code>get_fars_zip(pr = TRUE)</code> now uses the correct file name for Puerto Rico data and errors for years without Puerto Rico data (1975-1977 and 1979). <code>get_fars_zip(year = 1996, aux = TRUE)</code> now handles the misspelled file name on the NHTSA site.</li>
 <li>
 <code><a href="../reference/get_fars_zip.html">get_fars_zip()</a></code> and <code><a href="../reference/get_crss_zip.html">get_crss_zip()</a></code> support multiple years and return a list named by year.</li>

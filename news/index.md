@@ -111,6 +111,17 @@
   [`get_crss_zip()`](https://elipousson.github.io/crashapi/reference/get_crss_zip.md)
   now read CSV files from the folder inside newer zip files, which
   previously caused `read = TRUE` to fail for most recent years.
+- `get_crss_zip(year = 2019, aux = TRUE)` now handles the misspelled
+  file name on the NHTSA site, and
+  [`get_crss_zip()`](https://elipousson.github.io/crashapi/reference/get_crss_zip.md)
+  is documented with a description of CRSS and a link to the official
+  CRSS page.
+- [`get_fars_zip()`](https://elipousson.github.io/crashapi/reference/get_fars_zip.md)
+  and
+  [`get_crss_zip()`](https://elipousson.github.io/crashapi/reference/get_crss_zip.md)
+  warn if `geometry = TRUE` and the accident table has no coordinate
+  columns (e.g. CRSS data or older FARS data) instead of silently
+  returning a data frame.
 - `get_fars_zip(pr = TRUE)` now uses the correct file name for Puerto
   Rico data and errors for years without Puerto Rico data (1975-1977 and
   1979). `get_fars_zip(year = 1996, aux = TRUE)` now handles the
