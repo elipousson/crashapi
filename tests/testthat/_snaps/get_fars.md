@@ -58,3 +58,14 @@
       Error in `get_fars()`:
       ! `county` requires a single `state`.
 
+# get_fars() errors for a county that can't be matched
+
+    Code
+      get_fars("MD", year = 2022, county = "Baltimore")
+    Condition
+      Warning in `lookup_fips()`:
+      `county` input 'Baltimore' matches Baltimore County, Baltimore city. Please refine your selection.
+      Error in `get_fars()`:
+      ! `county` "Baltimore" can't be matched to a county in `state` "MD".
+      i Use a full county name (e.g. "Baltimore County") or a county FIPS code.
+

@@ -77,6 +77,11 @@ get_fars <- function(
     cli_abort("{.arg county} requires a single {.arg state}.")
   }
 
+  # Check the county before getting any data
+  if (!is.null(county)) {
+    lookup_fips(state, county)
+  }
+
   is_pr <- !is.null(state) && all(lookup_fips(state, several.ok = TRUE) == 72)
 
   if (source == "auto") {
@@ -239,8 +244,16 @@ fars_year_col <- function(x) {
 #' Tables without a COUNTY column are filtered to crashes in the county from
 #' the accident table, matching on ST_CASE and the case year.
 #' @noRd
-filter_fars_county <- function(fars_data, state, county, year, source, ...) {
-  county_fips <- lookup_fips(state, county)
+filter_fars_county <- function(
+  fars_data,
+  state,
+  county,
+  year,
+  source,
+  ...,
+  call = caller_env()
+) {
+  county_fips <- lookup_fips(state, county, call = call)
 
   if (!is.data.frame(fars_data)) {
     return(

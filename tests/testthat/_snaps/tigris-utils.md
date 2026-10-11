@@ -6,6 +6,28 @@
       Warning in `lookup_fips()`:
       `state` contains 1 invalid FIPS code or state name/abbreviations: "XX"
 
+---
+
+    Code
+      lookup_fips(state = "MD", county = "Baltimore")
+    Condition
+      Warning in `lookup_fips()`:
+      `county` input 'Baltimore' matches Baltimore County, Baltimore city. Please refine your selection.
+      Error:
+      ! `county` "Baltimore" can't be matched to a county in `state` "MD".
+      i Use a full county name (e.g. "Baltimore County") or a county FIPS code.
+
+---
+
+    Code
+      lookup_fips(state = "MD", county = 999)
+    Condition
+      Warning in `lookup_fips()`:
+      Dropping invalid `county` value: "999"
+      Error:
+      ! `county` 999 can't be matched to a county in `state` "MD".
+      i Use a full county name (e.g. "Baltimore County") or a county FIPS code.
+
 # validate_state and validate_county works
 
     Code

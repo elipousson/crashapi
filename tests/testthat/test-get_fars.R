@@ -365,3 +365,15 @@ test_that("get_fars() converts CrashAPI values to match zipped data", {
   expect_identical(out$LATITUDE, 39.3)
   expect_identical(out$STATENAME, "Maryland")
 })
+
+test_that("get_fars() errors for a county that can't be matched", {
+  local_mocked_bindings(
+    get_fars_api_table = function(...) stop("data should not be requested"),
+    get_fars_zip_table = function(...) stop("data should not be requested")
+  )
+
+  expect_snapshot(
+    get_fars("MD", year = 2022, county = "Baltimore"),
+    error = TRUE
+  )
+})

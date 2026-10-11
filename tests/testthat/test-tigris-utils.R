@@ -12,6 +12,8 @@ test_that("Test lookup_fips outputs", {
   expect_identical(lookup_fips(c("MD", "VT"), several.ok = TRUE), c(24L, 50L))
   expect_snapshot(out <- lookup_fips(state = "XX"))
   expect_identical(out, integer(0))
+  expect_snapshot(lookup_fips(state = "MD", county = "Baltimore"), error = TRUE)
+  expect_snapshot(lookup_fips(state = "MD", county = 999), error = TRUE)
 })
 
 test_that("validate_state and validate_county works", {

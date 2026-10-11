@@ -261,7 +261,8 @@ lookup_fips <- function(
   county = NULL,
   several.ok = FALSE,
   list = FALSE,
-  int = TRUE
+  int = TRUE,
+  call = caller_env()
 ) {
   if (!several.ok) {
     state_fips <- validate_state(state, .msg = FALSE)
@@ -277,6 +278,24 @@ lookup_fips <- function(
         county,
         MoreArgs = list(.msg = FALSE),
         USE.NAMES = FALSE
+      )
+    }
+  }
+
+  # Error instead of falling back to the state FIPS code if a county can't be
+  # matched (validate_county() warns with the reason)
+  if (!is.null(county)) {
+    county_fips <- unlist(county_fips)
+
+    if (length(county_fips) == 0 || anyNA(county_fips)) {
+      cli_abort(
+        c(
+          "{.arg county} {.val {county}} can't be matched to a county in
+          {.arg state} {.val {state}}.",
+          "i" = "Use a full county name (e.g. {.val Baltimore County}) or a
+          county FIPS code."
+        ),
+        call = call
       )
     }
   }
