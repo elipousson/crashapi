@@ -36,7 +36,9 @@
 #'   functions with `options(crashapi.year = 2022)`.
 #' @param api character. API function to use. Supported values include
 #'   "crashes", "cases", "state list", "summary count", "year dataset", and
-#'   "zip". Default: "crashes".
+#'   "zip". If `api` is not provided, it is "cases" if `cases` is provided,
+#'   "state list" if `vehicles` is provided, "year dataset" if `type` is
+#'   provided, "zip" if `pr` is `TRUE`, and "crashes" otherwise.
 #' @param state Required. State name, abbreviation, or FIPS number.
 #'   `get_fars_crash_list` supports multiple states.
 #' @param county  County name or FIPS number. Required for `get_fars_crashes`.
@@ -115,14 +117,18 @@ get_fars <- function(
   download = FALSE,
   labels = TRUE
 ) {
-  api <-
-    dplyr::case_when(
+  if (missing(api)) {
+    # Infer the api from the other parameters if api is not provided
+    api <- dplyr::case_when(
       !is.null(cases) ~ "cases",
       !is.null(vehicles) ~ "state list",
       !is.null(type) ~ "year dataset",
       isTRUE(pr) ~ "zip",
-      .default = match.arg(api)
+      .default = "crashes"
     )
+  } else {
+    api <- match.arg(api)
+  }
 
   switch(
     api,
@@ -318,6 +324,12 @@ get_fars_cases <- function(
       )
     )
 
+  if (rlang::is_empty(crash_df)) {
+    cli_abort(
+      "No case details found for {.arg cases} {.val {cases}}."
+    )
+  }
+
   if (is.logical(details)) {
     if (!isTRUE(details)) {
       crash_df <-
@@ -343,22 +355,16 @@ get_fars_cases <- function(
   details <- tolower(details)
   details <- match.arg(details, c("events", "vehicles"))
 
-  details_df <- switch(
-    details,
-    "events" = crash_df[, "CEvents"][[1]],
-    "vehicles" = crash_df[, "Vehicles"][[1]]
-  )
+  details_col <- switch(details, "events" = "CEvents", "vehicles" = "Vehicles")
+
+  # Combine the nested data frames for all cases
+  details_df <- list_rbind(crash_df[[details_col]])
 
   if (!isTRUE(labels)) {
     return(details_df)
   }
 
-  label_fars_vars(
-    details_df,
-    data_file = fars_list_cols[[
-      switch(details, "events" = "CEvents", "vehicles" = "Vehicles")
-    ]]
-  )
+  label_fars_vars(details_df, data_file = fars_list_cols[[details_col]])
 }
 
 #' @rdname get_fars

@@ -2,10 +2,16 @@
 
 - crashapi now requires R 4.1.0 or later, matching its dependencies and its use of the native pipe.
 - Fix package to use the current CrashAPI base URL and browser headers (broken since January 2025).
-- Breaking change: required arguments now come before `year` in `get_fars()` (`state`), `get_fars_crashes()` (`state`, `county`), `get_fars_cases()` (`state`, `cases`), `get_fars_crash_list()`, `get_fars_summary()`, `get_fars_year()`, `get_fars_crash_vehicles()` (`state`), and `get_fars_crash_persons()` (`state`, `seat`, `injury`). Calls that pass `year` by position need to name it.
+- Breaking change: required arguments now come before `year` in `get_fars()` (`state`), `get_fars_crashes()` (`state`, `county`), `get_fars_cases()` (`state`, `cases`), `get_fars_crash_list()`, `get_fars_summary()`, `get_fars_year()`, `get_fars_crash_vehicles()` (`state`, `make`, `model`, `model_year`, `body_type`), and `get_fars_crash_persons()` (`state`, `age`, `sex`, `seat`, `injury`). Calls that pass `year` by position need to name it.
+- `get_fars_crash_persons()` now works. `age`, `sex`, `seat`, and `injury` are all required since the CrashAPI returns an error unless all four are provided (contrary to NHTSA's documentation), and names (e.g. `sex = "female"`, `seat = "front left"`, `injury = "fatal"`) are converted to codes. The `occupants` and `nonoccupants` arguments are removed since the seat position determines whether occupants or non-occupants are returned.
+- `get_fars_crash_vehicles()` now requires `make`, `model`, `model_year`, and `body_type` since the CrashAPI returns an error unless all four are provided, and accepts names or numeric IDs for `make`, `model`, and `body_type` (previously only character IDs worked).
 - Data from 2024 (released in April 2026) is now supported and the default `year` for all functions is `getOption("crashapi.year", 2024)`. Use `options(crashapi.year = 2022)` to set a different default year for the session.
 - Breaking change: the `start_year` and `end_year` arguments are removed. Functions for API endpoints that take a range of years (`get_fars_crashes()`, `get_fars_crash_list()`, `get_fars_summary()`, `get_fars_year()`, `get_fars_crash_vehicles()`, and `get_fars_crash_persons()`) now use the minimum and maximum of `year` as the start and end year, with a message if `year` has gaps.
 - `fars_vars()` supports multiple years and returns a `year` column.
+- `get_fars()` now uses `api` when it is provided instead of inferring the api from other arguments (e.g. `type`).
+- `get_fars_cases(details = "events")` and `get_fars_cases(details = "vehicles")` now return details for all cases instead of only the first case, and `get_fars_cases()` errors clearly if no case details are found.
+- `get_fars_zip()` and `get_crss_zip()` now error before downloading if `read = TRUE` and `format = "sas"`.
+- `read_crashapi()` no longer errors for responses without results and returns `NULL` with the CrashAPI message.
 - `get_fars_cases()` supports one year for each case number, and `get_fars_crashes(details = TRUE)` now works for multiple years by using the case year for each crash.
 - `get_fars_zip()` and `get_crss_zip()` now read CSV files from the folder inside newer zip files, which previously caused `read = TRUE` to fail for most recent years.
 - `get_fars_zip(pr = TRUE)` now uses the correct file name for Puerto Rico data and errors for years without Puerto Rico data (1975-1977 and 1979). `get_fars_zip(year = 1996, aux = TRUE)` now handles the misspelled file name on the NHTSA site.

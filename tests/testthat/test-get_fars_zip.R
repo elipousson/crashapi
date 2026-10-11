@@ -73,6 +73,17 @@ test_that("get_fars_zip() reads CSV files in a folder within the zip file", {
   expect_s3_class(data$accident, "data.frame")
 })
 
+test_that("get_fars_zip() errors before downloading SAS files to read", {
+  local_mocked_bindings(
+    download.file = function(...) stop("download.file() should not be called")
+  )
+
+  expect_snapshot(
+    get_fars_zip(year = 2024, format = "sas", read = TRUE),
+    error = TRUE
+  )
+})
+
 test_that("get_fars_zip() adds variable labels", {
   skip_if_not_installed("readr")
   path <- withr::local_tempdir()

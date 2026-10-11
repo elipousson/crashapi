@@ -122,3 +122,25 @@ test_that("read_crashapi() builds URLs with the current CrashAPI path", {
     "https://crashviewer.nhtsa.dot.gov/crashviewer/CrashAPI/analytics/GetInjurySeverityCounts?fromCaseYear=2014&toCaseYear=2015&state=1&format=json"
   )
 })
+
+test_that("read_crashapi() returns NULL for responses without results", {
+  httr2::local_mocked_responses(function(req) {
+    httr2::response_json(
+      body = list(
+        Count = 0,
+        Message = "Object reference not set to an instance of an object.",
+        Results = list(),
+        SearchCriteria = ""
+      )
+    )
+  })
+
+  expect_snapshot(
+    out <- read_crashapi(
+      data = "definitions",
+      type = "GetVariables",
+      dataYear = 2020
+    )
+  )
+  expect_null(out)
+})

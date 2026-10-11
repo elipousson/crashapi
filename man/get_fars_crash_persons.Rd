@@ -6,35 +6,38 @@
 \usage{
 get_fars_crash_persons(
   state,
+  age,
+  sex,
   seat,
   injury,
   year = getOption("crashapi.year", 2024),
-  age = NULL,
-  sex = NULL,
-  occupants = TRUE,
-  nonoccupants = TRUE,
   labels = TRUE
 )
 }
 \arguments{
 \item{state}{Required. State name, abbreviation, or FIPS number.}
 
-\item{seat}{Seat position}
+\item{age}{Required. Age in years.}
 
-\item{injury}{Options "unknown", "not reported", "died prior", "injured",
-"fatal", "suspected serious", "suspected minor", "possible", "no apparent"}
+\item{sex}{Required. Code or name for the person's sex: 1 ("Male"), 2
+("Female"), 8 ("Not Reported"), or 9 ("Reported as Unknown"). "m", "f",
+and "unknown" are also accepted.}
+
+\item{seat}{Required. Code or name for the person's seat position, e.g. 11
+or "Front Seat, Left Side" ("front left" is also accepted). Use 0 or "Not
+a Motor Vehicle Occupant" for non-occupants. See the FARS Analytical
+User's Manual for all seat position codes.}
+
+\item{injury}{Required. Code or name for the person's injury severity: 0
+("No Apparent Injury (O)"), 1 ("Possible Injury (C)"), 2 ("Suspected
+Minor Injury (B)"), 3 ("Suspected Serious Injury (A)"), 4 ("Fatal Injury
+(K)"), 5 ("Injured, Severity Unknown"), 6 ("Died Prior to Crash"), or 9
+("Unknown/Not Reported"). Short names (e.g. "fatal") and KABCO letters
+(e.g. "K") are also accepted.}
 
 \item{year}{numeric vector. One or more years from 2010 to 2024. The minimum
 and maximum values are used as the start and end year. Defaults to
 \code{getOption("crashapi.year", 2024)}.}
-
-\item{age}{numeric}
-
-\item{sex}{Options "m", "f", "male", "female", "unknown", "not reported."}
-
-\item{occupants}{Include vehicle occupants in query; defaults to \code{TRUE}}
-
-\item{nonoccupants}{Include non-occupants in query; defaults to \code{TRUE}}
 
 \item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
 with a variable label from \link{fars_vars_labels}. Labels are shown by
@@ -42,6 +45,35 @@ with a variable label from \link{fars_vars_labels}. Labels are shown by
 gtsummary.}
 }
 \description{
-This function returns a list of fatal crashes by occupant that have occurred
-throughout United States. This function is not currently working.
+This function returns a list of people involved in fatal crashes that match
+a specific age, sex, seat position, and injury severity using the CrashAPI
+GetCrashesByPerson endpoint. The returned data has one row for each person.
+}
+\section{API behavior}{
+NHTSA's documentation says this endpoint accepts "one or more" occupant
+details for age, sex, seat position, and injury severity. However, testing in
+October 2026 found that the API does not behave this way: the API returns an
+error (HTTP 404) unless all four are provided, an error message if any are
+blank, and only returns people who match all four values exactly. For this
+reason, \code{age}, \code{sex}, \code{seat}, and \code{injury} are all required.
+
+The endpoint's \code{includeOccupants} and \code{includeNonOccupants} parameters are
+not supported since the required seat position already determines whether
+occupants or non-occupants are returned (use \code{seat = 0} for people who were
+not motor vehicle occupants).
+
+To find people using other criteria (e.g. a range of ages or any injury
+severity), download the person table with \code{\link[=get_fars_year]{get_fars_year()}} using \code{type = "person"} and filter the data.
+}
+
+\examples{
+# Fatally injured 30 year old female drivers in Maryland in 2022
+get_fars_crash_persons(
+  state = "MD",
+  age = 30,
+  sex = "female",
+  seat = "front left",
+  injury = "fatal",
+  year = 2022
+)
 }

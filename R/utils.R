@@ -61,7 +61,7 @@ read_crashapi <- function(
       "GetCaseList" = "GET /{data}/{type}?states={states}&fromYear={fromYear}&toYear={toYear}&minNumOfVehicles={minNumOfVehicles}&maxNumOfVehicles={maxNumOfVehicles}&format={format}",
       "GetCaseDetails" = "GET /{data}/{type}?stateCase={stateCase}&caseYear={caseYear}&state={state}&format={format}",
       "GetCrashesByVehicle" = "GET /{data}/{type}?make={make}&model={model}&modelyear={modelyear}&bodyType={bodyType}&fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&format={format}",
-      "GetCrashesByPerson" = "GET /{data}/{type}?age={age}&sex={sex}&seatPos={seatPos}&injurySeverity={injurySeverity}&fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&includeOccupants={includeOccupants}&includeNonOccupants={includeNonOccupants}&format={format}",
+      "GetCrashesByPerson" = "GET /{data}/{type}?age={age}&sex={sex}&seatPos={seatPos}&injurySeverity={injurySeverity}&fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&format={format}",
       "GetCrashesByLocation" = "GET /{data}/{type}?fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&county={county}&format={format}",
       "GetInjurySeverityCounts" = "GET /{data}/{type}?fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&format={format}",
       "GetVariables" = "GET /{data}/{type}?dataYear={dataYear}&format={format}",
@@ -101,16 +101,23 @@ read_crashapi <- function(
     simplifyVector = TRUE
   )
 
-  if (data[["Count"]] == 0) {
+  results <- data[["Results"]]
+
+  if (isTRUE(data[["Count"]] == 0) || length(results) == 0) {
     cli::cli_bullets(
       c(
-        "!" = data[["Message"]],
+        "!" = data[["Message"]] %||% "No results returned by the CrashAPI.",
         "*" = "Adjust search criteria and try again: {data[['SearchCriteria']]}"
       )
     )
   }
 
-  data[["Results"]][[1]]
+  # The CrashAPI returns an empty list of results for some errors
+  if (length(results) == 0) {
+    return(NULL)
+  }
+
+  results[[1]]
 }
 
 req_crashapi_headers <- function(
