@@ -45,10 +45,13 @@
 #'   `geometry` is `TRUE`.
 #' @param type Name of the dataset or data file to download when using the "year
 #'   dataset" api or `get_fars_year`. Supported values include "ACCIDENT",
-#'   "CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "FACTOR", "MANEUVER",
-#'   "NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE", "PERSON",
-#'   "SAFETYEQ", "VEHICLE", "VEVENT VINDECODE", "VINDERIVED", "VIOLATION",
-#'   "VISION", and "VSOE". Lowercase or mixed case values are permitted.
+#'   "CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "DRUGS", "FACTOR",
+#'   "MANEUVER", "NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE",
+#'   "PERSON", "SAFETYEQ", "VEHICLE", "VEVENT", "VINDECODE", "VINDERIVED",
+#'   "VIOLATION", "VISION", and "VSOE". "TRAILERVINDERIVED" is supported for
+#'   2016 onwards, "NMDISTRACT" and "RACE" for 2019 onwards, and "CRASHRF",
+#'   "DRIVERRF", "PERSONRF", "PVEHICLESF", "VEHICLESF", and "WEATHER" for
+#'   2020 onwards. Lowercase or mixed case values are permitted.
 #' @param cases One or more FARS case numbers. Required if `api` is "cases" or
 #'   using `get_fars_cases`. Multiple case numbers can be provided.
 #' @param details Type of detailed crash data to return (either "events" or
@@ -461,9 +464,14 @@ get_fars_year <- function(
     "VSOE"
   )
 
-  # Add 2019 and 2020 onwards tables to the data
+  # Add 2016, 2019, and 2020 onwards tables to the data
+  if (min(year) >= 2016) {
+    fars_tabs <- c(fars_tabs, "TRAILERVINDERIVED")
+  }
+
   if (min(year) >= 2019) {
-    fars_tabs <- c(fars_tabs, "NMDISTRACT")
+    # Race was moved from the PERSON table to a separate RACE table in 2019
+    fars_tabs <- c(fars_tabs, "NMDISTRACT", "RACE")
     if (min(year) >= 2020) {
       fars_tabs <- c(
         fars_tabs,

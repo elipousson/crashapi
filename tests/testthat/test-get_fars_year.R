@@ -109,3 +109,27 @@ test_that("get_fars_year works", {
     "sf"
   )
 })
+
+test_that("get_fars_year() supports RACE and TRAILERVINDERIVED by year", {
+  skip_if_not_installed("readr")
+  withr::local_options(readr.show_col_types = FALSE)
+  local_mocked_csv("ST_CASE,RACE\n1,1\n")
+
+  expect_s3_class(
+    get_fars_year(year = 2019, state = "VT", type = "race", format = "csv"),
+    "data.frame"
+  )
+  expect_s3_class(
+    get_fars_year(
+      year = 2016,
+      state = "VT",
+      type = "trailervinderived",
+      format = "csv"
+    ),
+    "data.frame"
+  )
+  expect_snapshot(
+    get_fars_year(year = 2018, state = "VT", type = "race", format = "csv"),
+    error = TRUE
+  )
+})

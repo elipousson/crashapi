@@ -102,10 +102,13 @@ functions with \code{options(crashapi.year = 2022)}.}
 
 \item{type}{Name of the dataset or data file to download when using the "year
 dataset" api or \code{get_fars_year}. Supported values include "ACCIDENT",
-"CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "FACTOR", "MANEUVER",
-"NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE", "PERSON",
-"SAFETYEQ", "VEHICLE", "VEVENT VINDECODE", "VINDERIVED", "VIOLATION",
-"VISION", and "VSOE". Lowercase or mixed case values are permitted.}
+"CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "DRUGS", "FACTOR",
+"MANEUVER", "NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE",
+"PERSON", "SAFETYEQ", "VEHICLE", "VEVENT", "VINDECODE", "VINDERIVED",
+"VIOLATION", "VISION", and "VSOE". "TRAILERVINDERIVED" is supported for
+2016 onwards, "NMDISTRACT" and "RACE" for 2019 onwards, and "CRASHRF",
+"DRIVERRF", "PERSONRF", "PVEHICLESF", "VEHICLESF", and "WEATHER" for
+2020 onwards. Lowercase or mixed case values are permitted.}
 
 \item{details}{Type of detailed crash data to return (either "events" or
 "vehicles"). If \code{TRUE} for \code{get_fars} or \code{get_fars_crashes}, detailed case
