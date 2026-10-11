@@ -12,7 +12,7 @@
 \usage{
 get_fars(
   state,
-  year = getOption("crashapi.year", 2023),
+  year = getOption("crashapi.year", 2024),
   county = NULL,
   api = c("crashes", "cases", "state list", "summary count", "year dataset", "zip"),
   type = NULL,
@@ -31,7 +31,7 @@ get_fars(
 get_fars_crashes(
   state,
   county,
-  year = getOption("crashapi.year", 2023),
+  year = getOption("crashapi.year", 2024),
   start_year = NULL,
   end_year = NULL,
   details = FALSE,
@@ -43,7 +43,7 @@ get_fars_crashes(
 get_fars_cases(
   state,
   cases,
-  year = getOption("crashapi.year", 2023),
+  year = getOption("crashapi.year", 2024),
   details = FALSE,
   geometry = FALSE,
   crs = NULL,
@@ -52,7 +52,7 @@ get_fars_cases(
 
 get_fars_crash_list(
   state,
-  year = getOption("crashapi.year", 2023),
+  year = getOption("crashapi.year", 2024),
   start_year = NULL,
   end_year = NULL,
   vehicles = c(1, 50),
@@ -61,7 +61,7 @@ get_fars_crash_list(
 
 get_fars_summary(
   state,
-  year = getOption("crashapi.year", 2023),
+  year = getOption("crashapi.year", 2024),
   start_year = NULL,
   end_year = NULL,
   labels = TRUE
@@ -69,14 +69,15 @@ get_fars_summary(
 
 get_fars_year(
   state,
-  year = getOption("crashapi.year", 2023),
+  year = getOption("crashapi.year", 2024),
   type = "accident",
   format = "json",
   path = NULL,
   geometry = FALSE,
   crs = NULL,
   download = FALSE,
-  labels = TRUE
+  labels = TRUE,
+  call = caller_env()
 )
 }
 \arguments{
@@ -88,9 +89,9 @@ is "cases" or "zip" (or using the \code{get_fars_cases} or \code{get_fars_zip}
 functions), a single year is required. All other \code{api} options support a
 range with the minimum value is used as a start year and the maximum value
 used as a end year. Most \code{api} options support the years from 2010 through
-2023 and "zip" supports 1975 to 2023. \code{start_year} and \code{end_year} are
+2024 and "zip" supports 1975 to 2024. \code{start_year} and \code{end_year} are
 ignored if \code{year} is not \code{NULL}. Defaults to
-\code{getOption("crashapi.year", 2023)} so the default year can be set for all
+\code{getOption("crashapi.year", 2024)} so the default year can be set for all
 functions with \code{options(crashapi.year = 2022)}.}
 
 \item{county}{County name or FIPS number. Required for \code{get_fars_crashes}.}
@@ -146,6 +147,11 @@ gtsummary.}
 
 \item{start_year, end_year}{Start and end year for crash reports. Only used
 if \code{year} is \code{NULL}.}
+
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \description{
 This function provides a convenient interface for accessing FARS

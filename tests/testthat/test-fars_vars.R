@@ -15,7 +15,13 @@ test_that("fars_vars works", {
   # Does not work if var = model and make is not provided
   # expect_error(fars_vars(year = 2010, var = "model"), "Error in open.connection")
   # Works if var is model and a make ID number is provided
-  expect_s3_class(fars_vars(year = 2010, var = "model", make = 54), "data.frame")
+  expect_s3_class(
+    fars_vars(year = 2010, var = "model", make = 54),
+    "data.frame"
+  )
   # Works if var is bodytype and a make and model ID number are both provided
-  expect_s3_class(fars_vars(year = 2010, var = "bodytype", make = 54, model = 37), "data.frame")
+  expect_s3_class(
+    fars_vars(year = 2010, var = "bodytype", make = 54, model = 37),
+    "data.frame"
+  )
 })

@@ -67,3 +67,17 @@ test_that("format_crashes() adds variable labels", {
   out <- format_crashes(x, labels = FALSE)
   expect_null(attr(out$FATALS, "label"))
 })
+
+test_that("read_crashapi() builds URLs with the current CrashAPI path", {
+  expect_identical(
+    read_crashapi(
+      data = "analytics",
+      type = "GetInjurySeverityCounts",
+      fromCaseYear = 2014,
+      toCaseYear = 2015,
+      state = 1,
+      results = FALSE
+    ),
+    "https://crashviewer.nhtsa.dot.gov/crashviewer/CrashAPI/analytics/GetInjurySeverityCounts?fromCaseYear=2014&toCaseYear=2015&state=1&format=json"
+  )
+})

@@ -7,15 +7,15 @@
 Reporting System (FARS) API}
 \usage{
 fars_vars(
-  year = getOption("crashapi.year", 2023),
+  year = getOption("crashapi.year", 2024),
   var = NULL,
   make = NULL,
   model = NULL
 )
 }
 \arguments{
-\item{year}{Case year. Year must be between 2010 and 2023. Defaults to
-\code{getOption("crashapi.year", 2023)}.}
+\item{year}{Case year. Year must be between 2010 and 2024. Defaults to
+\code{getOption("crashapi.year", 2024)}.}
 
 \item{var}{Default NULL. Supported values are "make", "model", and
 "bodytype". Using the var parameter returns variable attributes for the

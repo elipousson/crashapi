@@ -5,7 +5,7 @@
 \title{Download FARS data files as zipped CSV or SAS files}
 \usage{
 get_fars_zip(
-  year = getOption("crashapi.year", 2023),
+  year = getOption("crashapi.year", 2024),
   format = "csv",
   path = NULL,
   pr = FALSE,
@@ -17,8 +17,8 @@ get_fars_zip(
 )
 }
 \arguments{
-\item{year}{Year of data from 1975 to 2023. Defaults to
-\code{getOption("crashapi.year", 2023)}.}
+\item{year}{Year of data from 1975 to 2024. Defaults to
+\code{getOption("crashapi.year", 2024)}.}
 
 \item{format}{Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
 unzip and geo options are only supported if format is "csv".}

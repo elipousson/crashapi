@@ -28,9 +28,9 @@
 #'   functions), a single year is required. All other `api` options support a
 #'   range with the minimum value is used as a start year and the maximum value
 #'   used as a end year. Most `api` options support the years from 2010 through
-#'   2023 and "zip" supports 1975 to 2023. `start_year` and `end_year` are
+#'   2024 and "zip" supports 1975 to 2024. `start_year` and `end_year` are
 #'   ignored if `year` is not `NULL`. Defaults to
-#'   `getOption("crashapi.year", 2023)` so the default year can be set for all
+#'   `getOption("crashapi.year", 2024)` so the default year can be set for all
 #'   functions with `options(crashapi.year = 2022)`.
 #' @param api character. API function to use. Supported values include
 #'   "crashes", "cases", "state list", "summary count", "year dataset", and
@@ -71,6 +71,7 @@
 #' @param download logical. If `TRUE` and the `api` is "year dataset" or "zip",
 #'   download the data to a file. Default `FALSE`.
 #' @inheritParams format_crashes
+#' @inheritParams rlang::args_error_context
 #' @rdname get_fars
 #' @examples
 #'
@@ -88,7 +89,7 @@
 #' @md
 get_fars <- function(
   state,
-  year = getOption("crashapi.year", 2023),
+  year = getOption("crashapi.year", 2024),
   county = NULL,
   api = c(
     "crashes",
@@ -176,7 +177,7 @@ get_fars <- function(
 get_fars_crashes <- function(
   state,
   county,
-  year = getOption("crashapi.year", 2023),
+  year = getOption("crashapi.year", 2024),
   start_year = NULL,
   end_year = NULL,
   details = FALSE,
@@ -274,7 +275,7 @@ get_fars_crashes <- function(
 get_fars_cases <- function(
   state,
   cases,
-  year = getOption("crashapi.year", 2023),
+  year = getOption("crashapi.year", 2024),
   details = FALSE,
   geometry = FALSE,
   crs = NULL,
@@ -351,7 +352,7 @@ get_fars_cases <- function(
 #' @export
 get_fars_crash_list <- function(
   state,
-  year = getOption("crashapi.year", 2023),
+  year = getOption("crashapi.year", 2024),
   start_year = NULL,
   end_year = NULL,
   vehicles = c(1, 50),
@@ -384,7 +385,7 @@ get_fars_crash_list <- function(
 #' @export
 get_fars_summary <- function(
   state,
-  year = getOption("crashapi.year", 2023),
+  year = getOption("crashapi.year", 2024),
   start_year = NULL,
   end_year = NULL,
   labels = TRUE
@@ -411,17 +412,29 @@ get_fars_summary <- function(
 #' @importFrom httr2 resp_body_json req_perform request
 get_fars_year <- function(
   state,
-  year = getOption("crashapi.year", 2023),
+  year = getOption("crashapi.year", 2024),
   type = "accident",
   format = "json",
   path = NULL,
   geometry = FALSE,
   crs = NULL,
   download = FALSE,
-  labels = TRUE
+  labels = TRUE,
+  call = caller_env()
 ) {
-  year <- validate_year(year)
+  year <- validate_year(year, call = call)
   state_fips <- lookup_fips(state)
+
+  # This exports the FARS data by given year (2010 - 2020). In order to get the
+  # FARS Data, please send in the Dataset Name, Case Year range (From Year - To
+  # Year) and State code. Note: To export all state data (*), please restrict
+  # the case year range to 5 years. The following are the valid dataset names:
+  # ACCIDENT, CEVENT, CRASHRF (2020 Onwards), DAMAGE, DISTRACT, DRIMPAIR,
+  # DRIVERRF (2020 Onwards), DRUGS, FACTOR, MANEUVER, NMCRASH, NMDISTRACT (2019
+  # Onwards), NMIMPAIR, NMPRIOR, PARKWORK, PBTYPE, PERSON, PERSONRF (2020
+  # Onwards), PVEHICLESF (2020 Onwards), RACE, SAFETYEQ, TRAILERVINDERIVED,
+  # VEHICLE, VEHICLESF (2020 Onwards), VEVENT, VINDECODE, VINDERIVED, VIOLATION,
+  # VISION, VSOE, WEATHER (2020 Onwards)
 
   fars_tabs <- c(
     "ACCIDENT",
@@ -483,11 +496,7 @@ get_fars_year <- function(
 
   if (!download) {
     if (format == "json") {
-      request <-
-        httr2::req_user_agent(
-          httr2::request(url),
-          "crashapi https://elipousson.github.io/crashapi/"
-        )
+      request <- req_crashapi_headers(httr2::request(url))
     }
 
     if (format == "csv") {
@@ -498,7 +507,7 @@ get_fars_year <- function(
       switch(
         format,
         "json" = httr2::resp_body_json(
-          httr2::req_perform(request),
+          httr2::req_perform(request, error_call = call),
           simplifyVector = TRUE,
           check_type = FALSE
         )[["Results"]][[1]],
@@ -536,6 +545,7 @@ get_fars_year <- function(
   utils::download.file(
     url = url,
     destfile = filename,
-    method = "auto"
+    method = "auto",
+    mode = "wb"
   )
 }

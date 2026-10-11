@@ -1,11 +1,11 @@
 test_that("get_fars_zip() uses the crashapi.year option for the default year", {
   path <- withr::local_tempdir()
-  local_fars_zip(path, year = 2023)
+  local_fars_zip(path, year = 2024)
   local_fars_zip(path, year = 2022)
 
   expect_identical(
     get_fars_zip(read = FALSE, path = path),
-    file.path(path, "FARS2023NationalCSV.zip")
+    file.path(path, "FARS2024NationalCSV.zip")
   )
 
   withr::local_options(crashapi.year = 2022)

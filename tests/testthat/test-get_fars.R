@@ -3,7 +3,7 @@ test_that("get_fars() supports the zip api with the default format", {
   path <- withr::local_tempdir()
   local_fars_zip(path)
 
-  data <- get_fars(year = 2023, api = "zip", path = path)
+  data <- get_fars(year = 2024, api = "zip", path = path)
 
   expect_named(data, "accident")
   expect_s3_class(data$accident, "data.frame")

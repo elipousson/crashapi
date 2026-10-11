@@ -6,7 +6,7 @@
 #' @rdname get_fars_crash_persons
 #' @inheritParams get_fars
 #' @param year numeric vector. Year or range with start and end year. 2010 to
-#'   2023 supported. Defaults to `getOption("crashapi.year", 2023)`.
+#'   2024 supported. Defaults to `getOption("crashapi.year", 2024)`.
 #' @param state Required. State name, abbreviation, or FIPS number.
 #' @param age numeric
 #' @param sex Options "m", "f", "male", "female", "unknown", "not reported."
@@ -21,7 +21,7 @@ get_fars_crash_persons <- function(
   state,
   seat,
   injury,
-  year = getOption("crashapi.year", 2023),
+  year = getOption("crashapi.year", 2024),
   start_year = NULL,
   end_year = NULL,
   age = NULL,

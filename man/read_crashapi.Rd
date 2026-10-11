@@ -5,12 +5,13 @@
 \title{Read data from the CrashAPI using a url template}
 \usage{
 read_crashapi(
-  url = "https://crashviewer.nhtsa.dot.gov",
+  url = "https://crashviewer.nhtsa.dot.gov/crashviewer/CrashAPI",
   data = "crashes",
   type = NULL,
   format = "json",
   results = TRUE,
   ...,
+  cookie_file = "crashapi.cookies",
   call = caller_env()
 )
 }
@@ -27,6 +28,9 @@ read_crashapi(
 
 \item{...}{Additional parameters used in template (varies by type).}
 
+\item{cookie_file}{File name passed to \code{\link[=tempfile]{tempfile()}} for the temporary cookie
+file used to preserve cookies between requests.}
+
 \item{call}{The execution environment of a currently
 running function, e.g. \code{caller_env()}. The function will be
 mentioned in error messages as the source of the error. See the
@@ -38,5 +42,5 @@ Data frame with requested data or a formatted url (if \code{results = FALSE})
 \description{
 An updated utility function using the httr2 package to read data from the
 CrashAPI using the API URL templates listed on the NHSTA website:
-\url{https://crashviewer.nhtsa.dot.gov/CrashAPI}
+\url{https://crashviewer.nhtsa.dot.gov/crashviewer/CrashAPI}
 }

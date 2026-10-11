@@ -1,6 +1,6 @@
 # Create a minimal FARS-style zip file in `path` so zip functions can be
 # tested without downloading data
-local_fars_zip <- function(path, year = 2023) {
+local_fars_zip <- function(path, year = 2024) {
   filename <- paste0("FARS", year, "NationalCSV.zip")
   testthat::skip_if(Sys.which("zip") == "", "zip utility not available")
   src <- withr::local_tempdir()

@@ -1,9 +1,8 @@
-<!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
-
 # crashapi (development version)
 
+- Fix package to use the current CrashAPI base URL and browser headers (broken since January 2025).
 - Breaking change: required arguments now come before `year` in `get_fars()` (`state`), `get_fars_crashes()` (`state`, `county`), `get_fars_cases()` (`state`, `cases`), `get_fars_crash_list()`, `get_fars_summary()`, `get_fars_year()`, `get_fars_crash_vehicles()` (`state`), and `get_fars_crash_persons()` (`state`, `seat`, `injury`). Calls that pass `year` by position need to name it.
-- Data from 2023 is now supported and the default `year` for all functions is `getOption("crashapi.year", 2023)`. Use `options(crashapi.year = 2022)` to set a different default year for the session.
+- Data from 2024 (released in April 2025) is now supported and the default `year` for all functions is `getOption("crashapi.year", 2024)`. Use `options(crashapi.year = 2022)` to set a different default year for the session.
 - `start_year` now defaults to `NULL` in `get_fars_crashes()`, `get_fars_summary()`, `get_fars_crash_vehicles()`, and `get_fars_crash_persons()`, so using `end_year` without `start_year` no longer errors with a missing argument.
 - `format_crashes()`, `get_crss_zip()`, `get_fars()`, `get_fars_cases()`, `get_fars_crash_list()`, `get_fars_crash_persons()`, `get_fars_crash_vehicles()`, `get_fars_crashes()`, `get_fars_summary()`, `get_fars_year()`, and `get_fars_zip()` gain a `labels` argument. When `TRUE` (the default), each column with a matching variable in `fars_vars_labels` gets a `"label"` attribute, which is shown by `View()` and used by packages such as gt and gtsummary. Where a variable appears in more than one FARS data file, the label for the table being read is used.
 - `format_crashes()` now reorders columns, converts coordinate and count columns, and appends `date`, `time`, and `datetime` columns as documented. Previously, a faulty check skipped this step, so `get_fars_crashes()`, `get_fars_crash_list()`, and `get_fars_summary()` returned unformatted data. Column names are kept as returned by the API, and columns not found in `fars_vars_labels` are kept at the end.

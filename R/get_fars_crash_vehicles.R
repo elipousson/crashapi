@@ -7,7 +7,7 @@
 #'
 #' @inheritParams get_fars
 #' @param year numeric vector. Year or range with start and end year. 2010 to
-#'   2023 supported. Defaults to `getOption("crashapi.year", 2023)`.
+#'   2024 supported. Defaults to `getOption("crashapi.year", 2024)`.
 #' @param state Required. State name, abbreviation, or FIPS number.
 #' @param make Make name or ID, Required. The start_year is used to return a
 #'   list of support make options. Default: `NULL`
@@ -19,7 +19,7 @@
 #' @importFrom glue glue
 get_fars_crash_vehicles <- function(
   state,
-  year = getOption("crashapi.year", 2023),
+  year = getOption("crashapi.year", 2024),
   start_year = NULL,
   end_year = NULL,
   make = NULL,
