@@ -82,7 +82,7 @@ people who were not motor vehicle occupants).
 
 To find people using other criteria (e.g. a range of ages or any injury
 severity), download the person table with
-[`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+[`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
 using `type = "person"` and filter the data.
 
 ## Examples

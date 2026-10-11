@@ -2,10 +2,10 @@
 
 This function is similar to
 [`get_fars_zip()`](https://elipousson.github.io/crashapi/reference/get_fars_zip.md)
-to download files directly from NHTSA FTP site. If read is `TRUE`, the
-function reads a list containing data frames for each table available in
-the selected year. If geometry is `TRUE`, the accident table is
-converted to an sf object.
+to download files directly from the NHTSA downloads site. If `read` is
+`TRUE`, the function returns a list containing data frames for each
+table available in the selected year. If `geometry` is `TRUE`, the
+accident table is converted to an sf object.
 
 ## Usage
 
@@ -18,6 +18,7 @@ get_crss_zip(
   read = TRUE,
   geometry = FALSE,
   overwrite = FALSE,
+  keep_files = FALSE,
   labels = TRUE
 )
 ```
@@ -32,22 +33,24 @@ get_crss_zip(
 
 - format:
 
-  Format of zipped data tables ('csv' or 'sas'). Default: 'csv'. unzip
-  and geo options are only supported if format is "csv".
+  Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
+  `read = TRUE` and `geometry = TRUE` are only supported if format is
+  "csv".
 
 - path:
 
-  Path to download zip file. Set to
-  [`getwd()`](https://rdrr.io/r/base/getwd.html) if `NULL` (default).
+  Directory for downloaded and cached files. If `NULL` (default), uses
+  `getOption("crashapi.cache_dir")` or the user cache directory from
+  `tools::R_user_dir("crashapi", "cache")`.
 
 - aux:
 
-  If `TRUE`, download auxiliary CRSS datasets .
+  If `TRUE`, download auxiliary CRSS datasets.
 
 - read:
 
-  If `TRUE`, unzip the downloaded file and read CSV files into a list of
-  tables with each list item corresponding to one CSV file.
+  If `TRUE` (default), read the cached parquet files into a list of
+  tables with each list item corresponding to one data file.
 
 - geometry:
 
@@ -55,8 +58,13 @@ get_crss_zip(
 
 - overwrite:
 
-  If `FALSE`, abort if file exists at the provided path. If `TRUE`,
-  overwrite file.
+  If `TRUE`, download the data and replace any cached files. Default:
+  `FALSE`
+
+- keep_files:
+
+  If `TRUE`, keep the downloaded zip file and the extracted CSV files in
+  the cache folder. Default: `FALSE`
 
 - labels:
 
@@ -68,8 +76,18 @@ get_crss_zip(
 
 ## Value
 
-Downloads zip file with CSV or SAS tables and returns the zip file path
-invisibly if `read = FALSE`, or a list of data frames with one item for
-each table (with the accident table converted to an sf object if
-`geometry = TRUE`). If more than one year is provided, returns a named
-vector of file paths or a list of lists named by year.
+If `read = TRUE`, a list of data frames with one item for each table
+(with the accident table converted to an sf object if
+`geometry = TRUE`). If `read = FALSE`, the cached parquet file paths
+named by table (or the zip file path if `format = "sas"`) invisibly. If
+more than one year is provided, returns a list named by year.
+
+## Details
+
+Zipped CSV files are converted to parquet files and cached in a folder
+named after the zip file within `path` (by default, the user cache
+directory from
+[`tools::R_user_dir()`](https://rdrr.io/r/tools/userdir.html)), and the
+zip and CSV files are removed unless `keep_files = TRUE`. Later calls
+read the cached parquet files without downloading the data again unless
+`overwrite = TRUE`.

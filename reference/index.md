@@ -8,16 +8,17 @@
 - [`get_crss_zip()`](https://elipousson.github.io/crashapi/reference/get_crss_zip.md)
   : Download CRSS data files as zipped CSV or SAS files
 - [`get_fars()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
-  [`get_fars_crashes()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
-  [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
-  [`get_fars_crash_list()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
-  [`get_fars_summary()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
-  [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
-  : Get Fatality Analysis Reporting System (FARS) data with the FARS API
+  : Get Fatality Analysis Reporting System (FARS) data tables
 - [`get_fars_crash_persons()`](https://elipousson.github.io/crashapi/reference/get_fars_crash_persons.md)
   : Get Crashes By Occupant
 - [`get_fars_crash_vehicles()`](https://elipousson.github.io/crashapi/reference/get_fars_crash_vehicles.md)
   : Get Crashes By Vehicle
+- [`get_fars_crashes()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
+  [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
+  [`get_fars_crash_list()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
+  [`get_fars_summary()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
+  [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
+  : Get crash data from the CrashAPI
 - [`get_fars_zip()`](https://elipousson.github.io/crashapi/reference/get_fars_zip.md)
   : Download FARS data files as zipped CSV or SAS files
 - [`read_crashapi()`](https://elipousson.github.io/crashapi/reference/read_crashapi.md)

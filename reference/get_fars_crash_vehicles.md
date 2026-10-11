@@ -71,7 +71,7 @@ message if any are blank. For this reason, `make`, `model`,
 
 To find crashes using other vehicle criteria, download the vehicle table
 with
-[`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+[`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
 using `type = "vehicle"` and filter the data.
 
 ## Examples

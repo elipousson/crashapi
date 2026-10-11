@@ -2,20 +2,47 @@
 
 ## crashapi (development version)
 
+- Breaking change:
+  [`get_fars()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+  is redesigned to return a FARS data table (e.g. accident, person, or
+  vehicle) for one or more states, an optional county, and one or more
+  years, similar to `stats19::get_stats19()`. Data for a state from 2010
+  onwards comes from the CrashAPI and national data, Puerto Rico, or
+  data before 2010 comes from zipped data files (set `source` to
+  choose). Tables are filtered by county directly or by matching crashes
+  in the county from the accident table. The `api`, `cases`, `vehicles`,
+  `details`, `format`, `pr`, `path`, and `download` arguments are
+  removed; use
+  [`get_fars_crashes()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
+  [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
+  [`get_fars_crash_list()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
+  [`get_fars_summary()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
+  or
+  [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
+  for other CrashAPI endpoints.
+- Breaking change:
+  [`get_fars_zip()`](https://elipousson.github.io/crashapi/reference/get_fars_zip.md)
+  and
+  [`get_crss_zip()`](https://elipousson.github.io/crashapi/reference/get_crss_zip.md)
+  now convert zipped CSV files to parquet files cached in the user cache
+  directory (or `getOption("crashapi.cache_dir")`) and remove the zip
+  and CSV files unless `keep_files = TRUE`. Later calls read the cached
+  files without downloading the data again unless `overwrite = TRUE`.
+  With `read = FALSE`, they return the parquet file paths named by table
+  (or a list named by year for multiple years). crashapi now imports
+  nanoparquet.
 - crashapi now requires R 4.1.0 or later, matching its dependencies and
   its use of the native pipe.
 - Fix package to use the current CrashAPI base URL and browser headers
   (broken since January 2025).
 - Breaking change: required arguments now come before `year` in
-  [`get_fars()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
-  (`state`),
-  [`get_fars_crashes()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+  [`get_fars_crashes()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
   (`state`, `county`),
-  [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+  [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
   (`state`, `cases`),
-  [`get_fars_crash_list()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
-  [`get_fars_summary()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
-  [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
+  [`get_fars_crash_list()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
+  [`get_fars_summary()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
+  [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
   [`get_fars_crash_vehicles()`](https://elipousson.github.io/crashapi/reference/get_fars_crash_vehicles.md)
   (`state`, `make`, `model`, `model_year`, `body_type`), and
   [`get_fars_crash_persons()`](https://elipousson.github.io/crashapi/reference/get_fars_crash_persons.md)
@@ -40,10 +67,10 @@
   the session.
 - Breaking change: the `start_year` and `end_year` arguments are
   removed. Functions for API endpoints that take a range of years
-  ([`get_fars_crashes()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
-  [`get_fars_crash_list()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
-  [`get_fars_summary()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
-  [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
+  ([`get_fars_crashes()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
+  [`get_fars_crash_list()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
+  [`get_fars_summary()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
+  [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
   [`get_fars_crash_vehicles()`](https://elipousson.github.io/crashapi/reference/get_fars_crash_vehicles.md),
   and
   [`get_fars_crash_persons()`](https://elipousson.github.io/crashapi/reference/get_fars_crash_persons.md))
@@ -51,13 +78,22 @@
   with a message if `year` has gaps.
 - [`fars_vars()`](https://elipousson.github.io/crashapi/reference/fars_vars.md)
   supports multiple years and returns a `year` column.
+- [`get_fars_crashes()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
+  errors with a clear message if `county` is missing.
 - [`get_fars()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
-  now uses `api` when it is provided instead of inferring the api from
-  other arguments (e.g. `type`).
+  and
+  [`get_fars_crashes()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
+  now error if `county` can’t be matched to a county in `state` (e.g. an
+  ambiguous name like “Baltimore” or an invalid FIPS code) instead of
+  filtering by the state FIPS code and returning no rows.
+- Matching state and county names now returns FIPS codes for valid
+  values when some values are invalid and drops county names that match
+  more than one county (e.g. “Baltimore”) with a warning asking for a
+  more specific name.
 - `get_fars_cases(details = "events")` and
   `get_fars_cases(details = "vehicles")` now return details for all
   cases instead of only the first case, and
-  [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+  [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
   errors clearly if no case details are found.
 - [`get_fars_zip()`](https://elipousson.github.io/crashapi/reference/get_fars_zip.md)
   and
@@ -66,7 +102,7 @@
 - [`read_crashapi()`](https://elipousson.github.io/crashapi/reference/read_crashapi.md)
   no longer errors for responses without results and returns `NULL` with
   the CrashAPI message.
-- [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+- [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
   supports one year for each case number, and
   `get_fars_crashes(details = TRUE)` now works for multiple years by
   using the case year for each crash.
@@ -82,18 +118,17 @@
 - [`get_fars_zip()`](https://elipousson.github.io/crashapi/reference/get_fars_zip.md)
   and
   [`get_crss_zip()`](https://elipousson.github.io/crashapi/reference/get_crss_zip.md)
-  support multiple years and return a list (or vector of file paths)
-  named by year.
+  support multiple years and return a list named by year.
 - [`format_crashes()`](https://elipousson.github.io/crashapi/reference/format_crashes.md),
   [`get_crss_zip()`](https://elipousson.github.io/crashapi/reference/get_crss_zip.md),
   [`get_fars()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
-  [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
-  [`get_fars_crash_list()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
+  [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
+  [`get_fars_crash_list()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
   [`get_fars_crash_persons()`](https://elipousson.github.io/crashapi/reference/get_fars_crash_persons.md),
   [`get_fars_crash_vehicles()`](https://elipousson.github.io/crashapi/reference/get_fars_crash_vehicles.md),
-  [`get_fars_crashes()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
-  [`get_fars_summary()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
-  [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
+  [`get_fars_crashes()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
+  [`get_fars_summary()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
+  [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
   and
   [`get_fars_zip()`](https://elipousson.github.io/crashapi/reference/get_fars_zip.md)
   gain a `labels` argument. When `TRUE` (the default), each column with
@@ -107,28 +142,25 @@
   exact match (e.g. `CASEYEAR`), label `…NAME` columns from their coded
   variable (e.g. `BODY_TYPNAME` from `BODY_TYP`), and label nested data
   frames in list columns returned by
-  [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars.md).
+  [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md).
 - [`format_crashes()`](https://elipousson.github.io/crashapi/reference/format_crashes.md)
   now reorders columns, converts coordinate and count columns, and
   appends `date`, `time`, and `datetime` columns as documented.
   Previously, a faulty check skipped this step, so
-  [`get_fars_crashes()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
-  [`get_fars_crash_list()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
+  [`get_fars_crashes()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
+  [`get_fars_crash_list()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
   and
-  [`get_fars_summary()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+  [`get_fars_summary()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
   returned unformatted data. Column names are kept as returned by the
   API, and columns not found in `fars_vars_labels` are kept at the end.
-- [`get_fars()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
-  now works with `api = "zip"` when `format` is left at its default
-  (“json” is treated as “csv”).
-- [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+- [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
   now supports the “RACE” (2019 onwards) and “TRAILERVINDERIVED” (2016
   onwards) tables.
-- [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+- [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
   now sends the same browser headers as other API requests when reading
   CSV data or downloading a file (`download = TRUE`), and returns the
   downloaded file path invisibly.
-- [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+- [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
   returns the data with a warning when `geometry = TRUE` and the table
   has no coordinate columns, instead of downloading a file.
 
@@ -146,13 +178,13 @@
 ## crashapi 0.1.1
 
 CrashAPI now has data from 2010 to 2020.
-[`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+[`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
 is also updated to support multiple years and to include a state
 parameter which makes it much easier to use.
 
 - refactor: update 2019 -\> 2020 max year
 - feat: add geometry and state parameter support to
-  [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+  [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
 - refactor: set default crs to NULL and switch to use `sfext::df_to_sf`
 - refactor: switch to use `httr2` package +
   [`read_crashapi()`](https://elipousson.github.io/crashapi/reference/read_crashapi.md)
@@ -167,11 +199,11 @@ parameter which makes it much easier to use.
 - refactor: Rename `tidy_crashes()` to
   [`format_crashes()`](https://elipousson.github.io/crashapi/reference/format_crashes.md)
 - feat: rename
-  [`get_fars_crash_details()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+  [`get_fars_crash_details()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
   to
-  [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+  [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
 - feat: Add details parameter to
-  [`get_fars_crashes()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+  [`get_fars_crashes()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
   to supported appending detailed case information
 - feat: Add `fars_vars_labels` with names and labels derived from
   current analytical manual
@@ -213,7 +245,7 @@ parameter which makes it much easier to use.
   counties (closes
   [\#1](https://github.com/elipousson/crashapi/issues/1))
 - feat: Update
-  [`get_fars_crash_details()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+  [`get_fars_crash_details()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md)
   to return sf objects using geometry parameter
 - refactor: Set up API calls w/ unexported utility function
   (`make_query`)
