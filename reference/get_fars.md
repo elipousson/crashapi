@@ -119,8 +119,10 @@ get_fars_year(
 - api:
 
   character. API function to use. Supported values include "crashes",
-  "cases", "state list", "summary count", "year dataset", and "zip".
-  Default: "crashes".
+  "cases", "state list", "summary count", "year dataset", and "zip". If
+  `api` is not provided, it is "cases" if `cases` is provided, "state
+  list" if `vehicles` is provided, "year dataset" if `type` is provided,
+  "zip" if `pr` is `TRUE`, and "crashes" otherwise.
 
 - type:
 

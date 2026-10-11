@@ -190,7 +190,9 @@ functions with <code>options(crashapi.year = 2022)</code>.</p></dd>
 <dt id="arg-api">api<a class="anchor" aria-label="anchor" href="#arg-api"></a></dt>
 <dd><p>character. API function to use. Supported values include
 "crashes", "cases", "state list", "summary count", "year dataset", and
-"zip". Default: "crashes".</p></dd>
+"zip". If <code>api</code> is not provided, it is "cases" if <code>cases</code> is provided,
+"state list" if <code>vehicles</code> is provided, "year dataset" if <code>type</code> is
+provided, "zip" if <code>pr</code> is <code>TRUE</code>, and "crashes" otherwise.</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>

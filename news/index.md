@@ -17,10 +17,22 @@
   [`get_fars_summary()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
   [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars.md),
   [`get_fars_crash_vehicles()`](https://elipousson.github.io/crashapi/reference/get_fars_crash_vehicles.md)
-  (`state`), and
+  (`state`, `make`, `model`, `model_year`, `body_type`), and
   [`get_fars_crash_persons()`](https://elipousson.github.io/crashapi/reference/get_fars_crash_persons.md)
-  (`state`, `seat`, `injury`). Calls that pass `year` by position need
-  to name it.
+  (`state`, `age`, `sex`, `seat`, `injury`). Calls that pass `year` by
+  position need to name it.
+- [`get_fars_crash_persons()`](https://elipousson.github.io/crashapi/reference/get_fars_crash_persons.md)
+  now works. `age`, `sex`, `seat`, and `injury` are all required since
+  the CrashAPI returns an error unless all four are provided (contrary
+  to NHTSA’s documentation), and names (e.g. `sex = "female"`,
+  `seat = "front left"`, `injury = "fatal"`) are converted to codes. The
+  `occupants` and `nonoccupants` arguments are removed since the seat
+  position determines whether occupants or non-occupants are returned.
+- [`get_fars_crash_vehicles()`](https://elipousson.github.io/crashapi/reference/get_fars_crash_vehicles.md)
+  now requires `make`, `model`, `model_year`, and `body_type` since the
+  CrashAPI returns an error unless all four are provided, and accepts
+  names or numeric IDs for `make`, `model`, and `body_type` (previously
+  only character IDs worked).
 - Data from 2024 (released in April 2026) is now supported and the
   default `year` for all functions is
   `getOption("crashapi.year", 2024)`. Use
@@ -39,6 +51,21 @@
   with a message if `year` has gaps.
 - [`fars_vars()`](https://elipousson.github.io/crashapi/reference/fars_vars.md)
   supports multiple years and returns a `year` column.
+- [`get_fars()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+  now uses `api` when it is provided instead of inferring the api from
+  other arguments (e.g. `type`).
+- `get_fars_cases(details = "events")` and
+  `get_fars_cases(details = "vehicles")` now return details for all
+  cases instead of only the first case, and
+  [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+  errors clearly if no case details are found.
+- [`get_fars_zip()`](https://elipousson.github.io/crashapi/reference/get_fars_zip.md)
+  and
+  [`get_crss_zip()`](https://elipousson.github.io/crashapi/reference/get_crss_zip.md)
+  now error before downloading if `read = TRUE` and `format = "sas"`.
+- [`read_crashapi()`](https://elipousson.github.io/crashapi/reference/read_crashapi.md)
+  no longer errors for responses without results and returns `NULL` with
+  the CrashAPI message.
 - [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
   supports one year for each case number, and
   `get_fars_crashes(details = TRUE)` now works for multiple years by
