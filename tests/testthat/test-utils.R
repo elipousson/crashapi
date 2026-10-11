@@ -11,7 +11,7 @@ test_that("format_crashes() reorders and adds date columns", {
     STATE = "50"
   )
 
-  out <- format_crashes(x)
+  out <- format_crashes(x, labels = FALSE)
 
   expect_identical(
     names(out)[1:4],
@@ -30,4 +30,27 @@ test_that("format_crashes() reorders and adds date columns", {
 test_that("format_crashes() returns data without FARS variables unchanged", {
   x <- data.frame(a = 1, b = "x")
   expect_identical(format_crashes(x), x)
+})
+
+test_that("format_crashes() adds variable labels", {
+  x <- data.frame(
+    ST_CASE = "500001",
+    YEAR = "2022",
+    MONTH = "7",
+    DAY = "3",
+    HOUR = "14",
+    MINUTE = "5",
+    FATALS = "2",
+    EXTRA = "a"
+  )
+
+  out <- format_crashes(x)
+
+  expect_identical(attr(out$ST_CASE, "label"), "Consecutive Number")
+  expect_identical(attr(out$FATALS, "label"), "Fatalities")
+  expect_identical(attr(out$date, "label"), "Crash date")
+  expect_null(attr(out$EXTRA, "label"))
+
+  out <- format_crashes(x, labels = FALSE)
+  expect_null(attr(out$FATALS, "label"))
 })

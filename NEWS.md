@@ -2,6 +2,7 @@
 
 # crashapi (development version)
 
+- `format_crashes()` gains a `labels` argument. When `TRUE` (the default), each column with a matching variable in `fars_vars_labels` gets a `"label"` attribute, which is shown by `View()` and used by packages such as gt and gtsummary.
 - `format_crashes()` now reorders columns, converts coordinate and count columns, and appends `date`, `time`, and `datetime` columns as documented. Previously, a faulty check skipped this step, so `get_fars_crashes()`, `get_fars_crash_list()`, and `get_fars_summary()` returned unformatted data. Column names are kept as returned by the API, and columns not found in `fars_vars_labels` are kept at the end.
 - `get_fars()` now works with `api = "zip"` when `format` is left at its default ("json" is treated as "csv").
 - `get_fars_year()` returns the data with a warning when `geometry = TRUE` and the table has no coordinate columns, instead of downloading a file.

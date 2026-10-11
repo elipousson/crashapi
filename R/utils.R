@@ -290,6 +290,25 @@ rename_fars_vars <- function(x, reorder = TRUE, rename = TRUE) {
   dplyr::rename(x, !!!rlang::set_names(x_name, x_vars[["nm"]]))
 }
 
+#' Add variable labels from fars_vars_labels as column attributes
+#' @noRd
+label_fars_vars <- function(x) {
+  x_vars <- fars_vars_labels[
+    fars_vars_labels[["name"]] %in%
+      names(x) &
+      !is.na(fars_vars_labels[["label"]]),
+  ]
+  x_vars <- x_vars[!duplicated(x_vars[["name"]]), ]
+
+  x_labels <- rlang::set_names(x_vars[["label"]], x_vars[["name"]])
+
+  for (nm in names(x_labels)) {
+    attr(x[[nm]], "label") <- x_labels[[nm]]
+  }
+
+  x
+}
+
 #' Format crash data
 #'
 #' Reorder columns to match the order documented in Fatality Analysis Reporting
@@ -300,11 +319,15 @@ rename_fars_vars <- function(x, reorder = TRUE, rename = TRUE) {
 #' @param x Data frame with crash data.
 #' @param details If `TRUE`, append date, time, datetime columns to formatted
 #'   crash data; defaults to TRUE
+#' @param labels If `TRUE` (default), add a `"label"` attribute to each column
+#'   with a variable label from [fars_vars_labels]. Labels are shown by
+#'   [View()] in RStudio and Positron and used by packages such as gt and
+#'   gtsummary.
 #' @export
 #' @importFrom dplyr mutate
 #' @importFrom rlang .data
 #' @importFrom stringr str_pad
-format_crashes <- function(x, details = TRUE) {
+format_crashes <- function(x, details = TRUE, labels = TRUE) {
   # Reorder columns but keep the API column names
   crash_df <- rename_fars_vars(x, rename = FALSE)
 
@@ -328,36 +351,42 @@ format_crashes <- function(x, details = TRUE) {
       )
     )
 
-  if (!isTRUE(details)) {
-    return(crash_df)
-  }
+  date_cols <- c("ST_CASE", "YEAR", "MONTH", "DAY", "HOUR", "MINUTE")
 
-  pad_hm <- function(x) {
-    stringr::str_pad(x, width = 2, pad = "0")
-  }
+  if (isTRUE(details) && all(date_cols %in% names(crash_df))) {
+    pad_hm <- function(x) {
+      stringr::str_pad(x, width = 2, pad = "0")
+    }
 
-  if (
-    !all(
-      c("ST_CASE", "YEAR", "MONTH", "DAY", "HOUR", "MINUTE") %in%
-        names(crash_df)
+    # Append date/time columns
+    crash_df <- dplyr::mutate(
+      crash_df,
+      date = paste(
+        .data[["YEAR"]],
+        .data[["MONTH"]],
+        .data[["DAY"]],
+        sep = "-"
+      ),
+      time = paste(
+        pad_hm(.data[["HOUR"]]),
+        pad_hm(.data[["MINUTE"]]),
+        sep = ":"
+      ),
+      datetime = as.POSIXct(
+        paste(date, time),
+        format = "%Y-%m-%d %H:%M",
+        tz = "UTC"
+      ),
+      date = as.Date(date),
+      .after = "ST_CASE"
     )
-  ) {
+  }
+
+  if (!isTRUE(labels)) {
     return(crash_df)
   }
 
-  # Append date/time columns
-  dplyr::mutate(
-    crash_df,
-    date = paste(.data[["YEAR"]], .data[["MONTH"]], .data[["DAY"]], sep = "-"),
-    time = paste(pad_hm(.data[["HOUR"]]), pad_hm(.data[["MINUTE"]]), sep = ":"),
-    datetime = as.POSIXct(
-      paste(date, time),
-      format = "%Y-%m-%d %H:%M",
-      tz = "UTC"
-    ),
-    date = as.Date(date),
-    .after = "ST_CASE"
-  )
+  label_fars_vars(crash_df)
 }
 
 #' Helper function to return date added or updated for package data for documentation
