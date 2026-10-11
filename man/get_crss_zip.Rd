@@ -33,7 +33,9 @@ uses \code{getOption("crashapi.cache_dir")} or the user cache directory from
 \item{read}{If \code{TRUE} (default), read the cached parquet files into a list
 of tables with each list item corresponding to one data file.}
 
-\item{geometry}{If \code{TRUE}, convert the accident table to a sf object.}
+\item{geometry}{Not supported for CRSS data, which does not include
+coordinates. If \code{TRUE}, a warning is shown and the accident table is
+returned as a data frame.}
 
 \item{overwrite}{If \code{TRUE}, download the data and replace any cached files.
 Default: \code{FALSE}}
@@ -53,12 +55,21 @@ the zip file path if \code{format = "sas"}) invisibly. If more than one year is
 provided, returns a list named by year.
 }
 \description{
-This function is similar to \code{\link[=get_fars_zip]{get_fars_zip()}} to download files directly from
-the NHTSA downloads site. If \code{read} is \code{TRUE}, the function returns a list
-containing data frames for each table available in the selected year. If
-\code{geometry} is \code{TRUE}, the accident table is converted to an sf object.
+The \href{https://www.nhtsa.gov/crash-data-systems/crash-report-sampling-system}{Crash Report Sampling System (CRSS)}
+is a national sample of police-reported motor vehicle crashes of all
+severities, from minor property damage to fatal crashes, and replaced the
+General Estimates System (GES) in 2016. This function is similar to
+\code{\link[=get_fars_zip]{get_fars_zip()}} to download CRSS files directly from the NHTSA downloads
+site. If \code{read} is \code{TRUE}, the function returns a list containing data frames
+for each table available in the selected year.
 }
 \details{
+CRSS is a sample, so national estimates should use the sampling weight
+(\code{WEIGHT}) and survey design variables (e.g. \code{PSU_VAR} and \code{PSUSTRAT}) as
+described in the CRSS Analytical User's Manual. CRSS data does not include
+crash locations beyond broad geographic categories (e.g. \code{REGION} and
+\code{URBANICITY}).
+
 Zipped CSV files are converted to parquet files and cached in a folder
 named after the zip file within \code{path} (by default, the user cache directory
 from \code{\link[tools:R_user_dir]{tools::R_user_dir()}}), and the zip and CSV files are removed unless

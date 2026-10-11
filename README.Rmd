@@ -82,9 +82,11 @@ Data now returned by the CrashAPI codes `SEX` as 1 (Male), 2 (Female), 8 (Not Re
 
 ### Additional data access functionality
 
-The `get_fars_zip()` and `get_crss_zip()` functions can be used to access FARS data files from 1975 to 2024 and CRSS data files from 2016 to 2024 that are not available via the API but are available for download through [the NHTSA File Downloads site](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/) as zipped CSV or SAS files. Zipped CSV files are converted to parquet files and cached in the user cache directory (see `tools::R_user_dir()`) so the data only needs to be downloaded once. This site also provides extensive technical documentation on coding and use of the FARS data files.
+The `get_fars_zip()` function can be used to access FARS data files from 1975 to 2024 that are not available via the API but are available for download through [the NHTSA File Downloads site](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/) as zipped CSV or SAS files. Zipped CSV files are converted to parquet files and cached in the user cache directory (see `tools::R_user_dir()`) so the data only needs to be downloaded once. This site also provides extensive technical documentation on coding and use of the FARS data files.
 
-Earlier data along with data from the the [General Estimates System](https://www.nhtsa.gov/national-automotive-sampling-system-nass/nass-general-estimates-system) (GES) / [Crash Report Sampling System](https://www.nhtsa.gov/crash-data-systems/crash-report-sampling-system-crss) (CRSS) is also available through the [Fatality and Injury Reporting System Tool](https://cdan.dot.gov/query) (FIRST).
+The `get_crss_zip()` function works the same way for data files from the [Crash Report Sampling System](https://www.nhtsa.gov/crash-data-systems/crash-report-sampling-system) (CRSS) from 2016 to 2024. CRSS is a national sample of police-reported crashes of all severities (not only fatal crashes) that replaced the General Estimates System (GES) in 2016. Since CRSS is a sample, national estimates should use the sampling weights and survey design variables described in the CRSS Analytical User's Manual, and the data does not include crash locations.
+
+Earlier data along with data from the [General Estimates System](https://www.nhtsa.gov/national-automotive-sampling-system-nass/nass-general-estimates-system) (GES) / [Crash Report Sampling System](https://www.nhtsa.gov/crash-data-systems/crash-report-sampling-system) (CRSS) is also available through the [Fatality and Injury Reporting System Tool](https://cdan.dot.gov/query) (FIRST).
 
 ## Examples
 
@@ -145,6 +147,16 @@ get_fars(year = 2024, type = "vehicle")
 
 # Get the accident table for Maryland for 2005
 get_fars(state = "MD", year = 2005)
+```
+
+CRSS data files can be downloaded and cached with `get_crss_zip()`:
+
+```{r get_crss_zip, eval = FALSE}
+# Get all CRSS tables for 2024
+crss_2024 <- get_crss_zip(year = 2024)
+
+# Estimate the number of police-reported crashes using the sampling weight
+sum(crss_2024$accident$WEIGHT)
 ```
 
 Other CrashAPI endpoints are available through specific functions. For example, you can use `get_fars_summary()` to access state-level summary data on crash and fatality counts.
