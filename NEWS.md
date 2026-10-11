@@ -1,8 +1,20 @@
-# crashapi (development)
+# crashapi (development version)
 
-- Fix package to use browser headers (broken since January 2025)
-- Update year range to cover 2024 data (released in April 2025)
-- Fix issue when `get_fars_year()` failed if `geometry=TRUE` but dataset had no coordinate columns.
+- crashapi now requires R 4.1.0 or later, matching its dependencies and its use of the native pipe.
+- Fix package to use the current CrashAPI base URL and browser headers (broken since January 2025).
+- Breaking change: required arguments now come before `year` in `get_fars()` (`state`), `get_fars_crashes()` (`state`, `county`), `get_fars_cases()` (`state`, `cases`), `get_fars_crash_list()`, `get_fars_summary()`, `get_fars_year()`, `get_fars_crash_vehicles()` (`state`), and `get_fars_crash_persons()` (`state`, `seat`, `injury`). Calls that pass `year` by position need to name it.
+- Data from 2024 (released in April 2026) is now supported and the default `year` for all functions is `getOption("crashapi.year", 2024)`. Use `options(crashapi.year = 2022)` to set a different default year for the session.
+- Breaking change: the `start_year` and `end_year` arguments are removed. Functions for API endpoints that take a range of years (`get_fars_crashes()`, `get_fars_crash_list()`, `get_fars_summary()`, `get_fars_year()`, `get_fars_crash_vehicles()`, and `get_fars_crash_persons()`) now use the minimum and maximum of `year` as the start and end year, with a message if `year` has gaps.
+- `fars_vars()` supports multiple years and returns a `year` column.
+- `get_fars_cases()` supports one year for each case number, and `get_fars_crashes(details = TRUE)` now works for multiple years by using the case year for each crash.
+- `get_fars_zip()` and `get_crss_zip()` support multiple years and return a list (or vector of file paths) named by year.
+- `format_crashes()`, `get_crss_zip()`, `get_fars()`, `get_fars_cases()`, `get_fars_crash_list()`, `get_fars_crash_persons()`, `get_fars_crash_vehicles()`, `get_fars_crashes()`, `get_fars_summary()`, `get_fars_year()`, and `get_fars_zip()` gain a `labels` argument. When `TRUE` (the default), each column with a matching variable in `fars_vars_labels` gets a `"label"` attribute, which is shown by `View()` and used by packages such as gt and gtsummary. Where a variable appears in more than one FARS data file, the label for the table being read is used.
+- Variable labels now prefer labels for current variables over discontinued ones, match names case-insensitively when there is no exact match (e.g. `CASEYEAR`), label `…NAME` columns from their coded variable (e.g. `BODY_TYPNAME` from `BODY_TYP`), and label nested data frames in list columns returned by `get_fars_cases()`.
+- `format_crashes()` now reorders columns, converts coordinate and count columns, and appends `date`, `time`, and `datetime` columns as documented. Previously, a faulty check skipped this step, so `get_fars_crashes()`, `get_fars_crash_list()`, and `get_fars_summary()` returned unformatted data. Column names are kept as returned by the API, and columns not found in `fars_vars_labels` are kept at the end.
+- `get_fars()` now works with `api = "zip"` when `format` is left at its default ("json" is treated as "csv").
+- `get_fars_year()` now supports the "RACE" (2019 onwards) and "TRAILERVINDERIVED" (2016 onwards) tables.
+- `get_fars_year()` now sends the same browser headers as other API requests when reading CSV data or downloading a file (`download = TRUE`), and returns the downloaded file path invisibly.
+- `get_fars_year()` returns the data with a warning when `geometry = TRUE` and the table has no coordinate columns, instead of downloading a file.
 
 # crashapi 0.1.2
 

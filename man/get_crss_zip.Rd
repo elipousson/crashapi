@@ -5,17 +5,20 @@
 \title{Download CRSS data files as zipped CSV or SAS files}
 \usage{
 get_crss_zip(
-  year = 2023,
+  year = getOption("crashapi.year", 2024),
   format = "csv",
   path = NULL,
   aux = FALSE,
   read = TRUE,
   geometry = FALSE,
-  overwrite = FALSE
+  overwrite = FALSE,
+  labels = TRUE
 )
 }
 \arguments{
-\item{year}{Year of data from 2016 to 2023, Default: 2023}
+\item{year}{One or more years of data from 2016 to 2024. Each year is
+downloaded separately and, if \code{read = TRUE}, returned as a list named by
+year. Defaults to \code{getOption("crashapi.year", 2024)}.}
 
 \item{format}{Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
 unzip and geo options are only supported if format is "csv".}
@@ -32,12 +35,18 @@ list of tables with each list item corresponding to one CSV file.}
 
 \item{overwrite}{If \code{FALSE}, abort if file exists at the provided path. If
 \code{TRUE}, overwrite file.}
+
+\item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
+with a matching variable in \link{fars_vars_labels}. Labels are taken from the
+FARS Analytical User's Manual so variables only used in CRSS are not
+labelled.}
 }
 \value{
 Downloads zip file with CSV or SAS tables and returns the zip file
-path invisibly or returns a list of data frames (if geo is \code{FALSE}), or
-returns a list of data frames with the accident table converted to a sf
-object.
+path invisibly if \code{read = FALSE}, or a list of data frames with one item
+for each table (with the accident table converted to an sf object if
+\code{geometry = TRUE}). If more than one year is provided, returns a named
+vector of file paths or a list of lists named by year.
 }
 \description{
 This function is similar to \code{\link[=get_fars_zip]{get_fars_zip()}} to download files directly from

@@ -8,6 +8,16 @@
 \description{
 Get Fatality Analysis Reporting System (FARS) data with the FARS API from the U.S. National Highway Traffic Safety Administration (NHTSA).
 }
+\section{Package options}{
+
+\itemize{
+\item \code{crashapi.year}: Default year used by \code{\link[=get_fars]{get_fars()}}, \code{\link[=get_fars_zip]{get_fars_zip()}},
+\code{\link[=get_crss_zip]{get_crss_zip()}}, \code{\link[=fars_vars]{fars_vars()}}, and related functions. Defaults to 2024,
+the most recent year of FARS data supported by the package. Set with
+\code{options(crashapi.year = 2022)}.
+}
+}
+
 \seealso{
 Useful links:
 \itemize{
@@ -19,6 +29,11 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Eli Pousson \email{eli.pousson@gmail.com} (\href{https://orcid.org/0000-0001-8280-1706}{ORCID})
+
+Authors:
+\itemize{
+  \item Eli Pousson \email{eli.pousson@gmail.com} (\href{https://orcid.org/0000-0001-8280-1706}{ORCID})
+}
 
 Other contributors:
 \itemize{

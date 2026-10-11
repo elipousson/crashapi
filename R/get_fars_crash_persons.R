@@ -5,8 +5,9 @@
 #'
 #' @rdname get_fars_crash_persons
 #' @inheritParams get_fars
-#' @param year numeric vector. Year or range with start and end year. 2010 to
-#'   2022 supported.
+#' @param year numeric vector. One or more years from 2010 to 2024. The minimum
+#'   and maximum values are used as the start and end year. Defaults to
+#'   `getOption("crashapi.year", 2024)`.
 #' @param state Required. State name, abbreviation, or FIPS number.
 #' @param age numeric
 #' @param sex Options "m", "f", "male", "female", "unknown", "not reported."
@@ -18,18 +19,17 @@
 #' @export
 #' @importFrom glue glue
 get_fars_crash_persons <- function(
-  year = NULL,
-  start_year,
-  end_year = NULL,
   state,
-  age = NULL,
-  sex = NULL,
   seat,
   injury,
+  year = getOption("crashapi.year", 2024),
+  age = NULL,
+  sex = NULL,
   occupants = TRUE,
-  nonoccupants = TRUE
+  nonoccupants = TRUE,
+  labels = TRUE
 ) {
-  year <- validate_year(year, start_year = start_year, end_year = end_year)
+  year <- year_span(validate_year(year))
 
   if (is.character(seat)) {
     front <- grepl("front", seat)
@@ -73,18 +73,24 @@ get_fars_crash_persons <- function(
     is.numeric(injury)
   )
 
-  read_crashapi(
+  crash_df <- read_crashapi(
     data = "crashes",
     type = "GetCrashesByPerson",
     age = as.integer(age),
     sex = sex,
     seatPos = as.integer(seat),
     injurySeverity = as.integer(injury),
-    fromCaseYear = min(year),
-    toCaseYear = max(year),
+    fromCaseYear = year[[1]],
+    toCaseYear = year[[2]],
     state = lookup_fips(state),
     includeOccupants = tolower(occupants),
     includeNonOccupants = tolower(nonoccupants),
     format = "json"
   )
+
+  if (!isTRUE(labels)) {
+    return(crash_df)
+  }
+
+  label_fars_vars(crash_df)
 }

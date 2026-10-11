@@ -5,40 +5,41 @@
 \title{Get Crashes By Occupant}
 \usage{
 get_fars_crash_persons(
-  year = NULL,
-  start_year,
-  end_year = NULL,
   state,
-  age = NULL,
-  sex = NULL,
   seat,
   injury,
+  year = getOption("crashapi.year", 2024),
+  age = NULL,
+  sex = NULL,
   occupants = TRUE,
-  nonoccupants = TRUE
+  nonoccupants = TRUE,
+  labels = TRUE
 )
 }
 \arguments{
-\item{year}{numeric vector. Year or range with start and end year. 2010 to
-2022 supported.}
-
-\item{start_year}{Start year for crash reports.}
-
-\item{end_year}{End year for crash reports.}
-
 \item{state}{Required. State name, abbreviation, or FIPS number.}
-
-\item{age}{numeric}
-
-\item{sex}{Options "m", "f", "male", "female", "unknown", "not reported."}
 
 \item{seat}{Seat position}
 
 \item{injury}{Options "unknown", "not reported", "died prior", "injured",
 "fatal", "suspected serious", "suspected minor", "possible", "no apparent"}
 
+\item{year}{numeric vector. One or more years from 2010 to 2024. The minimum
+and maximum values are used as the start and end year. Defaults to
+\code{getOption("crashapi.year", 2024)}.}
+
+\item{age}{numeric}
+
+\item{sex}{Options "m", "f", "male", "female", "unknown", "not reported."}
+
 \item{occupants}{Include vehicle occupants in query; defaults to \code{TRUE}}
 
 \item{nonoccupants}{Include non-occupants in query; defaults to \code{TRUE}}
+
+\item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
+with a variable label from \link{fars_vars_labels}. Labels are shown by
+\code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt and
+gtsummary.}
 }
 \description{
 This function returns a list of fatal crashes by occupant that have occurred

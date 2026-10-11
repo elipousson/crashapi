@@ -19,13 +19,8 @@ utils::globalVariables(c(
   "TWAY_ID2",
   "VE_FORMS",
   "abb",
-  "day",
   "get_area_crashes",
-  "hour",
-  "minute",
-  "month",
   "name",
-  "st_case",
   "state_abb",
   "statewide_yn",
   "time",
@@ -44,6 +39,8 @@ utils::globalVariables(c(
 #' @param format Format to return, Default: 'json'
 #' @param results If `FALSE`, return formatted url, Default: `TRUE`
 #' @param ... Additional parameters used in template (varies by type).
+#' @param cookie_file File name passed to [tempfile()] for the temporary cookie
+#'   file used to preserve cookies between requests.
 #' @inheritParams rlang::args_error_context
 #' @return Data frame with requested data or a formatted url (if `results = FALSE`)
 #' @export
@@ -91,6 +88,11 @@ read_crashapi <- function(
   if (!results) {
     return(request[["url"]])
   }
+
+  request <- httr2::req_timeout(
+    req = request,
+    seconds = 180
+  )
 
   # FIXME: Implement a way of dealing with alternate formats
   data <- httr2::resp_body_json(
@@ -140,25 +142,18 @@ req_crashapi_headers <- function(
     httr2::req_cookie_preserve(tempfile(cookie_file))
 }
 
-#' Validate start and end year
+#' Validate one or more years
 #' @noRd
 validate_year <- function(
   year,
   year_range = c(2010, 2024),
-  start_year = NULL,
-  end_year = NULL,
   call = caller_env()
 ) {
-  if (is.null(year)) {
-    if (is.null(start_year) && is.null(end_year)) {
-      cli_abort(
-        "A {.arg year}, {.arg start_year}, or
-        {.arg end_year} must be provided to download FARS data.",
-        call = call
-      )
-    }
-
-    year <- c(start_year, end_year)
+  if (is.null(year) || length(year) == 0) {
+    cli_abort(
+      "{.arg year} must be provided to download FARS data.",
+      call = call
+    )
   }
 
   year <- as.integer(year)
@@ -185,6 +180,27 @@ validate_year <- function(
   }
 
   year
+}
+
+#' Get the start and end year for API endpoints that take a year range
+#'
+#' Informs the user if `year` has gaps since the API returns all years between
+#' the minimum and maximum year.
+#' @noRd
+year_span <- function(year) {
+  span <- range(year)
+  missing_year <- setdiff(seq(span[[1]], span[[2]]), year)
+
+  if (length(missing_year) > 0) {
+    cli::cli_inform(
+      c(
+        "i" = "Requesting data for all years from {span[[1]]} to {span[[2]]},
+        including {.val {missing_year}} not in {.arg year}."
+      )
+    )
+  }
+
+  span
 }
 
 #' Convert data frame to sf object
@@ -288,97 +304,210 @@ lookup_fips <- function(
 }
 
 #' @noRd
-#' @importFrom rlang has_name
 rename_fars_vars <- function(x, reorder = TRUE, rename = TRUE) {
-  # Reorder columns to match analytical manual order
   x_vars <- fars_vars_labels[fars_vars_labels[["name"]] %in% names(x), ]
+  # Some variables are listed for multiple data files so keep the first
+  x_vars <- x_vars[!duplicated(x_vars[["name"]]), ]
 
-  if (!all(rlang::has_name(x, x_vars))) {
+  if (nrow(x_vars) == 0) {
     return(x)
   }
 
   x_name <- x_vars[["name"]]
 
   if (isTRUE(reorder)) {
-    x <- x[, match(x_name, colnames(x))]
+    # Reorder columns to match analytical manual order and keep any
+    # unrecognized columns at the end
+    x <- x[, c(x_name, setdiff(names(x), x_name)), drop = FALSE]
   }
 
   if (!isTRUE(rename)) {
     return(x)
   }
 
-  x_name <- rlang::set_names(x_vars[["name"]], x_vars[["nm"]])
+  dplyr::rename(x, !!!rlang::set_names(x_name, x_vars[["nm"]]))
+}
 
-  dplyr::rename_with(
-    x,
-    ~ names(x_name)[which(x_name == .x)],
-    .cols = dplyr::any_of(as.character(x_name))
+# Nested list columns returned by the CrashAPI GetCaseDetails endpoint and the
+# corresponding FARS data file
+fars_list_cols <- c(
+  "CEvents" = "CEVENT",
+  "Vehicles" = "VEHICLE",
+  "Damages" = "DAMAGE",
+  "Distractions" = "DISTRACT",
+  "DrImpairs" = "DRIMPAIR",
+  "DriverRFs" = "DRIVERRF",
+  "Factors" = "FACTOR",
+  "Maneuvers" = "MANEUVER",
+  "Persons" = "PERSON",
+  "OCCDrugs" = "DRUGS",
+  "PersonRFs" = "PERSONRF",
+  "Races" = "RACE",
+  "TrailerVinDeriveds" = "TRAILERVINDERIVED",
+  "VEvents" = "VEVENT",
+  "VehicleSFs" = "VEHICLESF",
+  "VinDecodes" = "VINDECODE",
+  "VinDeriveds" = "VINDERIVED",
+  "Violations" = "VIOLATN",
+  "Visions" = "VISION",
+  "Vsoes" = "VSOE",
+  "NPersons" = "PERSON",
+  "NmCrashes" = "NMCRASH",
+  "NmImpairs" = "NMIMPAIR",
+  "NmPriors" = "NMPRIOR",
+  "SafetyEQs" = "SAFETYEQ",
+  "PbTypes" = "PBTYPE"
+)
+
+#' Add variable labels from fars_vars_labels as column attributes
+#'
+#' Variable names are matched exactly and then, for any names not found in
+#' fars_vars_labels, case-insensitively (e.g. CASEYEAR and CaseYear). When a
+#' variable is listed more than once, labels for the matching data file are
+#' preferred, then labels for variables that are not discontinued. Columns
+#' with decoded values (e.g. BODY_TYPNAME) without their own label use the
+#' label for the coded variable. Nested data frames in list columns are
+#' labelled using the data file from fars_list_cols.
+#' @noRd
+label_fars_vars <- function(x, data_file = NULL) {
+  for (nm in intersect(names(x), names(fars_list_cols))) {
+    if (is.list(x[[nm]]) && !is.data.frame(x[[nm]])) {
+      x[[nm]] <- lapply(x[[nm]], function(el) {
+        if (!is.data.frame(el)) {
+          return(el)
+        }
+        label_fars_vars(el, data_file = fars_list_cols[[nm]])
+      })
+    }
+  }
+
+  vars <- fars_vars_labels[!is.na(fars_vars_labels[["name"]]), ]
+
+  # Prefer labels for the matching data file, then current variables
+  vars <- vars[
+    order(
+      !(vars[["data_file"]] %in% data_file),
+      vars[["discontinued"]] %in% TRUE
+    ),
+  ]
+
+  exact <- vars[!duplicated(vars[["name"]]), ]
+  exact_labels <- rlang::set_names(exact[["label"]], exact[["name"]])
+
+  upper <- vars[!duplicated(toupper(vars[["name"]])), ]
+  upper_labels <- rlang::set_names(upper[["label"]], toupper(upper[["name"]]))
+
+  lookup_label <- function(name) {
+    if (name %in% names(exact_labels)) {
+      return(exact_labels[[name]])
+    }
+
+    upper_labels[toupper(name)][[1]]
+  }
+
+  x_labels <- vapply(
+    names(x),
+    function(name) {
+      label <- lookup_label(name)
+
+      if (is.na(label) && grepl("NAME$", name, ignore.case = TRUE)) {
+        code_label <- lookup_label(sub("NAME$", "", name, ignore.case = TRUE))
+
+        if (!is.na(code_label)) {
+          label <- paste(code_label, "(name)")
+        }
+      }
+
+      label
+    },
+    character(1)
   )
+
+  for (nm in names(x_labels)[!is.na(x_labels)]) {
+    attr(x[[nm]], "label") <- x_labels[[nm]]
+  }
+
+  x
 }
 
 #' Format crash data
 #'
 #' Reorder columns to match the order documented in Fatality Analysis Reporting
-#' System (FARS) Analytical User's Manual, 1975-2019 and append derived columns
-#' for date, time, and datetime.
+#' System (FARS) Analytical User's Manual, 1975-2019, convert coordinate and
+#' count columns to numeric and integer values, and append derived columns for
+#' date, time, and datetime. Column names are kept as returned by the API.
 #'
 #' @param x Data frame with crash data.
 #' @param details If `TRUE`, append date, time, datetime columns to formatted
 #'   crash data; defaults to TRUE
+#' @param labels If `TRUE` (default), add a `"label"` attribute to each column
+#'   with a variable label from [fars_vars_labels]. Labels are shown by
+#'   [View()] in RStudio and Positron and used by packages such as gt and
+#'   gtsummary.
 #' @export
-#' @importFrom janitor clean_names
 #' @importFrom dplyr mutate
+#' @importFrom rlang .data
 #' @importFrom stringr str_pad
-format_crashes <- function(x, details = TRUE) {
-  # Reorder and clean column names
-  crash_df <- rename_fars_vars(x)
+format_crashes <- function(x, details = TRUE, labels = TRUE) {
+  # Reorder columns but keep the API column names
+  crash_df <- rename_fars_vars(x, rename = FALSE)
 
   crash_df <-
     dplyr::mutate(
       crash_df,
       dplyr::across(
-        dplyr::any_of(c("latitude", "longitud")),
+        dplyr::any_of(c("LATITUDE", "LONGITUD")),
         ~ as.numeric(.x)
       ),
       dplyr::across(
         dplyr::any_of(c(
-          "case_year",
-          "totalvehicles",
-          "total_vehicles",
-          "ve_forms",
-          "fatals",
-          "peds",
-          "persons"
+          "CaseYear",
+          "TOTALVEHICLES",
+          "VE_FORMS",
+          "FATALS",
+          "PEDS",
+          "PERSONS"
         )),
         ~ as.integer(.x)
       )
     )
 
-  if (!isTRUE(details)) {
+  date_cols <- c("ST_CASE", "YEAR", "MONTH", "DAY", "HOUR", "MINUTE")
+
+  if (isTRUE(details) && all(date_cols %in% names(crash_df))) {
+    pad_hm <- function(x) {
+      stringr::str_pad(x, width = 2, pad = "0")
+    }
+
+    # Append date/time columns
+    crash_df <- dplyr::mutate(
+      crash_df,
+      date = paste(
+        .data[["YEAR"]],
+        .data[["MONTH"]],
+        .data[["DAY"]],
+        sep = "-"
+      ),
+      time = paste(
+        pad_hm(.data[["HOUR"]]),
+        pad_hm(.data[["MINUTE"]]),
+        sep = ":"
+      ),
+      datetime = as.POSIXct(
+        paste(date, time),
+        format = "%Y-%m-%d %H:%M",
+        tz = "UTC"
+      ),
+      date = as.Date(date),
+      .after = "ST_CASE"
+    )
+  }
+
+  if (!isTRUE(labels)) {
     return(crash_df)
   }
 
-  pad_hm <- function(x) {
-    stringr::str_pad(x, width = 2, pad = "0")
-  }
-
-  if (!all(c("year", "month", "day") %in% names(crash_df))) {
-    return(crash_df)
-  }
-
-  # Append date/time columns
-  dplyr::mutate(
-    crash_df,
-    date = paste(year, month, day, sep = "-"),
-    time = paste(pad_hm(hour), pad_hm(minute), sep = ":"),
-    datetime = as.POSIXct(
-      paste(date, time),
-      format = "%Y-%m-%d %H:%M",
-      tz = "UTC"
-    ),
-    date = as.Date(date),
-    .after = st_case
-  )
+  label_fars_vars(crash_df)
 }
 
 #' Helper function to return date added or updated for package data for documentation

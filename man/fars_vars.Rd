@@ -6,10 +6,18 @@
 \title{Get variables and variable attributes for the Fatality Analysis
 Reporting System (FARS) API}
 \usage{
-fars_vars(year, var = NULL, make = NULL, model = NULL)
+fars_vars(
+  year = getOption("crashapi.year", 2024),
+  var = NULL,
+  make = NULL,
+  model = NULL
+)
 }
 \arguments{
-\item{year}{Case year. Year must be between 2010 and 2019.}
+\item{year}{One or more case years between 2010 and 2024. If more than one
+year is provided, the results for each year are combined. Ignored if \code{var}
+is "bodytype" since body type attributes are not available by year.
+Defaults to \code{getOption("crashapi.year", 2024)}.}
 
 \item{var}{Default NULL. Supported values are "make", "model", and
 "bodytype". Using the var parameter returns variable attributes for the
@@ -24,12 +32,16 @@ selected year, e.g. \code{fars_vars(year = 2010, var = "make")}.}
 "bodytype". Get a list of model ID numbers using the "model" var for the
 selected year with a valid make ID number, e.g. \code{fars_vars(year = 2010, var = "model", make = 37)}}
 }
+\value{
+A data frame with a \code{year} column (except when \code{var} is
+"bodytype").
+}
 \description{
-By default, this function returns the returns the list of
-variables for the data year specified. If \code{vars} is "make", "model", or
-"bodytype", the function returns #'   list of variable attributes for the
-specified variable name or attributes for make model and body type
-specified in the FARS dataset.
+By default, this function returns the list of variables for
+the data year specified. If \code{var} is "make", "model", or "bodytype", the
+function returns a list of variable attributes for the specified variable
+name or attributes for make model and body type specified in the FARS
+dataset.
 }
 \examples{
 

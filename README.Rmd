@@ -54,7 +54,7 @@ Most of these APIs support XML, JSV, CSV, and JSON output formats. This package 
 
 For reference, this package also includes a list of terms and NHTSA technical definitions in `fars_terms` and a list of variable labels in `fars_vars_labels`.
 
-The FARS API currently provides access to data from 2010 to 2022. The [NHTSA website](https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx) also provides additional information on the release data and version status for the FARS data files available through the API:
+The FARS API currently provides access to data from 2010 to 2024. The [NHTSA website](https://www-fars.nhtsa.dot.gov/Help/helplinks.aspx) also provides additional information on the release data and version status for the FARS data files available through the API:
 
 | Data Year | File Version | Release Date      |
 |-----------|--------------|-------------------|
@@ -69,13 +69,20 @@ The FARS API currently provides access to data from 2010 to 2022. The [NHTSA web
 | 2018      | Final        | June 24, 2021     |
 | 2019      | Final        | March 2, 2022     |
 | 2020      | Final        | April 3, 2023     |
-| 2021      | Final        | August 19, 2024   |
-| 2022      | Annual       | August 19, 2024   |
+| 2021      | Final        | April 1, 2024     |
+| 2022      | Final        | April 8, 2025     |
+| 2023      | Final        | April 1, 2026     |
+| 2024      | Annual       | April 1, 2026     |
 
+### Changes to the sex variable
+
+According to the [Data Index terminations tracker](https://dataindex.us/terminations-tracker), in February 2025 NHTSA renamed the person-level gender variable to "Sex" and recoded its third response value to "Not Reported", removing the non-binary category from published FARS data files. The [FARS 2022 release notes](https://static.nhtsa.gov/nhtsa/downloads/FARS/2022/FARS2022%20Release%20Notes.txt) confirm that on February 11, 2025, NHTSA replaced attribute 3 with attribute 8 (Not Reported), updating 22 records in the PERSON table and 1 record in the PBTYPE table. See [OMB ICR 202503-2127-008](https://www.reginfo.gov/public/do/PRAViewICR?ref_nbr=202503-2127-008) and the Williams Institute report [Removal of SOGI from Federal Data Collections (Feb 2026)](https://williamsinstitute.law.ucla.edu/wp-content/uploads/Federal-SOGI-Data-Collection-Feb-2026.pdf) for more information.
+
+Data now returned by the CrashAPI codes `SEX` as 1 (Male), 2 (Female), 8 (Not Reported), or 9 (Reported as Unknown) for all years, so people previously recorded as non-binary now appear as "Not Reported".
 
 ### Additional data access functionality
 
-The `get_fars_zip()` function can be used to access FARS data files from 1975 to 2020 that that are not available via the API but are available for download on through [the NHTSA File Downloads site](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/) as zipped CSV or SAS files (not available through the NHTSA FARS API). This site also provides extensive technical documentation on coding and use of the FARS data files.
+The `get_fars_zip()` function can be used to access FARS data files from 1975 to 2024 that are not available via the API but are available for download on through [the NHTSA File Downloads site](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/) as zipped CSV or SAS files (not available through the NHTSA FARS API). This site also provides extensive technical documentation on coding and use of the FARS data files.
 
 Earlier data along with data from the the [General Estimates System](https://www.nhtsa.gov/national-automotive-sampling-system-nass/nass-general-estimates-system) (GES) / [Crash Report Sampling System](https://www.nhtsa.gov/crash-data-systems/crash-report-sampling-system-crss) (CRSS) is also available through the [Fatality and Injury Reporting System Tool](https://cdan.dot.gov/query) (FIRST).
 
@@ -94,7 +101,7 @@ For example, you can use the `get_fars()` access state-level summary data on cra
 # Get summary crash count and fatality count data for Maryland from 2010 to 2019
 md_summary <-
   get_fars(
-    year = c(2010, 2021),
+    year = 2010:2021,
     state = "MD",
     api = "summary count"
   )
@@ -110,7 +117,7 @@ You can download crash data and set geometry to TRUE optionally convert the data
 ```{r map_fars_crashes}
 crashes_sf <-
   get_fars(
-    year = c(2018, 2021),
+    year = 2018:2021,
     state = "NC",
     county = "Wake County",
     geometry = TRUE
@@ -123,7 +130,8 @@ wake_co <- sf::st_transform(nc[nc$NAME == "Wake", ], 4326)
 ggplot() +
   geom_sf(
     data = wake_co,
-    fill = NA, color = "black"
+    fill = NA,
+    color = "black"
   ) +
   geom_sf(
     data = sf::st_crop(crashes_sf, wake_co),

@@ -11,8 +11,8 @@
 \title{Get Fatality Analysis Reporting System (FARS) data with the FARS API}
 \usage{
 get_fars(
-  year = 2024,
   state,
+  year = getOption("crashapi.year", 2024),
   county = NULL,
   api = c("crashes", "cases", "state list", "summary count", "year dataset", "zip"),
   type = NULL,
@@ -24,64 +24,67 @@ get_fars(
   format = "json",
   pr = FALSE,
   path = NULL,
-  download = FALSE
+  download = FALSE,
+  labels = TRUE
 )
 
 get_fars_crashes(
-  year = 2024,
-  start_year,
-  end_year = NULL,
   state,
   county,
+  year = getOption("crashapi.year", 2024),
   details = FALSE,
   geometry = FALSE,
-  crs = NULL
+  crs = NULL,
+  labels = TRUE
 )
 
 get_fars_cases(
-  year = 2024,
   state,
   cases,
+  year = getOption("crashapi.year", 2024),
   details = FALSE,
   geometry = FALSE,
-  crs = NULL
+  crs = NULL,
+  labels = TRUE
 )
 
 get_fars_crash_list(
-  year = 2024,
-  start_year = NULL,
-  end_year = NULL,
   state,
-  vehicles = c(1, 50)
+  year = getOption("crashapi.year", 2024),
+  vehicles = c(1, 50),
+  labels = TRUE
 )
 
-get_fars_summary(year = 2024, start_year, end_year = NULL, state)
+get_fars_summary(state, year = getOption("crashapi.year", 2024), labels = TRUE)
 
 get_fars_year(
-  year = 2024,
-  type = "accident",
   state,
+  year = getOption("crashapi.year", 2024),
+  type = "accident",
   format = "json",
   path = NULL,
   geometry = FALSE,
   crs = NULL,
   download = FALSE,
+  labels = TRUE,
   call = caller_env()
 )
 }
 \arguments{
-\item{year}{numeric vector. Year or range with start and end year. If \code{api}
-is "details", "year dataset", or "zip" (or using the
-\code{get_fars_crash_details}, \code{get_fars_year}, or \code{get_fars_zip} functions), a
-single year is required. All other \code{api} options support a range with the
-minimum value is used as a start year and the maximum value used as a end
-year. Most \code{api} options support the years from 2010 through the most
-recent year of release. "year dataset" only supports 2010 to 2017 and "zip"
-supports 1975 to 2023. \code{start_year} and \code{end_year} are ignored if \code{year} is
-not \code{NULL}.}
-
 \item{state}{Required. State name, abbreviation, or FIPS number.
 \code{get_fars_crash_list} supports multiple states.}
+
+\item{year}{numeric vector. One or more years. For \code{get_fars_crashes},
+\code{get_fars_crash_list}, \code{get_fars_summary}, and \code{get_fars_year} (and the
+corresponding \code{api} values), the minimum and maximum values are used as
+the start and end year, so \code{year = 2015:2020} and \code{year = c(2015, 2020)}
+both request data from 2015 through 2020 (with a message if \code{year} has
+gaps). For \code{get_fars_cases}, \code{year} must be a single year or one year for
+each case in \code{cases}. For \code{get_fars_zip}, each year is downloaded
+separately. Most \code{api} options support the years from 2010 through 2024
+and "zip" supports 1975 to 2024. Defaults to
+\code{getOption("crashapi.year", 2024)} so the default year can be set for all
+functions with \code{options(crashapi.year = 2022)}.}
 
 \item{county}{County name or FIPS number. Required for \code{get_fars_crashes}.}
 
@@ -91,10 +94,13 @@ not \code{NULL}.}
 
 \item{type}{Name of the dataset or data file to download when using the "year
 dataset" api or \code{get_fars_year}. Supported values include "ACCIDENT",
-"CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "FACTOR", "MANEUVER",
-"NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE", "PERSON",
-"SAFETYEQ", "VEHICLE", "VEVENT VINDECODE", "VINDERIVED", "VIOLATION",
-"VISION", and "VSOE". Lowercase or mixed case values are permitted.}
+"CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "DRUGS", "FACTOR",
+"MANEUVER", "NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE",
+"PERSON", "SAFETYEQ", "VEHICLE", "VEVENT", "VINDECODE", "VINDERIVED",
+"VIOLATION", "VISION", and "VSOE". "TRAILERVINDERIVED" is supported for
+2016 onwards, "NMDISTRACT" and "RACE" for 2019 onwards, and "CRASHRF",
+"DRIVERRF", "PERSONRF", "PVEHICLESF", "VEHICLESF", and "WEATHER" for
+2020 onwards. Lowercase or mixed case values are permitted.}
 
 \item{details}{Type of detailed crash data to return (either "events" or
 "vehicles"). If \code{TRUE} for \code{get_fars} or \code{get_fars_crashes}, detailed case
@@ -117,7 +123,8 @@ vehicles, e.g. c(1, 2) for minimum of 1 vehicle and maximum of 2. Required
 for \code{get_fars_crash_list}.}
 
 \item{format}{Default "json". "csv" is supported when using the "year
-dataset" api. "sas" is supporting for the "zip" api.}
+dataset" api. "csv" and "sas" are supported for the "zip" api ("json" is
+treated as "csv").}
 
 \item{pr}{logical. If \code{TRUE}, download zip file with FARS data for Puerto
 Rico. No Puerto Rico data available for years 1975-1977. Default: \code{FALSE}
@@ -128,9 +135,15 @@ for \code{get_fars_zip} only.}
 \item{download}{logical. If \code{TRUE} and the \code{api} is "year dataset" or "zip",
 download the data to a file. Default \code{FALSE}.}
 
-\item{start_year}{Start year for crash reports.}
+\item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
+with a variable label from \link{fars_vars_labels}. Labels are shown by
+\code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt and
+gtsummary.}
 
-\item{end_year}{End year for crash reports.}
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \description{
 This function provides a convenient interface for accessing FARS

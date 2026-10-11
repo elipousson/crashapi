@@ -5,27 +5,23 @@
 \title{Get Crashes By Vehicle}
 \usage{
 get_fars_crash_vehicles(
-  year = NULL,
-  start_year,
-  end_year = NULL,
   state,
+  year = getOption("crashapi.year", 2024),
   make = NULL,
   model = NULL,
   model_year = 2010,
-  body_type = NULL
+  body_type = NULL,
+  labels = TRUE
 )
 }
 \arguments{
-\item{year}{numeric vector. Year or range with start and end year. 2010 to
-2022 supported.}
-
-\item{start_year}{Start year for crash reports.}
-
-\item{end_year}{End year for crash reports.}
-
 \item{state}{Required. State name, abbreviation, or FIPS number.}
 
-\item{make}{Make name or ID, Required. The start_year is used to return a
+\item{year}{numeric vector. One or more years from 2010 to 2024. The minimum
+and maximum values are used as the start and end year. Defaults to
+\code{getOption("crashapi.year", 2024)}.}
+
+\item{make}{Make name or ID, Required. The earliest year in \code{year} is used to return a
 list of support make options. Default: \code{NULL}}
 
 \item{model}{Model name or ID, Optional. Default: \code{NULL}}
@@ -34,6 +30,11 @@ list of support make options. Default: \code{NULL}}
 
 \item{body_type}{Body type, Optional. \code{model} must be provided to use
 body_type parameter. Default: \code{NULL}}
+
+\item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
+with a variable label from \link{fars_vars_labels}. Labels are shown by
+\code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt and
+gtsummary.}
 }
 \description{
 This function returns a list of fatal crashes by vehicle type

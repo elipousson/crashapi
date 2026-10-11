@@ -5,7 +5,7 @@
 \alias{fars_vars_labels}
 \title{FARS variable names and labels}
 \format{
-A data frame with 498 rows and 14 variables:
+A data frame with 504 rows and 15 variables:
 \describe{
 \item{\code{name}}{character Variable name}
 \item{\code{label}}{character Variable label}
@@ -33,6 +33,10 @@ Analysis Reporting System (FARS) Analytical User's Manual, 1975-2019,
 documentation of the SAS format data files.
 }
 \details{
+The source data is installed with the package as a CSV file
+(\code{system.file("extdata", "fars_vars_labels.csv", package = "crashapi")})
+with column definitions in \code{fars_vars_labels_definitions.csv}.
+
 Added: January 31 2022
 Updated: March 27 2022
 }
