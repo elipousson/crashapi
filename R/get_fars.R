@@ -36,6 +36,10 @@
 #' @param geometry If `TRUE`, return an sf object. Only supported for tables
 #'   with `LATITUDE` and `LONGITUD` columns (e.g. accident).
 #' @param crs Coordinate reference system to use if `geometry` is `TRUE`.
+#' @param decode If `TRUE` (default), add columns with decoded values (e.g.
+#'   `INJ_SEVNAME` for `INJ_SEV`) to data from zipped data files using
+#'   [decode_fars()]. Zipped CSV files from 2015 onwards (and data from the
+#'   CrashAPI) already include these `…NAME` columns.
 #' @inheritParams format_crashes
 #' @returns A data frame, or an sf object if `geometry = TRUE`. If tables for
 #'   multiple years from zipped data files can't be combined, a list of data
@@ -61,6 +65,7 @@ get_fars <- function(
   ...,
   geometry = FALSE,
   crs = NULL,
+  decode = TRUE,
   labels = TRUE
 ) {
   source <- match.arg(source)
@@ -127,11 +132,13 @@ get_fars <- function(
     )
   }
 
+  decode <- isTRUE(decode) && source == "zip"
+
   if (is.data.frame(fars_data)) {
-    return(finish_fars_table(fars_data, type, geometry, crs, labels))
+    return(finish_fars_table(fars_data, type, geometry, crs, labels, decode))
   }
 
-  lapply(fars_data, finish_fars_table, type, geometry, crs, labels)
+  lapply(fars_data, finish_fars_table, type, geometry, crs, labels, decode)
 }
 
 #' Get a FARS data table for one or more states from the CrashAPI
@@ -296,7 +303,20 @@ filter_fars_county <- function(
 
 #' Add geometry and labels to a FARS data table
 #' @noRd
-finish_fars_table <- function(fars_df, type, geometry, crs, labels) {
+finish_fars_table <- function(
+  fars_df,
+  type,
+  geometry,
+  crs,
+  labels,
+  decode = FALSE
+) {
+  # Data from zipped data files has a CASEYEAR column added by
+  # get_fars_zip_table() so the value labels for each year can be used
+  if (decode && !is.null(fars_year_col(fars_df))) {
+    fars_df <- decode_fars(fars_df, table = type, source = "FARS")
+  }
+
   if (geometry) {
     coords <- c("LONGITUD", "LATITUDE")
 

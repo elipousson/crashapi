@@ -143,6 +143,10 @@ zip_csv_to_parquet <- function(
       show_col_types = FALSE
     )
 
+    # Some older CSV files include Latin-1 encoded text (e.g. MCARR_ID in
+    # 2015 vehicle data)
+    crash_df[] <- lapply(crash_df, fix_latin1)
+
     nanoparquet::write_parquet(crash_df, parquet_files[[i]])
   }
 
@@ -151,4 +155,20 @@ zip_csv_to_parquet <- function(
   }
 
   parquet_files
+}
+
+#' Convert character values that aren't valid UTF-8 from Latin-1
+#' @noRd
+fix_latin1 <- function(x) {
+  if (!is.character(x)) {
+    return(x)
+  }
+
+  invalid <- !is.na(x) & !validUTF8(x)
+
+  if (any(invalid)) {
+    x[invalid] <- iconv(x[invalid], from = "latin1", to = "UTF-8")
+  }
+
+  x
 }

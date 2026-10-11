@@ -13,6 +13,7 @@ get_fars(
   ...,
   geometry = FALSE,
   crs = NULL,
+  decode = TRUE,
   labels = TRUE
 )
 }
@@ -42,6 +43,11 @@ from zipped data files, e.g. \code{path}, \code{overwrite}, or \code{keep_files}
 with \code{LATITUDE} and \code{LONGITUD} columns (e.g. accident).}
 
 \item{crs}{Coordinate reference system to use if \code{geometry} is \code{TRUE}.}
+
+\item{decode}{If \code{TRUE} (default), add columns with decoded values (e.g.
+\code{INJ_SEVNAME} for \code{INJ_SEV}) to data from zipped data files using
+\code{\link[=decode_fars]{decode_fars()}}. Zipped CSV files from 2015 onwards (and data from the
+CrashAPI) already include these \verb{…NAME} columns.}
 
 \item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
 with a variable label from \link{fars_vars_labels}. Labels are shown by

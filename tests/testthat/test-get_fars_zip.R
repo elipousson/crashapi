@@ -183,3 +183,9 @@ test_that("get_fars_zip works", {
   expect_type(data, "list")
   expect_named(data, c("accident", "person", "vehicle"))
 })
+
+test_that("fix_latin1() converts text that isn't valid UTF-8 from Latin-1", {
+  x <- c("Caf\xe9", "Plain", NA)
+  expect_identical(fix_latin1(x), c("Café", "Plain", NA))
+  expect_identical(fix_latin1(1:2), 1:2)
+})

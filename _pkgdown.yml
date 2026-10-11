@@ -6,8 +6,11 @@ reference:
   contents:
   - starts_with("get")
   - read_crashapi
-- title: Get variable definitions
-  contents: fars_vars
+- title: Get variable definitions and value labels
+  contents:
+  - fars_vars
+  - fars_value_labels
+  - decode_fars
 - title: Data formatting functions
   contents: starts_with("format")
 - title: Reference information
