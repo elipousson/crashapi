@@ -90,7 +90,9 @@ functions with \code{options(crashapi.year = 2022)}.}
 
 \item{api}{character. API function to use. Supported values include
 "crashes", "cases", "state list", "summary count", "year dataset", and
-"zip". Default: "crashes".}
+"zip". If \code{api} is not provided, it is "cases" if \code{cases} is provided,
+"state list" if \code{vehicles} is provided, "year dataset" if \code{type} is
+provided, "zip" if \code{pr} is \code{TRUE}, and "crashes" otherwise.}
 
 \item{type}{Name of the dataset or data file to download when using the "year
 dataset" api or \code{get_fars_year}. Supported values include "ACCIDENT",

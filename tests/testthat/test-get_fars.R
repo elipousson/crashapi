@@ -209,7 +209,7 @@ test_that("get_cases works", {
 test_that("get_cases errors", {
   expect_error(
     get_fars_cases(year = 2019, state = "MD", cases = "0"),
-    "subscript out of bounds"
+    "No case details found"
   )
   expect_error(get_fars_cases(year = 2019, state = "MD"))
 })
@@ -252,5 +252,49 @@ test_that("get_cases works", {
       geometry = TRUE
     ),
     "sf"
+  )
+})
+
+test_that("get_fars_cases() combines details for all cases", {
+  local_mocked_bindings(
+    read_crashapi = function(...) {
+      args <- list(...)
+      crash_df <- data.frame(ST_CASE = args$stateCase)
+      crash_df$CEvents <- list(
+        data.frame(ST_CASE = args$stateCase, EVENTNUM = 1:2)
+      )
+      list(CrashResultSet = crash_df)
+    }
+  )
+
+  events <- get_fars_cases(
+    state = "MD",
+    cases = c(1, 2),
+    year = 2020,
+    details = "events",
+    labels = FALSE
+  )
+  expect_identical(events$ST_CASE, c(1, 1, 2, 2))
+})
+
+test_that("get_fars_cases() errors if no case details are found", {
+  local_mocked_bindings(read_crashapi = function(...) NULL)
+
+  expect_snapshot(
+    get_fars_cases(state = "MD", cases = 1, year = 2020),
+    error = TRUE
+  )
+})
+
+test_that("get_fars() uses an explicit api over an inferred api", {
+  local_mocked_bindings(
+    get_fars_summary = function(...) "summary count",
+    get_fars_year = function(...) "year dataset"
+  )
+
+  expect_identical(get_fars("MD", type = "accident"), "year dataset")
+  expect_identical(
+    get_fars("MD", api = "summary count", type = "accident"),
+    "summary count"
   )
 })

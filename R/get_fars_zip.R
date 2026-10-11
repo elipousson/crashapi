@@ -85,6 +85,15 @@ get_fars_zip <- function(
   }
 
   format <- match.arg(format, c("csv", "sas"))
+
+  if (isTRUE(read) && format != "csv") {
+    cli_abort(
+      c(
+        "{.code read = TRUE} is only supported when {.code format = \"csv\"}.",
+        "i" = "Set {.code read = FALSE} to download SAS files without reading them."
+      )
+    )
+  }
   folder <- "National"
   scope <- "National"
 
@@ -183,8 +192,6 @@ get_fars_zip <- function(
       recursive = TRUE,
       full.names = TRUE
     )
-
-  stopifnot(format == "csv")
 
   rlang::check_installed("readr")
 
