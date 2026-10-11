@@ -32,10 +32,11 @@
 #' @param geometry Not supported for CRSS data, which does not include
 #'   coordinates. If `TRUE`, a warning is shown and the accident table is
 #'   returned as a data frame.
-#' @param labels If `TRUE` (default), add a `"label"` attribute to each column
-#'   with a matching variable in [fars_vars_labels]. Labels are taken from the
-#'   FARS Analytical User's Manual so variables only used in CRSS are not
-#'   labelled.
+#' @param var_labels How to add variable labels: "attribute" (default) adds a
+#'   `"label"` attribute to each column with a matching variable in
+#'   [fars_vars_labels] and "none" doesn't add variable labels. Labels are
+#'   taken from the FARS Analytical User's Manual so variables only used in CRSS
+#'   are not labelled.
 #' @inheritParams get_fars_zip
 #' @return If `read = TRUE`, a list of data frames with one item for each
 #'   table (with the accident table converted to an sf object if `geometry =
@@ -58,7 +59,7 @@ get_crss_zip <- function(
   geometry = FALSE,
   overwrite = FALSE,
   keep_files = FALSE,
-  labels = TRUE
+  var_labels = c("attribute", "none")
 ) {
   year <- validate_year(year = year, year_range = c(2016, 2024))
 
@@ -77,7 +78,7 @@ get_crss_zip <- function(
             geometry = geometry,
             overwrite = overwrite,
             keep_files = keep_files,
-            labels = labels
+            var_labels = var_labels
           )
         }
       ),
@@ -132,6 +133,6 @@ get_crss_zip <- function(
     geometry = geometry,
     overwrite = overwrite,
     keep_files = keep_files,
-    labels = labels
+    var_labels = var_labels
   )
 }

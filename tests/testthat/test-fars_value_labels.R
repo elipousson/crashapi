@@ -74,6 +74,59 @@ test_that("decode_fars() uses year if provided", {
   expect_snapshot(decode_fars(person, table = "person"), error = TRUE)
 })
 
+test_that("decode_fars() replaces codes with factors for categorical variables", {
+  person <- data.frame(
+    CASEYEAR = 2022,
+    INJ_SEV = c(4, 0),
+    INJ_SEVNAME = c("Fatal Injury (K)", "No Apparent Injury (O)"),
+    AGE = c(30, 998)
+  )
+
+  expect_snapshot(
+    out <- decode_fars(person, table = "person", decode = "replace")
+  )
+  expect_named(out, c("CASEYEAR", "INJ_SEV", "AGE"))
+  expect_s3_class(out$INJ_SEV, "factor")
+  expect_identical(
+    as.character(out$INJ_SEV),
+    c("Fatal Injury (K)", "No Apparent Injury (O)")
+  )
+  expect_identical(levels(out$INJ_SEV)[[1]], "No Apparent Injury (O)")
+  expect_identical(out$AGE, c(30, 998))
+})
+
+test_that("decode_fars() adds value labels with haven::labelled()", {
+  skip_if_not_installed("haven")
+  person <- data.frame(CASEYEAR = 2022, INJ_SEV = c(4, 0), AGE = c(30, 998))
+
+  out <- decode_fars(person, table = "person", decode = "labelled")
+  expect_s3_class(out$INJ_SEV, "haven_labelled")
+  expect_identical(
+    as.character(haven::as_factor(out$INJ_SEV)),
+    c("Fatal Injury (K)", "No Apparent Injury (O)")
+  )
+  # Only special codes are labelled for measures like AGE
+  age_labels <- attr(out$AGE, "labels")
+  expect_identical(unname(age_labels[names(age_labels) == "Not Reported"]), 998)
+  expect_identical(as.numeric(out$AGE), c(30, 998))
+
+  multi_year <- data.frame(CASEYEAR = c(1985, 2022), INJ_SEV = c(3, 3))
+  expect_snapshot(
+    out <- decode_fars(multi_year, table = "person", decode = "labelled")
+  )
+  expect_identical(
+    as.character(haven::as_factor(out$INJ_SEV)),
+    rep("Suspected Serious Injury (A)", 2)
+  )
+})
+
+test_that("var_labels must be a valid value", {
+  expect_snapshot(
+    format_crashes(data.frame(ST_CASE = 1), var_labels = "yes"),
+    error = TRUE
+  )
+})
+
 test_that("get_fars() decodes data from zipped data files", {
   path <- withr::local_tempdir()
   local_mocked_bindings(
@@ -87,15 +140,24 @@ test_that("get_fars() decodes data from zipped data files", {
     }
   )
 
-  out <- get_fars("MD", year = 1985, type = "person", labels = FALSE)
+  out <- get_fars("MD", year = 1985, type = "person", var_labels = "none")
   expect_identical(out$INJ_SEVNAME, "Fatal Injury")
 
   out <- get_fars(
     "MD",
     year = 1985,
     type = "person",
-    decode = FALSE,
-    labels = FALSE
+    decode = "replace",
+    var_labels = "none"
+  )
+  expect_identical(as.character(out$INJ_SEV), "Fatal Injury")
+
+  out <- get_fars(
+    "MD",
+    year = 1985,
+    type = "person",
+    decode = "none",
+    var_labels = "none"
   )
   expect_named(out, c("STATE", "ST_CASE", "INJ_SEV", "CASEYEAR"))
 })

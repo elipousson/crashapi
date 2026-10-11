@@ -16,7 +16,7 @@ get_fars_crashes(
   details = FALSE,
   geometry = FALSE,
   crs = NULL,
-  labels = TRUE
+  var_labels = c("attribute", "none")
 )
 
 get_fars_cases(
@@ -26,17 +26,21 @@ get_fars_cases(
   details = FALSE,
   geometry = FALSE,
   crs = NULL,
-  labels = TRUE
+  var_labels = c("attribute", "none")
 )
 
 get_fars_crash_list(
   state,
   year = getOption("crashapi.year", 2024),
   vehicles = c(1, 50),
-  labels = TRUE
+  var_labels = c("attribute", "none")
 )
 
-get_fars_summary(state, year = getOption("crashapi.year", 2024), labels = TRUE)
+get_fars_summary(
+  state,
+  year = getOption("crashapi.year", 2024),
+  var_labels = c("attribute", "none")
+)
 
 get_fars_year(
   state,
@@ -47,7 +51,7 @@ get_fars_year(
   geometry = FALSE,
   crs = NULL,
   download = FALSE,
-  labels = TRUE,
+  var_labels = c("attribute", "none"),
   call = caller_env()
 )
 }
@@ -78,10 +82,10 @@ for all cases. Default: \code{FALSE}.}
 \item{crs}{Coordinate reference system to return for \code{get_fars_crashes} if
 \code{geometry} is \code{TRUE}.}
 
-\item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
-with a variable label from \link{fars_vars_labels}. Labels are shown by
-\code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt and
-gtsummary.}
+\item{var_labels}{How to add variable labels from \link{fars_vars_labels}:
+"attribute" (default) adds a \code{"label"} attribute to each column, which is
+shown by \code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt
+and gtsummary, and "none" doesn't add variable labels.}
 
 \item{cases}{One or more FARS case numbers. Required for \code{get_fars_cases}.}
 

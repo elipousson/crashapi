@@ -30,7 +30,7 @@ get_zip_tables <- function(
   geometry = FALSE,
   overwrite = FALSE,
   keep_files = FALSE,
-  labels = TRUE,
+  var_labels = c("attribute", "none"),
   call = caller_env()
 ) {
   path <- path %||% crashapi_cache_dir()
@@ -86,7 +86,7 @@ get_zip_tables <- function(
     }
   }
 
-  if (!isTRUE(labels)) {
+  if (!use_var_labels(var_labels)) {
     return(crash_tables)
   }
 

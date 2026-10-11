@@ -14,7 +14,7 @@ get_fars_zip(
   geometry = FALSE,
   overwrite = FALSE,
   keep_files = FALSE,
-  labels = TRUE
+  var_labels = c("attribute", "none")
 )
 }
 \arguments{
@@ -55,10 +55,10 @@ Default: \code{FALSE}}
 \item{keep_files}{If \code{TRUE}, keep the downloaded zip file and the extracted
 CSV files in the cache folder. Default: \code{FALSE}}
 
-\item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
-with a variable label from \link{fars_vars_labels}. Labels are shown by
-\code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt and
-gtsummary.}
+\item{var_labels}{How to add variable labels from \link{fars_vars_labels}:
+"attribute" (default) adds a \code{"label"} attribute to each column, which is
+shown by \code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt
+and gtsummary, and "none" doesn't add variable labels.}
 }
 \value{
 If \code{read = TRUE}, a list of data frames with one item for each

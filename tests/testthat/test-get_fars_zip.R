@@ -167,7 +167,7 @@ test_that("get_fars_zip() adds variable labels", {
   data <- get_fars_zip(path = path)
   expect_identical(attr(data$accident$LATITUDE, "label"), "Latitude")
 
-  data <- get_fars_zip(path = path, labels = FALSE, overwrite = FALSE)
+  data <- get_fars_zip(path = path, var_labels = "none", overwrite = FALSE)
   expect_null(attr(data$accident$LATITUDE, "label"))
 })
 

@@ -30,6 +30,7 @@ Imports:
     vctrs
 Suggests: 
     covr,
+    haven,
     httptest2,
     knitr,
     readr,

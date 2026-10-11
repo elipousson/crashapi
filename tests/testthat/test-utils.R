@@ -11,7 +11,7 @@ test_that("format_crashes() reorders and adds date columns", {
     STATE = "50"
   )
 
-  out <- format_crashes(x, labels = FALSE)
+  out <- format_crashes(x, var_labels = "none")
 
   expect_identical(
     names(out)[1:4],
@@ -105,7 +105,7 @@ test_that("format_crashes() adds variable labels", {
   expect_identical(attr(out$date, "label"), "Crash date")
   expect_null(attr(out$EXTRA, "label"))
 
-  out <- format_crashes(x, labels = FALSE)
+  out <- format_crashes(x, var_labels = "none")
   expect_null(attr(out$FATALS, "label"))
 })
 

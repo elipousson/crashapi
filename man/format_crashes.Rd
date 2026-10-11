@@ -4,7 +4,7 @@
 \alias{format_crashes}
 \title{Format crash data}
 \usage{
-format_crashes(x, details = TRUE, labels = TRUE)
+format_crashes(x, details = TRUE, var_labels = c("attribute", "none"))
 }
 \arguments{
 \item{x}{Data frame with crash data.}
@@ -12,10 +12,10 @@ format_crashes(x, details = TRUE, labels = TRUE)
 \item{details}{If \code{TRUE}, append date, time, datetime columns to formatted
 crash data; defaults to TRUE}
 
-\item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
-with a variable label from \link{fars_vars_labels}. Labels are shown by
-\code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt and
-gtsummary.}
+\item{var_labels}{How to add variable labels from \link{fars_vars_labels}:
+"attribute" (default) adds a \code{"label"} attribute to each column, which is
+shown by \code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt
+and gtsummary, and "none" doesn't add variable labels.}
 }
 \description{
 Reorder columns to match the order documented in Fatality Analysis Reporting

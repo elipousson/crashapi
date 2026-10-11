@@ -461,15 +461,19 @@ label_fars_vars <- function(x, data_file = NULL) {
 #' @param x Data frame with crash data.
 #' @param details If `TRUE`, append date, time, datetime columns to formatted
 #'   crash data; defaults to TRUE
-#' @param labels If `TRUE` (default), add a `"label"` attribute to each column
-#'   with a variable label from [fars_vars_labels]. Labels are shown by
-#'   [View()] in RStudio and Positron and used by packages such as gt and
-#'   gtsummary.
+#' @param var_labels How to add variable labels from [fars_vars_labels]:
+#'   "attribute" (default) adds a `"label"` attribute to each column, which is
+#'   shown by [View()] in RStudio and Positron and used by packages such as gt
+#'   and gtsummary, and "none" doesn't add variable labels.
 #' @export
 #' @importFrom dplyr mutate
 #' @importFrom rlang .data
 #' @importFrom stringr str_pad
-format_crashes <- function(x, details = TRUE, labels = TRUE) {
+format_crashes <- function(
+  x,
+  details = TRUE,
+  var_labels = c("attribute", "none")
+) {
   # Reorder columns but keep the API column names
   crash_df <- rename_fars_vars(x, rename = FALSE)
 
@@ -524,7 +528,7 @@ format_crashes <- function(x, details = TRUE, labels = TRUE) {
     )
   }
 
-  if (!isTRUE(labels)) {
+  if (!use_var_labels(var_labels)) {
     return(crash_df)
   }
 
@@ -594,4 +598,24 @@ list_rbind <- function(x, ..., names_to = rlang::zap(), ptype = NULL) {
     .ptype = ptype,
     .error_call = rlang::current_env()
   )
+}
+
+#' Check the var_labels argument and return TRUE if variable labels are used
+#' @noRd
+use_var_labels <- function(
+  var_labels = c("attribute", "none"),
+  call = caller_env()
+) {
+  if (identical(var_labels, c("attribute", "none"))) {
+    var_labels <- "attribute"
+  }
+
+  var_labels <- rlang::arg_match0(
+    var_labels,
+    c("attribute", "none"),
+    arg_nm = "var_labels",
+    error_call = call
+  )
+
+  var_labels == "attribute"
 }

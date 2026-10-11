@@ -128,29 +128,52 @@ fars_value_labels <- function(
 #' @param year Year of the data. If `NULL` (default), uses the `CASEYEAR`,
 #'   `CaseYear`, or `YEAR` column of `x`. Can be a single year or one year for
 #'   each row of `x`.
-#' @param suffix Suffix for the names of the decoded columns. Default: "NAME".
-#' @param overwrite If `TRUE`, replace existing decoded columns. Default:
-#'   `FALSE`.
+#' @param decode How to decode values:
+#'   - "names" (default) adds a column with decoded values after each coded
+#'   variable (e.g. `INJ_SEVNAME` for `INJ_SEV`), matching the `…NAME` columns
+#'   in data from the CrashAPI and FARS zipped CSV files from 2015 onwards.
+#'   - "replace" replaces the codes with a factor of decoded values (with levels
+#'   in code order) and removes any existing `…NAME` column. Variables with
+#'   values that don't have value labels (e.g. `AGE`, where only special codes
+#'   like "Not Reported" have labels) are not replaced.
+#'   - "labelled" keeps the codes and adds value labels with
+#'   [haven::labelled()]. A labelled vector has a single set of value labels so
+#'   the value labels from the latest year in the data are used (with a warning
+#'   if the value labels differ between years). Requires the haven package.
+#' @param suffix Suffix for the names of the decoded columns if `decode =
+#'   "names"`. Default: "NAME".
+#' @param overwrite If `TRUE` and `decode = "names"`, replace existing decoded
+#'   columns. Default: `FALSE`.
 #' @inheritParams fars_value_labels
-#' @returns `x` with additional columns of decoded values.
+#' @returns `x` with additional columns of decoded values (`decode =
+#'   "names"`), factors of decoded values (`decode = "replace"`), or labelled
+#'   vectors (`decode = "labelled"`).
 #' @examples
 #' person <- data.frame(CASEYEAR = c(1985, 2024), INJ_SEV = c(3, 3))
 #' decode_fars(person, table = "person")
+#'
+#' decode_fars(person, table = "person", decode = "replace")
 #' @export
 decode_fars <- function(
   x,
   table,
   year = NULL,
+  decode = c("names", "replace", "labelled"),
   source = c("FARS", "CRSS"),
   suffix = "NAME",
   overwrite = FALSE
 ) {
+  decode <- rlang::arg_match(decode)
   source <- match.arg(source)
+
+  if (decode == "labelled") {
+    rlang::check_installed("haven", reason = "to use `decode = \"labelled\"`.")
+  }
 
   if (is.null(year)) {
     year_col <- c(fars_year_col(x), intersect("YEAR", names(x)))[1]
 
-    if (is.na(year_col) || is.null(year_col)) {
+    if (is.na(year_col)) {
       cli_abort(
         "{.arg year} must be provided if {.arg x} doesn't have a
         {.field CASEYEAR}, {.field CaseYear}, or {.field YEAR} column."
@@ -181,27 +204,173 @@ decode_fars <- function(
     toupper(names(x)) %in% toupper(value_labels[["variable"]])
   ]
 
+  not_replaced <- character(0)
+  labels_differ <- character(0)
+
   for (variable in variables) {
+    variable_labels <- value_labels[
+      toupper(value_labels[["variable"]]) == toupper(variable),
+    ]
     name_col <- paste0(variable, suffix)
 
-    if (rlang::has_name(x, name_col) && !isTRUE(overwrite)) {
-      next
+    if (decode == "names") {
+      if (rlang::has_name(x, name_col) && !isTRUE(overwrite)) {
+        next
+      }
+
+      x[[name_col]] <- decode_values(x[[variable]], year, variable_labels)
+      x <- dplyr::relocate(
+        x,
+        dplyr::all_of(name_col),
+        .after = dplyr::all_of(variable)
+      )
     }
 
-    x[[name_col]] <- decode_values(
-      x[[variable]],
-      year,
-      value_labels[toupper(value_labels[["variable"]]) == toupper(variable), ]
-    )
+    if (decode == "replace") {
+      decoded <- decode_values(x[[variable]], year, variable_labels)
 
-    x <- dplyr::relocate(
-      x,
-      dplyr::all_of(name_col),
-      .after = dplyr::all_of(variable)
+      # Only replace values for categorical variables where every value can be
+      # decoded (e.g. not AGE where labels are like "30 Years" or only special
+      # codes like "Not Reported" have labels)
+      if (
+        is_measure_labels(variable_labels) ||
+          any(is.na(decoded) & !is.na(x[[variable]]))
+      ) {
+        not_replaced <- c(not_replaced, variable)
+        next
+      }
+
+      x[[variable]] <- factor(decoded, levels = label_levels(variable_labels))
+      x[[name_col]] <- NULL
+    }
+
+    if (decode == "labelled") {
+      # Only label special codes without numbers (e.g. "Not Reported") for
+      # measures like AGE
+      if (is_measure_labels(variable_labels)) {
+        variable_labels <- variable_labels[
+          !grepl("[0-9]", variable_labels[["value"]]),
+        ]
+      }
+
+      labelled <- labelled_values(x[[variable]], variable_labels)
+
+      if (is.null(labelled)) {
+        next
+      }
+
+      if (isTRUE(attr(labelled, "labels_differ"))) {
+        labels_differ <- c(labels_differ, variable)
+        attr(labelled, "labels_differ") <- NULL
+      }
+
+      x[[variable]] <- labelled
+    }
+  }
+
+  if (length(not_replaced) > 0) {
+    cli::cli_inform(
+      c(
+        "i" = "{.val {not_replaced}} {?wasn't/weren't} replaced since
+        {?it is a measure or has/they are measures or have} values without
+        value labels."
+      )
+    )
+  }
+
+  if (length(labels_differ) > 0) {
+    cli::cli_warn(
+      c(
+        "Value labels for {.val {labels_differ}} differ between
+        {min(year)} and {max(year)}.",
+        "i" = "Using value labels from {max(year)}."
+      )
     )
   }
 
   x
+}
+
+#' Is the first number in a value label equal to its code (e.g. "30 Years" for
+#' 30 or "001 MPH" for 1)?
+#' @noRd
+is_code_label <- function(code, value) {
+  first_number <- suppressWarnings(
+    as.numeric(regmatches(value, regexpr("[0-9]+([.][0-9]+)?", value)))
+  )
+  matched <- rep(FALSE, length(value))
+  has_number <- grepl("[0-9]", value)
+  matched[has_number] <- !is.na(code[has_number]) &
+    first_number == code[has_number]
+  matched
+}
+
+#' Are value labels for a measure (e.g. AGE or MOD_YEAR) where most labels
+#' include their code?
+#' @noRd
+is_measure_labels <- function(value_labels) {
+  codes <- value_labels[!is.na(value_labels[["code_min"]]), ]
+  nrow(codes) > 0 &&
+    mean(is_code_label(codes[["code_min"]], codes[["value"]])) > 0.5
+}
+
+#' Get factor levels from value labels in code order
+#' @noRd
+label_levels <- function(value_labels) {
+  value_labels <- value_labels[
+    order(value_labels[["code_min"]], -value_labels[["year"]]),
+  ]
+  unique(value_labels[["value"]])
+}
+
+#' Create a haven_labelled vector using value labels from the latest year
+#'
+#' Ranges can't be used as labelled values so only single codes are used.
+#' Returns NULL if no codes can be used as labels for x.
+#' @noRd
+labelled_values <- function(x, value_labels) {
+  is_numeric <- is.numeric(x)
+  single <- value_labels[
+    is.na(value_labels[["code_min"]]) |
+      value_labels[["code_min"]] == value_labels[["code_max"]],
+  ]
+
+  if (is_numeric) {
+    single <- single[!is.na(single[["code_min"]]), ]
+  }
+
+  if (nrow(single) == 0) {
+    return(NULL)
+  }
+
+  # Check if any code has a different label in another year
+  codes <- if (is_numeric) single[["code_min"]] else single[["code"]]
+  labels_differ <- any(tapply(single[["value"]], codes, function(v) {
+    length(unique(v)) > 1
+  }))
+
+  latest <- single[single[["year"]] == max(single[["year"]]), ]
+  latest_codes <- if (is_numeric) latest[["code_min"]] else latest[["code"]]
+  latest <- latest[!duplicated(latest_codes), ]
+  latest_codes <- latest_codes[!duplicated(latest_codes)]
+
+  labels <- tryCatch(
+    vctrs::vec_cast(latest_codes, x[0]),
+    error = function(e) NULL
+  )
+
+  if (is.null(labels)) {
+    return(NULL)
+  }
+
+  labelled <- haven::labelled(
+    vctrs::vec_data(x),
+    labels = rlang::set_names(labels, latest[["value"]]),
+    label = attr(x, "label", exact = TRUE)
+  )
+
+  attr(labelled, "labels_differ") <- labels_differ
+  labelled
 }
 
 #' Match values to value labels by year using numeric codes, ranges, or

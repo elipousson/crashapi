@@ -8,6 +8,7 @@ decode_fars(
   x,
   table,
   year = NULL,
+  decode = c("names", "replace", "labelled"),
   source = c("FARS", "CRSS"),
   suffix = "NAME",
   overwrite = FALSE
@@ -24,15 +25,31 @@ or "vehicle").}
 \code{CaseYear}, or \code{YEAR} column of \code{x}. Can be a single year or one year for
 each row of \code{x}.}
 
+\item{decode}{How to decode values:
+\itemize{
+\item "names" (default) adds a column with decoded values after each coded
+variable (e.g. \code{INJ_SEVNAME} for \code{INJ_SEV}), matching the \verb{…NAME} columns
+in data from the CrashAPI and FARS zipped CSV files from 2015 onwards.
+\item "replace" replaces the codes with a factor of decoded values (with levels
+in code order) and removes any existing \verb{…NAME} column. Variables with
+values that don't have value labels (e.g. \code{AGE}, where only special codes
+like "Not Reported" have labels) are not replaced.
+\item "labelled" keeps the codes and adds value labels with
+\code{\link[haven:labelled]{haven::labelled()}}. A labelled vector has a single set of value labels so
+the value labels from the latest year in the data are used (with a warning
+if the value labels differ between years). Requires the haven package.
+}}
+
 \item{source}{Data source: "FARS" (default) or "CRSS".}
 
-\item{suffix}{Suffix for the names of the decoded columns. Default: "NAME".}
+\item{suffix}{Suffix for the names of the decoded columns if \code{decode = "names"}. Default: "NAME".}
 
-\item{overwrite}{If \code{TRUE}, replace existing decoded columns. Default:
-\code{FALSE}.}
+\item{overwrite}{If \code{TRUE} and \code{decode = "names"}, replace existing decoded
+columns. Default: \code{FALSE}.}
 }
 \value{
-\code{x} with additional columns of decoded values.
+\code{x} with additional columns of decoded values (\code{decode = "names"}), factors of decoded values (\code{decode = "replace"}), or labelled
+vectors (\code{decode = "labelled"}).
 }
 \description{
 \code{decode_fars()} adds a column with decoded values (e.g. \code{INJ_SEVNAME} for
@@ -49,4 +66,6 @@ FARS data files before 2015.
 \examples{
 person <- data.frame(CASEYEAR = c(1985, 2024), INJ_SEV = c(3, 3))
 decode_fars(person, table = "person")
+
+decode_fars(person, table = "person", decode = "replace")
 }
