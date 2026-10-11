@@ -11,7 +11,7 @@
 - Breaking change: the `start_year` and `end_year` arguments are removed. Functions for API endpoints that take a range of years (`get_fars_crashes()`, `get_fars_crash_list()`, `get_fars_summary()`, `get_fars_year()`, `get_fars_crash_vehicles()`, and `get_fars_crash_persons()`) now use the minimum and maximum of `year` as the start and end year, with a message if `year` has gaps.
 - `fars_vars()` supports multiple years and returns a `year` column.
 - `get_fars_crashes()` errors with a clear message if `county` is missing.
-- Matching state and county names now returns FIPS codes for valid values when some values are invalid and warns when a county name matches more than one county (e.g. "Baltimore").
+- Matching state and county names now returns FIPS codes for valid values when some values are invalid and drops county names that match more than one county (e.g. "Baltimore") with a warning asking for a more specific name.
 - `get_fars_cases(details = "events")` and `get_fars_cases(details = "vehicles")` now return details for all cases instead of only the first case, and `get_fars_cases()` errors clearly if no case details are found.
 - `get_fars_zip()` and `get_crss_zip()` now error before downloading if `read = TRUE` and `format = "sas"`.
 - `read_crashapi()` no longer errors for responses without results and returns `NULL` with the CrashAPI message.

@@ -22,7 +22,11 @@ test_that("validate_state and validate_county works", {
   expect_snapshot(out <- validate_county("DC", "Garrett", .msg = FALSE))
   expect_null(out)
   expect_snapshot(out <- validate_county("MD", "Baltimore", .msg = FALSE))
-  expect_identical(out, "005")
+  expect_null(out)
+  expect_snapshot(out <- validate_county("MD", 999, .msg = FALSE))
+  expect_null(out)
+  expect_snapshot(out <- validate_county("XX", "Garrett", .msg = FALSE))
+  expect_null(out)
 })
 
 test_that("validate_state() returns FIPS codes for valid values", {
@@ -33,4 +37,8 @@ test_that("validate_state() returns FIPS codes for valid values", {
   )
   expect_identical(out, "24")
   expect_snapshot(validate_state(c("MD", "VT"), .msg = FALSE), error = TRUE)
+  expect_snapshot(
+    validate_state("XX", require_state = TRUE, .msg = FALSE),
+    error = TRUE
+  )
 })

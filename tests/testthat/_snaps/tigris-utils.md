@@ -12,7 +12,7 @@
       out <- validate_county("DC", "Garrett", .msg = FALSE)
     Condition
       Warning:
-      `county` input can't be matched to any valid value: Garrett
+      `county` input can't be matched to any valid value: "Garrett"
 
 ---
 
@@ -20,7 +20,26 @@
       out <- validate_county("MD", "Baltimore", .msg = FALSE)
     Condition
       Warning:
-      Using first match for 'Baltimore'. Multiple matches found: Baltimore County, Baltimore city
+      `county` input 'Baltimore' matches Baltimore County, Baltimore city. Please refine your selection.
+
+---
+
+    Code
+      out <- validate_county("MD", 999, .msg = FALSE)
+    Condition
+      Warning:
+      Dropping invalid `county` value: "999"
+
+---
+
+    Code
+      out <- validate_county("XX", "Garrett", .msg = FALSE)
+    Condition
+      Warning:
+      `state` contains 1 invalid FIPS code or state name/abbreviations: "XX"
+      Warning:
+      `county` can't be checked without a valid `state`.
+      ! Dropping `county` value: "Garrett"
 
 # validate_state() returns FIPS codes for valid values
 
@@ -37,4 +56,12 @@
     Condition
       Error:
       ! `state` must be length 1, not length 2
+
+---
+
+    Code
+      validate_state("XX", require_state = TRUE, .msg = FALSE)
+    Condition
+      Error:
+      ! `state` must be a valid state name or abbreviation, not "XX".
 
