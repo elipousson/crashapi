@@ -1,9 +1,19 @@
 #' Download CRSS data files as zipped CSV or SAS files
 #'
-#' This function is similar to [get_fars_zip()] to download files directly from
-#' the NHTSA downloads site. If `read` is `TRUE`, the function returns a list
-#' containing data frames for each table available in the selected year. If
-#' `geometry` is `TRUE`, the accident table is converted to an sf object.
+#' The [Crash Report Sampling System
+#' (CRSS)](https://www.nhtsa.gov/crash-data-systems/crash-report-sampling-system)
+#' is a national sample of police-reported motor vehicle crashes of all
+#' severities, from minor property damage to fatal crashes, and replaced the
+#' General Estimates System (GES) in 2016. This function is similar to
+#' [get_fars_zip()] to download CRSS files directly from the NHTSA downloads
+#' site. If `read` is `TRUE`, the function returns a list containing data frames
+#' for each table available in the selected year.
+#'
+#' CRSS is a sample, so national estimates should use the sampling weight
+#' (`WEIGHT`) and survey design variables (e.g. `PSU_VAR` and `PSUSTRAT`) as
+#' described in the CRSS Analytical User's Manual. CRSS data does not include
+#' crash locations beyond broad geographic categories (e.g. `REGION` and
+#' `URBANICITY`).
 #'
 #' Zipped CSV files are converted to parquet files and cached in a folder
 #' named after the zip file within `path` (by default, the user cache directory
@@ -19,7 +29,9 @@
 #' @param aux If `TRUE`, download auxiliary CRSS datasets.
 #' @param read If `TRUE` (default), read the cached parquet files into a list
 #'   of tables with each list item corresponding to one data file.
-#' @param geometry If `TRUE`, convert the accident table to a sf object.
+#' @param geometry Not supported for CRSS data, which does not include
+#'   coordinates. If `TRUE`, a warning is shown and the accident table is
+#'   returned as a data frame.
 #' @param labels If `TRUE` (default), add a `"label"` attribute to each column
 #'   with a matching variable in [fars_vars_labels]. Labels are taken from the
 #'   FARS Analytical User's Manual so variables only used in CRSS are not
@@ -97,10 +109,16 @@ get_crss_zip <- function(
   }
 
   filename <- glue::glue("CRSS{year}{auxiliary}{toupper(format)}.zip")
+  remote_filename <- filename
+
+  # The 2019 auxiliary CSV file name is misspelled on the NHTSA site
+  if (filename == "CRSS2019AuxiliaryCSV.zip") {
+    remote_filename <- "CRSS2019AuxiliaryCVS.zip"
+  }
 
   url <-
     glue::glue(
-      "https://static.nhtsa.gov/nhtsa/downloads/CRSS/{year}/{filename}"
+      "https://static.nhtsa.gov/nhtsa/downloads/CRSS/{year}/{remote_filename}"
     )
 
   get_zip_tables(

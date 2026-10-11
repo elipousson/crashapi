@@ -71,8 +71,19 @@ get_zip_tables <- function(
 
   crash_tables <- map(parquet_files, nanoparquet::read_parquet)
 
-  if (geometry && rlang::has_name(crash_tables, "accident")) {
-    crash_tables[["accident"]] <- df_to_sf(crash_tables[["accident"]])
+  if (geometry) {
+    coords <- c("LONGITUD", "LATITUDE")
+    accident <- crash_tables[["accident"]]
+
+    if (!is.null(accident) && all(coords %in% names(accident))) {
+      crash_tables[["accident"]] <- df_to_sf(accident)
+    } else {
+      cli::cli_warn(
+        "{dataset} data for {year} doesn't include coordinate columns so
+        {.code geometry = TRUE} is ignored.",
+        call = call
+      )
+    }
   }
 
   if (!isTRUE(labels)) {

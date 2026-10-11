@@ -18,6 +18,8 @@
 - `read_crashapi()` no longer errors for responses without results and returns `NULL` with the CrashAPI message.
 - `get_fars_cases()` supports one year for each case number, and `get_fars_crashes(details = TRUE)` now works for multiple years by using the case year for each crash.
 - `get_fars_zip()` and `get_crss_zip()` now read CSV files from the folder inside newer zip files, which previously caused `read = TRUE` to fail for most recent years.
+- `get_crss_zip(year = 2019, aux = TRUE)` now handles the misspelled file name on the NHTSA site, and `get_crss_zip()` is documented with a description of CRSS and a link to the official CRSS page.
+- `get_fars_zip()` and `get_crss_zip()` warn if `geometry = TRUE` and the accident table has no coordinate columns (e.g. CRSS data or older FARS data) instead of silently returning a data frame.
 - `get_fars_zip(pr = TRUE)` now uses the correct file name for Puerto Rico data and errors for years without Puerto Rico data (1975-1977 and 1979). `get_fars_zip(year = 1996, aux = TRUE)` now handles the misspelled file name on the NHTSA site.
 - `get_fars_zip()` and `get_crss_zip()` support multiple years and return a list named by year.
 - `format_crashes()`, `get_crss_zip()`, `get_fars()`, `get_fars_cases()`, `get_fars_crash_list()`, `get_fars_crash_persons()`, `get_fars_crash_vehicles()`, `get_fars_crashes()`, `get_fars_summary()`, `get_fars_year()`, and `get_fars_zip()` gain a `labels` argument. When `TRUE` (the default), each column with a matching variable in `fars_vars_labels` gets a `"label"` attribute, which is shown by `View()` and used by packages such as gt and gtsummary. Where a variable appears in more than one FARS data file, the label for the table being read is used.
