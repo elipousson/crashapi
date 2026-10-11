@@ -116,7 +116,8 @@ vehicles, e.g. c(1, 2) for minimum of 1 vehicle and maximum of 2. Required
 for \code{get_fars_crash_list}.}
 
 \item{format}{Default "json". "csv" is supported when using the "year
-dataset" api. "sas" is supporting for the "zip" api.}
+dataset" api. "csv" and "sas" are supported for the "zip" api ("json" is
+treated as "csv").}
 
 \item{pr}{logical. If \code{TRUE}, download zip file with FARS data for Puerto
 Rico. No Puerto Rico data available for years 1975-1977. Default: \code{FALSE}

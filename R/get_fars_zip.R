@@ -38,15 +38,17 @@
 #' @importFrom cli cli_bullets cli_progress_along
 #' @importFrom rlang check_installed
 #' @importFrom stats setNames
-get_fars_zip <- function(year = 2022,
-                         format = "csv",
-                         path = NULL,
-                         pr = FALSE,
-                         aux = FALSE,
-                         read = TRUE,
-                         geometry = FALSE,
-                         overwrite = FALSE) {
-  year <- validate_year(year = year, year_range = c(1975:2021))
+get_fars_zip <- function(
+  year = 2022,
+  format = "csv",
+  path = NULL,
+  pr = FALSE,
+  aux = FALSE,
+  read = TRUE,
+  geometry = FALSE,
+  overwrite = FALSE
+) {
+  year <- validate_year(year = year, year_range = c(1975, 2022))
   format <- match.arg(format, c("csv", "sas"))
   scope <- "National"
 
@@ -59,7 +61,8 @@ get_fars_zip <- function(year = 2022,
   if (isTRUE(aux)) {
     if (year < 1982) {
       cli_warn(
-        c("Auxiliary data (when {.code aux = TRUE}) is only available for years
+        c(
+          "Auxiliary data (when {.code aux = TRUE}) is only available for years
         after 1982.",
           "i" = "Returning non-auxiliary data only."
         )

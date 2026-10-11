@@ -22,7 +22,6 @@ Imports:
     dplyr (>= 1.1.0),
     glue,
     httr2 (>= 0.2.3),
-    janitor,
     rlang,
     stats,
     stringr,
@@ -35,7 +34,8 @@ Suggests:
     readr,
     rmarkdown,
     sf,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
@@ -43,4 +43,4 @@ Config/testthat/parallel: true
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+Config/roxygen2/version: 8.1.0

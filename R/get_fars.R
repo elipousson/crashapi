@@ -65,7 +65,8 @@
 #'   Rico. No Puerto Rico data available for years 1975-1977. Default: `FALSE`
 #'   for `get_fars_zip` only.
 #' @param format Default "json". "csv" is supported when using the "year
-#'   dataset" api. "sas" is supporting for the "zip" api.
+#'   dataset" api. "csv" and "sas" are supported for the "zip" api ("json" is
+#'   treated as "csv").
 #' @param path File path used if download is `TRUE`.
 #' @param download logical. If `TRUE` and the `api` is "year dataset" or "zip",
 #'   download the data to a file. Default `FALSE`.
@@ -84,23 +85,29 @@
 #'
 #' @export
 #' @md
-get_fars <- function(year = 2022,
-                     state,
-                     county = NULL,
-                     api = c(
-                       "crashes", "cases", "state list",
-                       "summary count", "year dataset", "zip"
-                     ),
-                     type = NULL,
-                     details = FALSE,
-                     geometry = FALSE,
-                     crs = NULL,
-                     cases = NULL,
-                     vehicles = NULL,
-                     format = "json",
-                     pr = FALSE,
-                     path = NULL,
-                     download = FALSE) {
+get_fars <- function(
+  year = 2022,
+  state,
+  county = NULL,
+  api = c(
+    "crashes",
+    "cases",
+    "state list",
+    "summary count",
+    "year dataset",
+    "zip"
+  ),
+  type = NULL,
+  details = FALSE,
+  geometry = FALSE,
+  crs = NULL,
+  cases = NULL,
+  vehicles = NULL,
+  format = "json",
+  pr = FALSE,
+  path = NULL,
+  download = FALSE
+) {
   api <-
     dplyr::case_when(
       !is.null(cases) ~ "cases",
@@ -110,51 +117,47 @@ get_fars <- function(year = 2022,
       .default = match.arg(api)
     )
 
-  switch(api,
-    "crashes" =
-      get_fars_crashes(
-        year = year,
-        state = state,
-        county = county,
-        details = details,
-        geometry = geometry,
-        crs = crs
-      ),
-    "cases" =
-      get_fars_cases(
-        year = year,
-        state = state,
-        cases = cases,
-        geometry = geometry,
-        crs = crs,
-        details = details
-      ),
-    "state list" =
-      get_fars_crash_list(
-        year = year,
-        state = state,
-        vehicles = vehicles
-      ),
-    "summary count" =
-      get_fars_summary(
-        year = year,
-        state = state
-      ),
-    "year dataset" =
-      get_fars_year(
-        year = year,
-        type = type,
-        state = state,
-        format = format,
-        download = download
-      ),
-    "zip" =
-      get_fars_zip(
-        year = year,
-        path = path,
-        format = format,
-        pr = pr
-      )
+  switch(
+    api,
+    "crashes" = get_fars_crashes(
+      year = year,
+      state = state,
+      county = county,
+      details = details,
+      geometry = geometry,
+      crs = crs
+    ),
+    "cases" = get_fars_cases(
+      year = year,
+      state = state,
+      cases = cases,
+      geometry = geometry,
+      crs = crs,
+      details = details
+    ),
+    "state list" = get_fars_crash_list(
+      year = year,
+      state = state,
+      vehicles = vehicles
+    ),
+    "summary count" = get_fars_summary(
+      year = year,
+      state = state
+    ),
+    "year dataset" = get_fars_year(
+      year = year,
+      type = type,
+      state = state,
+      format = format,
+      download = download
+    ),
+    "zip" = get_fars_zip(
+      year = year,
+      path = path,
+      # "json" is the get_fars() default but is not supported for zip files
+      format = if (identical(format, "json")) "csv" else format,
+      pr = pr
+    )
   )
 }
 
@@ -162,14 +165,16 @@ get_fars <- function(year = 2022,
 #' @aliases get_fars_crashes
 #' @export
 #' @importFrom cli cli_abort
-get_fars_crashes <- function(year = 2022,
-                             start_year,
-                             end_year = NULL,
-                             state,
-                             county,
-                             details = FALSE,
-                             geometry = FALSE,
-                             crs = NULL) {
+get_fars_crashes <- function(
+  year = 2022,
+  start_year,
+  end_year = NULL,
+  state,
+  county,
+  details = FALSE,
+  geometry = FALSE,
+  crs = NULL
+) {
   year <- validate_year(year, start_year = start_year, end_year = end_year)
 
   if (any(c(missing(county), is.null(county)))) {
@@ -223,8 +228,17 @@ get_fars_crashes <- function(year = 2022,
       subset(
         cases_df,
         select = -c(
-          STATENAME, VE_FORMS, TWAY_ID, TWAY_ID2, LONGITUD, LATITUDE,
-          FATALS, CITY, CITYNAME, COUNTY, COUNTYNAME
+          STATENAME,
+          VE_FORMS,
+          TWAY_ID,
+          TWAY_ID2,
+          LONGITUD,
+          LATITUDE,
+          FATALS,
+          CITY,
+          CITYNAME,
+          COUNTY,
+          COUNTYNAME
         )
       )
 
@@ -247,12 +261,14 @@ get_fars_crashes <- function(year = 2022,
 #' @aliases get_fars_cases get_fars_crash_details
 #' @export
 #' @importFrom cli cli_abort cli_progress_along
-get_fars_cases <- function(year = 2022,
-                           state,
-                           cases,
-                           details = FALSE,
-                           geometry = FALSE,
-                           crs = NULL) {
+get_fars_cases <- function(
+  year = 2022,
+  state,
+  cases,
+  details = FALSE,
+  geometry = FALSE,
+  crs = NULL
+) {
   year <- validate_year(year)
   state_fips <- lookup_fips(state)
 
@@ -305,7 +321,8 @@ get_fars_cases <- function(year = 2022,
   details <- tolower(details)
   details <- match.arg(details, c("events", "vehicles"))
 
-  switch(details,
+  switch(
+    details,
     "events" = crash_df[, "CEvents"][[1]],
     "vehicles" = crash_df[, "Vehicles"][[1]]
   )
@@ -314,11 +331,13 @@ get_fars_cases <- function(year = 2022,
 #' @rdname get_fars
 #' @aliases get_fars_crash_list
 #' @export
-get_fars_crash_list <- function(year = 2022,
-                                start_year = NULL,
-                                end_year = NULL,
-                                state,
-                                vehicles = c(1, 50)) {
+get_fars_crash_list <- function(
+  year = 2022,
+  start_year = NULL,
+  end_year = NULL,
+  state,
+  vehicles = c(1, 50)
+) {
   year <- validate_year(year, start_year = start_year, end_year = end_year)
 
   states_fips <-
@@ -344,10 +363,7 @@ get_fars_crash_list <- function(year = 2022,
 #' @rdname get_fars
 #' @aliases get_fars_summary
 #' @export
-get_fars_summary <- function(year = 2022,
-                             start_year,
-                             end_year = NULL,
-                             state) {
+get_fars_summary <- function(year = 2022, start_year, end_year = NULL, state) {
   year <- validate_year(year, start_year = start_year, end_year = end_year)
 
   crash_df <-
@@ -368,23 +384,42 @@ get_fars_summary <- function(year = 2022,
 #' @importFrom stringr str_to_sentence
 #' @importFrom cli cli_warn
 #' @importFrom httr2 resp_body_json req_perform request
-get_fars_year <- function(year = 2022,
-                          type = "accident",
-                          state,
-                          format = "json",
-                          path = NULL,
-                          geometry = FALSE,
-                          crs = NULL,
-                          download = FALSE) {
+get_fars_year <- function(
+  year = 2022,
+  type = "accident",
+  state,
+  format = "json",
+  path = NULL,
+  geometry = FALSE,
+  crs = NULL,
+  download = FALSE
+) {
   year <- validate_year(year)
   state_fips <- lookup_fips(state)
 
   fars_tabs <- c(
-    "ACCIDENT", "CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR",
-    "DRUGS", "FACTOR", "MANEUVER", "NMCRASH", "NMIMPAIR",
-    "NMPRIOR", "PARKWORK", "PBTYPE", "PERSON", "SAFETYEQ",
-    "VEHICLE", "VEVENT", "VINDECODE", "VINDERIVED", "VIOLATION",
-    "VISION", "VSOE"
+    "ACCIDENT",
+    "CEVENT",
+    "DAMAGE",
+    "DISTRACT",
+    "DRIMPAIR",
+    "DRUGS",
+    "FACTOR",
+    "MANEUVER",
+    "NMCRASH",
+    "NMIMPAIR",
+    "NMPRIOR",
+    "PARKWORK",
+    "PBTYPE",
+    "PERSON",
+    "SAFETYEQ",
+    "VEHICLE",
+    "VEVENT",
+    "VINDECODE",
+    "VINDERIVED",
+    "VIOLATION",
+    "VISION",
+    "VSOE"
   )
 
   # Add 2019 and 2020 onwards tables to the data
@@ -392,8 +427,13 @@ get_fars_year <- function(year = 2022,
     fars_tabs <- c(fars_tabs, "NMDISTRACT")
     if (min(year) >= 2020) {
       fars_tabs <- c(
-        fars_tabs, "CRASHRF", "DRIVERRF", "PERSONRF", "PVEHICLESF",
-        "VEHICLESF", "WEATHER"
+        fars_tabs,
+        "CRASHRF",
+        "DRIVERRF",
+        "PERSONRF",
+        "PVEHICLESF",
+        "VEHICLESF",
+        "WEATHER"
       )
     }
   }
@@ -429,7 +469,8 @@ get_fars_year <- function(year = 2022,
     }
 
     crash_df <-
-      switch(format,
+      switch(
+        format,
         "json" = httr2::resp_body_json(
           httr2::req_perform(request),
           simplifyVector = TRUE,
@@ -455,14 +496,15 @@ get_fars_year <- function(year = 2022,
     }
 
     cli::cli_warn(
-      c("Coordinate columns {coords} can't be found in data of
+      c(
+        "Coordinate columns {coords} can't be found in data of
           the type {.val {type}}.",
         "i" = 'Use {.code type = "accident"} with
           {.code geometry = TRUE} to return an sf object.'
       )
     )
 
-    crash_df
+    return(crash_df)
   }
 
   filename <- paste0(min(year), "_", max(year), "_", type, ".", format)

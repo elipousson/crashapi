@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# crashapi (development version)
+
+- `format_crashes()` now reorders columns, converts coordinate and count columns, and appends `date`, `time`, and `datetime` columns as documented. Previously, a faulty check skipped this step, so `get_fars_crashes()`, `get_fars_crash_list()`, and `get_fars_summary()` returned unformatted data. Column names are kept as returned by the API, and columns not found in `fars_vars_labels` are kept at the end.
+- `get_fars()` now works with `api = "zip"` when `format` is left at its default ("json" is treated as "csv").
+- `get_fars_year()` returns the data with a warning when `geometry = TRUE` and the table has no coordinate columns, instead of downloading a file.
+- `get_fars_zip()` now supports 2022 data, matching its default `year`.
+
 # crashapi 0.1.2
 
 - Update year range to cover 2022 data.

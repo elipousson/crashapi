@@ -9,7 +9,7 @@ list_rbind(x, ..., names_to = rlang::zap(), ptype = NULL)
 \description{
 \itemize{
 \item \code{list_rbind()} combines elements into a data frame by row-binding them
-together with \code{\link[vctrs:vec_bind]{vctrs::vec_rbind()}}.
+together with \code{\link[vctrs:vec_rbind]{vctrs::vec_rbind()}}.
 }
 }
 \keyword{internal}

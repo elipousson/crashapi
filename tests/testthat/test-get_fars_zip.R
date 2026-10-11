@@ -1,3 +1,13 @@
+test_that("get_fars_zip() supports the default year", {
+  path <- withr::local_tempdir()
+  destfile <- local_fars_zip(path)
+
+  expect_identical(
+    get_fars_zip(read = FALSE, path = path),
+    file.path(path, "FARS2022NationalCSV.zip")
+  )
+})
+
 test_that("get_fars_zip works", {
   expect_true(
     file.exists(

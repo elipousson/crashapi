@@ -1,14 +1,30 @@
 .onLoad <- function(libname, pkgname) {
-  utils::data("fars_vars_labels",
+  utils::data(
+    "fars_vars_labels",
     package = pkgname,
     envir = parent.env(environment())
   )
 }
 
 utils::globalVariables(c(
-  "CITY", "CITYNAME", "COUNTY", "COUNTYNAME", "FATALS", "LATITUDE", "LONGITUD", "STATENAME",
-  "TWAY_ID", "TWAY_ID2", "VE_FORMS", "abb", "day", "get_area_crashes",
-  "hour", "minute", "month", "name", "st_case", "state_abb", "statewide_yn", "time", "year"
+  "CITY",
+  "CITYNAME",
+  "COUNTY",
+  "COUNTYNAME",
+  "FATALS",
+  "LATITUDE",
+  "LONGITUD",
+  "STATENAME",
+  "TWAY_ID",
+  "TWAY_ID2",
+  "VE_FORMS",
+  "abb",
+  "get_area_crashes",
+  "name",
+  "state_abb",
+  "statewide_yn",
+  "time",
+  "year"
 ))
 
 #' Read data from the CrashAPI using a url template
@@ -27,15 +43,18 @@ utils::globalVariables(c(
 #' @return Data frame with requested data or a formatted url (if `results = FALSE`)
 #' @export
 #' @importFrom httr2 req_template request req_perform resp_body_json
-read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
-                          data = "crashes",
-                          type = NULL,
-                          format = "json",
-                          results = TRUE,
-                          ...,
-                          call = caller_env()) {
+read_crashapi <- function(
+  url = "https://crashviewer.nhtsa.dot.gov",
+  data = "crashes",
+  type = NULL,
+  format = "json",
+  results = TRUE,
+  ...,
+  call = caller_env()
+) {
   template <-
-    switch(type,
+    switch(
+      type,
       "GetCaseList" = "GET /CrashAPI/{data}/{type}?states={states}&fromYear={fromYear}&toYear={toYear}&minNumOfVehicles={minNumOfVehicles}&maxNumOfVehicles={maxNumOfVehicles}&format={format}",
       "GetCaseDetails" = "GET /CrashAPI/{data}/{type}?stateCase={stateCase}&caseYear={caseYear}&state={state}&format={format}",
       "GetCrashesByVehicle" = "GET /CrashAPI/{data}/{type}?make={make}&model={model}&modelyear={modelyear}&bodyType={bodyType}&fromCaseYear={fromCaseYear}&toCaseYear={toCaseYear}&state={state}&format={format}",
@@ -70,17 +89,29 @@ read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
     return(request[["url"]])
   }
 
+  request <- httr2::req_timeout(
+    req = request,
+    seconds = 180
+  )
+
+  request <- httr2::req_options(
+    .req = request,
+    http_version = 1.1
+  )
+
   # FIXME: Implement a way of dealing with alternate formats
   data <- httr2::resp_body_json(
-      httr2::req_perform(request, error_call = call),
-      check_type = FALSE,
-      simplifyVector = TRUE
-    )
+    httr2::req_perform(request, error_call = call),
+    check_type = FALSE,
+    simplifyVector = TRUE
+  )
 
   if (data[["Count"]] == 0) {
     cli::cli_bullets(
-      c("!" = data[["Message"]],
-        "*" = "Adjust search criteria and try again: {data[['SearchCriteria']]}")
+      c(
+        "!" = data[["Message"]],
+        "*" = "Adjust search criteria and try again: {data[['SearchCriteria']]}"
+      )
     )
   }
 
@@ -89,11 +120,13 @@ read_crashapi <- function(url = "https://crashviewer.nhtsa.dot.gov",
 
 #' Validate start and end year
 #' @noRd
-validate_year <- function(year,
-                          year_range = c(2010, 2022),
-                          start_year = NULL,
-                          end_year = NULL,
-                          call = caller_env()) {
+validate_year <- function(
+  year,
+  year_range = c(2010, 2022),
+  start_year = NULL,
+  end_year = NULL,
+  call = caller_env()
+) {
   if (is.null(year)) {
     if (is.null(start_year) && is.null(end_year)) {
       cli_abort(
@@ -137,11 +170,13 @@ validate_year <- function(year,
 #' @noRd
 #' @importFrom dplyr mutate across all_of
 #' @importFrom rlang check_installed %||%
-df_to_sf <- function(x,
-                     coords = c("LONGITUD", "LATITUDE"),
-                     crs = 4326,
-                     na.fail = FALSE,
-                     remove = FALSE) {
+df_to_sf <- function(
+  x,
+  coords = c("LONGITUD", "LATITUDE"),
+  crs = 4326,
+  na.fail = FALSE,
+  remove = FALSE
+) {
   crs <- crs %||% 4326
 
   if (!all(coords %in% names(x))) {
@@ -176,11 +211,13 @@ df_to_sf <- function(x,
 
 #' Validate state and county name/abbreviation and convert to FIPS number
 #' @noRd
-lookup_fips <- function(state,
-                        county = NULL,
-                        several.ok = FALSE,
-                        list = FALSE,
-                        int = TRUE) {
+lookup_fips <- function(
+  state,
+  county = NULL,
+  several.ok = FALSE,
+  list = FALSE,
+  int = TRUE
+) {
   if (!several.ok) {
     state_fips <- suppressMessages(validate_state(state))
     county_fips <- suppressMessages(validate_county(state, county))
@@ -229,62 +266,63 @@ lookup_fips <- function(state,
 }
 
 #' @noRd
-#' @importFrom rlang has_name
 rename_fars_vars <- function(x, reorder = TRUE, rename = TRUE) {
-  # Reorder columns to match analytical manual order
   x_vars <- fars_vars_labels[fars_vars_labels[["name"]] %in% names(x), ]
+  # Some variables are listed for multiple data files so keep the first
+  x_vars <- x_vars[!duplicated(x_vars[["name"]]), ]
 
-  if (!all(rlang::has_name(x, x_vars))) {
+  if (nrow(x_vars) == 0) {
     return(x)
   }
 
   x_name <- x_vars[["name"]]
 
   if (isTRUE(reorder)) {
-    x <- x[, match(x_name, colnames(x))]
+    # Reorder columns to match analytical manual order and keep any
+    # unrecognized columns at the end
+    x <- x[, c(x_name, setdiff(names(x), x_name)), drop = FALSE]
   }
 
   if (!isTRUE(rename)) {
     return(x)
   }
 
-  x_name <- rlang::set_names(x_vars[["name"]], x_vars[["nm"]])
-
-  dplyr::rename_with(
-    x,
-    ~ names(x_name)[which(x_name == .x)],
-    .cols = dplyr::any_of(as.character(x_name))
-  )
+  dplyr::rename(x, !!!rlang::set_names(x_name, x_vars[["nm"]]))
 }
 
 #' Format crash data
 #'
 #' Reorder columns to match the order documented in Fatality Analysis Reporting
-#' System (FARS) Analytical User's Manual, 1975-2019 and append derived columns
-#' for date, time, and datetime.
+#' System (FARS) Analytical User's Manual, 1975-2019, convert coordinate and
+#' count columns to numeric and integer values, and append derived columns for
+#' date, time, and datetime. Column names are kept as returned by the API.
 #'
 #' @param x Data frame with crash data.
 #' @param details If `TRUE`, append date, time, datetime columns to formatted
 #'   crash data; defaults to TRUE
 #' @export
-#' @importFrom janitor clean_names
 #' @importFrom dplyr mutate
+#' @importFrom rlang .data
 #' @importFrom stringr str_pad
 format_crashes <- function(x, details = TRUE) {
-  # Reorder and clean column names
-  crash_df <- rename_fars_vars(x)
+  # Reorder columns but keep the API column names
+  crash_df <- rename_fars_vars(x, rename = FALSE)
 
   crash_df <-
     dplyr::mutate(
       crash_df,
       dplyr::across(
-        dplyr::any_of(c("latitude", "longitud")),
+        dplyr::any_of(c("LATITUDE", "LONGITUD")),
         ~ as.numeric(.x)
       ),
       dplyr::across(
         dplyr::any_of(c(
-          "case_year", "totalvehicles", "total_vehicles",
-          "ve_forms", "fatals", "peds", "persons"
+          "CaseYear",
+          "TOTALVEHICLES",
+          "VE_FORMS",
+          "FATALS",
+          "PEDS",
+          "PERSONS"
         )),
         ~ as.integer(.x)
       )
@@ -298,22 +336,27 @@ format_crashes <- function(x, details = TRUE) {
     stringr::str_pad(x, width = 2, pad = "0")
   }
 
-  if (!all(c("year", "month", "day") %in% names(crash_df))) {
+  if (
+    !all(
+      c("ST_CASE", "YEAR", "MONTH", "DAY", "HOUR", "MINUTE") %in%
+        names(crash_df)
+    )
+  ) {
     return(crash_df)
   }
 
   # Append date/time columns
   dplyr::mutate(
     crash_df,
-    date = paste(year, month, day, sep = "-"),
-    time = paste(pad_hm(hour), pad_hm(minute), sep = ":"),
+    date = paste(.data[["YEAR"]], .data[["MONTH"]], .data[["DAY"]], sep = "-"),
+    time = paste(pad_hm(.data[["HOUR"]]), pad_hm(.data[["MINUTE"]]), sep = ":"),
     datetime = as.POSIXct(
       paste(date, time),
       format = "%Y-%m-%d %H:%M",
       tz = "UTC"
     ),
     date = as.Date(date),
-    .after = st_case
+    .after = "ST_CASE"
   )
 }
 
@@ -321,11 +364,13 @@ format_crashes <- function(x, details = TRUE) {
 #'
 #' @noRd
 #' @importFrom stringr str_to_sentence
-pkg_data_date <- function(data,
-                          date = "added",
-                          format = "%B %d %Y",
-                          verbose = TRUE,
-                          pkg = "crashapi") {
+pkg_data_date <- function(
+  data,
+  date = "added",
+  format = "%B %d %Y",
+  verbose = TRUE,
+  pkg = "crashapi"
+) {
   data_date <-
     pkg_data_index[pkg_data_index[["data"]] == data, ][[paste0("date_", date)]]
 
