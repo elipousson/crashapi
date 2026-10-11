@@ -11,9 +11,9 @@
 #' @param format Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
 #'   unzip and geo options are only supported if format is "csv".
 #' @param path Path to download zip file. Set to [getwd()] if `NULL` (default).
-#' @param pr If `TRUE`, download FARS data for Puerto Rico. No Puerto Rico data
-#'   available for years 1975-1977. Default: `FALSE`
-#' @param aux If `TRUE` and year is after 1982, download auxiliary
+#' @param pr If `TRUE`, download FARS data for Puerto Rico. Puerto Rico data is
+#'   available for 1978 and from 1980 onwards. Default: `FALSE`
+#' @param aux If `TRUE` and year is 1982 or later, download auxiliary
 #'   FARS datasets that "contain data derived from the regular FARS/GES
 #'   variables using NCSA analytical data classifications." In 2010, the NHTSA
 #'   explained: "These classifications are widely used in NCSA publications and
@@ -85,10 +85,22 @@ get_fars_zip <- function(
   }
 
   format <- match.arg(format, c("csv", "sas"))
+  folder <- "National"
   scope <- "National"
 
-  if (pr) {
-    scope <- utils::URLencode("Puerto Rico")
+  if (isTRUE(pr)) {
+    if (year < 1978 || year == 1979) {
+      cli_abort(
+        c(
+          "Puerto Rico data is not available for {year}.",
+          "i" = "Puerto Rico data is available for 1978 and from 1980 onwards."
+        )
+      )
+    }
+
+    # The Puerto Rico folder name includes a space but the file names do not
+    folder <- utils::URLencode("Puerto Rico")
+    scope <- "PuertoRico"
   }
 
   auxiliary <- ""
@@ -97,8 +109,8 @@ get_fars_zip <- function(
     if (year < 1982) {
       cli_warn(
         c(
-          "Auxiliary data (when {.code aux = TRUE}) is only available for years
-        after 1982.",
+          "Auxiliary data (when {.code aux = TRUE}) is only available from 1982
+          onwards.",
           "i" = "Returning non-auxiliary data only."
         )
       )
@@ -108,10 +120,16 @@ get_fars_zip <- function(
   }
 
   filename <- glue::glue("FARS{year}{scope}{auxiliary}{toupper(format)}.zip")
+  remote_filename <- filename
+
+  # The 1996 national auxiliary CSV file name is misspelled on the NHTSA site
+  if (filename == "FARS1996NationalAuxiliaryCSV.zip") {
+    remote_filename <- "FARS1996NationalAuxiliaryCVS.zip"
+  }
 
   url <-
     glue::glue(
-      "https://static.nhtsa.gov/nhtsa/downloads/FARS/{year}/{scope}/{filename}"
+      "https://static.nhtsa.gov/nhtsa/downloads/FARS/{year}/{folder}/{remote_filename}"
     )
 
   if (is.null(path)) {
@@ -159,6 +177,10 @@ get_fars_zip <- function(
   files <-
     list.files(
       path = exdir,
+      # Newer zip files contain a folder with the CSV files
+      pattern = "\\.csv$",
+      ignore.case = TRUE,
+      recursive = TRUE,
       full.names = TRUE
     )
 

@@ -130,6 +130,10 @@ get_crss_zip <- function(
   files <-
     list.files(
       path = exdir,
+      # Newer zip files contain a folder with the CSV files
+      pattern = "\\.csv$",
+      ignore.case = TRUE,
+      recursive = TRUE,
       full.names = TRUE
     )
 

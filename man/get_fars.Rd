@@ -127,7 +127,8 @@ dataset" api. "csv" and "sas" are supported for the "zip" api ("json" is
 treated as "csv").}
 
 \item{pr}{logical. If \code{TRUE}, download zip file with FARS data for Puerto
-Rico. No Puerto Rico data available for years 1975-1977. Default: \code{FALSE}
+Rico. Puerto Rico data is available for 1978 and from 1980 onwards.
+Default: \code{FALSE}
 for \code{get_fars_zip} only.}
 
 \item{path}{File path used if download is \code{TRUE}.}

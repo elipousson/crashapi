@@ -65,7 +65,8 @@
 #'   vehicles, e.g. c(1, 2) for minimum of 1 vehicle and maximum of 2. Required
 #'   for `get_fars_crash_list`.
 #' @param pr logical. If `TRUE`, download zip file with FARS data for Puerto
-#'   Rico. No Puerto Rico data available for years 1975-1977. Default: `FALSE`
+#'   Rico. Puerto Rico data is available for 1978 and from 1980 onwards.
+#'   Default: `FALSE`
 #'   for `get_fars_zip` only.
 #' @param format Default "json". "csv" is supported when using the "year
 #'   dataset" api. "csv" and "sas" are supported for the "zip" api ("json" is

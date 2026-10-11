@@ -33,6 +33,46 @@ test_that("get_fars_zip() returns results for multiple years named by year", {
   expect_named(data[["2024"]], "accident")
 })
 
+test_that("get_fars_zip() builds URLs for Puerto Rico and 1996 auxiliary data", {
+  urls <- NULL
+  local_mocked_bindings(
+    download.file = function(url, destfile, ...) {
+      urls <<- c(urls, url)
+      file.create(destfile)
+    }
+  )
+  path <- withr::local_tempdir()
+
+  get_fars_zip(year = 2022, pr = TRUE, read = FALSE, path = path)
+  get_fars_zip(year = 1996, aux = TRUE, read = FALSE, path = path)
+
+  expect_identical(
+    urls,
+    c(
+      "https://static.nhtsa.gov/nhtsa/downloads/FARS/2022/Puerto%20Rico/FARS2022PuertoRicoCSV.zip",
+      "https://static.nhtsa.gov/nhtsa/downloads/FARS/1996/National/FARS1996NationalAuxiliaryCVS.zip"
+    )
+  )
+  expect_identical(
+    list.files(path, pattern = "1996"),
+    "FARS1996NationalAuxiliaryCSV.zip"
+  )
+})
+
+test_that("get_fars_zip() errors for years without Puerto Rico data", {
+  expect_snapshot(get_fars_zip(year = 1979, pr = TRUE), error = TRUE)
+})
+
+test_that("get_fars_zip() reads CSV files in a folder within the zip file", {
+  skip_if_not_installed("readr")
+  path <- withr::local_tempdir()
+  local_fars_zip(path, year = 2022, scope = "PuertoRico", nested = TRUE)
+
+  data <- get_fars_zip(year = 2022, pr = TRUE, path = path)
+  expect_named(data, "accident")
+  expect_s3_class(data$accident, "data.frame")
+})
+
 test_that("get_fars_zip() adds variable labels", {
   skip_if_not_installed("readr")
   path <- withr::local_tempdir()
