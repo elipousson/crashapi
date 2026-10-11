@@ -12,6 +12,7 @@ get_crss_zip(
   read = TRUE,
   geometry = FALSE,
   overwrite = FALSE,
+  keep_files = FALSE,
   labels = TRUE
 )
 }
@@ -21,20 +22,24 @@ downloaded separately and, if \code{read = TRUE}, returned as a list named by
 year. Defaults to \code{getOption("crashapi.year", 2024)}.}
 
 \item{format}{Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
-unzip and geo options are only supported if format is "csv".}
+\code{read = TRUE} and \code{geometry = TRUE} are only supported if format is "csv".}
 
-\item{path}{Path to download zip file. Set to \code{\link[=getwd]{getwd()}} if \code{NULL} (default).}
+\item{path}{Directory for downloaded and cached files. If \code{NULL} (default),
+uses \code{getOption("crashapi.cache_dir")} or the user cache directory from
+\code{tools::R_user_dir("crashapi", "cache")}.}
 
-\item{aux}{If \code{TRUE}, download auxiliary
-CRSS datasets .}
+\item{aux}{If \code{TRUE}, download auxiliary CRSS datasets.}
 
-\item{read}{If \code{TRUE}, unzip the downloaded file and read CSV files into a
-list of tables with each list item corresponding to one CSV file.}
+\item{read}{If \code{TRUE} (default), read the cached parquet files into a list
+of tables with each list item corresponding to one data file.}
 
 \item{geometry}{If \code{TRUE}, convert the accident table to a sf object.}
 
-\item{overwrite}{If \code{FALSE}, abort if file exists at the provided path. If
-\code{TRUE}, overwrite file.}
+\item{overwrite}{If \code{TRUE}, download the data and replace any cached files.
+Default: \code{FALSE}}
+
+\item{keep_files}{If \code{TRUE}, keep the downloaded zip file and the extracted
+CSV files in the cache folder. Default: \code{FALSE}}
 
 \item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
 with a matching variable in \link{fars_vars_labels}. Labels are taken from the
@@ -42,15 +47,21 @@ FARS Analytical User's Manual so variables only used in CRSS are not
 labelled.}
 }
 \value{
-Downloads zip file with CSV or SAS tables and returns the zip file
-path invisibly if \code{read = FALSE}, or a list of data frames with one item
-for each table (with the accident table converted to an sf object if
-\code{geometry = TRUE}). If more than one year is provided, returns a named
-vector of file paths or a list of lists named by year.
+If \code{read = TRUE}, a list of data frames with one item for each
+table (with the accident table converted to an sf object if \code{geometry = TRUE}). If \code{read = FALSE}, the cached parquet file paths named by table (or
+the zip file path if \code{format = "sas"}) invisibly. If more than one year is
+provided, returns a list named by year.
 }
 \description{
 This function is similar to \code{\link[=get_fars_zip]{get_fars_zip()}} to download files directly from
-NHTSA FTP site. If read is \code{TRUE}, the function reads a list containing data
-frames for each table available in the selected year. If geometry is \code{TRUE},
-the accident table is converted to an sf object.
+the NHTSA downloads site. If \code{read} is \code{TRUE}, the function returns a list
+containing data frames for each table available in the selected year. If
+\code{geometry} is \code{TRUE}, the accident table is converted to an sf object.
+}
+\details{
+Zipped CSV files are converted to parquet files and cached in a folder
+named after the zip file within \code{path} (by default, the user cache directory
+from \code{\link[tools:R_user_dir]{tools::R_user_dir()}}), and the zip and CSV files are removed unless
+\code{keep_files = TRUE}. Later calls read the cached parquet files without
+downloading the data again unless \code{overwrite = TRUE}.
 }

@@ -9,17 +9,38 @@ test_that("Test lookup_fips outputs", {
     lookup_fips(state = "MD", int = FALSE),
     "character"
   )
-  expect_warning(
-    lookup_fips(state = "XX"),
-    "not a valid FIPS code or state name/abbreviation"
-  )
+  expect_identical(lookup_fips(c("MD", "VT"), several.ok = TRUE), c(24L, 50L))
+  expect_snapshot(out <- lookup_fips(state = "XX"))
+  expect_identical(out, integer(0))
+  expect_snapshot(lookup_fips(state = "MD", county = "Baltimore"), error = TRUE)
+  expect_snapshot(lookup_fips(state = "MD", county = 999), error = TRUE)
 })
 
 test_that("validate_state and validate_county works", {
   expect_type(validate_state("MD", .msg = FALSE), "character")
   expect_type(validate_county("MD", "Garrett", .msg = FALSE), "character")
-  expect_warning(
-    validate_county("DC", "Garrett", .msg = FALSE),
-    "'Garrett' is not a valid name for counties in District of Columbia"
+  expect_identical(validate_county("MD", 5, .msg = FALSE), "005")
+  expect_identical(validate_county("CA", "Los Angeles", .msg = FALSE), "037")
+  expect_snapshot(out <- validate_county("DC", "Garrett", .msg = FALSE))
+  expect_null(out)
+  expect_snapshot(out <- validate_county("MD", "Baltimore", .msg = FALSE))
+  expect_null(out)
+  expect_snapshot(out <- validate_county("MD", 999, .msg = FALSE))
+  expect_null(out)
+  expect_snapshot(out <- validate_county("XX", "Garrett", .msg = FALSE))
+  expect_null(out)
+})
+
+test_that("validate_state() returns FIPS codes for valid values", {
+  expect_identical(validate_state(6, .msg = FALSE), "06")
+  expect_identical(validate_state("Puerto Rico", .msg = FALSE), "72")
+  expect_snapshot(
+    out <- validate_state(c("MD", "XX"), multiple = TRUE, .msg = FALSE)
+  )
+  expect_identical(out, "24")
+  expect_snapshot(validate_state(c("MD", "VT"), .msg = FALSE), error = TRUE)
+  expect_snapshot(
+    validate_state("XX", require_state = TRUE, .msg = FALSE),
+    error = TRUE
   )
 })

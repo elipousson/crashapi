@@ -1,16 +1,25 @@
 #' Download FARS data files as zipped CSV or SAS files
 #'
 #' This function provides an alternative to [get_fars_year()] that downloads
-#' files directly from NHTSA FTP site. If read is `TRUE`, the function reads a
-#' list containing data frames for each table available in the selected year. If
-#' geometry is `TRUE`, the accident table is converted to an sf object.
+#' files directly from the NHTSA downloads site. If `read` is `TRUE`, the
+#' function returns a list containing data frames for each table available in
+#' the selected year. If `geometry` is `TRUE`, the accident table is converted
+#' to an sf object.
+#'
+#' Zipped CSV files are converted to parquet files and cached in a folder
+#' named after the zip file within `path` (by default, the user cache directory
+#' from [tools::R_user_dir()]), and the zip and CSV files are removed unless
+#' `keep_files = TRUE`. Later calls read the cached parquet files without
+#' downloading the data again unless `overwrite = TRUE`.
 #'
 #' @param year One or more years of data from 1975 to 2024. Each year is
 #'   downloaded separately and, if `read = TRUE`, returned as a list named by
 #'   year. Defaults to `getOption("crashapi.year", 2024)`.
 #' @param format Format of zipped data tables ('csv' or 'sas'). Default: 'csv'.
-#'   unzip and geo options are only supported if format is "csv".
-#' @param path Path to download zip file. Set to [getwd()] if `NULL` (default).
+#'   `read = TRUE` and `geometry = TRUE` are only supported if format is "csv".
+#' @param path Directory for downloaded and cached files. If `NULL` (default),
+#'   uses `getOption("crashapi.cache_dir")` or the user cache directory from
+#'   `tools::R_user_dir("crashapi", "cache")`.
 #' @param pr If `TRUE`, download FARS data for Puerto Rico. Puerto Rico data is
 #'   available for 1978 and from 1980 onwards. Default: `FALSE`
 #' @param aux If `TRUE` and year is 1982 or later, download auxiliary
@@ -24,16 +33,18 @@
 #'   traffic safety research." Learn more from the FARS and GES Auxiliary
 #'   Datasets Q & A:
 #'   <https://crashstats.nhtsa.dot.gov/Api/Public/ViewPublication/811364>
-#' @param read If `TRUE`, unzip the downloaded file and read CSV files into a
-#'   list of tables with each list item corresponding to one CSV file.
+#' @param read If `TRUE` (default), read the cached parquet files into a list
+#'   of tables with each list item corresponding to one data file.
 #' @param geometry If `TRUE`, convert the accident table to a sf object.
-#' @param overwrite If `FALSE`, abort if file exists at the provided path. If
-#'   `TRUE`, overwrite file.
-#' @return Downloads zip file with CSV or SAS tables and returns the zip file
-#'   path invisibly if `read = FALSE`, or a list of data frames with one item
-#'   for each table (with the accident table converted to an sf object if
-#'   `geometry = TRUE`). If more than one year is provided, returns a named
-#'   vector of file paths or a list of lists named by year.
+#' @param overwrite If `TRUE`, download the data and replace any cached files.
+#'   Default: `FALSE`
+#' @param keep_files If `TRUE`, keep the downloaded zip file and the extracted
+#'   CSV files in the cache folder. Default: `FALSE`
+#' @return If `read = TRUE`, a list of data frames with one item for each
+#'   table (with the accident table converted to an sf object if `geometry =
+#'   TRUE`). If `read = FALSE`, the cached parquet file paths named by table (or
+#'   the zip file path if `format = "sas"`) invisibly. If more than one year is
+#'   provided, returns a list named by year.
 #' @inheritParams format_crashes
 #' @rdname get_fars_zip
 #' @export
@@ -51,6 +62,7 @@ get_fars_zip <- function(
   read = TRUE,
   geometry = FALSE,
   overwrite = FALSE,
+  keep_files = FALSE,
   labels = TRUE
 ) {
   year <- validate_year(year = year, year_range = c(1975, 2024))
@@ -70,6 +82,7 @@ get_fars_zip <- function(
             read = read,
             geometry = geometry,
             overwrite = overwrite,
+            keep_files = keep_files,
             labels = labels
           )
         }
@@ -78,7 +91,7 @@ get_fars_zip <- function(
     )
 
     if (!read) {
-      return(invisible(unlist(crash_data)))
+      return(invisible(crash_data))
     }
 
     return(crash_data)
@@ -141,80 +154,17 @@ get_fars_zip <- function(
       "https://static.nhtsa.gov/nhtsa/downloads/FARS/{year}/{folder}/{remote_filename}"
     )
 
-  if (is.null(path)) {
-    path <- getwd()
-  }
-
-  destfile <- file.path(path, filename)
-
-  if (file.exists(destfile)) {
-    if (isTRUE(overwrite)) {
-      file.remove(destfile)
-    } else {
-      cli_bullets(
-        c(
-          ">" = "Reading existing {.file {filename}} at {.path {path}}.",
-          "i" = "Set {.code overwrite = TRUE} to overwrite existing file."
-        )
-      )
-    }
-  }
-
-  if (!file.exists(destfile)) {
-    download.file(
-      url = url,
-      destfile = destfile,
-      method = "auto",
-      mode = "wb"
-    )
-  }
-
-  if (!read) {
-    return(invisible(destfile))
-  }
-
-  exdir <-
-    file.path(path, gsub("\\.zip$", "", filename))
-
-  utils::unzip(
-    zipfile = destfile,
-    exdir = exdir,
-    overwrite = TRUE,
-    list = FALSE
+  get_zip_tables(
+    dataset = "FARS",
+    year = year,
+    url = url,
+    filename = filename,
+    format = format,
+    path = path,
+    read = read,
+    geometry = geometry,
+    overwrite = overwrite,
+    keep_files = keep_files,
+    labels = labels
   )
-
-  files <-
-    list.files(
-      path = exdir,
-      # Newer zip files contain a folder with the CSV files
-      pattern = "\\.csv$",
-      ignore.case = TRUE,
-      recursive = TRUE,
-      full.names = TRUE
-    )
-
-  rlang::check_installed("readr")
-
-  crash_tables <-
-    stats::setNames(
-      map(
-        cli::cli_progress_along(files, "Reading data"),
-        ~ readr::read_csv(
-          file = files[.x],
-          progress = FALSE,
-          show_col_types = FALSE
-        )
-      ),
-      nm = tolower(gsub(".CSV", "", basename(files), ignore.case = TRUE))
-    )
-
-  if (geometry) {
-    crash_tables[["accident"]] <- df_to_sf(crash_tables[["accident"]])
-  }
-
-  if (!isTRUE(labels)) {
-    return(crash_tables)
-  }
-
-  Map(label_fars_vars, crash_tables, toupper(names(crash_tables)))
 }

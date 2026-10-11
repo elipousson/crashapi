@@ -261,28 +261,42 @@ lookup_fips <- function(
   county = NULL,
   several.ok = FALSE,
   list = FALSE,
-  int = TRUE
+  int = TRUE,
+  call = caller_env()
 ) {
   if (!several.ok) {
-    state_fips <- suppressMessages(validate_state(state))
-    county_fips <- suppressMessages(validate_county(state, county))
+    state_fips <- validate_state(state, .msg = FALSE)
+    county_fips <- validate_county(state, county, .msg = FALSE)
   } else {
-    state_fips <- suppressMessages(vapply(
-      state,
-      validate_state,
-      USE.NAMES = FALSE,
-      FUN.VALUE = "1"
-    ))
-
+    state_fips <- validate_state(state, multiple = TRUE, .msg = FALSE)
     county_fips <- NULL
 
     if (!is.null(county)) {
-      county_fips <- suppressMessages(mapply(
+      county_fips <- mapply(
         validate_county,
         state_fips,
         county,
+        MoreArgs = list(.msg = FALSE),
         USE.NAMES = FALSE
-      ))
+      )
+    }
+  }
+
+  # Error instead of falling back to the state FIPS code if a county can't be
+  # matched (validate_county() warns with the reason)
+  if (!is.null(county)) {
+    county_fips <- unlist(county_fips)
+
+    if (length(county_fips) == 0 || anyNA(county_fips)) {
+      cli_abort(
+        c(
+          "{.arg county} {.val {county}} can't be matched to a county in
+          {.arg state} {.val {state}}.",
+          "i" = "Use a full county name (e.g. {.val Baltimore County}) or a
+          county FIPS code."
+        ),
+        call = call
+      )
     }
   }
 

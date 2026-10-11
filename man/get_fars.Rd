@@ -2,188 +2,87 @@
 % Please edit documentation in R/get_fars.R
 \name{get_fars}
 \alias{get_fars}
-\alias{get_fars_crashes}
-\alias{get_fars_cases}
-\alias{get_fars_crash_details}
-\alias{get_fars_crash_list}
-\alias{get_fars_summary}
-\alias{get_fars_year}
-\title{Get Fatality Analysis Reporting System (FARS) data with the FARS API}
+\title{Get Fatality Analysis Reporting System (FARS) data tables}
 \usage{
 get_fars(
-  state,
-  year = getOption("crashapi.year", 2024),
-  county = NULL,
-  api = c("crashes", "cases", "state list", "summary count", "year dataset", "zip"),
-  type = NULL,
-  details = FALSE,
-  geometry = FALSE,
-  crs = NULL,
-  cases = NULL,
-  vehicles = NULL,
-  format = "json",
-  pr = FALSE,
-  path = NULL,
-  download = FALSE,
-  labels = TRUE
-)
-
-get_fars_crashes(
-  state,
-  county,
-  year = getOption("crashapi.year", 2024),
-  details = FALSE,
-  geometry = FALSE,
-  crs = NULL,
-  labels = TRUE
-)
-
-get_fars_cases(
-  state,
-  cases,
-  year = getOption("crashapi.year", 2024),
-  details = FALSE,
-  geometry = FALSE,
-  crs = NULL,
-  labels = TRUE
-)
-
-get_fars_crash_list(
-  state,
-  year = getOption("crashapi.year", 2024),
-  vehicles = c(1, 50),
-  labels = TRUE
-)
-
-get_fars_summary(state, year = getOption("crashapi.year", 2024), labels = TRUE)
-
-get_fars_year(
-  state,
+  state = NULL,
   year = getOption("crashapi.year", 2024),
   type = "accident",
-  format = "json",
-  path = NULL,
+  county = NULL,
+  source = c("auto", "api", "zip"),
+  ...,
   geometry = FALSE,
   crs = NULL,
-  download = FALSE,
-  labels = TRUE,
-  call = caller_env()
+  labels = TRUE
 )
 }
 \arguments{
-\item{state}{Required. State name, abbreviation, or FIPS number.
-\code{get_fars_crash_list} supports multiple states.}
+\item{state}{One or more state names, abbreviations, or FIPS numbers. If
+\code{NULL} (default), returns national data. Use "PR" for Puerto Rico.}
 
-\item{year}{numeric vector. One or more years. For \code{get_fars_crashes},
-\code{get_fars_crash_list}, \code{get_fars_summary}, and \code{get_fars_year} (and the
-corresponding \code{api} values), the minimum and maximum values are used as
-the start and end year, so \code{year = 2015:2020} and \code{year = c(2015, 2020)}
-both request data from 2015 through 2020 (with a message if \code{year} has
-gaps). For \code{get_fars_cases}, \code{year} must be a single year or one year for
-each case in \code{cases}. For \code{get_fars_zip}, each year is downloaded
-separately. Most \code{api} options support the years from 2010 through 2024
-and "zip" supports 1975 to 2024. Defaults to
-\code{getOption("crashapi.year", 2024)} so the default year can be set for all
-functions with \code{options(crashapi.year = 2022)}.}
+\item{year}{One or more years from 1975 to 2024 (or from 2010 for the
+CrashAPI). The minimum and maximum values are used as the start and end
+year, with a message if \code{year} has gaps. Defaults to
+\code{getOption("crashapi.year", 2024)}.}
 
-\item{county}{County name or FIPS number. Required for \code{get_fars_crashes}.}
+\item{type}{Name of the FARS data table, e.g. "accident" (default),
+"person", or "vehicle". Lowercase or uppercase values are permitted. The
+available tables vary by year and source; see \code{\link[=get_fars_year]{get_fars_year()}} for tables
+available from the CrashAPI.}
 
-\item{api}{character. API function to use. Supported values include
-"crashes", "cases", "state list", "summary count", "year dataset", and
-"zip". If \code{api} is not provided, it is "cases" if \code{cases} is provided,
-"state list" if \code{vehicles} is provided, "year dataset" if \code{type} is
-provided, "zip" if \code{pr} is \code{TRUE}, and "crashes" otherwise.}
+\item{county}{County name or FIPS number. Requires a single \code{state}.}
 
-\item{type}{Name of the dataset or data file to download when using the "year
-dataset" api or \code{get_fars_year}. Supported values include "ACCIDENT",
-"CEVENT", "DAMAGE", "DISTRACT", "DRIMPAIR", "DRUGS", "FACTOR",
-"MANEUVER", "NMCRASH", "NMIMPAIR", "NMPRIOR", "PARKWORK", "PBTYPE",
-"PERSON", "SAFETYEQ", "VEHICLE", "VEVENT", "VINDECODE", "VINDERIVED",
-"VIOLATION", "VISION", and "VSOE". "TRAILERVINDERIVED" is supported for
-2016 onwards, "NMDISTRACT" and "RACE" for 2019 onwards, and "CRASHRF",
-"DRIVERRF", "PERSONRF", "PVEHICLESF", "VEHICLESF", and "WEATHER" for
-2020 onwards. Lowercase or mixed case values are permitted.}
+\item{source}{Source for the data: "auto" (default), "api" for the CrashAPI,
+or "zip" for zipped data files.}
 
-\item{details}{Type of detailed crash data to return (either "events" or
-"vehicles"). If \code{TRUE} for \code{get_fars} or \code{get_fars_crashes}, detailed case
-data (excluding event and vehicle data) is attached to the returned crash
-data. If \code{NULL} for \code{get_fars_cases}, events and vehicle data are excluded
-from the returned case data. returned by \code{get_fars_cases}. Optional for
-\code{get_fars_crash_details}. Default: \code{NULL} for \code{get_fars_cases}; \code{FALSE} for
-\code{get_fars} and \code{get_fars_crashes}.}
+\item{...}{Additional parameters passed to \code{\link[=get_fars_zip]{get_fars_zip()}} when data comes
+from zipped data files, e.g. \code{path}, \code{overwrite}, or \code{keep_files}.}
 
-\item{geometry}{If \code{TRUE}, return sf object. Optional for \code{get_fars_crashes}.}
+\item{geometry}{If \code{TRUE}, return an sf object. Only supported for tables
+with \code{LATITUDE} and \code{LONGITUD} columns (e.g. accident).}
 
-\item{crs}{Coordinate reference system to return for \code{get_fars_crashes} if
-\code{geometry} is \code{TRUE}.}
-
-\item{cases}{One or more FARS case numbers. Required if \code{api} is "cases" or
-using \code{get_fars_cases}. Multiple case numbers can be provided.}
-
-\item{vehicles}{numeric vector with the minimum and maximum number of
-vehicles, e.g. c(1, 2) for minimum of 1 vehicle and maximum of 2. Required
-for \code{get_fars_crash_list}.}
-
-\item{format}{Default "json". "csv" is supported when using the "year
-dataset" api. "csv" and "sas" are supported for the "zip" api ("json" is
-treated as "csv").}
-
-\item{pr}{logical. If \code{TRUE}, download zip file with FARS data for Puerto
-Rico. Puerto Rico data is available for 1978 and from 1980 onwards.
-Default: \code{FALSE}
-for \code{get_fars_zip} only.}
-
-\item{path}{File path used if download is \code{TRUE}.}
-
-\item{download}{logical. If \code{TRUE} and the \code{api} is "year dataset" or "zip",
-download the data to a file. Default \code{FALSE}.}
+\item{crs}{Coordinate reference system to use if \code{geometry} is \code{TRUE}.}
 
 \item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
 with a variable label from \link{fars_vars_labels}. Labels are shown by
 \code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt and
 gtsummary.}
-
-\item{call}{The execution environment of a currently
-running function, e.g. \code{caller_env()}. The function will be
-mentioned in error messages as the source of the error. See the
-\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
+}
+\value{
+A data frame, or an sf object if \code{geometry = TRUE}. If tables for
+multiple years from zipped data files can't be combined, a list of data
+frames named by year.
 }
 \description{
-This function provides a convenient interface for accessing FARS
-data or data summaries using a range of criteria. The \code{api} parameter
-allows you to call one of the following functions to access DOT NHTSA’s
-Crash API:
+\code{get_fars()} returns a FARS data table (e.g. accident, person, or vehicle)
+for one or more states, an optional county, and one or more years, using
+the CrashAPI or the zipped data files from the NHTSA downloads site:
+}
+\details{
 \itemize{
-\item \code{get_fars_crash_list} returns a list of fatal crashes that have occurred
-in multiple states in one or more years.
-\item \code{get_fars_crash_details} returns a details of a fatal crash that has
-occurred in a state for a single year.
-\item \code{get_fars_crashes} a list of fatal crashes by location that have occurred
-throughout U.S.
-\item \code{get_fars_summary} provides a count of injury severity that have occurred
-throughout U.S. including count of fatalities and crashes.
-\item \code{get_fars_year} provides one of 20 FARS data tables for a single year.
-Supports downloading to a CSV or JSON file.
+\item With \code{source = "auto"} (default), data for a state from 2010 onwards
+comes from the CrashAPI with \code{\link[=get_fars_year]{get_fars_year()}}. National data (\code{state = NULL}), data for Puerto Rico (\code{state = "PR"}), and data before 2010 comes
+from zipped data files with \code{\link[=get_fars_zip]{get_fars_zip()}}, which are converted to parquet
+files and cached so later calls do not download the data again.
+\item Data from zipped files is filtered to the requested states and, if
+needed, a \code{CASEYEAR} column is added so the data matches the CrashAPI.
+\item If \code{county} is provided, tables with a \code{COUNTY} column (accident and
+person) are filtered by county and other tables are filtered to crashes in
+the county from the accident table (matching \code{ST_CASE} and \code{CASEYEAR}).
 }
 
-Both \code{get_fars_crash_list} and \code{get_fars_crashes} limit the returned data
-to 5000 records so consider limiting the range of years requested if data
-exceeds that threshold.
-
-This package also enables access to the FARS data available through the
-NHTSA data downloads server in a zip format. Set \code{api} to "zip" or use the
-\code{get_fars_zip} function to download this data.
+Use \code{\link[=get_fars_crashes]{get_fars_crashes()}}, \code{\link[=get_fars_cases]{get_fars_cases()}}, \code{\link[=get_fars_crash_list]{get_fars_crash_list()}}, or
+\code{\link[=get_fars_summary]{get_fars_summary()}} to access other CrashAPI endpoints.
 }
 \examples{
+# Person table for Maryland from the CrashAPI
+head(get_fars(state = "MD", year = 2022, type = "person"), 5)
 
-head(get_fars_crashes(state = "MD", county = "Baltimore city"), 5)
+# Accident table for Baltimore City
+get_fars(state = "MD", county = "Baltimore city", year = 2022)
 
-get_fars_cases(state = "MD", cases = "240274")
-
-get_fars_crash_list(state = "MD", vehicles = 5)
-
-get_fars_summary(state = "MD")
-
-head(get_fars_year(state = "MD", type = "PERSON"), 5)
-
+\donttest{
+# National accident table from the zipped data files
+get_fars(year = 2024)
+}
 }
