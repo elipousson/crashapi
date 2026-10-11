@@ -9,9 +9,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @importFrom rlang %||%
-#' @importFrom rlang caller_env
-#' @importFrom cli cli_abort
-#' @importFrom cli cli_bullets
+#' @import rlang
+#' @importFrom cli cli_abort cli_warn cli_bullets cli_inform
 ## usethis namespace: end
 NULL

@@ -264,25 +264,20 @@ lookup_fips <- function(
   int = TRUE
 ) {
   if (!several.ok) {
-    state_fips <- suppressMessages(validate_state(state))
-    county_fips <- suppressMessages(validate_county(state, county))
+    state_fips <- validate_state(state, .msg = FALSE)
+    county_fips <- validate_county(state, county, .msg = FALSE)
   } else {
-    state_fips <- suppressMessages(vapply(
-      state,
-      validate_state,
-      USE.NAMES = FALSE,
-      FUN.VALUE = "1"
-    ))
-
+    state_fips <- validate_state(state, multiple = TRUE, .msg = FALSE)
     county_fips <- NULL
 
     if (!is.null(county)) {
-      county_fips <- suppressMessages(mapply(
+      county_fips <- mapply(
         validate_county,
         state_fips,
         county,
+        MoreArgs = list(.msg = FALSE),
         USE.NAMES = FALSE
-      ))
+      )
     }
   }
 

@@ -13,9 +13,11 @@ export(get_fars_summary)
 export(get_fars_year)
 export(get_fars_zip)
 export(read_crashapi)
+import(rlang)
 importFrom(cli,
   cli_abort,
   cli_bullets,
+  cli_inform,
   cli_progress_along,
   cli_warn
 )
@@ -35,7 +37,6 @@ importFrom(rlang,
   "%||%",
   .data,
   as_function,
-  caller_env,
   check_dots_empty,
   check_installed,
   current_env,
@@ -45,8 +46,7 @@ importFrom(rlang,
 importFrom(stats,setNames)
 importFrom(stringr,
   str_pad,
-  str_to_sentence,
-  str_trim
+  str_to_sentence
 )
 importFrom(utils,
   URLencode,
