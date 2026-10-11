@@ -12,7 +12,7 @@ fars_vars_labels
 
 ## Format
 
-A data frame with 498 rows and 14 variables:
+A data frame with 504 rows and 15 variables:
 
 - `name`:
 
@@ -75,5 +75,9 @@ A data frame with 498 rows and 14 variables:
   logical Indicator for list columns returned by API
 
 ## Details
+
+The source data is installed with the package as a CSV file
+(`system.file("extdata", "fars_vars_labels.csv", package = "crashapi")`)
+with column definitions in `fars_vars_labels_definitions.csv`.
 
 Added: January 31 2022 Updated: March 27 2022

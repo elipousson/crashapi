@@ -45,6 +45,12 @@ read_crashapi(
 
   Additional parameters used in template (varies by type).
 
+- cookie_file:
+
+  File name passed to
+  [`tempfile()`](https://rdrr.io/r/base/tempfile.html) for the temporary
+  cookie file used to preserve cookies between requests.
+
 - call:
 
   The execution environment of a currently running function, e.g.

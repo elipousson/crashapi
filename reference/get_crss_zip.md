@@ -11,13 +11,14 @@ converted to an sf object.
 
 ``` r
 get_crss_zip(
-  year = 2023,
+  year = getOption("crashapi.year", 2024),
   format = "csv",
   path = NULL,
   aux = FALSE,
   read = TRUE,
   geometry = FALSE,
-  overwrite = FALSE
+  overwrite = FALSE,
+  labels = TRUE
 )
 ```
 
@@ -25,7 +26,9 @@ get_crss_zip(
 
 - year:
 
-  Year of data from 2016 to 2023, Default: 2023
+  One or more years of data from 2016 to 2024. Each year is downloaded
+  separately and, if `read = TRUE`, returned as a list named by year.
+  Defaults to `getOption("crashapi.year", 2024)`.
 
 - format:
 
@@ -55,9 +58,18 @@ get_crss_zip(
   If `FALSE`, abort if file exists at the provided path. If `TRUE`,
   overwrite file.
 
+- labels:
+
+  If `TRUE` (default), add a `"label"` attribute to each column with a
+  matching variable in
+  [fars_vars_labels](https://elipousson.github.io/crashapi/reference/fars_vars_labels.md).
+  Labels are taken from the FARS Analytical User's Manual so variables
+  only used in CRSS are not labelled.
+
 ## Value
 
 Downloads zip file with CSV or SAS tables and returns the zip file path
-invisibly or returns a list of data frames (if geo is `FALSE`), or
-returns a list of data frames with the accident table converted to a sf
-object.
+invisibly if `read = FALSE`, or a list of data frames with one item for
+each table (with the accident table converted to an sf object if
+`geometry = TRUE`). If more than one year is provided, returns a named
+vector of file paths or a list of lists named by year.

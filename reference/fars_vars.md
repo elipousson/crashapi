@@ -1,22 +1,29 @@
 # Get variables and variable attributes for the Fatality Analysis Reporting System (FARS) API
 
-By default, this function returns the returns the list of variables for
-the data year specified. If `vars` is "make", "model", or "bodytype",
-the function returns \#' list of variable attributes for the specified
-variable name or attributes for make model and body type specified in
-the FARS dataset.
+By default, this function returns the list of variables for the data
+year specified. If `var` is "make", "model", or "bodytype", the function
+returns a list of variable attributes for the specified variable name or
+attributes for make model and body type specified in the FARS dataset.
 
 ## Usage
 
 ``` r
-fars_vars(year, var = NULL, make = NULL, model = NULL)
+fars_vars(
+  year = getOption("crashapi.year", 2024),
+  var = NULL,
+  make = NULL,
+  model = NULL
+)
 ```
 
 ## Arguments
 
 - year:
 
-  Case year. Year must be between 2010 and 2019.
+  One or more case years between 2010 and 2024. If more than one year is
+  provided, the results for each year are combined. Ignored if `var` is
+  "bodytype" since body type attributes are not available by year.
+  Defaults to `getOption("crashapi.year", 2024)`.
 
 - var:
 
@@ -38,24 +45,29 @@ fars_vars(year, var = NULL, make = NULL, model = NULL)
   year with a valid make ID number, e.g.
   `fars_vars(year = 2010, var = "model", make = 37)`
 
+## Value
+
+A data frame with a `year` column (except when `var` is "bodytype").
+
 ## Examples
 
 ``` r
+
 head(fars_vars(year = 2022, var = "make"), 5)
-#>   FROM_YEAR ID            TEXT TO_YEAR
-#> 1      1994 54           Acura      NA
-#> 2      1994 31      Alfa Romeo      NA
-#> 3      1994  3      AM General      NA
-#> 4      2010  1 American Motors      NA
-#> 5      1994 32            Audi      NA
+#>   year FROM_YEAR ID            TEXT TO_YEAR
+#> 1 2022      1994 54           Acura    <NA>
+#> 2 2022      1994 31      Alfa Romeo    <NA>
+#> 3 2022      1994  3      AM General    <NA>
+#> 4 2022      2010  1 American Motors    <NA>
+#> 5 2022      1994 32            Audi    <NA>
 
 head(fars_vars(year = 2022, var = "model", make = 12), 5)
-#>    ID
-#> 1 441
-#> 2  36
-#> 3 401
-#> 4 421
-#> 5 981
+#>   year  ID
+#> 1 2022 441
+#> 2 2022  36
+#> 3 2022 401
+#> 4 2022 421
+#> 5 2022 981
 #>                                                                                                                   MODELNAME
 #> 1                                                                                                                  Aerostar
 #> 2                                                                                                                    Aspire

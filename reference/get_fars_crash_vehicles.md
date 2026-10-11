@@ -9,40 +9,32 @@ options that are converted to ID numbers for use in the API query.
 
 ``` r
 get_fars_crash_vehicles(
-  year = NULL,
-  start_year,
-  end_year = NULL,
   state,
+  year = getOption("crashapi.year", 2024),
   make = NULL,
   model = NULL,
   model_year = 2010,
-  body_type = NULL
+  body_type = NULL,
+  labels = TRUE
 )
 ```
 
 ## Arguments
 
-- year:
-
-  numeric vector. Year or range with start and end year. 2010 to 2022
-  supported.
-
-- start_year:
-
-  Start year for crash reports.
-
-- end_year:
-
-  End year for crash reports.
-
 - state:
 
   Required. State name, abbreviation, or FIPS number.
 
+- year:
+
+  numeric vector. One or more years from 2010 to 2024. The minimum and
+  maximum values are used as the start and end year. Defaults to
+  `getOption("crashapi.year", 2024)`.
+
 - make:
 
-  Make name or ID, Required. The start_year is used to return a list of
-  support make options. Default: `NULL`
+  Make name or ID, Required. The earliest year in `year` is used to
+  return a list of support make options. Default: `NULL`
 
 - model:
 
@@ -56,3 +48,11 @@ get_fars_crash_vehicles(
 
   Body type, Optional. `model` must be provided to use body_type
   parameter. Default: `NULL`
+
+- labels:
+
+  If `TRUE` (default), add a `"label"` attribute to each column with a
+  variable label from
+  [fars_vars_labels](https://elipousson.github.io/crashapi/reference/fars_vars_labels.md).
+  Labels are shown by [`View()`](https://rdrr.io/r/utils/View.html) in
+  RStudio and Positron and used by packages such as gt and gtsummary.

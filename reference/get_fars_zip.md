@@ -11,14 +11,15 @@ table is converted to an sf object.
 
 ``` r
 get_fars_zip(
-  year = 2023,
+  year = getOption("crashapi.year", 2024),
   format = "csv",
   path = NULL,
   pr = FALSE,
   aux = FALSE,
   read = TRUE,
   geometry = FALSE,
-  overwrite = FALSE
+  overwrite = FALSE,
+  labels = TRUE
 )
 ```
 
@@ -26,7 +27,9 @@ get_fars_zip(
 
 - year:
 
-  Year of data from 1975 to 2024, Default: 2024
+  One or more years of data from 1975 to 2024. Each year is downloaded
+  separately and, if `read = TRUE`, returned as a list named by year.
+  Defaults to `getOption("crashapi.year", 2024)`.
 
 - format:
 
@@ -71,9 +74,18 @@ get_fars_zip(
   If `FALSE`, abort if file exists at the provided path. If `TRUE`,
   overwrite file.
 
+- labels:
+
+  If `TRUE` (default), add a `"label"` attribute to each column with a
+  variable label from
+  [fars_vars_labels](https://elipousson.github.io/crashapi/reference/fars_vars_labels.md).
+  Labels are shown by [`View()`](https://rdrr.io/r/utils/View.html) in
+  RStudio and Positron and used by packages such as gt and gtsummary.
+
 ## Value
 
 Downloads zip file with CSV or SAS tables and returns the zip file path
-invisibly or returns a list of data frames (if geometry is `FALSE`), or
-returns a list of data frames with the accident table converted to a sf
-object.
+invisibly if `read = FALSE`, or a list of data frames with one item for
+each table (with the accident table converted to an sf object if
+`geometry = TRUE`). If more than one year is provided, returns a named
+vector of file paths or a list of lists named by year.

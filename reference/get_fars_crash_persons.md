@@ -8,45 +8,23 @@ working.
 
 ``` r
 get_fars_crash_persons(
-  year = NULL,
-  start_year,
-  end_year = NULL,
   state,
-  age = NULL,
-  sex = NULL,
   seat,
   injury,
+  year = getOption("crashapi.year", 2024),
+  age = NULL,
+  sex = NULL,
   occupants = TRUE,
-  nonoccupants = TRUE
+  nonoccupants = TRUE,
+  labels = TRUE
 )
 ```
 
 ## Arguments
 
-- year:
-
-  numeric vector. Year or range with start and end year. 2010 to 2022
-  supported.
-
-- start_year:
-
-  Start year for crash reports.
-
-- end_year:
-
-  End year for crash reports.
-
 - state:
 
   Required. State name, abbreviation, or FIPS number.
-
-- age:
-
-  numeric
-
-- sex:
-
-  Options "m", "f", "male", "female", "unknown", "not reported."
 
 - seat:
 
@@ -57,6 +35,20 @@ get_fars_crash_persons(
   Options "unknown", "not reported", "died prior", "injured", "fatal",
   "suspected serious", "suspected minor", "possible", "no apparent"
 
+- year:
+
+  numeric vector. One or more years from 2010 to 2024. The minimum and
+  maximum values are used as the start and end year. Defaults to
+  `getOption("crashapi.year", 2024)`.
+
+- age:
+
+  numeric
+
+- sex:
+
+  Options "m", "f", "male", "female", "unknown", "not reported."
+
 - occupants:
 
   Include vehicle occupants in query; defaults to `TRUE`
@@ -64,3 +56,11 @@ get_fars_crash_persons(
 - nonoccupants:
 
   Include non-occupants in query; defaults to `TRUE`
+
+- labels:
+
+  If `TRUE` (default), add a `"label"` attribute to each column with a
+  variable label from
+  [fars_vars_labels](https://elipousson.github.io/crashapi/reference/fars_vars_labels.md).
+  Labels are shown by [`View()`](https://rdrr.io/r/utils/View.html) in
+  RStudio and Positron and used by packages such as gt and gtsummary.
