@@ -43,12 +43,12 @@ get_fars_zip(
 
 - pr:
 
-  If `TRUE`, download FARS data for Puerto Rico. No Puerto Rico data
-  available for years 1975-1977. Default: `FALSE`
+  If `TRUE`, download FARS data for Puerto Rico. Puerto Rico data is
+  available for 1978 and from 1980 onwards. Default: `FALSE`
 
 - aux:
 
-  If `TRUE` and year is after 1982, download auxiliary FARS datasets
+  If `TRUE` and year is 1982 or later, download auxiliary FARS datasets
   that "contain data derived from the regular FARS/GES variables using
   NCSA analytical data classifications." In 2010, the NHTSA explained:
   "These classifications are widely used in NCSA publications and

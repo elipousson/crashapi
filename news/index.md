@@ -46,6 +46,15 @@
 - [`get_fars_zip()`](https://elipousson.github.io/crashapi/reference/get_fars_zip.md)
   and
   [`get_crss_zip()`](https://elipousson.github.io/crashapi/reference/get_crss_zip.md)
+  now read CSV files from the folder inside newer zip files, which
+  previously caused `read = TRUE` to fail for most recent years.
+- `get_fars_zip(pr = TRUE)` now uses the correct file name for Puerto
+  Rico data and errors for years without Puerto Rico data (1975-1977 and
+  1979). `get_fars_zip(year = 1996, aux = TRUE)` now handles the
+  misspelled file name on the NHTSA site.
+- [`get_fars_zip()`](https://elipousson.github.io/crashapi/reference/get_fars_zip.md)
+  and
+  [`get_crss_zip()`](https://elipousson.github.io/crashapi/reference/get_crss_zip.md)
   support multiple years and return a list (or vector of file paths)
   named by year.
 - [`format_crashes()`](https://elipousson.github.io/crashapi/reference/format_crashes.md),

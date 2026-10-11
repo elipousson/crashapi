@@ -174,8 +174,8 @@ get_fars_year(
 - pr:
 
   logical. If `TRUE`, download zip file with FARS data for Puerto Rico.
-  No Puerto Rico data available for years 1975-1977. Default: `FALSE`
-  for `get_fars_zip` only.
+  Puerto Rico data is available for 1978 and from 1980 onwards. Default:
+  `FALSE` for `get_fars_zip` only.
 
 - path:
 
