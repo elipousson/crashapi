@@ -22,10 +22,14 @@
 #'   Analysis Reporting System (FARS) Analytical User's Manual, 1975-2019,
 #'   documentation of the SAS format data files.
 #'
+#' The source data is installed with the package as a CSV file
+#' (`system.file("extdata", "fars_vars_labels.csv", package = "crashapi")`)
+#' with column definitions in `fars_vars_labels_definitions.csv`.
+#'
 #' `r pkg_data_date("fars_vars_labels", "added")`
 #' `r pkg_data_date("fars_vars_labels", "updated")`
 #'
-#' @format A data frame with 498 rows and 14 variables:
+#' @format A data frame with 504 rows and 15 variables:
 #' \describe{
 #'   \item{\code{name}}{character Variable name}
 #'   \item{\code{label}}{character Variable label}

@@ -4,11 +4,11 @@ usethis::use_data(fars_terms, overwrite = TRUE)
 
 # Variable labels were originally compiled in a Google Sheet:
 # https://docs.google.com/spreadsheets/d/1aqRsXKtumgt5umiVsDTC0ETQiNVFZdWaal9ttQZmSNw/edit?usp=sharing
-# Edit data-raw/fars_vars_labels.csv instead. Column definitions are in
-# data-raw/fars_vars_labels_definitions.csv.
+# Edit inst/extdata/fars_vars_labels.csv instead. Column definitions are in
+# inst/extdata/fars_vars_labels_definitions.csv.
 fars_vars_labels <-
   readr::read_csv(
-    "data-raw/fars_vars_labels.csv",
+    "inst/extdata/fars_vars_labels.csv",
     col_types = readr::cols(
       name = readr::col_character(),
       label = readr::col_character(),
