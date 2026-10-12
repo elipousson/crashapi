@@ -36,6 +36,12 @@
 #' @param geometry If `TRUE`, return an sf object. Only supported for tables
 #'   with `LATITUDE` and `LONGITUD` columns (e.g. accident).
 #' @param crs Coordinate reference system to use if `geometry` is `TRUE`.
+#' @param decode How to decode coded values using [decode_fars()]: "names"
+#'   (default) adds `…NAME` columns with decoded values where they are missing
+#'   (data from the CrashAPI and FARS zipped CSV files from 2015 onwards already
+#'   include them), "replace" replaces codes with factors of decoded values,
+#'   "labelled" adds value labels with [haven::labelled()], and "none" doesn't
+#'   decode values. See [decode_fars()] for details.
 #' @inheritParams format_crashes
 #' @returns A data frame, or an sf object if `geometry = TRUE`. If tables for
 #'   multiple years from zipped data files can't be combined, a list of data
@@ -61,9 +67,11 @@ get_fars <- function(
   ...,
   geometry = FALSE,
   crs = NULL,
-  labels = TRUE
+  decode = c("names", "replace", "labelled", "none"),
+  var_labels = c("attribute", "none")
 ) {
   source <- match.arg(source)
+  decode <- rlang::arg_match(decode)
   year <- year_span(validate_year(year, year_range = c(1975, 2024)))
   years <- seq(year[[1]], year[[2]])
 
@@ -128,10 +136,17 @@ get_fars <- function(
   }
 
   if (is.data.frame(fars_data)) {
-    return(finish_fars_table(fars_data, type, geometry, crs, labels))
+    return(finish_fars_table(
+      fars_data,
+      type,
+      geometry,
+      crs,
+      var_labels,
+      decode
+    ))
   }
 
-  lapply(fars_data, finish_fars_table, type, geometry, crs, labels)
+  lapply(fars_data, finish_fars_table, type, geometry, crs, var_labels, decode)
 }
 
 #' Get a FARS data table for one or more states from the CrashAPI
@@ -149,7 +164,7 @@ get_fars_api_table <- function(state, year, type) {
           state = state_fips,
           year = year,
           type = type,
-          labels = FALSE
+          var_labels = "none"
         )
       }
     )
@@ -280,7 +295,7 @@ filter_fars_county <- function(
     county = county,
     source = source,
     ...,
-    labels = FALSE
+    var_labels = "none"
   )
 
   if (!is.data.frame(accident)) {
@@ -296,7 +311,25 @@ filter_fars_county <- function(
 
 #' Add geometry and labels to a FARS data table
 #' @noRd
-finish_fars_table <- function(fars_df, type, geometry, crs, labels) {
+finish_fars_table <- function(
+  fars_df,
+  type,
+  geometry,
+  crs,
+  var_labels,
+  decode = "none"
+) {
+  # Data has a case year column (added to data from zipped data files by
+  # get_fars_zip_table()) so the value labels for each year can be used
+  if (decode != "none" && !is.null(fars_year_col(fars_df))) {
+    fars_df <- decode_fars(
+      fars_df,
+      table = type,
+      decode = decode,
+      source = "FARS"
+    )
+  }
+
   if (geometry) {
     coords <- c("LONGITUD", "LATITUDE")
 
@@ -314,7 +347,7 @@ finish_fars_table <- function(fars_df, type, geometry, crs, labels) {
     }
   }
 
-  if (!isTRUE(labels)) {
+  if (!use_var_labels(var_labels)) {
     return(fars_df)
   }
 
@@ -406,7 +439,7 @@ get_fars_crashes <- function(
   details = FALSE,
   geometry = FALSE,
   crs = NULL,
-  labels = TRUE
+  var_labels = c("attribute", "none")
 ) {
   year <- year_span(validate_year(year))
 
@@ -456,7 +489,7 @@ get_fars_crashes <- function(
         cases = crash_df$ST_CASE,
         details = TRUE,
         geometry = FALSE,
-        labels = FALSE
+        var_labels = "none"
       )
 
     cases_df <-
@@ -489,7 +522,7 @@ get_fars_crashes <- function(
       )
   }
 
-  format_crashes(crash_df, details = details, labels = labels)
+  format_crashes(crash_df, details = details, var_labels = var_labels)
 }
 
 #' @rdname get_fars_crashes
@@ -503,7 +536,7 @@ get_fars_cases <- function(
   details = FALSE,
   geometry = FALSE,
   crs = NULL,
-  labels = TRUE
+  var_labels = c("attribute", "none")
 ) {
   if (missing(cases)) {
     cli_abort(
@@ -558,7 +591,7 @@ get_fars_cases <- function(
       crash_df <- df_to_sf(crash_df, crs = crs)
     }
 
-    if (isTRUE(labels)) {
+    if (use_var_labels(var_labels)) {
       crash_df <- label_fars_vars(crash_df, data_file = "ACCIDENT")
     }
 
@@ -575,7 +608,7 @@ get_fars_cases <- function(
   # Combine the nested data frames for all cases
   details_df <- list_rbind(crash_df[[details_col]])
 
-  if (!isTRUE(labels)) {
+  if (!use_var_labels(var_labels)) {
     return(details_df)
   }
 
@@ -589,7 +622,7 @@ get_fars_crash_list <- function(
   state,
   year = getOption("crashapi.year", 2024),
   vehicles = c(1, 50),
-  labels = TRUE
+  var_labels = c("attribute", "none")
 ) {
   year <- year_span(validate_year(year))
 
@@ -610,7 +643,7 @@ get_fars_crash_list <- function(
     return(NULL)
   }
 
-  format_crashes(crash_df, labels = labels)
+  format_crashes(crash_df, var_labels = var_labels)
 }
 
 #' @rdname get_fars_crashes
@@ -619,7 +652,7 @@ get_fars_crash_list <- function(
 get_fars_summary <- function(
   state,
   year = getOption("crashapi.year", 2024),
-  labels = TRUE
+  var_labels = c("attribute", "none")
 ) {
   year <- year_span(validate_year(year))
 
@@ -632,12 +665,11 @@ get_fars_summary <- function(
       state = lookup_fips(state)
     )
 
-  format_crashes(crash_df, labels = labels)
+  format_crashes(crash_df, var_labels = var_labels)
 }
 
 #' @rdname get_fars_crashes
 #' @export
-#' @importFrom utils download.file
 #' @importFrom stringr str_to_sentence
 #' @importFrom cli cli_warn
 #' @importFrom httr2 resp_body_json req_perform request
@@ -650,7 +682,7 @@ get_fars_year <- function(
   geometry = FALSE,
   crs = NULL,
   download = FALSE,
-  labels = TRUE,
+  var_labels = c("attribute", "none"),
   call = caller_env()
 ) {
   year <- year_span(validate_year(year, call = call))
@@ -766,7 +798,7 @@ get_fars_year <- function(
       )
     }
 
-    if (isTRUE(labels)) {
+    if (use_var_labels(var_labels)) {
       crash_df <- label_fars_vars(crash_df, data_file = type)
     }
 

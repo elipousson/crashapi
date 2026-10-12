@@ -13,7 +13,8 @@ get_fars(
   ...,
   geometry = FALSE,
   crs = NULL,
-  labels = TRUE
+  decode = c("names", "replace", "labelled", "none"),
+  var_labels = c("attribute", "none")
 )
 }
 \arguments{
@@ -43,10 +44,17 @@ with \code{LATITUDE} and \code{LONGITUD} columns (e.g. accident).}
 
 \item{crs}{Coordinate reference system to use if \code{geometry} is \code{TRUE}.}
 
-\item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
-with a variable label from \link{fars_vars_labels}. Labels are shown by
-\code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt and
-gtsummary.}
+\item{decode}{How to decode coded values using \code{\link[=decode_fars]{decode_fars()}}: "names"
+(default) adds \verb{…NAME} columns with decoded values where they are missing
+(data from the CrashAPI and FARS zipped CSV files from 2015 onwards already
+include them), "replace" replaces codes with factors of decoded values,
+"labelled" adds value labels with \code{\link[haven:labelled]{haven::labelled()}}, and "none" doesn't
+decode values. See \code{\link[=decode_fars]{decode_fars()}} for details.}
+
+\item{var_labels}{How to add variable labels from \link{fars_vars_labels}:
+"attribute" (default) adds a \code{"label"} attribute to each column, which is
+shown by \code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt
+and gtsummary, and "none" doesn't add variable labels.}
 }
 \value{
 A data frame, or an sf object if \code{geometry = TRUE}. If tables for

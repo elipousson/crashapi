@@ -380,17 +380,25 @@ fars_list_cols <- c(
   "PbTypes" = "PBTYPE"
 )
 
-#' Add variable labels from fars_vars_labels as column attributes
+#' Add variable labels as column attributes
 #'
-#' Variable names are matched exactly and then, for any names not found in
-#' fars_vars_labels, case-insensitively (e.g. CASEYEAR and CaseYear). When a
-#' variable is listed more than once, labels for the matching data file are
-#' preferred, then labels for variables that are not discontinued. Columns
+#' If `data_file` is provided and the year is known (from `year` or a
+#' CASEYEAR, CaseYear, or YEAR column), variable labels from the SAS data
+#' files for that table and year are used first (see fars_variables()). For
+#' other variables, names are matched exactly to fars_vars_labels and then,
+#' for any names not found, case-insensitively (e.g. CASEYEAR and CaseYear).
+#' When a variable is listed more than once, labels for the matching data file
+#' are preferred, then labels for variables that are not discontinued. Columns
 #' with decoded values (e.g. BODY_TYPNAME) without their own label use the
 #' label for the coded variable. Nested data frames in list columns are
 #' labelled using the data file from fars_list_cols.
 #' @noRd
-label_fars_vars <- function(x, data_file = NULL) {
+label_fars_vars <- function(
+  x,
+  data_file = NULL,
+  year = NULL,
+  source = "FARS"
+) {
   for (nm in intersect(names(x), names(fars_list_cols))) {
     if (is.list(x[[nm]]) && !is.data.frame(x[[nm]])) {
       x[[nm]] <- lapply(x[[nm]], function(el) {
@@ -418,7 +426,16 @@ label_fars_vars <- function(x, data_file = NULL) {
   upper <- vars[!duplicated(toupper(vars[["name"]])), ]
   upper_labels <- rlang::set_names(upper[["label"]], toupper(upper[["name"]]))
 
+  # Use variable labels from the SAS data files for the table and year first
+  sas_labels <- sas_variable_labels(x, data_file, year, source)
+
   lookup_label <- function(name) {
+    sas_label <- sas_labels[toupper(name)]
+
+    if (length(sas_label) == 1 && !is.na(sas_label)) {
+      return(unname(sas_label))
+    }
+
     if (name %in% names(exact_labels)) {
       return(exact_labels[[name]])
     }
@@ -461,15 +478,19 @@ label_fars_vars <- function(x, data_file = NULL) {
 #' @param x Data frame with crash data.
 #' @param details If `TRUE`, append date, time, datetime columns to formatted
 #'   crash data; defaults to TRUE
-#' @param labels If `TRUE` (default), add a `"label"` attribute to each column
-#'   with a variable label from [fars_vars_labels]. Labels are shown by
-#'   [View()] in RStudio and Positron and used by packages such as gt and
-#'   gtsummary.
+#' @param var_labels How to add variable labels from [fars_vars_labels]:
+#'   "attribute" (default) adds a `"label"` attribute to each column, which is
+#'   shown by [View()] in RStudio and Positron and used by packages such as gt
+#'   and gtsummary, and "none" doesn't add variable labels.
 #' @export
 #' @importFrom dplyr mutate
 #' @importFrom rlang .data
 #' @importFrom stringr str_pad
-format_crashes <- function(x, details = TRUE, labels = TRUE) {
+format_crashes <- function(
+  x,
+  details = TRUE,
+  var_labels = c("attribute", "none")
+) {
   # Reorder columns but keep the API column names
   crash_df <- rename_fars_vars(x, rename = FALSE)
 
@@ -524,7 +545,7 @@ format_crashes <- function(x, details = TRUE, labels = TRUE) {
     )
   }
 
-  if (!isTRUE(labels)) {
+  if (!use_var_labels(var_labels)) {
     return(crash_df)
   }
 
@@ -594,4 +615,86 @@ list_rbind <- function(x, ..., names_to = rlang::zap(), ptype = NULL) {
     .ptype = ptype,
     .error_call = rlang::current_env()
   )
+}
+
+#' Check the var_labels argument and return TRUE if variable labels are used
+#' @noRd
+use_var_labels <- function(
+  var_labels = c("attribute", "none"),
+  call = caller_env()
+) {
+  if (identical(var_labels, c("attribute", "none"))) {
+    var_labels <- "attribute"
+  }
+
+  var_labels <- rlang::arg_match0(
+    var_labels,
+    c("attribute", "none"),
+    arg_nm = "var_labels",
+    error_call = call
+  )
+
+  var_labels == "attribute"
+}
+
+#' Get variable labels from the SAS data files for a table, named by the
+#' uppercase variable name
+#'
+#' For each variable, uses the label for the latest year in the data (or the
+#' closest earlier year with a label). If a variable doesn't have a label for
+#' an earlier year (e.g. a variable in CrashAPI data that was only added to the
+#' SAS data files later), the label for the closest later year is used.
+#' Returns an empty vector if the table or year isn't known.
+#' @noRd
+sas_variable_labels <- function(
+  x,
+  data_file = NULL,
+  year = NULL,
+  source = "FARS"
+) {
+  if (is.null(data_file)) {
+    return(character(0))
+  }
+
+  if (is.null(year)) {
+    year_col <- c(fars_year_col(x), intersect("YEAR", names(x)))[1]
+
+    if (is.na(year_col)) {
+      return(character(0))
+    }
+
+    year <- x[[year_col]]
+  }
+
+  year <- suppressWarnings(as.integer(year))
+
+  if (all(is.na(year))) {
+    return(character(0))
+  }
+
+  year <- max(year, na.rm = TRUE)
+
+  # The CrashAPI VIOLATION dataset is the violatn table in the SAS data files
+  table <- tolower(data_file)
+  table[table == "violation"] <- "violatn"
+
+  vars <- read_value_label_file("fars_variables.parquet")
+  vars <- vars[
+    vars[["source"]] == source &
+      vars[["table"]] == table &
+      !is.na(vars[["label"]]) &
+      toupper(vars[["variable"]]) %in% toupper(names(x)),
+  ]
+
+  if (nrow(vars) == 0) {
+    return(character(0))
+  }
+
+  # Prefer the latest year up to the data year, then the closest later year
+  after <- vars[["year"]] > year
+  vars <- vars[
+    order(after, ifelse(after, vars[["year"]], -vars[["year"]])),
+  ]
+  vars <- vars[!duplicated(toupper(vars[["variable"]])), ]
+  rlang::set_names(vars[["label"]], toupper(vars[["variable"]]))
 }

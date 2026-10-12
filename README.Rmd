@@ -149,6 +149,18 @@ get_fars(year = 2024, type = "vehicle")
 get_fars(state = "MD", year = 2005)
 ```
 
+The CrashAPI and FARS zipped CSV files from 2015 onwards include `…NAME` columns with decoded values for coded variables. For older FARS data, `get_fars()` adds these columns using `decode_fars()`, which can also decode CRSS data from `get_crss_zip()` (using `source = "CRSS"`). Both use value labels from `fars_value_labels()`, which are built from the SAS format files NHTSA publishes with each year of data. Value labels can change between years:
+
+```{r fars_value_labels}
+inj_sev <- fars_value_labels(
+  year = c(1985, 2024),
+  table = "person",
+  variable = "INJ_SEV"
+)
+
+inj_sev[, c("year", "code", "value")]
+```
+
 CRSS data files can be downloaded and cached with `get_crss_zip()`:
 
 ```{r get_crss_zip, eval = FALSE}

@@ -47,7 +47,7 @@ get_fars_crash_vehicles <- function(
   model_year,
   body_type,
   year = getOption("crashapi.year", 2024),
-  labels = TRUE
+  var_labels = c("attribute", "none")
 ) {
   rlang::check_required(make)
   rlang::check_required(model)
@@ -97,7 +97,7 @@ get_fars_crash_vehicles <- function(
     format = "json"
   )
 
-  if (!isTRUE(labels) || rlang::is_empty(crash_df)) {
+  if (!use_var_labels(var_labels) || rlang::is_empty(crash_df)) {
     return(crash_df)
   }
 

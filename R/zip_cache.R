@@ -30,7 +30,7 @@ get_zip_tables <- function(
   geometry = FALSE,
   overwrite = FALSE,
   keep_files = FALSE,
-  labels = TRUE,
+  var_labels = c("attribute", "none"),
   call = caller_env()
 ) {
   path <- path %||% crashapi_cache_dir()
@@ -41,7 +41,7 @@ get_zip_tables <- function(
 
   if (format == "sas") {
     if (!file.exists(zipfile) || isTRUE(overwrite)) {
-      download.file(url = url, destfile = zipfile, method = "auto", mode = "wb")
+      download_zip(url = url, destfile = zipfile, call = call)
     }
 
     return(invisible(zipfile))
@@ -86,11 +86,17 @@ get_zip_tables <- function(
     }
   }
 
-  if (!isTRUE(labels)) {
+  if (!use_var_labels(var_labels)) {
     return(crash_tables)
   }
 
-  Map(label_fars_vars, crash_tables, toupper(names(crash_tables)))
+  Map(
+    function(crash_df, data_file) {
+      label_fars_vars(crash_df, data_file, year = year, source = dataset)
+    },
+    crash_tables,
+    toupper(names(crash_tables))
+  )
 }
 
 #' List parquet files in a folder named by table
@@ -113,7 +119,7 @@ zip_csv_to_parquet <- function(
   rlang::check_installed("readr", call = call)
 
   if (!file.exists(zipfile) || isTRUE(overwrite)) {
-    download.file(url = url, destfile = zipfile, method = "auto", mode = "wb")
+    download_zip(url = url, destfile = zipfile, call = call)
   }
 
   exdir <- sub("[.]zip$", "", zipfile)
@@ -143,6 +149,10 @@ zip_csv_to_parquet <- function(
       show_col_types = FALSE
     )
 
+    # Some older CSV files include Latin-1 encoded text (e.g. MCARR_ID in
+    # 2015 vehicle data)
+    crash_df[] <- lapply(crash_df, fix_latin1)
+
     nanoparquet::write_parquet(crash_df, parquet_files[[i]])
   }
 
@@ -151,4 +161,66 @@ zip_csv_to_parquet <- function(
   }
 
   parquet_files
+}
+
+#' Convert character values that aren't valid UTF-8 from Latin-1
+#' @noRd
+fix_latin1 <- function(x) {
+  if (!is.character(x)) {
+    return(x)
+  }
+
+  invalid <- !is.na(x) & !validUTF8(x)
+
+  if (any(invalid)) {
+    x[invalid] <- iconv(x[invalid], from = "latin1", to = "UTF-8")
+  }
+
+  x
+}
+
+#' Download a zip file with retries
+#'
+#' The file is downloaded to a temporary file and moved to `destfile` only if
+#' the download succeeds so an interrupted download isn't used as a cached
+#' file.
+#' @noRd
+download_zip <- function(url, destfile, call = caller_env()) {
+  req <- httr2::request(url)
+  req <- httr2::req_retry(req, max_tries = 3, retry_on_failure = TRUE)
+
+  if (rlang::is_interactive()) {
+    req <- httr2::req_progress(req)
+  }
+
+  resp <- tryCatch(
+    httr2::req_perform(req),
+    httr2_http_404 = function(cnd) {
+      cli_abort(
+        c(
+          "{.url {url}} is not available.",
+          "i" = "NHTSA may not have published this file."
+        ),
+        parent = cnd,
+        call = call
+      )
+    },
+    httr2_error = function(cnd) {
+      cli_abort(
+        "Can't download {.url {url}}.",
+        parent = cnd,
+        call = call
+      )
+    }
+  )
+
+  tmp <- tempfile(fileext = ".zip", tmpdir = dirname(destfile))
+  on.exit(unlink(tmp))
+  writeBin(httr2::resp_body_raw(resp), tmp)
+
+  if (!file.rename(tmp, destfile)) {
+    cli_abort("Can't save {.file {destfile}}.", call = call)
+  }
+
+  invisible(destfile)
 }

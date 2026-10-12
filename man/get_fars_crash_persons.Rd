@@ -11,7 +11,7 @@ get_fars_crash_persons(
   seat,
   injury,
   year = getOption("crashapi.year", 2024),
-  labels = TRUE
+  var_labels = c("attribute", "none")
 )
 }
 \arguments{
@@ -39,10 +39,10 @@ Minor Injury (B)"), 3 ("Suspected Serious Injury (A)"), 4 ("Fatal Injury
 and maximum values are used as the start and end year. Defaults to
 \code{getOption("crashapi.year", 2024)}.}
 
-\item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
-with a variable label from \link{fars_vars_labels}. Labels are shown by
-\code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt and
-gtsummary.}
+\item{var_labels}{How to add variable labels from \link{fars_vars_labels}:
+"attribute" (default) adds a \code{"label"} attribute to each column, which is
+shown by \code{\link[=View]{View()}} in RStudio and Positron and used by packages such as gt
+and gtsummary, and "none" doesn't add variable labels.}
 }
 \description{
 This function returns a list of people involved in fatal crashes that match

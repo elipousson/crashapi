@@ -11,7 +11,7 @@ test_that("format_crashes() reorders and adds date columns", {
     STATE = "50"
   )
 
-  out <- format_crashes(x, labels = FALSE)
+  out <- format_crashes(x, var_labels = "none")
 
   expect_identical(
     names(out)[1:4],
@@ -59,8 +59,9 @@ test_that("label_fars_vars() matches names case-insensitively as a fallback", {
   out <- label_fars_vars(data.frame(CASEYEAR = 2022, Vehicles = 1))
 
   expect_identical(attr(out$CASEYEAR, "label"), "Case Year")
-  # Vehicles is listed without a label so it is not matched to VEHICLES
-  expect_null(attr(out$Vehicles, "label"))
+  # Vehicles has its own label so it is not matched to VEHICLES
+  # ("Vehicles in Transport (discontinued)")
+  expect_identical(attr(out$Vehicles, "label"), "Vehicles")
 })
 
 test_that("label_fars_vars() labels NAME columns from the coded variable", {
@@ -105,7 +106,7 @@ test_that("format_crashes() adds variable labels", {
   expect_identical(attr(out$date, "label"), "Crash date")
   expect_null(attr(out$EXTRA, "label"))
 
-  out <- format_crashes(x, labels = FALSE)
+  out <- format_crashes(x, var_labels = "none")
   expect_null(attr(out$FATALS, "label"))
 })
 
@@ -143,4 +144,26 @@ test_that("read_crashapi() returns NULL for responses without results", {
     )
   )
   expect_null(out)
+})
+
+test_that("label_fars_vars() labels CrashAPI-only columns", {
+  x <- data.frame(STATEINITIAL = "MD", NCSAMAKE = 12, TrackWidthIN = 60)
+  x$VinDeriveds <- list(data.frame(SAEAutomationLevel_from = 0))
+
+  out <- label_fars_vars(x, data_file = "VEHICLE")
+  expect_identical(attr(out$STATEINITIAL, "label"), "State Abbreviation")
+  expect_identical(attr(out$NCSAMAKE, "label"), "NCSA Make")
+  expect_identical(attr(out$TrackWidthIN, "label"), "Track Width (Inches)")
+  expect_identical(
+    attr(out$VinDeriveds[[1]]$SAEAutomationLevel_from, "label"),
+    "SAE Automation Level (From)"
+  )
+})
+
+test_that("label_fars_vars() uses the SAS violatn table for VIOLATION data", {
+  out <- label_fars_vars(
+    data.frame(CASEYEAR = 2024, VIOLATION = 1),
+    data_file = "VIOLATION"
+  )
+  expect_identical(attr(out$VIOLATION, "label"), "Citations Issued")
 })

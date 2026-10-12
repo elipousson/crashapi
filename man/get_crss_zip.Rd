@@ -13,7 +13,7 @@ get_crss_zip(
   geometry = FALSE,
   overwrite = FALSE,
   keep_files = FALSE,
-  labels = TRUE
+  var_labels = c("attribute", "none")
 )
 }
 \arguments{
@@ -43,10 +43,11 @@ Default: \code{FALSE}}
 \item{keep_files}{If \code{TRUE}, keep the downloaded zip file and the extracted
 CSV files in the cache folder. Default: \code{FALSE}}
 
-\item{labels}{If \code{TRUE} (default), add a \code{"label"} attribute to each column
-with a matching variable in \link{fars_vars_labels}. Labels are taken from the
-FARS Analytical User's Manual so variables only used in CRSS are not
-labelled.}
+\item{var_labels}{How to add variable labels: "attribute" (default) adds a
+\code{"label"} attribute to each column with a matching variable in
+\link{fars_vars_labels} and "none" doesn't add variable labels. Labels are
+taken from the FARS Analytical User's Manual so variables only used in CRSS
+are not labelled.}
 }
 \value{
 If \code{read = TRUE}, a list of data frames with one item for each

@@ -61,7 +61,7 @@ test_that("get_fars_cases() adds variable labels", {
     year = 2022,
     state = "VT",
     cases = 500001,
-    labels = FALSE
+    var_labels = "none"
   )
   expect_null(attr(out$LATITUDE, "label"))
 })
@@ -233,7 +233,7 @@ test_that("get_fars_cases() combines details for all cases", {
     cases = c(1, 2),
     year = 2020,
     details = "events",
-    labels = FALSE
+    var_labels = "none"
   )
   expect_identical(events$ST_CASE, c(1, 1, 2, 2))
 })
@@ -294,7 +294,7 @@ test_that("get_fars() filters zipped data by state and adds a case year", {
     "2022" = list(accident = data.frame(STATE = c(24, 50), ST_CASE = 3:4))
   ))
 
-  out <- get_fars("VT", year = 2021:2022, source = "zip", labels = FALSE)
+  out <- get_fars("VT", year = 2021:2022, source = "zip", var_labels = "none")
   expect_identical(out$ST_CASE, c(2L, 4L))
   expect_identical(out$CASEYEAR, c(2021L, 2022L))
 
@@ -311,7 +311,7 @@ test_that("get_fars() returns a list if tables can't be combined", {
   ))
 
   expect_snapshot(
-    out <- get_fars("MD", year = 2021:2022, source = "zip", labels = FALSE)
+    out <- get_fars("MD", year = 2021:2022, source = "zip", var_labels = "none")
   )
   expect_named(out, c("2021", "2022"))
 })
@@ -333,7 +333,7 @@ test_that("get_fars() filters by county using the accident table", {
     year = 2022,
     county = "Baltimore city",
     source = "zip",
-    labels = FALSE
+    var_labels = "none"
   )
   expect_identical(accident$ST_CASE, c(1L, 3L))
 
@@ -343,7 +343,7 @@ test_that("get_fars() filters by county using the accident table", {
     type = "vehicle",
     county = "Baltimore city",
     source = "zip",
-    labels = FALSE
+    var_labels = "none"
   )
   expect_identical(vehicle$ST_CASE, c(1, 1, 3))
 
@@ -360,7 +360,7 @@ test_that("get_fars() converts CrashAPI values to match zipped data", {
     }
   )
 
-  out <- get_fars("MD", year = 2022, labels = FALSE)
+  out <- get_fars("MD", year = 2022, var_labels = "none")
   expect_identical(out$ST_CASE, 240001L)
   expect_identical(out$LATITUDE, 39.3)
   expect_identical(out$STATENAME, "Maryland")

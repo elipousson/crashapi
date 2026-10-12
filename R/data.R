@@ -22,6 +22,11 @@
 #'   Analysis Reporting System (FARS) Analytical User's Manual, 1975-2019,
 #'   documentation of the SAS format data files.
 #'
+#' This table is used for column order, CrashAPI metadata, and variable labels
+#' for columns that are only returned by the CrashAPI. Use [fars_variables()]
+#' for complete, year-specific variable labels from the SAS data files that
+#' NHTSA publishes for each year.
+#'
 #' The source data is installed with the package as a CSV file
 #' (`system.file("extdata", "fars_vars_labels.csv", package = "crashapi")`)
 #' with column definitions in `fars_vars_labels_definitions.csv`.
@@ -29,7 +34,7 @@
 #' `r pkg_data_date("fars_vars_labels", "added")`
 #' `r pkg_data_date("fars_vars_labels", "updated")`
 #'
-#' @format A data frame with 504 rows and 15 variables:
+#' @format A data frame with 749 rows and 15 variables:
 #' \describe{
 #'   \item{\code{name}}{character Variable name}
 #'   \item{\code{label}}{character Variable label}
@@ -42,7 +47,8 @@
 #'   \item{\code{mmuc_equivalent}}{logical Equivalent term in MMUC (placeholder)}
 #'   \item{\code{discontinued}}{logical Indicator for discontinued variables}
 #'   \item{\code{api_only}}{logical Indicator for variables only used by API}
-#'   \item{\code{api}}{character Name(s) of corresponding CrashAPI service}
+#'   \item{\code{api}}{character Name(s) of corresponding CrashAPI service
+#'   (e.g. "Details" for GetCaseDetails or "FARS data" for GetFARSData)}
 #'   \item{\code{name_var}}{logical Indicator for "NAME" variable returned by API}
 #'   \item{\code{nm}}{Short version of the variable name}
 #'   \item{\code{api_list_col}}{logical Indicator for list columns returned by API}

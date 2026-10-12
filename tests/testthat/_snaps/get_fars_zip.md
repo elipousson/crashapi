@@ -16,3 +16,14 @@
       ! `read = TRUE` is only supported when `format = "csv"`.
       i Set `read = FALSE` to download SAS files without reading them.
 
+# download_zip() errors without leaving a file for missing data
+
+    Code
+      download_zip("https://example.com/data.zip", file.path(path, "data.zip"))
+    Condition
+      Error:
+      ! <https://example.com/data.zip> is not available.
+      i NHTSA may not have published this file.
+      Caused by error in `httr2::req_perform()`:
+      ! HTTP 404 Not Found.
+

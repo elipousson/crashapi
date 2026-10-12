@@ -42,7 +42,7 @@
 # get_fars() returns a list if tables can't be combined
 
     Code
-      out <- get_fars("MD", year = 2021:2022, source = "zip", labels = FALSE)
+      out <- get_fars("MD", year = 2021:2022, source = "zip", var_labels = "none")
     Condition
       Warning in `get_fars()`:
       The "accident" tables for 2021 and 2022 can't be combined.

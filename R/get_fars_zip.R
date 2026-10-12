@@ -63,7 +63,7 @@ get_fars_zip <- function(
   geometry = FALSE,
   overwrite = FALSE,
   keep_files = FALSE,
-  labels = TRUE
+  var_labels = c("attribute", "none")
 ) {
   year <- validate_year(year = year, year_range = c(1975, 2024))
 
@@ -83,7 +83,7 @@ get_fars_zip <- function(
             geometry = geometry,
             overwrite = overwrite,
             keep_files = keep_files,
-            labels = labels
+            var_labels = var_labels
           )
         }
       ),
@@ -165,6 +165,6 @@ get_fars_zip <- function(
     geometry = geometry,
     overwrite = overwrite,
     keep_files = keep_files,
-    labels = labels
+    var_labels = var_labels
   )
 }
