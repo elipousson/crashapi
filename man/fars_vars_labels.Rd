@@ -5,7 +5,7 @@
 \alias{fars_vars_labels}
 \title{FARS variable names and labels}
 \format{
-A data frame with 504 rows and 15 variables:
+A data frame with 749 rows and 15 variables:
 \describe{
 \item{\code{name}}{character Variable name}
 \item{\code{label}}{character Variable label}
@@ -18,7 +18,8 @@ A data frame with 504 rows and 15 variables:
 \item{\code{mmuc_equivalent}}{logical Equivalent term in MMUC (placeholder)}
 \item{\code{discontinued}}{logical Indicator for discontinued variables}
 \item{\code{api_only}}{logical Indicator for variables only used by API}
-\item{\code{api}}{character Name(s) of corresponding CrashAPI service}
+\item{\code{api}}{character Name(s) of corresponding CrashAPI service
+(e.g. "Details" for GetCaseDetails or "FARS data" for GetFARSData)}
 \item{\code{name_var}}{logical Indicator for "NAME" variable returned by API}
 \item{\code{nm}}{Short version of the variable name}
 \item{\code{api_list_col}}{logical Indicator for list columns returned by API}

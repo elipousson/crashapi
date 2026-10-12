@@ -640,7 +640,10 @@ use_var_labels <- function(
 #' Get variable labels from the SAS data files for a table, named by the
 #' uppercase variable name
 #'
-#' Uses the latest year in the data (or the closest earlier year with labels).
+#' For each variable, uses the label for the latest year in the data (or the
+#' closest earlier year with a label). If a variable doesn't have a label for
+#' an earlier year (e.g. a variable in CrashAPI data that was only added to the
+#' SAS data files later), the label for the closest later year is used.
 #' Returns an empty vector if the table or year isn't known.
 #' @noRd
 sas_variable_labels <- function(
@@ -669,19 +672,29 @@ sas_variable_labels <- function(
     return(character(0))
   }
 
+  year <- max(year, na.rm = TRUE)
+
+  # The CrashAPI VIOLATION dataset is the violatn table in the SAS data files
+  table <- tolower(data_file)
+  table[table == "violation"] <- "violatn"
+
   vars <- read_value_label_file("fars_variables.parquet")
   vars <- vars[
     vars[["source"]] == source &
-      vars[["table"]] == tolower(data_file) &
+      vars[["table"]] == table &
       !is.na(vars[["label"]]) &
-      vars[["year"]] <= max(year, na.rm = TRUE),
+      toupper(vars[["variable"]]) %in% toupper(names(x)),
   ]
 
   if (nrow(vars) == 0) {
     return(character(0))
   }
 
-  vars <- vars[vars[["year"]] == max(vars[["year"]]), ]
+  # Prefer the latest year up to the data year, then the closest later year
+  after <- vars[["year"]] > year
+  vars <- vars[
+    order(after, ifelse(after, vars[["year"]], -vars[["year"]])),
+  ]
   vars <- vars[!duplicated(toupper(vars[["variable"]])), ]
   rlang::set_names(vars[["label"]], toupper(vars[["variable"]]))
 }
