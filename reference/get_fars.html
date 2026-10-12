@@ -54,7 +54,8 @@ the CrashAPI or the zipped data files from the NHTSA downloads site:</p>
 <span>  <span class="va">...</span>,</span>
 <span>  geometry <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  crs <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  labels <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  decode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"names"</span>, <span class="st">"replace"</span>, <span class="st">"labelled"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
+<span>  var_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"attribute"</span>, <span class="st">"none"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -104,11 +105,20 @@ with <code>LATITUDE</code> and <code>LONGITUD</code> columns (e.g. accident).</p
 <dd><p>Coordinate reference system to use if <code>geometry</code> is <code>TRUE</code>.</p></dd>
 
 
-<dt id="arg-labels">labels<a class="anchor" aria-label="anchor" href="#arg-labels"></a></dt>
-<dd><p>If <code>TRUE</code> (default), add a <code>"label"</code> attribute to each column
-with a variable label from <a href="fars_vars_labels.html">fars_vars_labels</a>. Labels are shown by
-<code><a href="https://rdrr.io/r/utils/View.html" class="external-link">View()</a></code> in RStudio and Positron and used by packages such as gt and
-gtsummary.</p></dd>
+<dt id="arg-decode">decode<a class="anchor" aria-label="anchor" href="#arg-decode"></a></dt>
+<dd><p>How to decode coded values using <code><a href="decode_fars.html">decode_fars()</a></code>: "names"
+(default) adds <code>…NAME</code> columns with decoded values where they are missing
+(data from the CrashAPI and FARS zipped CSV files from 2015 onwards already
+include them), "replace" replaces codes with factors of decoded values,
+"labelled" adds value labels with <code><a href="https://haven.tidyverse.org/reference/labelled.html" class="external-link">haven::labelled()</a></code>, and "none" doesn't
+decode values. See <code><a href="decode_fars.html">decode_fars()</a></code> for details.</p></dd>
+
+
+<dt id="arg-var-labels">var_labels<a class="anchor" aria-label="anchor" href="#arg-var-labels"></a></dt>
+<dd><p>How to add variable labels from <a href="fars_vars_labels.html">fars_vars_labels</a>:
+"attribute" (default) adds a <code>"label"</code> attribute to each column, which is
+shown by <code><a href="https://rdrr.io/r/utils/View.html" class="external-link">View()</a></code> in RStudio and Positron and used by packages such as gt
+and gtsummary, and "none" doesn't add variable labels.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -1086,52 +1096,52 @@ the county from the accident table (matching <code>ST_CASE</code> and <code>CASE
 <span class="r-out co"><span class="r-pr">#&gt;</span> 523     6 Local Street - Municipality       2       Urban       0          No</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 524     3               State Highway       2       Urban       0          No</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 525     6 Local Street - Municipality       2       Urban       0          No</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     SP_JUR              SP_JURNAME STATENAME ST_CASE State</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59       0 No Special Jurisdiction  Maryland  240061    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69       0 No Special Jurisdiction  Maryland  240071    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70       0 No Special Jurisdiction  Maryland  240072    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99       0 No Special Jurisdiction  Maryland  240103    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 136      0 No Special Jurisdiction  Maryland  240144    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 186      0 No Special Jurisdiction  Maryland  240194    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 207      0 No Special Jurisdiction  Maryland  240216    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 208      0 No Special Jurisdiction  Maryland  240217    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 242      0 No Special Jurisdiction  Maryland  240252    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 259      0 No Special Jurisdiction  Maryland  240269    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 273      0 No Special Jurisdiction  Maryland  240283    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 298      0 No Special Jurisdiction  Maryland  240308    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 314      0 No Special Jurisdiction  Maryland  240324    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 339      0 No Special Jurisdiction  Maryland  240350    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 363      0 No Special Jurisdiction  Maryland  240374    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 382      0 No Special Jurisdiction  Maryland  240393    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 383      0 No Special Jurisdiction  Maryland  240394    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 418      0 No Special Jurisdiction  Maryland  240429    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 437      0 No Special Jurisdiction  Maryland  240449    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 440      0 No Special Jurisdiction  Maryland  240452    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 464      0 No Special Jurisdiction  Maryland  240476    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 468      0 No Special Jurisdiction  Maryland  240480    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 475      0 No Special Jurisdiction  Maryland  240487    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 478      0 No Special Jurisdiction  Maryland  240490    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 481      0 No Special Jurisdiction  Maryland  240493    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 486      0 No Special Jurisdiction  Maryland  240498    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 488      0 No Special Jurisdiction  Maryland  240500    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 491      0 No Special Jurisdiction  Maryland  240503    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 492      0 No Special Jurisdiction  Maryland  240504    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 493      0 No Special Jurisdiction  Maryland  240505    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 501      0 No Special Jurisdiction  Maryland  240513    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 502      0 No Special Jurisdiction  Maryland  240514    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 507      0 No Special Jurisdiction  Maryland  240519    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 510      0 No Special Jurisdiction  Maryland  240522    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 511      0 No Special Jurisdiction  Maryland  240523    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 515      0 No Special Jurisdiction  Maryland  240527    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 516      0 No Special Jurisdiction  Maryland  240528    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 517      0 No Special Jurisdiction  Maryland  240529    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 518      0 No Special Jurisdiction  Maryland  240530    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 520      0 No Special Jurisdiction  Maryland  240532    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 521      0 No Special Jurisdiction  Maryland  240533    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 522      0 No Special Jurisdiction  Maryland  240534    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 523      0 No Special Jurisdiction  Maryland  240535    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 524      0 No Special Jurisdiction  Maryland  240536    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 525      0 No Special Jurisdiction  Maryland  240537    24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     SP_JUR              SP_JURNAME STATENAME ST_CASE State StateNAME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59       0 No Special Jurisdiction  Maryland  240061    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69       0 No Special Jurisdiction  Maryland  240071    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70       0 No Special Jurisdiction  Maryland  240072    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99       0 No Special Jurisdiction  Maryland  240103    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 136      0 No Special Jurisdiction  Maryland  240144    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 186      0 No Special Jurisdiction  Maryland  240194    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 207      0 No Special Jurisdiction  Maryland  240216    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 208      0 No Special Jurisdiction  Maryland  240217    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 242      0 No Special Jurisdiction  Maryland  240252    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 259      0 No Special Jurisdiction  Maryland  240269    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 273      0 No Special Jurisdiction  Maryland  240283    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 298      0 No Special Jurisdiction  Maryland  240308    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 314      0 No Special Jurisdiction  Maryland  240324    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 339      0 No Special Jurisdiction  Maryland  240350    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 363      0 No Special Jurisdiction  Maryland  240374    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 382      0 No Special Jurisdiction  Maryland  240393    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 383      0 No Special Jurisdiction  Maryland  240394    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 418      0 No Special Jurisdiction  Maryland  240429    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 437      0 No Special Jurisdiction  Maryland  240449    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 440      0 No Special Jurisdiction  Maryland  240452    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 464      0 No Special Jurisdiction  Maryland  240476    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 468      0 No Special Jurisdiction  Maryland  240480    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 475      0 No Special Jurisdiction  Maryland  240487    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 478      0 No Special Jurisdiction  Maryland  240490    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 481      0 No Special Jurisdiction  Maryland  240493    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 486      0 No Special Jurisdiction  Maryland  240498    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 488      0 No Special Jurisdiction  Maryland  240500    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 491      0 No Special Jurisdiction  Maryland  240503    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 492      0 No Special Jurisdiction  Maryland  240504    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 493      0 No Special Jurisdiction  Maryland  240505    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 501      0 No Special Jurisdiction  Maryland  240513    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 502      0 No Special Jurisdiction  Maryland  240514    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 507      0 No Special Jurisdiction  Maryland  240519    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 510      0 No Special Jurisdiction  Maryland  240522    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 511      0 No Special Jurisdiction  Maryland  240523    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 515      0 No Special Jurisdiction  Maryland  240527    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 516      0 No Special Jurisdiction  Maryland  240528    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 517      0 No Special Jurisdiction  Maryland  240529    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 518      0 No Special Jurisdiction  Maryland  240530    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 520      0 No Special Jurisdiction  Maryland  240532    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 521      0 No Special Jurisdiction  Maryland  240533    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 522      0 No Special Jurisdiction  Maryland  240534    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 523      0 No Special Jurisdiction  Maryland  240535    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 524      0 No Special Jurisdiction  Maryland  240536    24  Maryland</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 525      0 No Special Jurisdiction  Maryland  240537    24  Maryland</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                       TWAY_ID        TWAY_ID2 TYP_INT           TYP_INTNAME</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 59                      I-895                       1   Not an Intersection</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 69         SR-150 EASTERN AVE     ANGLESEA ST       2 Four-Way Intersection</span>
@@ -1274,8 +1284,10 @@ the county from the accident table (matching <code>ST_CASE</code> and <code>CASE
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># National accident table from the zipped data files</span></span></span>
 <span class="r-in"><span><span class="fu">get_fars</span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2024</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting CSV to parquet <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■             </span>  61% | ETA:  4s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting CSV to parquet <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■    </span>  91% | ETA:  1s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting CSV to parquet <span style="color: #00BB00;">■■■■■■■■■■■                     </span>  33% | ETA:  7s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting CSV to parquet <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■        </span>  76% | ETA:  4s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting CSV to parquet <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■      </span>  82% | ETA:  3s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting CSV to parquet <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■    </span>  91% | ETA:  2s</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A data frame: 36,297 × 81</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    STATE STATENAME ST_CASE  PEDS PERNOTMVIT VE_TOTAL VE_FORMS PVH_INVL PERSONS</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>

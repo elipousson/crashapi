@@ -9,7 +9,7 @@ returned by the API.
 ## Usage
 
 ``` r
-format_crashes(x, details = TRUE, labels = TRUE)
+format_crashes(x, details = TRUE, var_labels = c("attribute", "none"))
 ```
 
 ## Arguments
@@ -23,10 +23,11 @@ format_crashes(x, details = TRUE, labels = TRUE)
   If `TRUE`, append date, time, datetime columns to formatted crash
   data; defaults to TRUE
 
-- labels:
+- var_labels:
 
-  If `TRUE` (default), add a `"label"` attribute to each column with a
-  variable label from
-  [fars_vars_labels](https://elipousson.github.io/crashapi/reference/fars_vars_labels.md).
-  Labels are shown by [`View()`](https://rdrr.io/r/utils/View.html) in
-  RStudio and Positron and used by packages such as gt and gtsummary.
+  How to add variable labels from
+  [fars_vars_labels](https://elipousson.github.io/crashapi/reference/fars_vars_labels.md):
+  "attribute" (default) adds a `"label"` attribute to each column, which
+  is shown by [`View()`](https://rdrr.io/r/utils/View.html) in RStudio
+  and Positron and used by packages such as gt and gtsummary, and "none"
+  doesn't add variable labels.

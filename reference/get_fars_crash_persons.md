@@ -15,7 +15,7 @@ get_fars_crash_persons(
   seat,
   injury,
   year = getOption("crashapi.year", 2024),
-  labels = TRUE
+  var_labels = c("attribute", "none")
 )
 ```
 
@@ -57,13 +57,14 @@ get_fars_crash_persons(
   maximum values are used as the start and end year. Defaults to
   `getOption("crashapi.year", 2024)`.
 
-- labels:
+- var_labels:
 
-  If `TRUE` (default), add a `"label"` attribute to each column with a
-  variable label from
-  [fars_vars_labels](https://elipousson.github.io/crashapi/reference/fars_vars_labels.md).
-  Labels are shown by [`View()`](https://rdrr.io/r/utils/View.html) in
-  RStudio and Positron and used by packages such as gt and gtsummary.
+  How to add variable labels from
+  [fars_vars_labels](https://elipousson.github.io/crashapi/reference/fars_vars_labels.md):
+  "attribute" (default) adds a `"label"` attribute to each column, which
+  is shown by [`View()`](https://rdrr.io/r/utils/View.html) in RStudio
+  and Positron and used by packages such as gt and gtsummary, and "none"
+  doesn't add variable labels.
 
 ## API behavior
 

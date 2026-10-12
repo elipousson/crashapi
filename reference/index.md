@@ -24,11 +24,17 @@
 - [`read_crashapi()`](https://elipousson.github.io/crashapi/reference/read_crashapi.md)
   : Read data from the CrashAPI using a url template
 
-## Get variable definitions
+## Get variable definitions and value labels
 
 - [`fars_vars()`](https://elipousson.github.io/crashapi/reference/fars_vars.md)
   : Get variables and variable attributes for the Fatality Analysis
   Reporting System (FARS) API
+- [`fars_variables()`](https://elipousson.github.io/crashapi/reference/fars_variables.md)
+  : Get variable labels for FARS and CRSS variables
+- [`fars_value_labels()`](https://elipousson.github.io/crashapi/reference/fars_value_labels.md)
+  : Get value labels for FARS and CRSS variables
+- [`decode_fars()`](https://elipousson.github.io/crashapi/reference/decode_fars.md)
+  : Add decoded value columns to FARS or CRSS data
 
 ## Data formatting functions
 

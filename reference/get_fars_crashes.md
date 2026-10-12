@@ -35,7 +35,7 @@ get_fars_crashes(
   details = FALSE,
   geometry = FALSE,
   crs = NULL,
-  labels = TRUE
+  var_labels = c("attribute", "none")
 )
 
 get_fars_cases(
@@ -45,17 +45,21 @@ get_fars_cases(
   details = FALSE,
   geometry = FALSE,
   crs = NULL,
-  labels = TRUE
+  var_labels = c("attribute", "none")
 )
 
 get_fars_crash_list(
   state,
   year = getOption("crashapi.year", 2024),
   vehicles = c(1, 50),
-  labels = TRUE
+  var_labels = c("attribute", "none")
 )
 
-get_fars_summary(state, year = getOption("crashapi.year", 2024), labels = TRUE)
+get_fars_summary(
+  state,
+  year = getOption("crashapi.year", 2024),
+  var_labels = c("attribute", "none")
+)
 
 get_fars_year(
   state,
@@ -66,7 +70,7 @@ get_fars_year(
   geometry = FALSE,
   crs = NULL,
   download = FALSE,
-  labels = TRUE,
+  var_labels = c("attribute", "none"),
   call = caller_env()
 )
 ```
@@ -112,13 +116,14 @@ get_fars_year(
   Coordinate reference system to return for `get_fars_crashes` if
   `geometry` is `TRUE`.
 
-- labels:
+- var_labels:
 
-  If `TRUE` (default), add a `"label"` attribute to each column with a
-  variable label from
-  [fars_vars_labels](https://elipousson.github.io/crashapi/reference/fars_vars_labels.md).
-  Labels are shown by [`View()`](https://rdrr.io/r/utils/View.html) in
-  RStudio and Positron and used by packages such as gt and gtsummary.
+  How to add variable labels from
+  [fars_vars_labels](https://elipousson.github.io/crashapi/reference/fars_vars_labels.md):
+  "attribute" (default) adds a `"label"` attribute to each column, which
+  is shown by [`View()`](https://rdrr.io/r/utils/View.html) in RStudio
+  and Positron and used by packages such as gt and gtsummary, and "none"
+  doesn't add variable labels.
 
 - cases:
 

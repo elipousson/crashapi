@@ -52,7 +52,7 @@ GetCrashesByPerson endpoint. The returned data has one row for each person.</p>
 <span>  <span class="va">seat</span>,</span>
 <span>  <span class="va">injury</span>,</span>
 <span>  year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"crashapi.year"</span>, <span class="fl">2024</span><span class="op">)</span>,</span>
-<span>  labels <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  var_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"attribute"</span>, <span class="st">"none"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -96,11 +96,11 @@ and maximum values are used as the start and end year. Defaults to
 <code>getOption("crashapi.year", 2024)</code>.</p></dd>
 
 
-<dt id="arg-labels">labels<a class="anchor" aria-label="anchor" href="#arg-labels"></a></dt>
-<dd><p>If <code>TRUE</code> (default), add a <code>"label"</code> attribute to each column
-with a variable label from <a href="fars_vars_labels.html">fars_vars_labels</a>. Labels are shown by
-<code><a href="https://rdrr.io/r/utils/View.html" class="external-link">View()</a></code> in RStudio and Positron and used by packages such as gt and
-gtsummary.</p></dd>
+<dt id="arg-var-labels">var_labels<a class="anchor" aria-label="anchor" href="#arg-var-labels"></a></dt>
+<dd><p>How to add variable labels from <a href="fars_vars_labels.html">fars_vars_labels</a>:
+"attribute" (default) adds a <code>"label"</code> attribute to each column, which is
+shown by <code><a href="https://rdrr.io/r/utils/View.html" class="external-link">View()</a></code> in RStudio and Positron and used by packages such as gt
+and gtsummary, and "none" doesn't add variable labels.</p></dd>
 
 </dl></div>
     <div class="section level2">

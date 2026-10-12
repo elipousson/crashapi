@@ -12,7 +12,7 @@ fars_vars_labels
 
 ## Format
 
-A data frame with 504 rows and 15 variables:
+A data frame with 749 rows and 15 variables:
 
 - `name`:
 
@@ -60,7 +60,8 @@ A data frame with 504 rows and 15 variables:
 
 - `api`:
 
-  character Name(s) of corresponding CrashAPI service
+  character Name(s) of corresponding CrashAPI service (e.g. "Details"
+  for GetCaseDetails or "FARS data" for GetFARSData)
 
 - `name_var`:
 
@@ -75,6 +76,12 @@ A data frame with 504 rows and 15 variables:
   logical Indicator for list columns returned by API
 
 ## Details
+
+This table is used for column order, CrashAPI metadata, and variable
+labels for columns that are only returned by the CrashAPI. Use
+[`fars_variables()`](https://elipousson.github.io/crashapi/reference/fars_variables.md)
+for complete, year-specific variable labels from the SAS data files that
+NHTSA publishes for each year.
 
 The source data is installed with the package as a CSV file
 (`system.file("extdata", "fars_vars_labels.csv", package = "crashapi")`)

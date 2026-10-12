@@ -17,7 +17,8 @@ get_fars(
   ...,
   geometry = FALSE,
   crs = NULL,
-  labels = TRUE
+  decode = c("names", "replace", "labelled", "none"),
+  var_labels = c("attribute", "none")
 )
 ```
 
@@ -68,13 +69,27 @@ get_fars(
 
   Coordinate reference system to use if `geometry` is `TRUE`.
 
-- labels:
+- decode:
 
-  If `TRUE` (default), add a `"label"` attribute to each column with a
-  variable label from
-  [fars_vars_labels](https://elipousson.github.io/crashapi/reference/fars_vars_labels.md).
-  Labels are shown by [`View()`](https://rdrr.io/r/utils/View.html) in
-  RStudio and Positron and used by packages such as gt and gtsummary.
+  How to decode coded values using
+  [`decode_fars()`](https://elipousson.github.io/crashapi/reference/decode_fars.md):
+  "names" (default) adds `…NAME` columns with decoded values where they
+  are missing (data from the CrashAPI and FARS zipped CSV files from
+  2015 onwards already include them), "replace" replaces codes with
+  factors of decoded values, "labelled" adds value labels with
+  [`haven::labelled()`](https://haven.tidyverse.org/reference/labelled.html),
+  and "none" doesn't decode values. See
+  [`decode_fars()`](https://elipousson.github.io/crashapi/reference/decode_fars.md)
+  for details.
+
+- var_labels:
+
+  How to add variable labels from
+  [fars_vars_labels](https://elipousson.github.io/crashapi/reference/fars_vars_labels.md):
+  "attribute" (default) adds a `"label"` attribute to each column, which
+  is shown by [`View()`](https://rdrr.io/r/utils/View.html) in RStudio
+  and Positron and used by packages such as gt and gtsummary, and "none"
+  doesn't add variable labels.
 
 ## Value
 
@@ -1063,52 +1078,52 @@ get_fars(state = "MD", county = "Baltimore city", year = 2022)
 #> 523     6 Local Street - Municipality       2       Urban       0          No
 #> 524     3               State Highway       2       Urban       0          No
 #> 525     6 Local Street - Municipality       2       Urban       0          No
-#>     SP_JUR              SP_JURNAME STATENAME ST_CASE State
-#> 59       0 No Special Jurisdiction  Maryland  240061    24
-#> 69       0 No Special Jurisdiction  Maryland  240071    24
-#> 70       0 No Special Jurisdiction  Maryland  240072    24
-#> 99       0 No Special Jurisdiction  Maryland  240103    24
-#> 136      0 No Special Jurisdiction  Maryland  240144    24
-#> 186      0 No Special Jurisdiction  Maryland  240194    24
-#> 207      0 No Special Jurisdiction  Maryland  240216    24
-#> 208      0 No Special Jurisdiction  Maryland  240217    24
-#> 242      0 No Special Jurisdiction  Maryland  240252    24
-#> 259      0 No Special Jurisdiction  Maryland  240269    24
-#> 273      0 No Special Jurisdiction  Maryland  240283    24
-#> 298      0 No Special Jurisdiction  Maryland  240308    24
-#> 314      0 No Special Jurisdiction  Maryland  240324    24
-#> 339      0 No Special Jurisdiction  Maryland  240350    24
-#> 363      0 No Special Jurisdiction  Maryland  240374    24
-#> 382      0 No Special Jurisdiction  Maryland  240393    24
-#> 383      0 No Special Jurisdiction  Maryland  240394    24
-#> 418      0 No Special Jurisdiction  Maryland  240429    24
-#> 437      0 No Special Jurisdiction  Maryland  240449    24
-#> 440      0 No Special Jurisdiction  Maryland  240452    24
-#> 464      0 No Special Jurisdiction  Maryland  240476    24
-#> 468      0 No Special Jurisdiction  Maryland  240480    24
-#> 475      0 No Special Jurisdiction  Maryland  240487    24
-#> 478      0 No Special Jurisdiction  Maryland  240490    24
-#> 481      0 No Special Jurisdiction  Maryland  240493    24
-#> 486      0 No Special Jurisdiction  Maryland  240498    24
-#> 488      0 No Special Jurisdiction  Maryland  240500    24
-#> 491      0 No Special Jurisdiction  Maryland  240503    24
-#> 492      0 No Special Jurisdiction  Maryland  240504    24
-#> 493      0 No Special Jurisdiction  Maryland  240505    24
-#> 501      0 No Special Jurisdiction  Maryland  240513    24
-#> 502      0 No Special Jurisdiction  Maryland  240514    24
-#> 507      0 No Special Jurisdiction  Maryland  240519    24
-#> 510      0 No Special Jurisdiction  Maryland  240522    24
-#> 511      0 No Special Jurisdiction  Maryland  240523    24
-#> 515      0 No Special Jurisdiction  Maryland  240527    24
-#> 516      0 No Special Jurisdiction  Maryland  240528    24
-#> 517      0 No Special Jurisdiction  Maryland  240529    24
-#> 518      0 No Special Jurisdiction  Maryland  240530    24
-#> 520      0 No Special Jurisdiction  Maryland  240532    24
-#> 521      0 No Special Jurisdiction  Maryland  240533    24
-#> 522      0 No Special Jurisdiction  Maryland  240534    24
-#> 523      0 No Special Jurisdiction  Maryland  240535    24
-#> 524      0 No Special Jurisdiction  Maryland  240536    24
-#> 525      0 No Special Jurisdiction  Maryland  240537    24
+#>     SP_JUR              SP_JURNAME STATENAME ST_CASE State StateNAME
+#> 59       0 No Special Jurisdiction  Maryland  240061    24  Maryland
+#> 69       0 No Special Jurisdiction  Maryland  240071    24  Maryland
+#> 70       0 No Special Jurisdiction  Maryland  240072    24  Maryland
+#> 99       0 No Special Jurisdiction  Maryland  240103    24  Maryland
+#> 136      0 No Special Jurisdiction  Maryland  240144    24  Maryland
+#> 186      0 No Special Jurisdiction  Maryland  240194    24  Maryland
+#> 207      0 No Special Jurisdiction  Maryland  240216    24  Maryland
+#> 208      0 No Special Jurisdiction  Maryland  240217    24  Maryland
+#> 242      0 No Special Jurisdiction  Maryland  240252    24  Maryland
+#> 259      0 No Special Jurisdiction  Maryland  240269    24  Maryland
+#> 273      0 No Special Jurisdiction  Maryland  240283    24  Maryland
+#> 298      0 No Special Jurisdiction  Maryland  240308    24  Maryland
+#> 314      0 No Special Jurisdiction  Maryland  240324    24  Maryland
+#> 339      0 No Special Jurisdiction  Maryland  240350    24  Maryland
+#> 363      0 No Special Jurisdiction  Maryland  240374    24  Maryland
+#> 382      0 No Special Jurisdiction  Maryland  240393    24  Maryland
+#> 383      0 No Special Jurisdiction  Maryland  240394    24  Maryland
+#> 418      0 No Special Jurisdiction  Maryland  240429    24  Maryland
+#> 437      0 No Special Jurisdiction  Maryland  240449    24  Maryland
+#> 440      0 No Special Jurisdiction  Maryland  240452    24  Maryland
+#> 464      0 No Special Jurisdiction  Maryland  240476    24  Maryland
+#> 468      0 No Special Jurisdiction  Maryland  240480    24  Maryland
+#> 475      0 No Special Jurisdiction  Maryland  240487    24  Maryland
+#> 478      0 No Special Jurisdiction  Maryland  240490    24  Maryland
+#> 481      0 No Special Jurisdiction  Maryland  240493    24  Maryland
+#> 486      0 No Special Jurisdiction  Maryland  240498    24  Maryland
+#> 488      0 No Special Jurisdiction  Maryland  240500    24  Maryland
+#> 491      0 No Special Jurisdiction  Maryland  240503    24  Maryland
+#> 492      0 No Special Jurisdiction  Maryland  240504    24  Maryland
+#> 493      0 No Special Jurisdiction  Maryland  240505    24  Maryland
+#> 501      0 No Special Jurisdiction  Maryland  240513    24  Maryland
+#> 502      0 No Special Jurisdiction  Maryland  240514    24  Maryland
+#> 507      0 No Special Jurisdiction  Maryland  240519    24  Maryland
+#> 510      0 No Special Jurisdiction  Maryland  240522    24  Maryland
+#> 511      0 No Special Jurisdiction  Maryland  240523    24  Maryland
+#> 515      0 No Special Jurisdiction  Maryland  240527    24  Maryland
+#> 516      0 No Special Jurisdiction  Maryland  240528    24  Maryland
+#> 517      0 No Special Jurisdiction  Maryland  240529    24  Maryland
+#> 518      0 No Special Jurisdiction  Maryland  240530    24  Maryland
+#> 520      0 No Special Jurisdiction  Maryland  240532    24  Maryland
+#> 521      0 No Special Jurisdiction  Maryland  240533    24  Maryland
+#> 522      0 No Special Jurisdiction  Maryland  240534    24  Maryland
+#> 523      0 No Special Jurisdiction  Maryland  240535    24  Maryland
+#> 524      0 No Special Jurisdiction  Maryland  240536    24  Maryland
+#> 525      0 No Special Jurisdiction  Maryland  240537    24  Maryland
 #>                       TWAY_ID        TWAY_ID2 TYP_INT           TYP_INTNAME
 #> 59                      I-895                       1   Not an Intersection
 #> 69         SR-150 EASTERN AVE     ANGLESEA ST       2 Four-Way Intersection
@@ -1251,8 +1266,10 @@ get_fars(state = "MD", county = "Baltimore city", year = 2022)
 # \donttest{
 # National accident table from the zipped data files
 get_fars(year = 2024)
-#> Converting CSV to parquet ■■■■■■■■■■■■■■■■■■■               61% | ETA:  4s
-#> Converting CSV to parquet ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      91% | ETA:  1s
+#> Converting CSV to parquet ■■■■■■■■■■■                       33% | ETA:  7s
+#> Converting CSV to parquet ■■■■■■■■■■■■■■■■■■■■■■■■          76% | ETA:  4s
+#> Converting CSV to parquet ■■■■■■■■■■■■■■■■■■■■■■■■■■        82% | ETA:  3s
+#> Converting CSV to parquet ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      91% | ETA:  2s
 #> # A data frame: 36,297 × 81
 #>    STATE STATENAME ST_CASE  PEDS PERNOTMVIT VE_TOTAL VE_FORMS PVH_INVL PERSONS
 #>    <dbl> <chr>       <dbl> <dbl>      <dbl>    <dbl>    <dbl>    <dbl>   <dbl>

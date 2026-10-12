@@ -22,7 +22,7 @@ get_crss_zip(
   geometry = FALSE,
   overwrite = FALSE,
   keep_files = FALSE,
-  labels = TRUE
+  var_labels = c("attribute", "none")
 )
 ```
 
@@ -71,13 +71,14 @@ get_crss_zip(
   If `TRUE`, keep the downloaded zip file and the extracted CSV files in
   the cache folder. Default: `FALSE`
 
-- labels:
+- var_labels:
 
-  If `TRUE` (default), add a `"label"` attribute to each column with a
-  matching variable in
-  [fars_vars_labels](https://elipousson.github.io/crashapi/reference/fars_vars_labels.md).
-  Labels are taken from the FARS Analytical User's Manual so variables
-  only used in CRSS are not labelled.
+  How to add variable labels: "attribute" (default) adds a `"label"`
+  attribute to each column with a matching variable in
+  [fars_vars_labels](https://elipousson.github.io/crashapi/reference/fars_vars_labels.md)
+  and "none" doesn't add variable labels. Labels are taken from the FARS
+  Analytical User's Manual so variables only used in CRSS are not
+  labelled.
 
 ## Value
 

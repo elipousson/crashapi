@@ -2,6 +2,42 @@
 
 ## crashapi (development version)
 
+- New
+  [`fars_value_labels()`](https://elipousson.github.io/crashapi/reference/fars_value_labels.md)
+  returns value labels (the decoded value for each code) for FARS
+  (1975-2024) and CRSS (2016-2024) variables by year, built from the SAS
+  format files NHTSA publishes with each year of data. New
+  [`decode_fars()`](https://elipousson.github.io/crashapi/reference/decode_fars.md)
+  uses these labels to decode FARS or CRSS data with `decode = "names"`
+  (add `…NAME` columns), `decode = "replace"` (replace codes with
+  factors of decoded values for categorical variables), or
+  `decode = "labelled"` (add value labels with
+  [`haven::labelled()`](https://haven.tidyverse.org/reference/labelled.html)).
+  [`get_fars()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
+  gains the same `decode` argument (with an additional `"none"` option)
+  and adds `…NAME` columns by default where they are missing (FARS data
+  before 2015) ([\#4](https://github.com/elipousson/crashapi/issues/4)).
+- New
+  [`fars_variables()`](https://elipousson.github.io/crashapi/reference/fars_variables.md)
+  returns year-specific variable labels for FARS and CRSS variables from
+  the SAS data files NHTSA publishes with each year of data. Variable
+  labels from these files are now used (before `fars_vars_labels`) when
+  the table and year are known, which labels variables added in recent
+  years, discontinued variables, and CRSS-only variables
+  (e.g. `WEIGHT`).
+- `fars_vars_labels` adds title case labels for columns only returned by
+  the CrashAPI (e.g. nested list columns from
+  [`get_fars_cases()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
+  `STATEINITIAL`, and vPIC variables in the VINDERIVED table), so every
+  column returned by the CrashAPI now has a variable label. Variable
+  labels from the SAS data files are used for variables that were only
+  added in later years.
+- [`get_fars_zip()`](https://elipousson.github.io/crashapi/reference/get_fars_zip.md)
+  and
+  [`get_crss_zip()`](https://elipousson.github.io/crashapi/reference/get_crss_zip.md)
+  now retry failed downloads, give a clearer error when a file isn’t
+  available, and no longer leave a partially downloaded zip file in the
+  cache if a download fails.
 - Breaking change:
   [`get_fars()`](https://elipousson.github.io/crashapi/reference/get_fars.md)
   is redesigned to return a FARS data table (e.g. accident, person, or
@@ -142,12 +178,12 @@
   [`get_fars_year()`](https://elipousson.github.io/crashapi/reference/get_fars_crashes.md),
   and
   [`get_fars_zip()`](https://elipousson.github.io/crashapi/reference/get_fars_zip.md)
-  gain a `labels` argument. When `TRUE` (the default), each column with
-  a matching variable in `fars_vars_labels` gets a `"label"` attribute,
-  which is shown by [`View()`](https://rdrr.io/r/utils/View.html) and
-  used by packages such as gt and gtsummary. Where a variable appears in
-  more than one FARS data file, the label for the table being read is
-  used.
+  gain a `var_labels` argument. When `"attribute"` (the default), each
+  column with a matching variable in `fars_vars_labels` gets a `"label"`
+  attribute (use `"none"` to skip variable labels), which is shown by
+  [`View()`](https://rdrr.io/r/utils/View.html) and used by packages
+  such as gt and gtsummary. Where a variable appears in more than one
+  FARS data file, the label for the table being read is used.
 - Variable labels now prefer labels for current variables over
   discontinued ones, match names case-insensitively when there is no
   exact match (e.g. `CASEYEAR`), label `…NAME` columns from their coded

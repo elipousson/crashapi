@@ -66,7 +66,7 @@ for each table available in the selected year.</p>
 <span>  geometry <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  keep_files <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  labels <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  var_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"attribute"</span>, <span class="st">"none"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -116,11 +116,12 @@ Default: <code>FALSE</code></p></dd>
 CSV files in the cache folder. Default: <code>FALSE</code></p></dd>
 
 
-<dt id="arg-labels">labels<a class="anchor" aria-label="anchor" href="#arg-labels"></a></dt>
-<dd><p>If <code>TRUE</code> (default), add a <code>"label"</code> attribute to each column
-with a matching variable in <a href="fars_vars_labels.html">fars_vars_labels</a>. Labels are taken from the
-FARS Analytical User's Manual so variables only used in CRSS are not
-labelled.</p></dd>
+<dt id="arg-var-labels">var_labels<a class="anchor" aria-label="anchor" href="#arg-var-labels"></a></dt>
+<dd><p>How to add variable labels: "attribute" (default) adds a
+<code>"label"</code> attribute to each column with a matching variable in
+<a href="fars_vars_labels.html">fars_vars_labels</a> and "none" doesn't add variable labels. Labels are
+taken from the FARS Analytical User's Manual so variables only used in CRSS
+are not labelled.</p></dd>
 
 </dl></div>
     <div class="section level2">
